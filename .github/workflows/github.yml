@@ -38,3 +38,16 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest
+
+      # Docker 이미지 풀 및 EC2 배포
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest
+            docker stop csolved || true
+            docker rm csolved || true
+            docker run -d --name csolved -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest
