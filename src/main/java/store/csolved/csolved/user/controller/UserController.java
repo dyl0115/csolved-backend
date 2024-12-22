@@ -11,14 +11,18 @@ public class UserController
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @GetMapping("/db-check")
-    public String hello()
+    @GetMapping("/db-insert")
+    public String testInsert()
     {
         try
         {
-            // 테스트 데이터 삽입 시도
-            jdbcTemplate.execute("INSERT INTO test_table (name) VALUES ('test-data-" + System.currentTimeMillis() + "')");
-            return "DB 저장 성공!";
+            String sql = "INSERT INTO users (email, password, nickname) VALUES (?, ?, ?)";
+            jdbcTemplate.update(sql,
+                    "test" + System.currentTimeMillis() + "@test.com",
+                    "testpass123",
+                    "테스트유저" + System.currentTimeMillis()
+            );
+            return "사용자 추가 성공!";
         }
         catch (Exception e)
         {

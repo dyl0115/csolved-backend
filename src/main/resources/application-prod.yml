@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://production-db:3306/csolved
+    url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
