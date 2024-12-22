@@ -5,6 +5,13 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+mybatis:
+  mapper-locations:
+    - classpath:mapper/**/*.xml
+    - classpath*:store/csolved/csolved/**/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
 logging:
   level:
     root: INFO
