@@ -50,4 +50,10 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest
             docker stop csolved || true
             docker rm csolved || true
-            docker run -d --name csolved -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest
+            docker run -d --name csolved \
+              -e DB_DRIVER='${{ secrets.DB_DRIVER }}' \
+              -e DB_URL='${{ secrets.DB_URL }}' \
+              -e DB_USERNAME='${{ secrets.DB_USERNAME }}' \
+              -e DB_PASSWORD='${{ secrets.DB_PASSWORD }}' \
+              -p 8080:8080 \
+              ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest
