@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/csolved
+    username: dyl0115
+    password: endyd132!!
+
+logging:
+  level:
+    root: DEBUG
