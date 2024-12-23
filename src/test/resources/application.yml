@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  sql:
+    init:
+      schema-locations: classpath:schema.sql
+      mode: always  # 항상 스키마를 실행하도록 설정
+
+mybatis:
+  mapper-locations:
+    - classpath:mapper/**/*.xml
+    - classpath*:store/csolved/csolved/**/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    root: INFO

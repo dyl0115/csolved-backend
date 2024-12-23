@@ -12,6 +12,8 @@ public interface UserMapper
 
     Long getUserCount();
 
+    String isEmailDuplicate(String email);
+
     void updateUser(User user);
 
     void deleteUserById(Long id);
