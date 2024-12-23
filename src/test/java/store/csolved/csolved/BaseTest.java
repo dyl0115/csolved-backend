@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 
 public class BaseTest
 {
-    private static final String TEST_USER_FORMAT = "test";
-    private static final String TEST_EMAIL_FORMAT = "@example.com";
-    private static final String TEST_PASSWORD_FORMAT = "_password";
-    private static final String TEST_NICK_NAME_FORMAT = "_nickname";
-    private static final String TEST_COMPANY_FORMAT = "_company";
+    protected static final String TEST_USER_FORMAT = "test";
+    protected static final String TEST_EMAIL_FORMAT = "@example.com";
+    protected static final String TEST_PASSWORD_FORMAT = "_password";
+    protected static final String TEST_NICK_NAME_FORMAT = "_nickname";
+    protected static final String TEST_COMPANY_FORMAT = "_company";
 
     public User createTestUser(int testId, boolean isAdmin)
     {

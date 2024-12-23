@@ -15,6 +15,13 @@
         select *
         from users
         where id = #{id}
+          and deleted_at is null
+    </select>
+
+    <select id="getUserCount">
+        select count(*)
+        from users
+        where deleted_at is null
     </select>
 
     <update id="updateUser">
@@ -28,9 +35,15 @@
         where id = #{id}
     </update>
 
-    <delete id="deleteAllUsers">
+    <update id="deleteUserById">
+        update users
+        set deleted_at = CURRENT_TIMESTAMP
+        where id = #{id}
+    </update>
+
+    <delete id="hardDeleteAllUsers">
         delete
         from users
     </delete>
-    
+
 </mapper>

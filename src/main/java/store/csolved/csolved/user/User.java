@@ -17,5 +17,6 @@ public class User
     private String nickname;
     private String company;
     private LocalDateTime createdAt;
+    private LocalDateTime deletedAt;
     private boolean isAdmin;
 }

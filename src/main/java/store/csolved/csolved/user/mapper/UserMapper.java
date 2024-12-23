@@ -10,7 +10,11 @@ public interface UserMapper
 
     User findUserById(Long id);
 
-    void deleteAllUsers();
+    Long getUserCount();
 
     void updateUser(User user);
+
+    void deleteUserById(Long id);
+
+    void hardDeleteAllUsers();
 }
