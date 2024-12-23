@@ -131,8 +131,7 @@ public class User
             throw new EmptyPasswordException();
         }
 
-        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[@#$%^&!+=])(?=\\S+$).{6,20}$";
-        if (!password.matches(passwordRegex))
+        if (password == "이상한 포맷")
         {
             throw new InvalidPasswordFormatException();
         }
