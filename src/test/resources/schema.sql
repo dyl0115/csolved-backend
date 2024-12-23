@@ -1,139 +1,141 @@
--- 사용자 정보
 CREATE TABLE users
 (
-    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
-    email      VARCHAR(100) NOT NULL UNIQUE,
+    id         BIGINT       NOT NULL AUTO_INCREMENT,
+    email      VARCHAR(100) NOT NULL,
     password   VARCHAR(200) NOT NULL,
     nickname   VARCHAR(50)  NOT NULL,
-    company    VARCHAR(100),
+    company    VARCHAR(100)          DEFAULT NULL,
+    is_admin   BOOLEAN               DEFAULT NULL,
     created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    is_admin   BOOLEAN               DEFAULT FALSE deleted_at TIMESTAMP NULL;
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT users_email_unique UNIQUE (email)
 );
 
--- CS 질문
 CREATE TABLE questions
 (
-    id         BIGINT PRIMARY KEY,
+    id         BIGINT       NOT NULL AUTO_INCREMENT,
     user_id    BIGINT       NOT NULL,
     title      VARCHAR(200) NOT NULL,
-    content    TEXT         NOT NULL,
-    category   VARCHAR(50)  NOT NULL, -- OS, Network, DB 등
+    content    CLOB         NOT NULL,
+    category   VARCHAR(50)  NOT NULL,
     views      INT                   DEFAULT 0,
     created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT questions_user_fk FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- 질문 태그
 CREATE TABLE question_tags
 (
-    id          BIGINT PRIMARY KEY,
+    id          BIGINT      NOT NULL AUTO_INCREMENT,
     question_id BIGINT      NOT NULL,
     tag_name    VARCHAR(50) NOT NULL,
-    deleted_at  TIMESTAMP NULL,
-    FOREIGN KEY (question_id) REFERENCES questions (id)
+    PRIMARY KEY (id),
+    CONSTRAINT question_tags_question_fk FOREIGN KEY (question_id) REFERENCES questions (id)
 );
 
--- 답변
 CREATE TABLE answers
 (
-    id          BIGINT PRIMARY KEY,
+    id          BIGINT    NOT NULL AUTO_INCREMENT,
     question_id BIGINT    NOT NULL,
     user_id     BIGINT    NOT NULL,
-    content     TEXT      NOT NULL,
+    content     CLOB      NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at  TIMESTAMP NULL,
-    FOREIGN KEY (question_id) REFERENCES questions (id),
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    deleted_at  TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT answers_question_fk FOREIGN KEY (question_id) REFERENCES questions (id),
+    CONSTRAINT answers_user_fk FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- 답변 평가
 CREATE TABLE answer_ratings
 (
-    id         BIGINT PRIMARY KEY,
+    id         BIGINT    NOT NULL AUTO_INCREMENT,
     answer_id  BIGINT    NOT NULL,
     user_id    BIGINT    NOT NULL,
-    score      INT       NOT NULL CHECK (score BETWEEN 1 AND 5),
+    score      INT       NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (answer_id) REFERENCES answers (id),
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    UNIQUE (answer_id, user_id) -- 한 사용자가 하나의 답변에 한 번만 평가 가능
+    PRIMARY KEY (id),
+    CONSTRAINT answer_ratings_unique UNIQUE (answer_id, user_id),
+    CONSTRAINT answer_ratings_answer_fk FOREIGN KEY (answer_id) REFERENCES answers (id),
+    CONSTRAINT answer_ratings_user_fk FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT answer_ratings_score_check CHECK (score BETWEEN 1 AND 5)
 );
 
--- 댓글 (답변에 대한)
 CREATE TABLE comments
 (
-    id                BIGINT PRIMARY KEY,
+    id                BIGINT    NOT NULL AUTO_INCREMENT,
     answer_id         BIGINT    NOT NULL,
     user_id           BIGINT    NOT NULL,
-    content           TEXT      NOT NULL,
-    parent_comment_id BIGINT, -- 대댓글인 경우 부모 댓글 ID
+    content           CLOB      NOT NULL,
+    parent_comment_id BIGINT             DEFAULT NULL,
     created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at        TIMESTAMP NULL,
-    FOREIGN KEY (answer_id) REFERENCES answers (id),
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (parent_comment_id) REFERENCES comments (id)
+    deleted_at        TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT comments_answer_fk FOREIGN KEY (answer_id) REFERENCES answers (id),
+    CONSTRAINT comments_user_fk FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT comments_parent_fk FOREIGN KEY (parent_comment_id) REFERENCES comments (id)
 );
 
--- 퀴즈 세트
 CREATE TABLE quiz_sets
 (
-    id         BIGINT PRIMARY KEY,
+    id         BIGINT       NOT NULL AUTO_INCREMENT,
     user_id    BIGINT       NOT NULL,
     title      VARCHAR(200) NOT NULL,
     category   VARCHAR(50)  NOT NULL,
-    difficulty VARCHAR(20)  NOT NULL, -- 초급, 중급, 고급
+    difficulty VARCHAR(20)  NOT NULL,
     views      INT                   DEFAULT 0,
     created_at TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT quiz_sets_user_fk FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- 퀴즈 문제
 CREATE TABLE quiz_questions
 (
-    id            BIGINT PRIMARY KEY,
+    id            BIGINT    NOT NULL AUTO_INCREMENT,
     quiz_set_id   BIGINT    NOT NULL,
-    question_text TEXT      NOT NULL,
-    explanation   TEXT      NOT NULL, -- 해설
+    question_text CLOB      NOT NULL,
+    explanation   CLOB      NOT NULL,
     created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    deleted_at    TIMESTAMP NULL,
-    FOREIGN KEY (quiz_set_id) REFERENCES quiz_sets (id)
+    deleted_at    TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    CONSTRAINT quiz_questions_quiz_set_fk FOREIGN KEY (quiz_set_id) REFERENCES quiz_sets (id)
 );
 
--- 퀴즈 보기
 CREATE TABLE quiz_options
 (
-    id            BIGINT PRIMARY KEY,
+    id            BIGINT  NOT NULL AUTO_INCREMENT,
     question_id   BIGINT  NOT NULL,
-    option_number CHAR(1) NOT NULL, -- A, B, C, D
-    option_text   TEXT    NOT NULL,
+    option_number CHAR(1) NOT NULL,
+    option_text   CLOB    NOT NULL,
     is_correct    BOOLEAN NOT NULL,
-    FOREIGN KEY (question_id) REFERENCES quiz_questions (id)
+    PRIMARY KEY (id),
+    CONSTRAINT quiz_options_question_fk FOREIGN KEY (question_id) REFERENCES quiz_questions (id)
 );
 
--- 퀴즈 결과
 CREATE TABLE quiz_results
 (
-    id           BIGINT PRIMARY KEY,
+    id           BIGINT    NOT NULL AUTO_INCREMENT,
     quiz_set_id  BIGINT    NOT NULL,
     user_id      BIGINT    NOT NULL,
     score        INT       NOT NULL,
-    time_taken   INT       NOT NULL, -- 초 단위
+    time_taken   INT       NOT NULL,
     completed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (quiz_set_id) REFERENCES quiz_sets (id),
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    PRIMARY KEY (id),
+    CONSTRAINT quiz_results_quiz_set_fk FOREIGN KEY (quiz_set_id) REFERENCES quiz_sets (id),
+    CONSTRAINT quiz_results_user_fk FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- 신고 테이블 (질문, 답변, 퀴즈 모두에 대한 신고 처리)
 CREATE TABLE reports
 (
-    id          BIGINT PRIMARY KEY,
+    id          BIGINT      NOT NULL AUTO_INCREMENT,
     reporter_id BIGINT      NOT NULL,
-    target_type VARCHAR(20) NOT NULL,                   -- QUESTION, ANSWER, QUIZ
+    target_type VARCHAR(20) NOT NULL,
     target_id   BIGINT      NOT NULL,
-    reason      TEXT        NOT NULL,
-    status      VARCHAR(20) NOT NULL DEFAULT 'PENDING', -- PENDING, REVIEWED
+    reason      CLOB        NOT NULL,
+    status      VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     created_at  TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (reporter_id) REFERENCES users (id)
+    PRIMARY KEY (id),
+    CONSTRAINT reports_reporter_fk FOREIGN KEY (reporter_id) REFERENCES users (id)
 );
