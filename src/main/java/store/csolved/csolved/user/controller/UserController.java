@@ -35,6 +35,6 @@ public class UserController
     {
         UserInfo user = userService.signIn(request);
         session.setAttribute("user", user);
-        return "redirect:/home";
+        return "redirect:/questions/";
     }
 }

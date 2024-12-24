@@ -10,8 +10,9 @@ public interface UserMapper
 
     User findUserById(Long id);
 
-    //테스트 필요
-    User findUserByEmailAndPassword(String email, String password);
+    User findUserByEmail(String email);
+
+    String findPasswordByEmail(String Email);
 
     long getUserCount();
 

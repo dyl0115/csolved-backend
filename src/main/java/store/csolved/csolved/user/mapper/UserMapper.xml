@@ -18,11 +18,16 @@
           and deleted_at is null
     </select>
 
-    <select id="findUserByEmailAndPassword">
+    <select id="findUserByEmail">
         select *
         from users
         where email = #{email}
-          and password = #{password}
+    </select>
+    
+    <select id="findPasswordByEmail">
+        select password
+        from users
+        where email = #{email}
     </select>
 
     <select id="getUserCount" resultType="long">

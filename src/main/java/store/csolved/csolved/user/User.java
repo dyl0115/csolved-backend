@@ -11,14 +11,14 @@ import static lombok.AccessLevel.*;
 @AllArgsConstructor(access = PRIVATE)
 public class User
 {
-    private final Long id;
-    private final String email;
-    private final String password;
-    private final String nickname;
-    private final String company;
-    private final Boolean isAdmin;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime deletedAt;
+    private Long id;
+    private String email;
+    private String password;
+    private String nickname;
+    private String company;
+    private Boolean isAdmin;
+    private LocalDateTime createdAt;
+    private LocalDateTime deletedAt;
 
     public static User create(String email, String password, String nickname, String company, boolean isAdmin)
     {
@@ -32,33 +32,35 @@ public class User
         return create(email, password, nickname, null, false);
     }
 
-    public User updateEmail(String email)
+    public void updateEmail(String email)
     {
         validateEmailFormat(email);
-        return new User(this.id, email, this.password, this.nickname, this.company, this.isAdmin, this.createdAt, this.deletedAt);
+        this.email = email;
     }
 
-    public User updatePassword(String password)
+    public void updatePassword(String password)
     {
         validatePasswordFormat(password);
-        return new User(this.id, this.email, password, this.nickname, this.company, this.isAdmin, this.createdAt, this.deletedAt);
+        this.password = password;
     }
 
-    public User updateNickname(String nickname)
+    public void updateNickname(String nickname)
     {
         validateNicknameFormat(nickname);
-        return new User(this.id, this.email, this.password, nickname, this.company, this.isAdmin, this.createdAt, this.deletedAt);
+        this.nickname = nickname;
     }
 
-    public User updateCompany(String company)
+    public void updateCompany(String company)
     {
-        return new User(this.id, this.email, this.password, this.nickname, company, this.isAdmin, this.createdAt, this.deletedAt);
+        this.company = company;
     }
 
-    public User delete()
+    public void delete()
     {
-        return new User(this.id, this.email, this.password, this.nickname,
-                this.company, this.isAdmin, this.createdAt, LocalDateTime.now());
+        if (this.deletedAt == null)
+        {
+            this.deletedAt = LocalDateTime.now();
+        }
     }
 
     public boolean isDeleted()
