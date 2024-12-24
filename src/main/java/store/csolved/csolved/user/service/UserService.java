@@ -2,13 +2,13 @@ package store.csolved.csolved.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.user.User;
-import store.csolved.csolved.user.dto.UserSignupRequestDto;
-import store.csolved.csolved.user.dto.UserSignupResponseDto;
-import store.csolved.csolved.user.exceptions.DuplicateEmailException;
+import store.csolved.csolved.user.dto.UserSignInRequest;
+import store.csolved.csolved.user.dto.UserSignUpRequest;
+import store.csolved.csolved.user.dto.UserInfo;
+import store.csolved.csolved.user.exceptions.*;
 import store.csolved.csolved.user.mapper.UserMapper;
-
-import static store.csolved.csolved.user.dto.UserSignupRequestDto.toEntity;
 
 @RequiredArgsConstructor
 @Service
@@ -16,26 +16,42 @@ public class UserService
 {
     private final UserMapper userMapper;
 
-    public UserSignupResponseDto signUp(UserSignupRequestDto dto)
+    @Transactional
+    public UserInfo signUp(UserSignUpRequest request)
     {
-        User user = toEntity(dto);
+        User user = UserSignUpRequest.toEntity(request);
 
-        String duplicateEmail = checkEmailDuplicate(user);
-        if (duplicateEmail != null)
+        validateEmailDuplication(user.getEmail());
+        validateNicknameDuplication(user.getNickname());
+
+        userMapper.insertUser(user);
+
+        return UserInfo.from(user);
+    }
+
+    public UserInfo signIn(UserSignInRequest request)
+    {
+        User user = userMapper.findUserByEmailAndPassword(request.getEmail(), request.getPassword());
+        if (user == null)
+        {
+            throw new AuthenticationFailedException();
+        }
+        return UserInfo.from(user);
+    }
+
+    private void validateEmailDuplication(String email)
+    {
+        if (userMapper.existsByEmail(email))
         {
             throw new DuplicateEmailException();
         }
-
-        // 이메일 인증은 나중에
-
-        userMapper.insertUser(user);
-        User userFind = userMapper.findUserById(user.getId());
-        return UserSignupResponseDto.from(userFind);
     }
 
-    private String checkEmailDuplicate(User user)
+    private void validateNicknameDuplication(String nickname)
     {
-        return userMapper.isEmailDuplicate(user.getEmail());
+        if (userMapper.existsByNickname(nickname))
+        {
+            throw new DuplicateNicknameException();
+        }
     }
-
 }

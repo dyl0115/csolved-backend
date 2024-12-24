@@ -10,9 +10,14 @@ public interface UserMapper
 
     User findUserById(Long id);
 
-    Long getUserCount();
+    //테스트 필요
+    User findUserByEmailAndPassword(String email, String password);
 
-    String isEmailDuplicate(String email);
+    long getUserCount();
+
+    boolean existsByEmail(String email);
+
+    boolean existsByNickname(String nickname);
 
     void updateUser(User user);
 

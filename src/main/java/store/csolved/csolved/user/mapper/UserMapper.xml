@@ -18,16 +18,29 @@
           and deleted_at is null
     </select>
 
-    <select id="getUserCount">
+    <select id="findUserByEmailAndPassword">
+        select *
+        from users
+        where email = #{email}
+          and password = #{password}
+    </select>
+
+    <select id="getUserCount" resultType="long">
         select count(*)
         from users
         where deleted_at is null
     </select>
 
-    <select id="isEmailDuplicate" resultType="String">
-        select email
-        from users
-        where email = #{email}
+    <select id="existsByEmail" resultType="boolean">
+        select exists(select 1
+                      from users
+                      where email = #{email})
+    </select>
+
+    <select id="existsByNickname" resultType="boolean">
+        select exists(select 1
+                      from users
+                      where nickname = #{nickname})
     </select>
 
     <update id="updateUser">

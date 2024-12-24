@@ -5,112 +5,75 @@ import store.csolved.csolved.user.exceptions.*;
 
 import java.time.LocalDateTime;
 
+import static lombok.AccessLevel.*;
+
 @Getter
+@AllArgsConstructor(access = PRIVATE)
 public class User
 {
-    private Long id;
-    private String email;
-    private String password;
-    private String nickname;
-    private String company;
-    private Boolean isAdmin;
-    private LocalDateTime createdAt;
-    private LocalDateTime deletedAt;
-
-    @Builder(access = AccessLevel.PRIVATE)
-    private User(Long id,
-                 String email,
-                 String password,
-                 String nickname,
-                 String company,
-                 Boolean isAdmin,
-                 LocalDateTime createdAt,
-                 LocalDateTime deletedAt)
-    {
-        validateEmailFormat(email);
-        validatePasswordFormat(password);
-        validateNicknameFormat(nickname);
-
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.nickname = nickname;
-        this.company = company;
-        this.createdAt = createdAt;
-        this.deletedAt = deletedAt;
-        this.isAdmin = isAdmin;
-    }
+    private final Long id;
+    private final String email;
+    private final String password;
+    private final String nickname;
+    private final String company;
+    private final Boolean isAdmin;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime deletedAt;
 
     public static User create(String email, String password, String nickname, String company, boolean isAdmin)
     {
-        return User.builder()
-                .email(email)
-                .password(password)
-                .nickname(nickname)
-                .company(company)
-                .isAdmin(isAdmin)
-                .createdAt(LocalDateTime.now())
-                .deletedAt(null)
-                .build();
+        validateFormat(email, password, nickname);
+        return new User(null, email, password, nickname, company, isAdmin, LocalDateTime.now(), null);
     }
 
     public static User create(String email, String password, String nickname)
     {
-        return User.builder()
-                .email(email)
-                .password(password)
-                .nickname(nickname)
-                .isAdmin(false)
-                .createdAt(LocalDateTime.now())
-                .deletedAt(null)
-                .build();
+        validateFormat(email, password, nickname);
+        return create(email, password, nickname, null, false);
     }
 
-    public void updateEmail(String email)
+    public User updateEmail(String email)
     {
         validateEmailFormat(email);
-        this.email = email;
+        return new User(this.id, email, this.password, this.nickname, this.company, this.isAdmin, this.createdAt, this.deletedAt);
     }
 
-    public void updatePassword(String password)
+    public User updatePassword(String password)
     {
         validatePasswordFormat(password);
-        this.password = password;
+        return new User(this.id, this.email, password, this.nickname, this.company, this.isAdmin, this.createdAt, this.deletedAt);
     }
 
-    public void updateNickname(String nickname)
+    public User updateNickname(String nickname)
     {
         validateNicknameFormat(nickname);
-        this.nickname = nickname;
+        return new User(this.id, this.email, this.password, nickname, this.company, this.isAdmin, this.createdAt, this.deletedAt);
     }
 
-    public void updateCompany(String company)
+    public User updateCompany(String company)
     {
-        this.company = company;
+        return new User(this.id, this.email, this.password, this.nickname, company, this.isAdmin, this.createdAt, this.deletedAt);
     }
 
-    public void updateAdmin(Boolean isAdmin)
+    public User delete()
     {
-        this.isAdmin = isAdmin;
+        return new User(this.id, this.email, this.password, this.nickname,
+                this.company, this.isAdmin, this.createdAt, LocalDateTime.now());
     }
 
-    public void delete()
+    public boolean isDeleted()
     {
-        this.deletedAt = LocalDateTime.now();
+        return this.deletedAt != null;
     }
 
-    public void update(User user)
+    private static void validateFormat(String email, String password, String nickname)
     {
-        this.email = user.email;
-        this.password = user.password;
-        this.nickname = user.nickname;
-        this.company = user.company;
-        this.isAdmin = user.isAdmin;
-        this.createdAt = user.createdAt;
-        this.deletedAt = user.deletedAt;
+        validateEmailFormat(email);
+        validatePasswordFormat(password);
+        validateNicknameFormat(nickname);
     }
 
-    private void validateEmailFormat(String email)
+    private static void validateEmailFormat(String email)
     {
         if (email == null)
         {
@@ -124,20 +87,20 @@ public class User
         }
     }
 
-    private void validatePasswordFormat(String password)
+    private static void validatePasswordFormat(String password)
     {
         if (password == null)
         {
             throw new EmptyPasswordException();
         }
 
-        if (password == "이상한 포맷")
+        if (password.equals("이상한 포맷"))
         {
             throw new InvalidPasswordFormatException();
         }
     }
 
-    private void validateNicknameFormat(String nickname)
+    private static void validateNicknameFormat(String nickname)
     {
         if (nickname == null)
         {

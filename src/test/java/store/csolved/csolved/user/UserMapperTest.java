@@ -50,14 +50,28 @@ class UserMapperTest extends TestHelper
     }
 
     @Test
-    @DisplayName("isEmailDuplicate() 중복되는 이메일이 있다면 해당 이메일을 반환합니다.")
-    public void isEmailDuplicate()
+    @DisplayName("findByEmailAndPassword() 이메일과 비밀번호로 회원을 조회합니다.")
+    public void findByEmailAndPasswordTest()
     {
         User user1 = createTestUser(1);
         userMapper.insertUser(user1);
 
-        String emailDuplicate = userMapper.isEmailDuplicate(user1.getEmail());
-        Assertions.assertThat(emailDuplicate).isEqualTo(user1.getEmail());
+        User userFind1 = userMapper.findUserByEmailAndPassword(user1.getEmail(), user1.getPassword());
+        assertThat(userFind1.getId()).isEqualTo(user1.getId());
+
+        User noUser = userMapper.findUserByEmailAndPassword("noExistEmail", "noExistPassword");
+        assertThat(noUser).isNull();
+    }
+
+    @Test
+    @DisplayName("existsByEmail() 중복되는 이메일이 있다면 true를 반환합니다.")
+    public void isEmailDuplicateTest()
+    {
+        User user1 = createTestUser(1);
+        userMapper.insertUser(user1);
+
+        boolean exist = userMapper.existsByEmail(user1.getEmail());
+        Assertions.assertThat(exist).isTrue();
     }
 
     @Test
@@ -70,11 +84,13 @@ class UserMapperTest extends TestHelper
         userMapper.insertUser(user2);
 
         // user1의 정보를 업데이트하고 데이터베이스에 저장합니다.
-        user1.updateNickname("new_nickname");
-        user1.updateEmail("new_email@example.com");
-        user1.updateCompany("new_company");
-        user1.updatePassword("password123!");
-        userMapper.updateUser(user1);
+        User userUpdate1 = user1
+                .updateNickname("new_nickname")
+                .updateEmail("new_email@example.com")
+                .updateCompany("new_company")
+                .updatePassword("password123!");
+
+        userMapper.updateUser(userUpdate1);
 
         // user1과 user2를 데이터베이스에서 가져옵니다.
         User userFind1 = userMapper.findUserById(user1.getId());
