@@ -1,5 +1,7 @@
 package store.csolved.csolved.user.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,8 +9,12 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class UserSignInForm
+public class SignInForm
 {
+    @NotBlank
+    @Email
     private String email;
+
+    @NotBlank
     private String password;
 }
