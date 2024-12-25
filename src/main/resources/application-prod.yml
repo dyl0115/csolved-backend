@@ -6,7 +6,7 @@ spring:
     password: ${DB_PASSWORD}
 
   messages:
-    basename: messages-ko
+    basename: messages/messages-ko
     encoding: UTF-8
 
 mybatis:

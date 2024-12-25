@@ -1,7 +1,7 @@
-package store.csolved.csolved.user.mapper;
+package store.csolved.csolved.domain.user.mapper;
 
 import org.apache.ibatis.annotations.*;
-import store.csolved.csolved.user.User;
+import store.csolved.csolved.domain.user.User;
 
 @Mapper
 public interface UserMapper

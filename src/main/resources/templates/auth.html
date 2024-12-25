@@ -217,19 +217,18 @@
                         </div>
                     </div>
                     <div class="form-container">
-                        <form th:action="@{/users/signin}" method="post">
-                            <!-- 에러 메시지 영역 추가 -->
-                            <div class="form-error"
-                                 th:if="${#fields.hasGlobalErrors()}"
-                                 th:each="error : ${#fields.globalErrors()}"
-                                 th:text="${error}"
-                                 style="display: block; margin-bottom: 20px;">
-                            </div>
-                            
+                        <form th:action="@{/auth/signin}" th:object="${signInForm}" method="post">
                             <div class="form-group">
                                 <label class="form-label">이메일</label>
                                 <input type="email" name="email" class="form-input" required>
+                                <div class="form-error"
+                                     th:if="${#fields.hasGlobalErrors()}"
+                                     th:each="error : ${#fields.globalErrors()}"
+                                     th:text="${error}"
+                                     style="display: block; margin-bottom: 20px;">
+                                </div>
                             </div>
+                            
                             <div class="form-group">
                                 <label class="form-label">비밀번호</label>
                                 <input type="password" name="password" class="form-input" required>

@@ -1,13 +1,13 @@
-package store.csolved.csolved.user;
+package store.csolved.csolved.domain.user;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PRIVATE;
 
+@Getter
 @AllArgsConstructor(access = PRIVATE)
 public class User
 {

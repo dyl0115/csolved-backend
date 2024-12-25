@@ -1,4 +1,4 @@
-package store.csolved.csolved.user.dto;
+package store.csolved.csolved.domain.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import store.csolved.csolved.user.User;
+import store.csolved.csolved.domain.user.User;
 
 @Setter
 @Getter
