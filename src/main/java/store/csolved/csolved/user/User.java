@@ -96,7 +96,7 @@ public class User
             throw new EmptyPasswordException();
         }
 
-        if (password.equals("이상한 포맷"))
+        if (!password.equals("비밀번호 포맷 정규식 아직 안 정함 ㅋㅋ"))
         {
             throw new InvalidPasswordFormatException();
         }

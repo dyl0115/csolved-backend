@@ -5,6 +5,10 @@ spring:
     username: dyl0115
     password: endyd132!!
 
+  messages:
+    basename: messages-ko
+    encoding: UTF-8
+
 mybatis:
   mapper-locations:
     - classpath:mapper/**/*.xml

@@ -4,17 +4,20 @@
         <meta charset="UTF-8">
         <title>CS Interview Platform - Auth</title>
         <style>
+            /* Reset CSS */
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
             }
 
+            /* Base Styles */
             body {
                 background-color: #f0f2f5;
                 font-family: Arial, sans-serif;
             }
 
+            /* Navigation Bar */
             .nav-bar {
                 background-color: white;
                 height: 60px;
@@ -45,6 +48,7 @@
                 font-weight: bold;
             }
 
+            /* Auth Card Container */
             .main-container {
                 display: flex;
                 justify-content: center;
@@ -57,13 +61,14 @@
                 position: relative;
                 transform-style: preserve-3d;
                 transition: transform 0.6s;
-                height: 580px; /* 높이를 580px로 증가 */
+                height: 580px;
             }
 
             .auth-card.flipped {
                 transform: rotateY(180deg);
             }
 
+            /* Card Faces */
             .card-face {
                 position: absolute;
                 width: 100%;
@@ -79,6 +84,7 @@
                 transform: rotateY(180deg);
             }
 
+            /* Tab Navigation */
             .tab-container {
                 display: flex;
                 border-bottom: 1px solid #e1e4e8;
@@ -106,10 +112,11 @@
                 border-radius: 0 8px 0 0;
             }
 
+            /* Form Styles */
             .form-container {
                 padding: 30px;
-                height: calc(100% - 51px); /* 탭 컨테이너 높이를 제외한 나머지 */
-                overflow-y: auto; /* 내용이 넘치면 스크롤 표시 */
+                height: calc(100% - 51px);
+                overflow-y: auto;
             }
 
             .form-group {
@@ -139,6 +146,7 @@
                 background-color: #f8f9fa;
             }
 
+            /* Button Styles */
             .auth-button {
                 width: 100%;
                 height: 45px;
@@ -152,6 +160,7 @@
                 margin: 20px 0;
             }
 
+            /* Checkbox Styles */
             .checkbox-group {
                 display: flex;
                 align-items: center;
@@ -169,35 +178,13 @@
                 color: #666666;
             }
 
+            /* Divider */
             .divider {
                 border-top: 1px solid #e1e4e8;
                 margin: 20px 0;
             }
 
-            .social-login {
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-                padding: 20px 0;
-            }
-
-            .social-button {
-                width: 40px;
-                height: 40px;
-                border: 1px solid #e1e4e8;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 20px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-
-            .social-button:hover {
-                background-color: #f8f9fa;
-            }
-
+            /* Error Styles */
             .form-error {
                 color: #dc3545;
                 font-size: 12px;
@@ -207,6 +194,7 @@
         </style>
     </head>
     <body>
+        <!-- Navigation Bar -->
         <div class="nav-bar">
             <div class="logo">
                 <div class="logo-circle"></div>
@@ -214,9 +202,12 @@
             </div>
         </div>
         
+        <!-- Main Container -->
         <div class="main-container">
-            <div class="auth-card">
-                <!-- 로그인 카드 (앞면) -->
+            <!-- Auth Card with conditional flipping -->
+            <div class="auth-card"
+                 th:classappend="${userSignUpForm != null and #fields.hasErrors('userSignUpForm.*')} ? 'flipped'">
+                <!-- Login Card (Front) -->
                 <div class="card-face card-front">
                     <div class="tab-container">
                         <div class="tab active">로그인</div>
@@ -238,29 +229,34 @@
                     </div>
                 </div>
                 
-                <!-- 회원가입 카드 (뒷면) -->
+                <!-- Sign Up Card (Back) -->
                 <div class="card-face card-back">
                     <div class="tab-container">
                         <div class="tab" onclick="flipCard()">로그인</div>
                         <div class="tab active">회원가입</div>
                     </div>
                     <div class="form-container">
-                        <form th:action="@{/users/signup}" method="post" onsubmit="return validateSignupForm()">
+                        <form th:action="@{/users/signup}" th:object="${signUpForm}" method="post"
+                              onsubmit="return validateSignupForm()">
                             <div class="form-group">
                                 <label class="form-label">이메일</label>
                                 <div class="form-sublabel">로그인 시 사용할 이메일 주소</div>
-                                <input type="email" name="email" class="form-input" required>
+                                <input type="email" th:field="*{email}" class="form-input" required>
+                                <div class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                                     style="display: block;"></div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">닉네임</label>
                                 <div class="form-sublabel">커뮤니티에서 사용할 닉네임 (2-10자)</div>
-                                <input type="text" name="nickname" class="form-input" required
-                                       minlength="2" maxlength="10">
+                                <input type="text" th:field="*{nickname}" class="form-input" required minlength="2"
+                                       maxlength="10">
+                                <div class="form-error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"
+                                     style="display: block;"></div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">비밀번호</label>
                                 <div class="form-sublabel">8자 이상, 영문/숫자/특수문자 조합</div>
-                                <input type="password" name="password" id="password" class="form-input" required
+                                <input type="password" th:field="*{password}" class="form-input" required
                                        pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$">
                             </div>
                             <div class="form-group">
@@ -280,12 +276,24 @@
             </div>
         </div>
         
+        <!-- Scripts -->
         <script>
+            // Initialize card state on page load
+            document.addEventListener('DOMContentLoaded', function () {
+                const hasError = document.querySelector('.form-error[style="display: block;"]');
+                const card = document.querySelector('.auth-card');
+                if (hasError) {
+                    card.classList.add('flipped');
+                }
+            });
+
+            // Handle card flipping
             function flipCard() {
                 const card = document.querySelector('.auth-card');
                 card.classList.toggle('flipped');
             }
 
+            // Validate signup form
             function validateSignupForm() {
                 const password = document.getElementById('password');
                 const passwordConfirm = document.getElementById('passwordConfirm');

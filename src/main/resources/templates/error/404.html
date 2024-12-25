@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>CS Interview Platform - 400 Error</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: #f0f2f5;
+                font-family: Arial, sans-serif;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .nav-bar {
+                background-color: white;
+                height: 60px;
+                width: 100%;
+                border-bottom: 1px solid #e1e4e8;
+                display: flex;
+                align-items: center;
+                padding: 0 20px;
+            }
+
+            .logo {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .logo-circle {
+                width: 40px;
+                height: 40px;
+                background-color: #4a90e2;
+                border-radius: 50%;
+            }
+
+            .logo-text {
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .error-container {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 40px;
+            }
+
+            .error-card {
+                background: white;
+                border-radius: 16px;
+                padding: 40px;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                max-width: 500px;
+                width: 100%;
+            }
+
+            .error-image {
+                width: 200px;
+                height: 200px;
+                margin: 0 auto 30px;
+                position: relative;
+            }
+
+            .error-circle {
+                width: 200px;
+                height: 200px;
+                background-color: #4a90e2;
+                border-radius: 50%;
+                position: relative;
+                animation: search 3s infinite;
+            }
+
+            .error-face {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 120px;
+                height: 60px;
+            }
+
+            .error-eyes {
+                display: flex;
+                justify-content: space-between;
+                width: 80px;
+                margin: 0 auto;
+            }
+
+            .error-eye {
+                width: 20px;
+                height: 20px;
+                background-color: white;
+                border-radius: 50%;
+                position: relative;
+                animation: searching 3s infinite;
+            }
+
+            .error-eye::after {
+                content: '';
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background-color: #4a90e2;
+                border-radius: 50%;
+                top: 5px;
+                left: 5px;
+                animation: lookAround 3s infinite;
+            }
+
+            .error-mouth {
+                width: 40px;
+                height: 40px;
+                margin: 10px auto 0;
+                position: relative;
+            }
+
+            .error-mouth::after {
+                content: 'o';
+                color: white;
+                font-size: 24px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .magnifying-glass {
+                position: absolute;
+                width: 60px;
+                height: 60px;
+                right: -20px;
+                bottom: -20px;
+                animation: tiltSearch 3s infinite;
+            }
+
+            .magnifying-glass::before {
+                content: '';
+                position: absolute;
+                width: 30px;
+                height: 30px;
+                border: 4px solid white;
+                border-radius: 50%;
+                top: 0;
+                left: 0;
+            }
+
+            .magnifying-glass::after {
+                content: '';
+                position: absolute;
+                width: 4px;
+                height: 20px;
+                background-color: white;
+                bottom: 5px;
+                right: 15px;
+                transform: rotate(45deg);
+            }
+
+            .error-title {
+                font-size: 48px;
+                font-weight: bold;
+                color: #4a90e2;
+                margin-bottom: 20px;
+            }
+
+            .error-message {
+                font-size: 18px;
+                color: #666;
+                margin-bottom: 30px;
+                line-height: 1.5;
+            }
+
+            .error-button {
+                background-color: #4a90e2;
+                color: white;
+                border: none;
+                border-radius: 25px;
+                padding: 12px 30px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .error-button:hover {
+                background-color: #357abd;
+                transform: translateY(-2px);
+            }
+
+            @keyframes search {
+                0%, 100% {
+                    transform: translateX(0);
+                }
+                25% {
+                    transform: translateX(-10px);
+                }
+                75% {
+                    transform: translateX(10px);
+                }
+            }
+
+            @keyframes searching {
+                0%, 100% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.1);
+                }
+            }
+
+            @keyframes lookAround {
+                0%, 100% {
+                    transform: translate(0, 0);
+                }
+                25% {
+                    transform: translate(3px, -3px);
+                }
+                50% {
+                    transform: translate(3px, 3px);
+                }
+                75% {
+                    transform: translate(-3px, 3px);
+                }
+            }
+
+            @keyframes tiltSearch {
+                0%, 100% {
+                    transform: rotate(45deg);
+                }
+                50% {
+                    transform: rotate(30deg);
+                }
+            }
+        
+        </style>
+    </head>
+    <body>
+        <div class="nav-bar">
+            <div class="logo">
+                <div class="logo-circle"></div>
+                <span class="logo-text">CS Interview Platform</span>
+            </div>
+        </div>
+        
+        <div class="error-container">
+            <div class="error-card">
+                <div class="error-image">
+                    <div class="error-circle">
+                        <div class="error-face">
+                            <div class="error-eyes">
+                                <div class="error-eye"></div>
+                                <div class="error-eye"></div>
+                            </div>
+                            <div class="error-mouth"></div>
+                        </div>
+                        <div class="magnifying-glass"></div>
+                    </div>
+                </div>
+                <h1 class="error-title">404</h1>
+                <p class="error-message">어라? 잘못된 요청이에요!<br>뭔가 열심히 찾아보고 있지만...<br>올바른 요청으로 다시 시도해주세요!</p>
+                <button class="error-button" onclick="window.location.href='/'">홈으로 가기</button>
+            </div>
+        </div>
+    </body>
+</html>

@@ -8,13 +8,13 @@ import store.csolved.csolved.user.User;
 @Setter
 @Getter
 @NoArgsConstructor
-public class UserSignUpRequest
+public class SignUpForm
 {
     private String email;
     private String nickname;
     private String password;
 
-    public static User toEntity(UserSignUpRequest request)
+    public static User toEntity(SignUpForm request)
     {
         return User.create(
                 request.getEmail(),

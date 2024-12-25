@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.user.User;
-import store.csolved.csolved.user.dto.UserSignInRequest;
-import store.csolved.csolved.user.dto.UserSignUpRequest;
+import store.csolved.csolved.user.dto.UserSignInForm;
+import store.csolved.csolved.user.dto.SignUpForm;
 import store.csolved.csolved.user.dto.UserInfo;
 import store.csolved.csolved.user.exceptions.*;
 import store.csolved.csolved.user.mapper.UserMapper;
@@ -18,15 +18,26 @@ public class UserService
     private final UserMapper userMapper;
 
     @Transactional
-    public UserInfo signUp(UserSignUpRequest request)
+    public UserInfo signUp(SignUpForm form)
     {
         // 입력 검증 및 유효성 검사
-        validateEmailDuplication(request.getEmail());
-        validateNicknameDuplication(request.getNickname());
+        SignUpFailedException ex = new SignUpFailedException();
+        if (userMapper.existsByEmail(form.getEmail()))
+        {
+            ex.addError("email", "duplicate");
+        }
+        if (userMapper.existsByNickname(form.getNickname()))
+        {
+            ex.addError("nickname", "duplicate");
+        }
+        if (!ex.getErrors().isEmpty())
+        {
+            throw ex;
+        }
 
         // 비밀번호 암호화
-        String hashedPassword = PasswordUtils.hashPassword(request.getPassword());
-        User user = UserSignUpRequest.toEntity(request);
+        String hashedPassword = PasswordUtils.hashPassword(form.getPassword());
+        User user = SignUpForm.toEntity(form);
         user.updatePassword(hashedPassword);
 
         // 데이터베이스에 저장
@@ -36,38 +47,21 @@ public class UserService
         return UserInfo.from(user);
     }
 
-    public UserInfo signIn(UserSignInRequest request)
+    public UserInfo signIn(UserSignInForm request)
     {
-        String password = userMapper.findPasswordByEmail(request.getEmail());
-        if (password == null)
-        {
-            throw new AuthenticationFailedException();
-        }
-
-        boolean matched = PasswordUtils.verifyPassword(request.getPassword(), password);
-        if (!matched)
-        {
-            throw new AuthenticationFailedException();
-        }
+        validateAuthentication(request);
 
         User user = userMapper.findUserByEmail(request.getEmail());
 
         return UserInfo.from(user);
     }
 
-    private void validateEmailDuplication(String email)
+    private void validateAuthentication(UserSignInForm request)
     {
-        if (userMapper.existsByEmail(email))
+        String storedPassword = userMapper.findPasswordByEmail(request.getEmail());
+        if (storedPassword == null || !PasswordUtils.verifyPassword(request.getPassword(), storedPassword))
         {
-            throw new DuplicateEmailException();
-        }
-    }
-
-    private void validateNicknameDuplication(String nickname)
-    {
-        if (userMapper.existsByNickname(nickname))
-        {
-            throw new DuplicateNicknameException();
+            throw new AuthenticationFailedException();
         }
     }
 }
