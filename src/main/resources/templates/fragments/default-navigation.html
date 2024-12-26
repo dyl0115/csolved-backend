@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.5/cdn.min.js"></script>
+    </head>
+    <body>
+        <!-- 네비게이션 바 -->
+        <nav th:fragment="navigationBar" class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center">
+                <!-- 로고 부분 -->
+                <div class="flex items-center">
+                    <a href="/example" class="flex items-center hover:opacity-80">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full"></div>
+                        <span class="ml-4 font-bold text-lg">CS Interview Platform</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </body>
+</html>
