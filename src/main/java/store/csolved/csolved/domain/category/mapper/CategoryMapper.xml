@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="store.csolved.csolved.domain.category.mapper.CategoryMapper">
+    <select id="findAllCategory" resultMap="CategoryDtoMap">
+        select *
+        from category;
+    </select>
+
+    <resultMap id="CategoryDtoMap" type="store.csolved.csolved.domain.category.Category">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="deletedAt" column="deleted_at"/>
+    </resultMap>
+
+</mapper>

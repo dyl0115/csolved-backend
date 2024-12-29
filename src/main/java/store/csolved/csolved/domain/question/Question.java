@@ -3,10 +3,8 @@ package store.csolved.csolved.domain.question;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import store.csolved.csolved.domain.category.Category;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,13 +14,17 @@ public class Question
 
     private final Long userId;
 
+    private final boolean isAnonymous;
+
     private final String title;
 
     private final String content;
 
     private final Long categoryId;
 
-    private final Integer views;
+    private final Long views;
+
+    private final Long likes;
 
     private final LocalDateTime createdAt;
 
@@ -30,7 +32,24 @@ public class Question
 
     public static Question create(Long userId, String title, String content, Long categoryId)
     {
-        return new Question(null, userId, title, content,
-                categoryId, 0, LocalDateTime.now(), null);
+        return new Question(null, userId, true, title, content,
+                categoryId, 0L, 0L, LocalDateTime.now(), null);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Question{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", isAnonymous=" + isAnonymous +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", categoryId=" + categoryId +
+                ", views=" + views +
+                ", likes=" + likes +
+                ", createdAt=" + createdAt +
+                ", deletedAt=" + deletedAt +
+                '}';
     }
 }

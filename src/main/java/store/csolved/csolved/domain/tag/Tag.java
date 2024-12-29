@@ -1,6 +1,5 @@
 package store.csolved.csolved.domain.tag;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

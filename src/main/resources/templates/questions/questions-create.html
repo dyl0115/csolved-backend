@@ -22,7 +22,7 @@
                 
                 <!-- Form Fields -->
                 <form th:action="@{/questions/create}"
-                      th:object="${questionForm}"
+                      th:object="${questionCreateForm}"
                       method="post"
                       x-data="{
                           tags: [],
@@ -74,7 +74,7 @@
                             <div class="relative">
                                 <select name="categoryId"
                                         class="w-full bg-white border border-gray-300 rounded-lg py-2 px-3 appearance-none">
-                                    <option th:each="category : ${questionForm.categoryList}"
+                                    <option th:each="category : ${questionCreateForm.categoryList}"
                                             th:value="${category.id}"
                                             th:text="${category.name}">운영체제
                                     </option>

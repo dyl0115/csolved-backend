@@ -3,4 +3,41 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.question.mapper.QuestionMapper">
+
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id">
+        insert into questions(user_id, title, content, category_id,
+                              views, deleted_at)
+        values (#{userId}, #{title}, #{content}, #{categoryId},
+                #{views}, #{deletedAt});
+    </insert>
+
+    <select id="findAllQuestions" resultMap="QuestionDtoMap">
+        select q.*,
+               (select group_concat(t.name)
+                from tags as t
+                         left join question_tags qt on t.id = qt.tag_id
+                where qt.question_id = q.id) as tags,
+               (select count(*)
+                from answers as a
+                where a.question_id = q.id)  as answer_count
+        from questions as q
+        limit #{offset}, #{limit};
+    </select>
+
+    <resultMap id="QuestionDtoMap" type="store.csolved.csolved.domain.question.dto.QuestionDto">
+        <result property="tags" column="tags"/>
+        <result property="answerCount" column="answer_count"/>
+        <association property="question" javaType="store.csolved.csolved.domain.question.Question">
+            <id property="id" column="id"/>
+            <result property="userId" column="user_id"/>
+            <result property="isAnonymous" column="is_anonymous"/>
+            <result property="title" column="title"/>
+            <result property="content" column="content"/>
+            <result property="categoryId" column="category_id"/>
+            <result property="views" column="views"/>
+            <result property="likes" column="likes"/>
+            <result property="createdAt" column="created_at"/>
+            <result property="deletedAt" column="deleted_at"/>
+        </association>
+    </resultMap>
 </mapper>
