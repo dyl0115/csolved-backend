@@ -9,9 +9,13 @@ import java.util.List;
 
 @Getter
 @Setter
-public class QuestionListDto
+public class QuestionCreateForm
 {
+    private String title;
+
     private User user;
-    private List<QuestionDto> questionList;
+
+    private String content;
+
     private List<Category> categoryList;
 }

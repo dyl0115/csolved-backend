@@ -6,20 +6,22 @@
     <insert id="insertTag" useGeneratedKeys="true" keyProperty="id">
         insert
         ignore into tags(name)
-        values (
+        values(
         #{name}
         );
     </insert>
 
-    <select id="findTagByName">
+    <select id="findTagsByNames">
         select *
         from tags
-        where name = #{name};
+        where name in
+        <foreach collection="list" item="name" open="(" separator="," close=")">
+            #{name}
+        </foreach>
     </select>
 
-    <insert id="insertQuestionAndTag">
-        insert
-        into question_tags(question_id, tag_id)
-        values (#{questionId}, #{tagId});
-    </insert>
+    <select id="findAllTagNames">
+        select name
+        from tags
+    </select>
 </mapper>

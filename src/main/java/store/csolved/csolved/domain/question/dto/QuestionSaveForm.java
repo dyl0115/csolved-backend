@@ -3,14 +3,17 @@ package store.csolved.csolved.domain.question.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import store.csolved.csolved.domain.question.Question;
+import store.csolved.csolved.domain.user.User;
 
-@Getter
-@Setter
-public class QuestionFormRequest
+@Data
+public class QuestionSaveForm
 {
+    private User user;
+
     @NotNull
     private Boolean isAnonymous;
 
@@ -27,8 +30,8 @@ public class QuestionFormRequest
     @Size(min = 1)
     private String content;
 
-    public Question toQuestion(Long userId)
+    public Question toQuestion()
     {
-        return Question.create(userId, title, content, categoryId);
+        return Question.create(user.getId(), title, content, categoryId);
     }
 }

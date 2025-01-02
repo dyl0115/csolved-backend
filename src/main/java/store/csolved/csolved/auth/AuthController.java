@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import store.csolved.csolved.config.auth.LoginUser;
 import store.csolved.csolved.domain.question.Page;
-import store.csolved.csolved.domain.question.dto.QuestionListDto;
+import store.csolved.csolved.domain.question.dto.QuestionListForm;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.user.dto.SignInForm;
 import store.csolved.csolved.domain.user.dto.SignUpForm;
@@ -51,7 +51,7 @@ public class AuthController
         {
             User principal = userService.signIn(signInForm);
             session.setAttribute("principal", principal);
-            model.addAttribute("questionListForm", new QuestionListDto());
+            model.addAttribute("questionListForm", new QuestionListForm());
             model.addAttribute("page", new Page(0L, 10L));
             return "redirect:/questions";
         }

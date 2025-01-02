@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import store.csolved.csolved.config.auth.LoginUser;
 import store.csolved.csolved.domain.question.Page;
-import store.csolved.csolved.domain.question.dto.QuestionFormRequest;
-import store.csolved.csolved.domain.question.dto.QuestionCreateDto;
-import store.csolved.csolved.domain.question.dto.QuestionListDto;
+import store.csolved.csolved.domain.question.dto.QuestionSaveForm;
+import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
+import store.csolved.csolved.domain.question.dto.QuestionListForm;
 import store.csolved.csolved.domain.question.service.QuestionService;
 import store.csolved.csolved.domain.user.User;
 
@@ -21,13 +21,13 @@ import static store.csolved.csolved.domain.question.Page.*;
 @RequiredArgsConstructor
 @RequestMapping("/questions")
 @Controller
-public class QuestionsController
+public class QuestionController
 {
     private final QuestionService questionService;
 
     @GetMapping("")
-    public String questions(@LoginUser User user,
-                            @ModelAttribute("questionList") QuestionListDto questionList)
+    public String provideQuestions(@LoginUser @ModelAttribute("user") User user,
+                                   @ModelAttribute("questionList") QuestionListForm questionList)
     {
         questionService.provideQuestions(user,
                 questionList,
@@ -37,26 +37,25 @@ public class QuestionsController
 
     @GetMapping("/create")
     public String provideQuestionForm(@LoginUser User user,
-                                      @ModelAttribute("questionCreateForm") QuestionCreateDto questionCreateDto)
+                                      @ModelAttribute("questionCreateForm") QuestionCreateForm createForm)
     {
-        questionService.provideQuestionForm(user, questionCreateDto);
+        questionService.provideQuestionForm(user, createForm);
         return "/questions/questions-create";
     }
 
     @PostMapping("/create")
     public String saveQuestion(@LoginUser User user,
-                               @Valid @ModelAttribute("questionCreateForm") QuestionFormRequest questionForm,
-                               BindingResult questionFormErrors)
+                               @Valid @ModelAttribute("questionSaveForm") QuestionSaveForm saveForm,
+                               BindingResult questionSaveErrors)
     {
-        if (questionFormErrors.hasErrors())
+        if (questionSaveErrors.hasErrors())
         {
             return "/questions/questions-create";
         }
         else
         {
-            questionService.saveQuestions(user, questionForm);
+            questionService.saveQuestion(user, saveForm);
             return "redirect:/questions";
         }
     }
-
 }

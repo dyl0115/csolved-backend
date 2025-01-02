@@ -27,8 +27,9 @@
                 <!-- 사용자 프로필 드롭다운 -->
                 <div class="relative" x-data="{ open: false, showWithdrawalAlert: false }">
                     <!-- 프로필 버튼 -->
-                    <button @click="open = !open" class="focus:outline-none">
+                    <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
                         <div class="w-8 h-8 bg-gray-500 rounded-full hover:opacity-80"></div>
+                        <span th:text="${user.nickname}" class="text-gray-700"></span>
                     </button>
                     
                     <!-- 드롭다운 메뉴 -->

@@ -5,30 +5,48 @@
 <mapper namespace="store.csolved.csolved.domain.question.mapper.QuestionMapper">
 
     <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id">
-        insert into questions(user_id, title, content, category_id,
-                              views, deleted_at)
-        values (#{userId}, #{title}, #{content}, #{categoryId},
-                #{views}, #{deletedAt});
+        insert into questions(user_id,
+                              title,
+                              content,
+                              category_id,
+                              views,
+                              deleted_at)
+        values (#{userId},
+                #{title},
+                #{content},
+                #{categoryId},
+                #{views},
+                #{deletedAt});
     </insert>
 
     <select id="findAllQuestions" resultMap="QuestionDtoMap">
-        select q.*,
-               (select group_concat(t.name)
-                from tags as t
-                         left join question_tags qt on t.id = qt.tag_id
-                where qt.question_id = q.id) as tags,
+        select q.id                         as question_id,
+               q.user_id                    as user_id,
+               q.is_anonymous               as is_anonymous,
+               q.title                      as title,
+               q.content                    as content,
+               q.category_id                as category_id,
+               q.views                      as views,
+               q.likes                      as likes,
+               q.created_at                 as created_at,
+               q.deleted_at                 as deleted_at,
+               t.id                         as tag_id,
+               t.name                       as tag_name,
                (select count(*)
                 from answers as a
-                where a.question_id = q.id)  as answer_count
+                where a.question_id = q.id) as answer_count
         from questions as q
+                 left join question_tags as qt on q.id = qt.question_id
+                 left join tags as t on qt.tag_id = t.id
+        order by q.created_at desc
         limit #{offset}, #{limit};
     </select>
 
     <resultMap id="QuestionDtoMap" type="store.csolved.csolved.domain.question.dto.QuestionDto">
-        <result property="tags" column="tags"/>
+        <id property="id" column="question_id"/>
         <result property="answerCount" column="answer_count"/>
         <association property="question" javaType="store.csolved.csolved.domain.question.Question">
-            <id property="id" column="id"/>
+            <id property="id" column="question_id"/>
             <result property="userId" column="user_id"/>
             <result property="isAnonymous" column="is_anonymous"/>
             <result property="title" column="title"/>
@@ -39,5 +57,16 @@
             <result property="createdAt" column="created_at"/>
             <result property="deletedAt" column="deleted_at"/>
         </association>
+        <collection property="tags" ofType="store.csolved.csolved.domain.tag.Tag">
+            <id property="id" column="tag_id"/>
+            <result property="name" column="tag_name"/>
+        </collection>
     </resultMap>
+
+    <insert id="insertQuestionAndTag">
+        insert
+        into question_tags(question_id, tag_id)
+        values (#{questionId}, #{tagId});
+    </insert>
+    
 </mapper>

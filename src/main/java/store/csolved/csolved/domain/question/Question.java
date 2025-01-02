@@ -1,11 +1,10 @@
 package store.csolved.csolved.domain.question;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
+@ToString
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Question
@@ -34,22 +33,5 @@ public class Question
     {
         return new Question(null, userId, true, title, content,
                 categoryId, 0L, 0L, LocalDateTime.now(), null);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Question{" +
-                "id=" + id +
-                ", userId=" + userId +
-                ", isAnonymous=" + isAnonymous +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", categoryId=" + categoryId +
-                ", views=" + views +
-                ", likes=" + likes +
-                ", createdAt=" + createdAt +
-                ", deletedAt=" + deletedAt +
-                '}';
     }
 }

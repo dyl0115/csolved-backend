@@ -6,13 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.question.Page;
 import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.question.dto.QuestionFormRequest;
-import store.csolved.csolved.domain.question.dto.QuestionCreateDto;
-import store.csolved.csolved.domain.question.dto.QuestionListDto;
+import store.csolved.csolved.domain.question.dto.QuestionSaveForm;
+import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
+import store.csolved.csolved.domain.question.dto.QuestionListForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
-import store.csolved.csolved.domain.tag.Tag;
-import store.csolved.csolved.domain.tag.mapper.TagMapper;
+import store.csolved.csolved.domain.tag.service.TagService;
 import store.csolved.csolved.domain.user.User;
 
 import java.util.List;
@@ -23,38 +22,29 @@ public class QuestionService
 {
     private final QuestionMapper questionMapper;
     private final CategoryMapper categoryMapper;
-    private final TagMapper tagMapper;
+    private final TagService tagService;
 
-    public void provideQuestionForm(User user, QuestionCreateDto form)
-    {
-        form.setUserId(user.getId());
-        form.setNickname(user.getNickname());
-        form.setCategoryList(categoryMapper.findAllCategory());
-    }
-
-    @Transactional
-    public void saveQuestions(User user, QuestionFormRequest form)
-    {
-        Question question = form.toQuestion(user.getId());
-        questionMapper.insertQuestion(question);
-        String[] tagNames = form.getTags().split(",");
-        for (String tagName : tagNames)
-        {
-            Tag tag = Tag.create(tagName);
-            tagMapper.insertTag(tag);
-        }
-
-        for (String tagName : tagNames)
-        {
-            Tag tag = tagMapper.findTagByName(tagName);
-            tagMapper.insertQuestionAndTag(question.getId(), tag.getId());
-        }
-    }
-
-    public void provideQuestions(User user, QuestionListDto form, Page page)
+    public void provideQuestions(User user, QuestionListForm form, Page page)
     {
         List<QuestionDto> questionList = questionMapper.findAllQuestions(page.getOffset(), page.getLimit());
         form.setUser(user);
         form.setQuestionList(questionList);
+    }
+
+    public void provideQuestionForm(User user, QuestionCreateForm form)
+    {
+        form.setUser(user);
+        form.setCategoryList(categoryMapper.findAllCategory());
+    }
+
+    @Transactional
+    public void saveQuestion(User user, QuestionSaveForm form)
+    {
+        form.setUser(user);
+        Question question = form.toQuestion();
+        questionMapper.insertQuestion(question);
+
+        tagService.saveAndGetTags(form.getTags())
+                .forEach(tag -> questionMapper.insertQuestionAndTag(question.getId(), tag.getId()));
     }
 }
