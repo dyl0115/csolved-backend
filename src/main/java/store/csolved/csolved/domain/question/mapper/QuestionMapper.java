@@ -13,5 +13,7 @@ public interface QuestionMapper
 
     List<QuestionDto> findAllQuestions(Long offset, Long limit);
 
+    QuestionDto findQuestionByQuestionId(Long questionId);
+
     void insertQuestionAndTag(Long questionId, Long tagId);
 }

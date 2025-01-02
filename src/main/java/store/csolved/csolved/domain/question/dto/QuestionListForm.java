@@ -1,14 +1,12 @@
 package store.csolved.csolved.domain.question.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.user.User;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class QuestionListForm
 {
     private User user;

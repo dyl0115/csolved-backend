@@ -3,11 +3,16 @@ package store.csolved.csolved.domain.question.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import store.csolved.csolved.domain.answer.Answer;
+import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
+import store.csolved.csolved.domain.answer.dto.AnswerDto;
+import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
+import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.question.Page;
 import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.question.dto.QuestionSaveForm;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
+import store.csolved.csolved.domain.question.dto.QuestionDetailForm;
 import store.csolved.csolved.domain.question.dto.QuestionListForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
@@ -22,6 +27,7 @@ public class QuestionService
 {
     private final QuestionMapper questionMapper;
     private final CategoryMapper categoryMapper;
+    private final AnswerService answerService;
     private final TagService tagService;
 
     public void provideQuestions(User user, QuestionListForm form, Page page)
@@ -31,6 +37,14 @@ public class QuestionService
         form.setQuestionList(questionList);
     }
 
+    public void provideQuestion(User user, Long questionId, QuestionDetailForm form)
+    {
+        QuestionDto question = questionMapper.findQuestionByQuestionId(questionId);
+        List<AnswerDto> answers = answerService.provideAllAnswersByQuestionId(questionId);
+        form.setQuestion(question);
+        form.setAnswers(answers);
+    }
+
     public void provideQuestionForm(User user, QuestionCreateForm form)
     {
         form.setUser(user);
@@ -38,7 +52,7 @@ public class QuestionService
     }
 
     @Transactional
-    public void saveQuestion(User user, QuestionSaveForm form)
+    public void saveQuestion(User user, QuestionCreateForm form)
     {
         form.setUser(user);
         Question question = form.toQuestion();
@@ -47,4 +61,5 @@ public class QuestionService
         tagService.saveAndGetTags(form.getTags())
                 .forEach(tag -> questionMapper.insertQuestionAndTag(question.getId(), tag.getId()));
     }
+
 }

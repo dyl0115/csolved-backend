@@ -1,9 +1,6 @@
 package store.csolved.csolved.domain.question.dto;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.tag.Tag;
 
@@ -15,6 +12,8 @@ public class QuestionDto
     private Long id;
 
     private Question question;
+
+    private String authorNickname;
 
     private List<Tag> tags;
 

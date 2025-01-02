@@ -17,7 +17,7 @@
                 <div class="bg-white rounded-lg shadow">
                     <!-- 질문 카드 -->
                     <div class="p-6 border-b hover:bg-gray-50 cursor-pointer"
-                         th:each="question : ${questionList.questionList}">
+                         th:each="question : ${questionListForm.questionList}">
                         <a th:href="@{'/questions/' + ${question.question.id}}" class="block">
                             <h2 class="text-lg font-bold" th:text="${question.question.title}">운영체제의 프로세스와 스레드의
                                                                                                차이점은?</h2>
@@ -26,8 +26,9 @@
                                   th:each="tag : ${question.tags}"
                                   th:text="${tag.name}">OS</span>
                             </div>
+                            
                             <div class="mt-4 text-gray-600">
-                            <span th:text="|답변 ${question.answerCount}개 • 좋아요 ${question.question.likes}|">
+                            <span th:text="|답변 ${question.answerCount}개 • 좋아요 ${question.question.likes} • ${#temporals.format(question.question.createdAt, 'yyyy/MM/dd/hh:mm')} • ${question.question.isAnonymous ? '익명' : question.authorNickname}|">
                                 답변 5개 • 평균 평점 4.2
                             </span>
                             </div>
