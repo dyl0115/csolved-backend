@@ -11,6 +11,7 @@ import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.dto.AnswerListForm;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
 import store.csolved.csolved.domain.answer.service.AnswerService;
+import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
 import store.csolved.csolved.domain.question.Page;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
 import store.csolved.csolved.domain.question.dto.QuestionDetailForm;
@@ -66,11 +67,12 @@ public class QuestionController
     }
 
     @GetMapping("/{questionId}")
-    public String provideQuestionDetail(@LoginUser User user,
+    public String provideQuestionDetail(@LoginUser @ModelAttribute("user") User user,
                                         @PathVariable Long questionId,
                                         @ModelAttribute("questionDetailForm") QuestionDetailForm questionDetailForm,
                                         @ModelAttribute("answerCreateForm") AnswerCreateForm answerCreateForm,
-                                        @ModelAttribute("answerListForm") AnswerListForm answerListForm)
+                                        @ModelAttribute("answerListForm") AnswerListForm answerListForm,
+                                        @ModelAttribute("commentCreateForm") CommentCreateForm commentCreateForm)
     {
         questionService.provideQuestion(user, questionId, questionDetailForm);
         return "/questions/questions-detail";

@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.comment.mapper.CommentMapper">
-    <insert id="insertComment">
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
         insert into comments(answer_id,
                              user_id,
                              is_anonymous,

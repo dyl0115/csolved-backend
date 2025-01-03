@@ -55,7 +55,8 @@
                  c.is_anonymous,
                  au.nickname,
                  c.content,
-                 c.created_at;
+                 c.created_at
+        order by a.created_at;
     </select>
 
     <resultMap id="answerDtoMap" type="store.csolved.csolved.domain.answer.dto.AnswerDto">
@@ -68,7 +69,7 @@
         <result property="averageScore" column="answer_average_score"/>
         <result property="voterCount" column="answer_voter_count"/>
         <result property="createdAt" column="answer_created_at"/>
-        <collection property="comments" javaType="store.csolved.csolved.domain.comment.dto.CommentDto">
+        <collection property="comments" ofType="store.csolved.csolved.domain.comment.dto.CommentDto">
             <id property="commentId" column="comment_id"/>
             <result property="answerId" column="comment_answer_id"/>
             <result property="authorId" column="comment_user_id"/>
