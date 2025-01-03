@@ -1,21 +1,35 @@
 package store.csolved.csolved.domain.question.dto;
 
 import lombok.Data;
-import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.tag.Tag;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 public class QuestionDto
 {
-    private Long id;
+    private Long questionId;
 
-    private Question question;
+    private Long authorId;
 
     private String authorNickname;
 
-    private List<Tag> tags;
+    private boolean anonymous;
+
+    private String title;
+
+    private String content;
 
     private Long answerCount;
+
+    private Long categoryId;
+
+    private Long views;
+
+    private Long likes;
+
+    private LocalDateTime createdAt;
+
+    private List<Tag> tags;
 }

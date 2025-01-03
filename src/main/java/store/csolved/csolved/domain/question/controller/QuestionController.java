@@ -3,25 +3,18 @@ package store.csolved.csolved.domain.question.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.config.auth.LoginUser;
-import store.csolved.csolved.domain.answer.Answer;
 import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
-import store.csolved.csolved.domain.answer.dto.AnswerListForm;
-import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
 import store.csolved.csolved.domain.answer.service.AnswerService;
+import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
 import store.csolved.csolved.domain.question.Page;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
-import store.csolved.csolved.domain.question.dto.QuestionDetailForm;
-import store.csolved.csolved.domain.question.dto.QuestionListForm;
 import store.csolved.csolved.domain.question.service.QuestionService;
 import store.csolved.csolved.domain.user.User;
-
-import java.util.List;
-
-import static store.csolved.csolved.domain.question.Page.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/questions")
@@ -30,51 +23,63 @@ public class QuestionController
 {
     private final QuestionService questionService;
     private final AnswerService answerService;
+    private final CategoryMapper categoryMapper;
 
-    @GetMapping("")
-    public String provideQuestions(@LoginUser @ModelAttribute("user") User user,
-                                   @ModelAttribute("questionListForm") QuestionListForm questionList)
+    @GetMapping
+    public String provideQuestions(@LoginUser User user,
+                                   @ModelAttribute("page") Page page,
+                                   Model model)
     {
-        questionService.provideQuestions(user,
-                questionList,
-                new Page(DEFAULT_OFFSET, DEFAULT_LIMIT));
-        return "/questions/questions-home";
+        model.addAttribute("user", user);
+        model.addAttribute("questions", questionService.provideQuestions(page));
+
+        return "questions/questions-home";
     }
 
     @GetMapping("/create")
     public String provideQuestionForm(@LoginUser User user,
-                                      @ModelAttribute("questionCreateForm") QuestionCreateForm createForm)
+                                      Model model)
     {
-        questionService.provideQuestionForm(user, createForm);
-        return "/questions/questions-create";
+        model.addAttribute("user", user);
+        model.addAttribute("questionCreateForm", new QuestionCreateForm());
+        model.addAttribute("categories", categoryMapper.findAllCategory());
+
+        return "questions/questions-create";
     }
 
     @PostMapping("/create")
     public String saveQuestion(@LoginUser User user,
                                @Valid @ModelAttribute("questionCreateForm") QuestionCreateForm createForm,
-                               BindingResult result)
+                               BindingResult result,
+                               Model model)
     {
         if (result.hasErrors())
         {
-            questionService.provideQuestionForm(user, createForm);
-            return "/questions/questions-create";
+            model.addAttribute("user", user);
+            model.addAttribute("questionCreateForm", createForm);
+            model.addAttribute("categories", categoryMapper.findAllCategory());
+
+            return "questions/questions-create";
         }
         else
         {
-            questionService.saveQuestion(user, createForm);
+            questionService.saveQuestion(createForm);
+
             return "redirect:/questions";
         }
     }
 
     @GetMapping("/{questionId}")
-    public String provideQuestionDetail(@LoginUser @ModelAttribute("user") User user,
+    public String provideQuestionDetail(@LoginUser User user,
                                         @PathVariable Long questionId,
-                                        @ModelAttribute("questionDetailForm") QuestionDetailForm questionDetailForm,
-                                        @ModelAttribute("answerCreateForm") AnswerCreateForm answerCreateForm,
-                                        @ModelAttribute("answerListForm") AnswerListForm answerListForm,
-                                        @ModelAttribute("commentCreateForm") CommentCreateForm commentCreateForm)
+                                        Model model)
     {
-        questionService.provideQuestion(user, questionId, questionDetailForm);
-        return "/questions/questions-detail";
+        model.addAttribute("user", user);
+        model.addAttribute("answerCreateForm", new AnswerCreateForm());
+        model.addAttribute("commentCreateForm", new CommentCreateForm());
+        model.addAttribute("question", questionService.provideQuestion(questionId));
+        model.addAttribute("answers", answerService.provideAllAnswersByQuestionId(questionId));
+
+        return "questions/questions-detail";
     }
 }

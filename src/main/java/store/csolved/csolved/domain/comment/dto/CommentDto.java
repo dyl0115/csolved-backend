@@ -13,7 +13,7 @@ public class CommentDto
 
     private Long authorId;
 
-    private boolean isAnonymous;
+    private boolean anonymous;
 
     private String authorNickname;
 

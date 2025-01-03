@@ -12,7 +12,7 @@
                             deleted_at)
         values (#{questionId},
                 #{userId},
-                #{isAnonymous},
+                #{anonymous},
                 #{content},
                 #{createdAt},
                 #{deletedAt});
@@ -64,7 +64,7 @@
         <result property="questionId" column="question_id"/>
         <result property="userId" column="user_id"/>
         <result property="authorNickname" column="answer_user_nickname"/>
-        <result property="isAnonymous" column="answer_is_anonymous"/>
+        <result property="anonymous" column="answer_is_anonymous"/>
         <result property="content" column="answer_content"/>
         <result property="averageScore" column="answer_average_score"/>
         <result property="voterCount" column="answer_voter_count"/>
@@ -73,7 +73,7 @@
             <id property="commentId" column="comment_id"/>
             <result property="answerId" column="comment_answer_id"/>
             <result property="authorId" column="comment_user_id"/>
-            <result property="isAnonymous" column="comment_is_anonymous"/>
+            <result property="anonymous" column="comment_is_anonymous"/>
             <result property="authorNickname" column="comment_user_nickname"/>
             <result property="content" column="comment_content"/>
             <result property="createdAt" column="comment_created_at"/>

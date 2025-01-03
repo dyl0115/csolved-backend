@@ -13,7 +13,7 @@
                               views,
                               deleted_at)
         values (#{userId},
-                #{isAnonymous},
+                #{anonymous},
                 #{title},
                 #{content},
                 #{categoryId},
@@ -24,6 +24,7 @@
     <select id="findAllQuestions" resultMap="QuestionDtoMap">
         select q.id                         as question_id,
                q.user_id                    as user_id,
+               u.nickname                   as author_nickname,
                q.is_anonymous               as is_anonymous,
                q.title                      as title,
                q.content                    as content,
@@ -31,8 +32,6 @@
                q.views                      as views,
                q.likes                      as likes,
                q.created_at                 as created_at,
-               q.deleted_at                 as deleted_at,
-               u.nickname                   as author_nickname,
                t.id                         as tag_id,
                t.name                       as tag_name,
                (select count(*)
@@ -42,10 +41,27 @@
                  left join users as u on q.user_id = u.id
                  left join question_tags as qt on q.id = qt.question_id
                  left join tags as t on qt.tag_id = t.id
-        order by q.created_at
-                desc
+        order by q.created_at desc
         limit #{offset}, #{limit};
     </select>
+
+    <resultMap id="QuestionDtoMap" type="store.csolved.csolved.domain.question.dto.QuestionDto">
+        <id property="questionId" column="question_id"/>
+        <result property="authorId" column="user_id"/>
+        <result property="authorNickname" column="author_nickname"/>
+        <result property="anonymous" column="is_anonymous"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="answerCount" column="answer_count"/>
+        <result property="views" column="views"/>
+        <result property="likes" column="likes"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="tags" ofType="store.csolved.csolved.domain.tag.Tag">
+            <id property="id" column="tag_id"/>
+            <result property="name" column="tag_name"/>
+        </collection>
+    </resultMap>
 
     <select id="findQuestionByQuestionId" resultMap="QuestionDtoMap">
         select q.id                         as question_id,
@@ -57,7 +73,6 @@
                q.views                      as views,
                q.likes                      as likes,
                q.created_at                 as created_at,
-               q.deleted_at                 as deleted_at,
                u.nickname                   as author_nickname,
                t.id                         as tag_id,
                t.name                       as tag_name,
@@ -71,27 +86,7 @@
         where q.id = #{questionId};
     </select>
 
-    <resultMap id="QuestionDtoMap" type="store.csolved.csolved.domain.question.dto.QuestionDto">
-        <id property="id" column="question_id"/>
-        <result property="authorNickname" column="author_nickname"/>
-        <result property="answerCount" column="answer_count"/>
-        <association property="question" javaType="store.csolved.csolved.domain.question.Question">
-            <id property="id" column="question_id"/>
-            <result property="userId" column="user_id"/>
-            <result property="isAnonymous" column="is_anonymous"/>
-            <result property="title" column="title"/>
-            <result property="content" column="content"/>
-            <result property="categoryId" column="category_id"/>
-            <result property="views" column="views"/>
-            <result property="likes" column="likes"/>
-            <result property="createdAt" column="created_at"/>
-            <result property="deletedAt" column="deleted_at"/>
-        </association>
-        <collection property="tags" ofType="store.csolved.csolved.domain.tag.Tag">
-            <id property="id" column="tag_id"/>
-            <result property="name" column="tag_name"/>
-        </collection>
-    </resultMap>
+
 
     <insert id="insertQuestionAndTag">
         insert

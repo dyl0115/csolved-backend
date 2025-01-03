@@ -12,7 +12,7 @@ public class CommentCreateForm
     private Long authorId;
 
     @NotNull
-    private boolean isAnonymous;
+    private boolean anonymous;
 
     private String content;
 
@@ -21,7 +21,7 @@ public class CommentCreateForm
         return Comment.create(
                 answerId,
                 authorId,
-                isAnonymous,
+                anonymous,
                 content);
     }
 }

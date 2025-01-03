@@ -17,7 +17,7 @@ public class AnswerDto
 
     private String authorNickname;
 
-    private boolean isAnonymous;
+    private boolean anonymous;
 
     private String content;
 

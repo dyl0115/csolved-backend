@@ -6,17 +6,16 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.user.User;
 
 import java.util.List;
 
 @Data
 public class QuestionCreateForm
 {
-    private User user;
+    private Long authorId;
 
     @NotNull
-    private Boolean isAnonymous;
+    private Boolean anonymous;
 
     private List<Category> categoryList;
 
@@ -35,6 +34,11 @@ public class QuestionCreateForm
 
     public Question toQuestion()
     {
-        return Question.create(user.getId(), isAnonymous, title, content, categoryId);
+        return Question.create(
+                authorId,
+                anonymous,
+                title,
+                content,
+                categoryId);
     }
 }

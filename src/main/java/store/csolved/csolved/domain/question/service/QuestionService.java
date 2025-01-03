@@ -3,21 +3,12 @@ package store.csolved.csolved.domain.question.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.answer.Answer;
-import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
-import store.csolved.csolved.domain.answer.dto.AnswerDto;
-import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
-import store.csolved.csolved.domain.answer.service.AnswerService;
-import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.question.Page;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
-import store.csolved.csolved.domain.question.dto.QuestionDetailForm;
-import store.csolved.csolved.domain.question.dto.QuestionListForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
 import store.csolved.csolved.domain.tag.service.TagService;
-import store.csolved.csolved.domain.user.User;
 
 import java.util.List;
 
@@ -26,40 +17,25 @@ import java.util.List;
 public class QuestionService
 {
     private final QuestionMapper questionMapper;
-    private final CategoryMapper categoryMapper;
-    private final AnswerService answerService;
     private final TagService tagService;
 
-    public void provideQuestions(User user, QuestionListForm form, Page page)
+    public List<QuestionDto> provideQuestions(Page page)
     {
-        List<QuestionDto> questionList = questionMapper.findAllQuestions(page.getOffset(), page.getLimit());
-        form.setUser(user);
-        form.setQuestionList(questionList);
+        return questionMapper.findAllQuestions(0L, 10L);
     }
 
-    public void provideQuestion(User user, Long questionId, QuestionDetailForm form)
+    public QuestionDto provideQuestion(Long questionId)
     {
-        QuestionDto question = questionMapper.findQuestionByQuestionId(questionId);
-        List<AnswerDto> answers = answerService.provideAllAnswersByQuestionId(questionId);
-        form.setQuestion(question);
-        form.setAnswers(answers);
-    }
-
-    public void provideQuestionForm(User user, QuestionCreateForm form)
-    {
-        form.setUser(user);
-        form.setCategoryList(categoryMapper.findAllCategory());
+        return questionMapper.findQuestionByQuestionId(questionId);
     }
 
     @Transactional
-    public void saveQuestion(User user, QuestionCreateForm form)
+    public void saveQuestion(QuestionCreateForm form)
     {
-        form.setUser(user);
         Question question = form.toQuestion();
         questionMapper.insertQuestion(question);
 
         tagService.saveAndGetTags(form.getTags())
                 .forEach(tag -> questionMapper.insertQuestionAndTag(question.getId(), tag.getId()));
     }
-
 }

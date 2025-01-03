@@ -12,7 +12,7 @@
                              deleted_at)
         values (#{answerId},
                 #{userId},
-                #{isAnonymous},
+                #{anonymous},
                 #{content},
                 #{createdAt},
                 #{deletedAt});

@@ -11,7 +11,7 @@ public class AnswerCreateForm
 
     private Long userId;
 
-    private Boolean isAnonymous;
+    private Boolean anonymous;
 
     @NotBlank(message = "공백은 허용하지 않습니다.")
     private String content;
@@ -21,7 +21,7 @@ public class AnswerCreateForm
         return Answer.create(
                 questionId,
                 userId,
-                isAnonymous,
+                anonymous,
                 content);
     }
 }
