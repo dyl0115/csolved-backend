@@ -25,7 +25,7 @@ public class AnswerController
     {
         if (result.hasErrors())
         {
-            return "/questions/questions-detail";
+            return "/article/detail";
         }
         else
         {

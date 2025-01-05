@@ -33,7 +33,7 @@ public class QuestionController
         model.addAttribute("user", user);
         model.addAttribute("questions", questionService.provideQuestions(page));
 
-        return "questions/questions-home";
+        return "article/list";
     }
 
     @GetMapping("/create")
@@ -80,6 +80,6 @@ public class QuestionController
         model.addAttribute("question", questionService.provideQuestion(questionId));
         model.addAttribute("answers", answerService.provideAllAnswersByQuestionId(questionId));
 
-        return "questions/questions-detail";
+        return "article/detail";
     }
 }
