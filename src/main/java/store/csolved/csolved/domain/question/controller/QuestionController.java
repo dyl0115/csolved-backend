@@ -17,7 +17,6 @@ import store.csolved.csolved.domain.question.service.QuestionService;
 import store.csolved.csolved.domain.user.User;
 
 @RequiredArgsConstructor
-@RequestMapping("/questions")
 @Controller
 public class QuestionController
 {
@@ -25,7 +24,7 @@ public class QuestionController
     private final AnswerService answerService;
     private final CategoryMapper categoryMapper;
 
-    @GetMapping
+    @GetMapping("/questions")
     public String provideQuestions(@LoginUser User user,
                                    @ModelAttribute("page") Page page,
                                    Model model)
@@ -36,7 +35,7 @@ public class QuestionController
         return "article/list";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/questions/create")
     public String provideQuestionForm(@LoginUser User user,
                                       Model model)
     {
@@ -47,7 +46,7 @@ public class QuestionController
         return "questions/questions-create";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/questions/create")
     public String saveQuestion(@LoginUser User user,
                                @Valid @ModelAttribute("questionCreateForm") QuestionCreateForm createForm,
                                BindingResult result,
@@ -69,7 +68,7 @@ public class QuestionController
         }
     }
 
-    @GetMapping("/{questionId}")
+    @GetMapping("/questions/{questionId}")
     public String provideQuestionDetail(@LoginUser User user,
                                         @PathVariable Long questionId,
                                         Model model)
@@ -81,5 +80,13 @@ public class QuestionController
         model.addAttribute("answers", answerService.provideAllAnswersByQuestionId(questionId));
 
         return "article/detail";
+    }
+
+    @DeleteMapping("/api/questions/{questionId}")
+    @ResponseBody
+    public void deleteQuestion(@LoginUser User user,
+                               @PathVariable Long questionId)
+    {
+        questionService.deleteQuestion(questionId);
     }
 }

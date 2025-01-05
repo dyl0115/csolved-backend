@@ -30,6 +30,7 @@ public class CommentController
                                 @PathVariable Long commentId)
     {
         commentService.deleteComment(commentId);
+
         return "ok";
     }
 }

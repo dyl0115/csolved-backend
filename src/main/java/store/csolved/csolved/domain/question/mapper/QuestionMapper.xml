@@ -41,6 +41,7 @@
                  left join users as u on q.user_id = u.id
                  left join question_tags as qt on q.id = qt.question_id
                  left join tags as t on qt.tag_id = t.id
+        where q.deleted_at is null
         order by q.created_at desc
         limit #{offset}, #{limit};
     </select>
@@ -86,12 +87,15 @@
         where q.id = #{questionId};
     </select>
 
-
-
     <insert id="insertQuestionAndTag">
         insert
         into question_tags(question_id, tag_id)
         values (#{questionId}, #{tagId});
     </insert>
 
+    <update id="softDeleteQuestionByQuestionId">
+        update questions
+        set deleted_at = current_timestamp
+        where id = #{questionId};
+    </update>
 </mapper>

@@ -38,4 +38,10 @@ public class QuestionService
         tagService.saveAndGetTags(form.getTags())
                 .forEach(tag -> questionMapper.insertQuestionAndTag(question.getId(), tag.getId()));
     }
+
+    @Transactional
+    public void deleteQuestion(Long questionId)
+    {
+        questionMapper.softDeleteQuestionByQuestionId(questionId);
+    }
 }

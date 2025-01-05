@@ -60,10 +60,10 @@
                                    class="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors">
                                     수정
                                 </a>
-                                <a th:href="@{/questions/{id}/delete(id=*{questionId})}"
-                                   class="px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
+                                <button th:onclick="'deleteQuestion(' + *{questionId} + ')'"
+                                        class="px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
                                     삭제
-                                </a>
+                                </button>
                             </div>
                         </div>
                     </section>
@@ -273,6 +273,30 @@
             function toggleAnswerForm() {
                 const form = document.getElementById('answer-form');
                 form.classList.toggle('hidden');
+            }
+
+            // 질문 삭제 함수
+            async function deleteQuestion(questionId) {
+                if (confirm('정말 삭제하시겠습니까?')) {
+                    try {
+                        const response = await fetch(`/api/questions/${questionId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('삭제에 실패했습니다.');
+                        }
+
+                        window.location.replace("/questions");
+
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('삭제 중 오류가 발생했습니다.');
+                    }
+                }
             }
 
             // 답변 삭제 함수

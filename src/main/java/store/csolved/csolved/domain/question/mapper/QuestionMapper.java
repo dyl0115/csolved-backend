@@ -16,4 +16,6 @@ public interface QuestionMapper
     QuestionDto findQuestionByQuestionId(Long questionId);
 
     void insertQuestionAndTag(Long questionId, Long tagId);
+
+    void softDeleteQuestionByQuestionId(Long questionId);
 }
