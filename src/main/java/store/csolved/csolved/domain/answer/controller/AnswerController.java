@@ -3,9 +3,7 @@ package store.csolved.csolved.domain.answer.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.config.auth.LoginUser;
 import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
@@ -32,5 +30,14 @@ public class AnswerController
             answerService.saveAnswer(user, answerCreateForm);
             return "redirect:/questions/" + questionId;
         }
+    }
+
+    @DeleteMapping("/api/answers/{answerId}")
+    @ResponseBody
+    public String deleteAnswer(@LoginUser User user,
+                               @PathVariable Long answerId)
+    {
+        answerService.deleteAnswer(answerId);
+        return "ok";
     }
 }

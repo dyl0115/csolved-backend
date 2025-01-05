@@ -124,14 +124,10 @@
                                     
                                     <!-- 답글 수정/삭제 버튼 스타일 통일 -->
                                     <div class="flex gap-2 ml-4" th:if="${user.id == answer.userId}">
-                                        <a th:href="@{/answers/{id}/edit(id=*{answerId})}"
-                                           class="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors">
-                                            수정
-                                        </a>
-                                        <a th:href="@{/answers/{id}/delete(id=*{answerId})}"
-                                           class="px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
+                                        <button th:onclick="'deleteAnswer(' + *{answerId} + ')'"
+                                                class="px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
                                             삭제
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -160,14 +156,10 @@
                                         </div>
                                         <!-- 대댓글 수정/삭제 버튼 추가 -->
                                         <div class="flex gap-2" th:if="${user.id == comment.authorId}">
-                                            <a th:href="@{/comments/{id}/edit(id=*{commentId})}"
-                                               class="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition-colors">
-                                                수정
-                                            </a>
-                                            <a th:href="@{/comments/{id}/delete(id=*{commentId})}"
-                                               class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
+                                            <button th:onclick="'deleteComment(' + *{commentId} + ')'"
+                                                    class="px-3 py-1.5 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
                                                 삭제
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                     <p class="text-gray-700" th:text="*{content}">대댓글 내용</p>
@@ -281,6 +273,54 @@
             function toggleAnswerForm() {
                 const form = document.getElementById('answer-form');
                 form.classList.toggle('hidden');
+            }
+
+            // 답변 삭제 함수
+            async function deleteAnswer(answerId) {
+                if (confirm('정말 삭제하시겠습니까?')) {
+                    try {
+                        const response = await fetch(`/api/answers/${answerId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('삭제에 실패했습니다.');
+                        }
+
+                        // 삭제 성공 시 페이지 새로고침
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('삭제 중 오류가 발생했습니다.');
+                    }
+                }
+            }
+
+            // 대댓글 삭제 함수
+            async function deleteComment(commentId) {
+                if (confirm('정말 삭제하시겠습니까?')) {
+                    try {
+                        const response = await fetch(`/api/comments/${commentId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('삭제에 실패했습니다.');
+                        }
+
+                        // 삭제 성공 시 페이지 새로고침
+                        window.location.reload();
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('삭제 중 오류가 발생했습니다.');
+                    }
+                }
             }
         </script>
     </body>

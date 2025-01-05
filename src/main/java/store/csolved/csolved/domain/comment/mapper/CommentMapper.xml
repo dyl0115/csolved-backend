@@ -31,4 +31,10 @@
         where c.answer_id = #{answerId}
           and c.deleted_at IS NULL;
     </select>
+
+    <delete id="deleteCommentByCommentId">
+        delete
+        from comments
+        where id = #{commentId}
+    </delete>
 </mapper>

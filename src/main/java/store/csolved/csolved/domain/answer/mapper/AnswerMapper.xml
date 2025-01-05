@@ -88,4 +88,23 @@
                 #{userId},
                 #{score});
     </insert>
+
+    <select id="existCommentInAnswer">
+        select exists(select 1
+                      from comments
+                      where answer_id = #{answerId})
+    </select>
+
+    <update id="softDeleteAnswer">
+        update answers
+        set content    = '[삭제된 답변입니다.]',
+            deleted_at = current_timestamp
+        where id = #{answerId}
+    </update>
+
+    <delete id="hardDeleteAnswer">
+        delete
+        from answers
+        where id = #{answerId}
+    </delete>
 </mapper>

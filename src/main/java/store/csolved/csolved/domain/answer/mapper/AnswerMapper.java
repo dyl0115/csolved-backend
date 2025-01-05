@@ -14,4 +14,10 @@ public interface AnswerMapper
     List<AnswerDto> findAllAnswersByQuestionId(Long questionId);
 
     void insertAnswerScore(Long answerId, Long userId, int score);
+
+    boolean existCommentInAnswer(Long answerId);
+
+    void softDeleteAnswer(Long answerId);
+
+    void hardDeleteAnswer(Long answerId);
 }

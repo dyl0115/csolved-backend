@@ -12,4 +12,6 @@ public interface CommentMapper
     void insertComment(Comment comment);
 
     List<CommentDto> findAllCommentsByAnswerId(Long answerId);
+
+    void deleteCommentByCommentId(Long commentId);
 }
