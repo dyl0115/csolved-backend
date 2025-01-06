@@ -98,4 +98,28 @@
         set deleted_at = current_timestamp
         where id = #{questionId};
     </update>
+
+    <select id="existUserInQuestionLikes">
+        select exists(select 1
+                      from question_likes
+                      where user_id = #{userId}
+                        and question_id = #{questionId});
+    </select>
+
+    <update id="increaseLikesInQuestions">
+        update questions
+        set likes = likes + 1
+        where id = #{questionId};
+    </update>
+    
+    <insert id="insertUserInQuestionLikes">
+        insert into question_likes(question_id, user_id)
+        values (#{questionId}, #{userId});
+    </insert>
+
+    <update id="increaseViewInQuestions">
+        update questions
+        set views = views + 1
+        where id = #{questionId};
+    </update>
 </mapper>

@@ -35,13 +35,30 @@ public class QuestionService
         Question question = form.toQuestion();
         questionMapper.insertQuestion(question);
 
-        tagService.saveAndGetTags(form.getTags())
-                .forEach(tag -> questionMapper.insertQuestionAndTag(question.getId(), tag.getId()));
+        tagService.saveAndGetTags(form.getTags()).forEach(tag -> questionMapper.insertQuestionAndTag(question.getId(), tag.getId()));
     }
 
     @Transactional
     public void deleteQuestion(Long questionId)
     {
         questionMapper.softDeleteQuestionByQuestionId(questionId);
+    }
+
+    public boolean hasAlreadyLiked(Long questionId, Long userId)
+    {
+        return questionMapper.existUserInQuestionLikes(questionId, userId);
+    }
+
+    @Transactional
+    public void increaseLike(Long questionId, Long userId)
+    {
+        questionMapper.insertUserInQuestionLikes(questionId, userId);
+        questionMapper.increaseLikesInQuestions(questionId);
+    }
+
+    @Transactional
+    public void increaseView(Long questionId)
+    {
+        questionMapper.increaseViewInQuestions(questionId);
     }
 }

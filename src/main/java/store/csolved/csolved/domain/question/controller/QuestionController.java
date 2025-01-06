@@ -2,6 +2,8 @@ package store.csolved.csolved.domain.question.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -73,6 +75,8 @@ public class QuestionController
                                         @PathVariable Long questionId,
                                         Model model)
     {
+        questionService.increaseView(questionId);
+
         model.addAttribute("user", user);
         model.addAttribute("answerCreateForm", new AnswerCreateForm());
         model.addAttribute("commentCreateForm", new CommentCreateForm());
@@ -88,5 +92,19 @@ public class QuestionController
                                @PathVariable Long questionId)
     {
         questionService.deleteQuestion(questionId);
+    }
+
+    @PostMapping("/api/questions/{questionId}/likes")
+    public ResponseEntity<Void> increaseLikes(@LoginUser User user,
+                                              @PathVariable Long questionId)
+    {
+        if (questionService.hasAlreadyLiked(questionId, user.getId()))
+        {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT).build();
+        }
+
+        questionService.increaseLike(questionId, user.getId());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
