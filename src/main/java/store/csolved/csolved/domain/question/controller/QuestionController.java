@@ -15,6 +15,8 @@ import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
 import store.csolved.csolved.domain.question.Page;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
+import store.csolved.csolved.domain.question.dto.QuestionDto;
+import store.csolved.csolved.domain.question.dto.QuestionEditForm;
 import store.csolved.csolved.domain.question.service.QuestionService;
 import store.csolved.csolved.domain.user.User;
 
@@ -45,7 +47,7 @@ public class QuestionController
         model.addAttribute("questionCreateForm", new QuestionCreateForm());
         model.addAttribute("categories", categoryMapper.findAllCategory());
 
-        return "questions/questions-create";
+        return "article/create";
     }
 
     @PostMapping("/questions/create")
@@ -60,7 +62,7 @@ public class QuestionController
             model.addAttribute("questionCreateForm", createForm);
             model.addAttribute("categories", categoryMapper.findAllCategory());
 
-            return "questions/questions-create";
+            return "article/create";
         }
         else
         {
@@ -84,6 +86,44 @@ public class QuestionController
         model.addAttribute("answers", answerService.provideAllAnswersByQuestionId(questionId));
 
         return "article/detail";
+    }
+
+    @GetMapping("/questions/{questionId}/edit-form")
+    public String provideQuestionEditForm(@LoginUser User user,
+                                          @PathVariable Long questionId,
+                                          Model model)
+    {
+        QuestionDto question = questionService.provideQuestion(questionId);
+        QuestionEditForm questionEditForm = new QuestionEditForm(
+                questionId,
+                user.getId(),
+                question.isAnonymous(),
+                question.getCategoryId(),
+                question.getTags().toString(),
+                question.getTitle(),
+                question.getContent());
+
+        model.addAttribute("user", user);
+        model.addAttribute("questionEditForm", questionEditForm);
+        model.addAttribute("categories", categoryMapper.findAllCategory());
+
+        return "article/edit";
+    }
+
+    @PutMapping("/questions/{questionId}")
+    public String updateQuestion(@LoginUser User user,
+                                 @ModelAttribute("questionEditForm") QuestionEditForm questionEditForm,
+                                 BindingResult result)
+    {
+        if (result.hasErrors())
+        {
+            return "article/edit";
+        }
+        else
+        {
+            questionService.updateQuestion(questionEditForm);
+            return "redirect:/questions";
+        }
     }
 
     @DeleteMapping("/api/questions/{questionId}")

@@ -13,4 +13,8 @@ public interface TagMapper
     List<Tag> findTagsByNames(List<String> name);
 
     List<String> findAllTagNames();
+
+    void insertQuestionAndTag(Long questionId, Long tagId);
+
+    void deleteQuestionAndTagByQuestionId(Long questionId);
 }

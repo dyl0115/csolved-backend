@@ -21,6 +21,15 @@
                 #{deletedAt});
     </insert>
 
+    <update id="updateQuestion">
+        update questions
+        set is_anonymous = #{isAnonymous},
+            title        = #{title},
+            content      = #{content},
+            category_id  = #{categoryId}
+        where id = #{id};
+    </update>
+
     <select id="findAllQuestions" resultMap="QuestionDtoMap">
         select q.id                         as question_id,
                q.user_id                    as user_id,
@@ -87,11 +96,7 @@
         where q.id = #{questionId};
     </select>
 
-    <insert id="insertQuestionAndTag">
-        insert
-        into question_tags(question_id, tag_id)
-        values (#{questionId}, #{tagId});
-    </insert>
+
 
     <update id="softDeleteQuestionByQuestionId">
         update questions

@@ -24,4 +24,16 @@
         select name
         from tags
     </select>
+
+    <insert id="insertQuestionAndTag">
+        insert
+        into question_tags(question_id, tag_id)
+        values (#{questionId}, #{tagId});
+    </insert>
+
+    <delete id="deleteQuestionAndTagByQuestionId">
+        delete
+        from question_tags
+        where question_id = #{questionId};
+    </delete>
 </mapper>

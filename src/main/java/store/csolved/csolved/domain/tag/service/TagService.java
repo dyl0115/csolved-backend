@@ -2,9 +2,11 @@ package store.csolved.csolved.domain.tag.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.tag.Tag;
 import store.csolved.csolved.domain.tag.mapper.TagMapper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -15,16 +17,39 @@ public class TagService
 {
     private final TagMapper tagMapper;
 
-    public List<Tag> saveAndGetTags(String tagString)
+    @Transactional
+    public void saveQuestionTags(Long questionId, String tagString)
     {
-        List<String> tagNames = splitTagNames(tagString);
+        List<Tag> tags = getOrCreateTags(tagString);
+        tags.forEach(tag -> tagMapper.insertQuestionAndTag(questionId, tag.getId()));
+    }
 
-        List<Tag> oldTags = getAlreadyExistTags(tagNames);
-        List<Tag> newTags = getNewTags(tagNames);
+    @Transactional
+    public void updateQuestionTags(Long questionId, String tagString)
+    {
+        tagMapper.deleteQuestionAndTagByQuestionId(questionId);
 
+        List<Tag> tags = getOrCreateTags(tagString);
+        tags.forEach(tag -> tagMapper.insertQuestionAndTag(questionId, tag.getId()));
+    }
+
+    private List<Tag> getOrCreateTags(String tagString)
+    {
+        List<String> tags = splitTagNames(tagString);
+        List<Tag> existTags = filterExistTags(tags);
+        List<Tag> newTags = filterNewTags(tags);
+
+        // 새로운 태그만 DB에 저장합니다.
         newTags.forEach(tagMapper::insertTag);
-        oldTags.addAll(newTags);
-        return oldTags;
+
+        return mergeTags(existTags, newTags);
+    }
+
+    private List<Tag> mergeTags(List<Tag> existTags, List<Tag> newTags)
+    {
+        List<Tag> allTags = new ArrayList<>(existTags);
+        allTags.addAll(newTags);
+        return allTags;
     }
 
     private List<String> splitTagNames(String tagNames)
@@ -34,12 +59,12 @@ public class TagService
                 .toList();
     }
 
-    private List<Tag> getAlreadyExistTags(List<String> tagNames)
+    private List<Tag> filterExistTags(List<String> tagNames)
     {
         return tagMapper.findTagsByNames(tagNames);
     }
 
-    private List<Tag> getNewTags(List<String> tagNames)
+    private List<Tag> filterNewTags(List<String> tagNames)
     {
         HashSet<String> tagNameSet = new HashSet<>(tagMapper.findAllTagNames());
 

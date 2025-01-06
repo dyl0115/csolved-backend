@@ -11,11 +11,13 @@ public interface QuestionMapper
 {
     void insertQuestion(Question question);
 
+    void updateQuestion(Question question);
+
     List<QuestionDto> findAllQuestions(Long offset, Long limit);
 
     QuestionDto findQuestionByQuestionId(Long questionId);
 
-    void insertQuestionAndTag(Long questionId, Long tagId);
+
 
     void softDeleteQuestionByQuestionId(Long questionId);
 
@@ -30,4 +32,5 @@ public interface QuestionMapper
 
     // 질문 테이블의 Views 1증가
     void increaseViewInQuestions(Long questionId);
+
 }

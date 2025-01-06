@@ -29,9 +29,9 @@ public class Question
 
     private final LocalDateTime deletedAt;
 
-    public static Question create(Long userId, boolean isAnonymous, String title, String content, Long categoryId)
+    public static Question create(Long questionId, Long userId, boolean isAnonymous, String title, String content, Long categoryId)
     {
-        return new Question(null, userId, isAnonymous, title, content,
+        return new Question(questionId, userId, isAnonymous, title, content,
                 categoryId, 0L, 0L, LocalDateTime.now(), null);
     }
 }

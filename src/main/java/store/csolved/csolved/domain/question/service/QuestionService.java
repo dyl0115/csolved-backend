@@ -7,6 +7,7 @@ import store.csolved.csolved.domain.question.Page;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
+import store.csolved.csolved.domain.question.dto.QuestionEditForm;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
 import store.csolved.csolved.domain.tag.service.TagService;
 
@@ -34,8 +35,15 @@ public class QuestionService
     {
         Question question = form.toQuestion();
         questionMapper.insertQuestion(question);
+        tagService.saveQuestionTags(question.getId(), form.getTags());
+    }
 
-        tagService.saveAndGetTags(form.getTags()).forEach(tag -> questionMapper.insertQuestionAndTag(question.getId(), tag.getId()));
+    @Transactional
+    public void updateQuestion(QuestionEditForm form)
+    {
+        Question question = form.toQuestion();
+        questionMapper.updateQuestion(question);
+        tagService.updateQuestionTags(question.getId(), form.getTags());
     }
 
     @Transactional
