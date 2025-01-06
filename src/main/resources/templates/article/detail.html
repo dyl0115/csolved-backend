@@ -24,6 +24,10 @@
                                 </div>
                                 <div class="flex items-center gap-4 text-sm text-gray-600">
                                     <div class="flex items-center gap-1">
+                                        <i data-lucide="book-text" class="w-4 h-4"></i>
+                                        <span th:text="*{categoryName}">카테고리</span>
+                                    </div>
+                                    <div class="flex items-center gap-1">
                                         <i data-lucide="user" class="w-4 h-4"></i>
                                         <span th:text="*{anonymous} ? '익명' : *{authorNickname}">작성자</span>
                                     </div>

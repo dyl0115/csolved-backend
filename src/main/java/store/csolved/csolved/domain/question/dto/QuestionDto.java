@@ -25,6 +25,8 @@ public class QuestionDto
 
     private Long categoryId;
 
+    private String categoryName;
+
     private Long views;
 
     private Long likes;

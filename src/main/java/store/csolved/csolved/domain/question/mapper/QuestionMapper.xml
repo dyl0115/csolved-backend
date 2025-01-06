@@ -37,6 +37,7 @@
                q.is_anonymous               as is_anonymous,
                q.title                      as title,
                q.content                    as content,
+               c.name                       as category_name,
                q.category_id                as category_id,
                q.views                      as views,
                q.likes                      as likes,
@@ -50,6 +51,7 @@
                  left join users as u on q.user_id = u.id
                  left join question_tags as qt on q.id = qt.question_id
                  left join tags as t on qt.tag_id = t.id
+                 left join category as c on q.category_id = c.id
         where q.deleted_at is null
         order by q.created_at desc
         limit #{offset}, #{limit};
@@ -63,6 +65,7 @@
         <result property="title" column="title"/>
         <result property="content" column="content"/>
         <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
         <result property="answerCount" column="answer_count"/>
         <result property="views" column="views"/>
         <result property="likes" column="likes"/>
@@ -79,6 +82,7 @@
                q.is_anonymous               as is_anonymous,
                q.title                      as title,
                q.content                    as content,
+               c.name                       as category_name,
                q.category_id                as category_id,
                q.views                      as views,
                q.likes                      as likes,
@@ -93,9 +97,9 @@
                  left join users as u on q.user_id = u.id
                  left join question_tags as qt on q.id = qt.question_id
                  left join tags as t on qt.tag_id = t.id
+                 left join category as c on q.category_id = c.id
         where q.id = #{questionId};
     </select>
-
 
 
     <update id="softDeleteQuestionByQuestionId">
@@ -116,7 +120,7 @@
         set likes = likes + 1
         where id = #{questionId};
     </update>
-    
+
     <insert id="insertUserInQuestionLikes">
         insert into question_likes(question_id, user_id)
         values (#{questionId}, #{userId});
