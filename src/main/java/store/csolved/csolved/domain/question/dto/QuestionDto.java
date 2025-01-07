@@ -1,7 +1,6 @@
 package store.csolved.csolved.domain.question.dto;
 
 import lombok.Data;
-import store.csolved.csolved.domain.tag.Tag;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,5 +32,5 @@ public class QuestionDto
 
     private LocalDateTime createdAt;
 
-    private List<Tag> tags;
+    private List<String> tags;
 }

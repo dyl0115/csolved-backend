@@ -13,7 +13,6 @@ import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
-import store.csolved.csolved.domain.question.Page;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
 import store.csolved.csolved.domain.question.dto.QuestionEditForm;
@@ -30,13 +29,12 @@ public class QuestionController
 
     @GetMapping("/questions")
     public String provideQuestions(@LoginUser User user,
-                                   @ModelAttribute("page") Page page,
                                    Model model)
     {
         model.addAttribute("user", user);
-        model.addAttribute("questions", questionService.provideQuestions(page));
+        model.addAttribute("questions", questionService.provideQuestions());
 
-        return "article/list";
+        return "questions/list";
     }
 
     @GetMapping("/questions/create")
@@ -47,7 +45,7 @@ public class QuestionController
         model.addAttribute("questionCreateForm", new QuestionCreateForm());
         model.addAttribute("categories", categoryMapper.findAllCategory());
 
-        return "article/create";
+        return "questions/create";
     }
 
     @PostMapping("/questions/create")
@@ -62,7 +60,7 @@ public class QuestionController
             model.addAttribute("questionCreateForm", createForm);
             model.addAttribute("categories", categoryMapper.findAllCategory());
 
-            return "article/create";
+            return "questions/create";
         }
         else
         {
@@ -85,7 +83,7 @@ public class QuestionController
         model.addAttribute("question", questionService.provideQuestion(questionId));
         model.addAttribute("answers", answerService.provideAllAnswersByQuestionId(questionId));
 
-        return "article/detail";
+        return "questions/detail";
     }
 
     @GetMapping("/questions/{questionId}/edit-form")
@@ -107,7 +105,7 @@ public class QuestionController
         model.addAttribute("questionEditForm", questionEditForm);
         model.addAttribute("categories", categoryMapper.findAllCategory());
 
-        return "article/edit";
+        return "questions/edit";
     }
 
     @PutMapping("/questions/{questionId}")
@@ -117,7 +115,7 @@ public class QuestionController
     {
         if (result.hasErrors())
         {
-            return "article/edit";
+            return "questions/edit";
         }
         else
         {
@@ -146,6 +144,7 @@ public class QuestionController
         }
 
         questionService.increaseLike(questionId, user.getId());
+
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

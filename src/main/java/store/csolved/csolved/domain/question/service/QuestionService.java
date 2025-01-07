@@ -20,7 +20,7 @@ public class QuestionService
     private final QuestionMapper questionMapper;
     private final TagService tagService;
 
-    public List<QuestionDto> provideQuestions(Page page)
+    public List<QuestionDto> provideQuestions()
     {
         return questionMapper.findAllQuestions(0L, 10L);
     }

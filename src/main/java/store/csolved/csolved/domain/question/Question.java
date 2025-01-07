@@ -11,9 +11,9 @@ public class Question
 {
     private Long id;
 
-    private final Long userId;
+    private final Long authorId;
 
-    private final boolean isAnonymous;
+    private final boolean anonymous;
 
     private final String title;
 
@@ -29,9 +29,22 @@ public class Question
 
     private final LocalDateTime deletedAt;
 
-    public static Question create(Long questionId, Long userId, boolean isAnonymous, String title, String content, Long categoryId)
+    public static Question create(Long questionId,
+                                  Long authorId,
+                                  boolean anonymous,
+                                  String title,
+                                  String content,
+                                  Long categoryId)
     {
-        return new Question(questionId, userId, isAnonymous, title, content,
-                categoryId, 0L, 0L, LocalDateTime.now(), null);
+        return new Question(questionId,
+                authorId,
+                anonymous,
+                title,
+                content,
+                categoryId,
+                0L,
+                0L,
+                LocalDateTime.now(),
+                null);
     }
 }

@@ -28,7 +28,7 @@ public class AnswerController
     {
         if (result.hasErrors())
         {
-            return "/article/detail";
+            return "questions/detail";
         }
         else
         {
