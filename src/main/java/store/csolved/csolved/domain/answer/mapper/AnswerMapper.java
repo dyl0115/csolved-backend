@@ -13,11 +13,19 @@ public interface AnswerMapper
 
     List<AnswerDto> findAllAnswersByQuestionId(Long questionId);
 
+    Double findAverageScoreByAnswerId(Long answerId);
+
+    Long findVoterCountByAnswerId(Long answerId);
+
+    boolean existUserInAnswerRatings(Long answerId, Long userId);
+
     void insertAnswerScore(Long answerId, Long userId, int score);
 
     boolean existCommentInAnswer(Long answerId);
 
     void softDeleteAnswer(Long answerId);
+
+    void hardDeleteAnswerRatings(Long answerId);
 
     void hardDeleteAnswer(Long answerId);
 }

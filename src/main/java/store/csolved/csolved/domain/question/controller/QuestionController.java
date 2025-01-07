@@ -127,11 +127,12 @@ public class QuestionController
     }
 
     @DeleteMapping("/api/questions/{questionId}")
-    @ResponseBody
-    public void deleteQuestion(@LoginUser User user,
-                               @PathVariable Long questionId)
+    public ResponseEntity<Void> deleteQuestion(@LoginUser User user,
+                                               @PathVariable Long questionId)
     {
         questionService.deleteQuestion(questionId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/api/questions/{questionId}/likes")

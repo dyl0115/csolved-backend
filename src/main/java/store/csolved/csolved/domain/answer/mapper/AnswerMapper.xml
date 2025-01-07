@@ -80,6 +80,25 @@
         </collection>
     </resultMap>
 
+    <select id="findAverageScoreByAnswerId">
+        select coalesce(avg(score), 0)
+        from answer_ratings
+        where answer_id = #{answerId};
+    </select>
+
+    <select id="findVoterCountByAnswerId">
+        select coalesce(count(*), 0)
+        from answer_ratings
+        where answer_id = #{answerId};
+    </select>
+
+    <select id="existUserInAnswerRatings">
+        select exists(select 1
+                      from answer_ratings
+                      where answer_id = #{answerId}
+                        and user_id = #{userId});
+    </select>
+
     <insert id="insertAnswerScore">
         insert into answer_ratings(answer_id,
                                    user_id,
@@ -101,6 +120,12 @@
             deleted_at = current_timestamp
         where id = #{answerId}
     </update>
+
+    <delete id="hardDeleteAnswerRatings">
+        delete
+        from answer_ratings
+        where answer_id = #{answerId};
+    </delete>
 
     <delete id="hardDeleteAnswer">
         delete

@@ -17,8 +17,6 @@ public interface QuestionMapper
 
     QuestionDto findQuestionByQuestionId(Long questionId);
 
-
-
     void softDeleteQuestionByQuestionId(Long questionId);
 
     // 질문-좋아요 테이블에 저장된 유저인지 체크

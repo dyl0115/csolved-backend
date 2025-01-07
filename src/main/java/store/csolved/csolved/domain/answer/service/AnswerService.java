@@ -30,6 +30,27 @@ public class AnswerService
         return answerMapper.findAllAnswersByQuestionId(questionId);
     }
 
+    public boolean hasAlreadyRated(Long answerId, Long userId)
+    {
+        return answerMapper.existUserInAnswerRatings(answerId, userId);
+    }
+
+    public Double findAverageScore(Long answerId)
+    {
+        return answerMapper.findAverageScoreByAnswerId(answerId);
+    }
+
+    public Long findVoterCount(Long answerId)
+    {
+        return answerMapper.findVoterCountByAnswerId(answerId);
+    }
+
+    @Transactional
+    public void rateAnswer(Long answerId, Long userId, Integer score)
+    {
+        answerMapper.insertAnswerScore(answerId, userId, score);
+    }
+
     @Transactional
     public void deleteAnswer(Long answerId)
     {
@@ -41,6 +62,7 @@ public class AnswerService
         }
         else
         {
+            answerMapper.hardDeleteAnswerRatings(answerId);
             answerMapper.hardDeleteAnswer(answerId);
         }
     }
