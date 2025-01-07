@@ -12,8 +12,6 @@ public class TestController
     @GetMapping
     public String testView(Model model)
     {
-        model.addAttribute("currentPage", 1);
-        model.addAttribute("totalPages", 20);
-        return "common/pagination";
+        return "common/footer";
     }
 }
