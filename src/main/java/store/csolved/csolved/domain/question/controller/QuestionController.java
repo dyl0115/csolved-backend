@@ -71,7 +71,7 @@ public class QuestionController
         {
             questionService.saveQuestion(createForm);
 
-            return "redirect:/questions";
+            return "redirect:/questions?page=1";
         }
     }
 
