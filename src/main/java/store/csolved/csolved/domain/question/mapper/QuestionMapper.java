@@ -1,6 +1,7 @@
 package store.csolved.csolved.domain.question.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import store.csolved.csolved.domain.common.Page;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
 
@@ -13,7 +14,9 @@ public interface QuestionMapper
 
     void updateQuestion(Question question);
 
-    List<QuestionDto> findAllQuestions(Long offset, Long limit);
+    Long findAllQuestionsCount();
+
+    List<QuestionDto> findAllQuestions(Page page);
 
     QuestionDto findQuestionByQuestionId(Long questionId);
 

@@ -49,7 +49,7 @@ public class AuthController
         {
             User principal = userService.signIn(signInForm);
             session.setAttribute("principal", principal);
-            return "redirect:/questions";
+            return "redirect:/questions?page=1";
         }
     }
 

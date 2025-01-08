@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.question.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.question.Page;
+import store.csolved.csolved.domain.common.Page;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
@@ -20,9 +20,14 @@ public class QuestionService
     private final QuestionMapper questionMapper;
     private final TagService tagService;
 
-    public List<QuestionDto> provideQuestions()
+    public Long provideAllQuestionsCount()
     {
-        return questionMapper.findAllQuestions(0L, 10L);
+        return questionMapper.findAllQuestionsCount();
+    }
+
+    public List<QuestionDto> provideQuestions(Page page)
+    {
+        return questionMapper.findAllQuestions(page);
     }
 
     public QuestionDto provideQuestion(Long questionId)

@@ -30,6 +30,11 @@
         where id = #{id};
     </update>
 
+    <select id="findAllQuestionsCount">
+        select count(*)
+        from questions;
+    </select>
+
     <select id="findAllQuestions" resultMap="QuestionDtoMap">
         SELECT q.*,
                u.nickname  AS author_nickname,
@@ -40,7 +45,7 @@
               FROM questions
               WHERE deleted_at IS NULL
               ORDER BY created_at DESC
-              LIMIT #{offset} , #{limit}) AS q
+              LIMIT #{offset} , #{rowCount}) AS q
                  LEFT JOIN
              users AS u ON q.author_id = u.id
                  LEFT JOIN
@@ -82,7 +87,6 @@
         where q.id = #{questionId}
         group by q.id, t.id;
     </select>
-
 
     <update id="softDeleteQuestionByQuestionId">
         update questions
