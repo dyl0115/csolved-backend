@@ -15,7 +15,6 @@ import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
 import store.csolved.csolved.domain.common.Page;
-import store.csolved.csolved.domain.question.QuestionsConstants;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
 import store.csolved.csolved.domain.question.dto.QuestionEditForm;
@@ -34,13 +33,11 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/questions")
-    public String provideQuestions(@LoginUser User user,
-                                   @RequestParam("page") Long requestPage,
+    public String provideQuestions(@RequestParam("page") String requestPage,
                                    Model model)
     {
         Page page = Page.create(requestPage, questionService.provideAllQuestionsCount());
 
-        model.addAttribute("user", user);
         model.addAttribute("questions", questionService.provideQuestions(page));
         model.addAttribute("page", page);
 

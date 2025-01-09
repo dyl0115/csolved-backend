@@ -16,9 +16,9 @@ public class Page
     private final Long offset;
     private final Long rowCount;
 
-    public static Page create(Long requestCurrentPage, Long totalRecordsCount)
+    public static Page create(String requestPage, Long totalRecordsCount)
     {
-        Long currentPage = createCurrentPage(requestCurrentPage, totalRecordsCount);
+        Long currentPage = createCurrentPage(requestPage, totalRecordsCount);
         Long totalPage = createTotalPage(totalRecordsCount);
         Long offset = createOffset(currentPage);
         Long rowCount = createRowCount();
@@ -30,11 +30,10 @@ public class Page
                 rowCount);
     }
 
-    private static Long createCurrentPage(Long currentPage, Long totalRecordsCount)
+    private static Long createCurrentPage(String requestPage, Long totalRecordsCount)
     {
-        if (currentPage < 1L) return 1L;
-        else if (currentPage > createTotalPage(totalRecordsCount)) return createTotalPage(totalRecordsCount);
-        return currentPage;
+        if (!requestPage.matches("^[1-9]\\d*$")) return 1L;
+        return Math.min(Long.parseLong(requestPage), createTotalPage(totalRecordsCount));
     }
 
     private static Long createTotalPage(Long totalRecordsCount)

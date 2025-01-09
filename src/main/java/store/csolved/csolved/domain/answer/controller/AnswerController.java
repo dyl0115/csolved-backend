@@ -28,15 +28,10 @@ public class AnswerController
                              @ModelAttribute("answerCreateForm") AnswerCreateForm answerCreateForm,
                              BindingResult result)
     {
-        if (result.hasErrors())
-        {
-            return "questions/detail";
-        }
-        else
-        {
-            answerService.saveAnswer(user, answerCreateForm);
-            return "redirect:/questions/" + questionId;
-        }
+        if (result.hasErrors()) return "questions/detail";
+
+        answerService.saveAnswer(user, answerCreateForm);
+        return "redirect:/questions/" + questionId;
     }
 
     @LoginRequest
@@ -46,26 +41,21 @@ public class AnswerController
                                         @RequestBody Integer rating)
     {
         if (answerService.hasAlreadyRated(answerId, user.getId()))
-        {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        else
-        {
-            answerService.rateAnswer(answerId, user.getId(), rating);
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("averageScore", answerService.findAverageScore(answerId));
-            response.put("voterCount", answerService.findVoterCount(answerId));
-            return ResponseEntity.ok(response);
-        }
+        answerService.rateAnswer(answerId, user.getId(), rating);
+        Map<String, Object> response = new HashMap<>();
+        response.put("averageScore", answerService.findAverageScore(answerId));
+        response.put("voterCount", answerService.findVoterCount(answerId));
+        return ResponseEntity.ok(response);
+
     }
 
     @LoginRequest
     @DeleteMapping("/api/answers/{answerId}")
-    @ResponseBody
-    public String deleteAnswer(@PathVariable Long answerId)
+    public ResponseEntity<Void> deleteAnswer(@PathVariable Long answerId)
     {
         answerService.deleteAnswer(answerId);
-        return "ok";
+        return ResponseEntity.ok().build();
     }
 }

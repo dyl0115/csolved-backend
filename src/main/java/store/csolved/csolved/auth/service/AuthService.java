@@ -46,10 +46,12 @@ public class AuthService
         userMapper.deleteUserById(user.getId());
     }
 
-    public void checkSignUpValid(SignUpForm form, BindingResult errors)
+    public void isSignUpValid(SignUpForm form, BindingResult errors)
     {
         checkEmailDuplicate(form, errors);
+
         checkNicknameDuplicate(form, errors);
+
         checkPasswordMatch(form, errors);
     }
 

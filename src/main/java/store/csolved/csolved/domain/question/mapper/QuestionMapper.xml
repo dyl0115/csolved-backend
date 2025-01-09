@@ -32,7 +32,8 @@
 
     <select id="findAllQuestionsCount">
         select count(*)
-        from questions;
+        from questions
+        where deleted_at is null;
     </select>
 
     <select id="findAllQuestions" resultMap="QuestionDtoMap">

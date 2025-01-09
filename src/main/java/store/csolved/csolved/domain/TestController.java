@@ -20,7 +20,7 @@ public class TestController
 
     @GetMapping
     public String testView(@LoginUser User user,
-                           @RequestParam("page") Long requestPage,
+                           @RequestParam("page") String requestPage,
                            Model model)
     {
         Page page = Page.create(requestPage, questionService.provideAllQuestionsCount());

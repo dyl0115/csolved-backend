@@ -1,13 +1,12 @@
 package store.csolved.csolved.config;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import store.csolved.csolved.auth.argumentResolver.LoginRequestInterceptor;
-import store.csolved.csolved.auth.argumentResolver.LoginUserArgumentResolver;
+import store.csolved.csolved.auth.etc.LoginRequestInterceptor;
+import store.csolved.csolved.auth.etc.LoginUserArgumentResolver;
 
 import java.util.List;
 

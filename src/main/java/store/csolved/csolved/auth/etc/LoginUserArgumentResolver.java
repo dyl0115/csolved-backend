@@ -1,4 +1,4 @@
-package store.csolved.csolved.auth.argumentResolver;
+package store.csolved.csolved.auth.etc;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +28,16 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter,
-                                  ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest,
-                                  WebDataBinderFactory binderFactory)
+    public User resolveArgument(MethodParameter parameter,
+                                ModelAndViewContainer mavContainer, // 이 매개변수가 핵심임!!
+                                NativeWebRequest webRequest,
+                                WebDataBinderFactory binderFactory)
     {
-        return httpSession.getAttribute(AuthConstants.LOGIN_USER_SESSION_KEY);
+        User user = (User) httpSession.getAttribute(AuthConstants.LOGIN_USER_SESSION_KEY);
+
+        // mavContainer 자체에 넣어버리고 해당 참조 값을 반환하면,
+        // 컨트롤러 내에서 업데이트 된 user객체가 view로 전달된다.
+        if (mavContainer != null) mavContainer.addAttribute("user", user);
+        return user;
     }
 }

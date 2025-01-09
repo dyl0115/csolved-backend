@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import store.csolved.csolved.auth.annotation.LoginRequest;
 import store.csolved.csolved.auth.service.AuthService;
 import store.csolved.csolved.auth.annotation.LoginUser;
 import store.csolved.csolved.domain.user.User;
@@ -33,7 +34,7 @@ public class AuthController
                          BindingResult result,
                          @ModelAttribute("signInForm") SignInForm signInForm)
     {
-        authService.checkSignUpValid(signUpForm, result);
+        authService.isSignUpValid(signUpForm, result);
         if (result.hasErrors()) return LOGIN_PAGE_URL;
 
         authService.signUp(signUpForm);
@@ -50,19 +51,18 @@ public class AuthController
         if (result.hasErrors()) return LOGIN_PAGE_URL;
 
         authService.signIn(session, signInForm);
-
         return "redirect:/questions?page=1";
     }
 
+    @LoginRequest
     @GetMapping("/signout")
-    public String signOut(@LoginUser User user,
-                          HttpSession session)
+    public String signOut(HttpSession session)
     {
         authService.signOut(session);
-
         return REDIRECT_LOGIN_PAGE_URL;
     }
 
+    @LoginRequest
     @DeleteMapping("/withdraw")
     public String withdraw(@LoginUser User user,
                            @ModelAttribute("signUpForm") SignUpForm signUpForm,
