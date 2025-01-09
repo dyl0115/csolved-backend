@@ -38,8 +38,7 @@ public class TagService
         List<String> tags = splitTagNames(tagString);
         List<Tag> existTags = filterExistTags(tags);
         List<Tag> newTags = filterNewTags(tags);
-
-        // 새로운 태그만 DB에 저장합니다.
+        
         newTags.forEach(tagMapper::insertTag);
 
         return mergeTags(existTags, newTags);

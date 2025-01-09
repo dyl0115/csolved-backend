@@ -6,7 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.config.auth.LoginUser;
+import store.csolved.csolved.auth.annotation.LoginRequest;
+import store.csolved.csolved.auth.annotation.LoginUser;
 import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.user.User;
@@ -20,6 +21,7 @@ public class AnswerController
 {
     private final AnswerService answerService;
 
+    @LoginRequest
     @PostMapping("/questions/{questionId}/answers")
     public String saveAnswer(@LoginUser User user,
                              @PathVariable Long questionId,
@@ -37,6 +39,7 @@ public class AnswerController
         }
     }
 
+    @LoginRequest
     @PostMapping("/api/answers/{answerId}/rate")
     public ResponseEntity<?> rateAnswer(@LoginUser User user,
                                         @PathVariable Long answerId,
@@ -57,10 +60,10 @@ public class AnswerController
         }
     }
 
+    @LoginRequest
     @DeleteMapping("/api/answers/{answerId}")
     @ResponseBody
-    public String deleteAnswer(@LoginUser User user,
-                               @PathVariable Long answerId)
+    public String deleteAnswer(@PathVariable Long answerId)
     {
         answerService.deleteAnswer(answerId);
         return "ok";

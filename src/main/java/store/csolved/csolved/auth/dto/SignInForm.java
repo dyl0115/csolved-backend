@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.user.dto;
+package store.csolved.csolved.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
