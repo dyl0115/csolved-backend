@@ -22,11 +22,11 @@
                         
                         <!-- 익명/실명 토글-->
                         <th:block
-                                th:replace="~{fragments/selectField::selectRadio('radio', '작성 방식', 'anonymous', ${ {{text:'익명',value:true},{text:'실명',value:false}} }, false)}"/>
+                                th:replace="~{fragments/selectField::selectOptions('radioButton', '작성 방식', 'anonymous', ${ {{text:'익명',value:true},{text:'실명',value:false}} }, false)}"/>
                         
                         <!-- 카테고리 선택창 -->
                         <th:block
-                                th:replace="~{fragments/selectField::selectBox('카테고리', 'categoryId', ${categories})}"/>
+                                th:replace="~{fragments/selectField::selectOptions('selectBox','카테고리', 'categoryId', ${categories}, ${categories[0].id})}"/>
                         
                         <!-- 태그 입력창-->
                         <th:block
