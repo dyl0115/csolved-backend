@@ -2,23 +2,26 @@
     <body>
         <th:block th:fragment="selectOptions(type, label, name, options, selected)">
             <div class="mb-4">
-                
                 <label class="block text-sm font-medium text-gray-700 mb-1"
                        th:text="${label}">라벨명</label>
                 
                 <div th:switch="${type}">
-                    
                     <!-- 셀렉트 박스 모드-->
                     <div th:case="'selectBox'" class="relative">
                         <select th:field="*{__${name}__}"
-                                class="w-full bg-white border border-gray-300 rounded-lg py-2 px-3 appearance-none">
+                                th:class="${'w-full bg-white border rounded-lg py-2 px-3 appearance-none ' +
+                                         (#fields.hasErrors(name) ?
+                                          'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' :
+                                          'border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500')}">
                             <option th:each="option : ${options}"
                                     th:value="${option.id}"
                                     th:text="${option.name}"
                                     th:selected="${option.id == selected}">옵션 이름
                             </option>
                         </select>
-                        <i data-lucide="chevron-down" class="absolute right-3 top-3 text-gray-400 w-4 h-4"></i>
+                        <i data-lucide="chevron-down"
+                           th:class="${'absolute right-3 top-3 w-4 h-4 ' +
+                                    (#fields.hasErrors(name) ? 'text-red-400' : 'text-gray-400')}"></i>
                     </div>
                     
                     <!-- 라디오 버튼 모드-->
@@ -30,7 +33,10 @@
                                        th:field="*{__${name}__}"
                                        th:value="${value}"
                                        th:checked="${value == selected}"
-                                       class="form-radio text-blue-500">
+                                       th:class="${'form-radio ' +
+                                                (#fields.hasErrors(name) ?
+                                                 'text-red-500 border-red-500 focus:border-red-500 focus:ring-red-500' :
+                                                 'text-blue-500 border-gray-300 focus:border-blue-500 focus:ring-blue-500')}">
                                 <span class="ml-2" th:text="${text}">옵션 텍스트</span>
                             </div>
                         </label>
@@ -43,6 +49,5 @@
                 </th:block>
             </div>
         </th:block>
-    
     </body>
 </html>
