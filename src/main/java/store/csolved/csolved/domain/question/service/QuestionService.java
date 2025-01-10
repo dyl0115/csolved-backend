@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.common.page.Page;
 import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
-import store.csolved.csolved.domain.question.dto.QuestionDto;
-import store.csolved.csolved.domain.question.dto.QuestionEditForm;
+import store.csolved.csolved.domain.question.controller.dto.request.QuestionCreateForm;
+import store.csolved.csolved.domain.question.controller.dto.QuestionDto;
+import store.csolved.csolved.domain.question.controller.dto.QuestionEditForm;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
 import store.csolved.csolved.domain.tag.service.TagService;
 

@@ -12,19 +12,19 @@ import store.csolved.csolved.auth.annotation.LoginRequest;
 import store.csolved.csolved.auth.annotation.LoginUser;
 import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
+import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
 import store.csolved.csolved.domain.common.page.Page;
 import store.csolved.csolved.domain.common.page.etc.PageInfo;
-import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
-import store.csolved.csolved.domain.question.dto.QuestionDto;
-import store.csolved.csolved.domain.question.dto.QuestionEditForm;
+import store.csolved.csolved.domain.question.controller.dto.request.QuestionCreateForm;
+import store.csolved.csolved.domain.question.controller.dto.QuestionDto;
+import store.csolved.csolved.domain.question.controller.dto.QuestionEditForm;
 import store.csolved.csolved.domain.question.service.QuestionService;
 import store.csolved.csolved.domain.user.User;
 
 import java.util.List;
 
-import static store.csolved.csolved.domain.question.QuestionsConstants.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -34,9 +34,17 @@ public class QuestionController
     private final AnswerService answerService;
     private final CategoryMapper categoryMapper;
 
+    public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "questions/create";
+
+    @ModelAttribute("categories")
+    public List<Category> findAllCategory()
+    {
+        return categoryMapper.findAllCategory();
+    }
+
     @LoginRequest
     @GetMapping("/questions")
-    public String provideQuestions(@PageInfo Page page, Model model)
+    public String findQuestionList(@PageInfo Page page, Model model)
     {
         List<QuestionDto> questions = questionService.provideQuestions(page);
         model.addAttribute("questions", questions);
@@ -45,24 +53,21 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/questions/create")
-    public String provideQuestionForm(Model model)
+    public String initCreateForm(Model model)
     {
         model.addAttribute("questionCreateForm", new QuestionCreateForm());
-        model.addAttribute("categories", categoryMapper.findAllCategory());
-
-        return "questions/create";
+        return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
     }
 
     @LoginRequest
     @PostMapping("/questions/create")
-    public String saveQuestion(@Valid @ModelAttribute("questionCreateForm") QuestionCreateForm createForm,
-                               BindingResult result,
-                               Model model)
+    public String processCreateForm(@Valid @ModelAttribute("questionCreateForm") QuestionCreateForm createForm,
+                                    BindingResult result,
+                                    Model model)
     {
         if (result.hasErrors())
         {
             model.addAttribute("questionCreateForm", createForm);
-            model.addAttribute("categories", categoryMapper.findAllCategory());
 
             return "questions/create";
         }
@@ -70,14 +75,14 @@ public class QuestionController
         {
             questionService.saveQuestion(createForm);
 
-            return REDIRECT_QUESTIONS_MAIN_PAGE_URL;
+            return "redirect:/questions?page=1";
         }
     }
 
     @LoginRequest
     @GetMapping("/questions/{questionId}")
-    public String provideQuestionDetail(@PathVariable Long questionId,
-                                        Model model)
+    public String findQuestion(@PathVariable Long questionId,
+                               Model model)
     {
         questionService.increaseView(questionId);
 
@@ -91,9 +96,9 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/questions/{questionId}/edit-form")
-    public String provideQuestionEditForm(@LoginUser User user,
-                                          @PathVariable Long questionId,
-                                          Model model)
+    public String initEditForm(@LoginUser User user,
+                               @PathVariable Long questionId,
+                               Model model)
     {
         QuestionDto question = questionService.provideQuestion(questionId);
         QuestionEditForm questionEditForm = new QuestionEditForm(
@@ -106,20 +111,18 @@ public class QuestionController
                 question.getContent());
 
         model.addAttribute("questionEditForm", questionEditForm);
-        model.addAttribute("categories", categoryMapper.findAllCategory());
-
         return "questions/edit";
     }
 
     @LoginRequest
     @PutMapping("/questions/{questionId}")
-    public String updateQuestion(@Valid @ModelAttribute("questionEditForm") QuestionEditForm questionEditForm,
-                                 BindingResult result)
+    public String processEditForm(@Valid @ModelAttribute("questionEditForm") QuestionEditForm questionEditForm,
+                                  BindingResult result)
     {
         if (result.hasErrors()) return "questions/edit";
 
         questionService.updateQuestion(questionEditForm);
-        return REDIRECT_QUESTIONS_MAIN_PAGE_URL;
+        return "redirect:/questions?page=1";
     }
 
     @LoginRequest

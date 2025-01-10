@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.question.dto;
+package store.csolved.csolved.domain.question.controller.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,22 +14,22 @@ public class QuestionCreateForm
 {
     private Long authorId;
 
-    @NotNull
+    @NotNull(message = "실명/익명 여부를 선택해주세요.")
     private Boolean anonymous;
 
     private List<Category> categoryList;
 
-    @NotNull
+    @NotNull(message = "카테고리를 하나 선택해주세요.")
     private Long categoryId;
 
-    @NotBlank
+    @NotBlank(message = "태그는 반드시 하나 이상 있어야 합니다.")
     private String tags;
 
-    @NotBlank
-    @Size(min = 2, max = 30)
+    @NotBlank(message = "제목을 입력해주세요.")
+    @Size(min = 2, max = 80, message = "제목은 최소 2글자에서 80자까지 가능합니다.")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
     public Question toQuestion()

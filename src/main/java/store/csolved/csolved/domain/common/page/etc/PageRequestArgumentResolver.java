@@ -7,7 +7,6 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import store.csolved.csolved.domain.common.page.Page;
 import store.csolved.csolved.domain.question.service.QuestionService;
 
 @RequiredArgsConstructor
@@ -20,18 +19,18 @@ public class PageRequestArgumentResolver implements HandlerMethodArgumentResolve
     public boolean supportsParameter(MethodParameter parameter)
     {
         boolean hasPageInfoAnnotation = parameter.hasParameterAnnotation(PageInfo.class);
-        boolean isPageClass = parameter.getParameterType().equals(Page.class);
+        boolean isPageClass = parameter.getParameterType().equals(store.csolved.csolved.domain.common.page.Page.class);
         return hasPageInfoAnnotation && isPageClass;
     }
 
     @Override
-    public Page resolveArgument(MethodParameter parameter,
-                                ModelAndViewContainer mavContainer,
-                                NativeWebRequest webRequest,
-                                WebDataBinderFactory binderFactory)
+    public store.csolved.csolved.domain.common.page.Page resolveArgument(MethodParameter parameter,
+                                                                         ModelAndViewContainer mavContainer,
+                                                                         NativeWebRequest webRequest,
+                                                                         WebDataBinderFactory binderFactory)
     {
         String pageString = webRequest.getParameter("page");
-        Page page = Page.validateAndCreate(pageString, questionService.provideAllQuestionsCount());
+        store.csolved.csolved.domain.common.page.Page page = store.csolved.csolved.domain.common.page.Page.validateAndCreate(pageString, questionService.provideAllQuestionsCount());
         if (mavContainer != null) mavContainer.addAttribute("page", page);
         return page;
     }

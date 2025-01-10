@@ -60,7 +60,7 @@
         GROUP BY q.id, t.id;
     </select>
 
-    <resultMap id="QuestionDtoMap" type="store.csolved.csolved.domain.question.dto.QuestionDto" autoMapping="true">
+    <resultMap id="QuestionDtoMap" type="store.csolved.csolved.domain.question.controller.dto.QuestionDto" autoMapping="true">
         <id property="questionId" column="id"/>
         <result property="authorId" column="author_id"/>
         <collection property="tags" ofType="java.lang.String">

@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.question.dto;
+package store.csolved.csolved.domain.question.controller.dto;
 
 import lombok.Data;
 
