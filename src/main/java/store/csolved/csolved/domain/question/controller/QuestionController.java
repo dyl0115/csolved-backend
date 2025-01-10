@@ -14,12 +14,15 @@ import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
-import store.csolved.csolved.domain.common.Page;
+import store.csolved.csolved.domain.common.page.Page;
+import store.csolved.csolved.domain.common.page.etc.PageInfo;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
 import store.csolved.csolved.domain.question.dto.QuestionEditForm;
 import store.csolved.csolved.domain.question.service.QuestionService;
 import store.csolved.csolved.domain.user.User;
+
+import java.util.List;
 
 import static store.csolved.csolved.domain.question.QuestionsConstants.*;
 
@@ -33,23 +36,17 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/questions")
-    public String provideQuestions(@RequestParam("page") String requestPage,
-                                   Model model)
+    public String provideQuestions(@PageInfo Page page, Model model)
     {
-        Page page = Page.create(requestPage, questionService.provideAllQuestionsCount());
-
-        model.addAttribute("questions", questionService.provideQuestions(page));
-        model.addAttribute("page", page);
-
+        List<QuestionDto> questions = questionService.provideQuestions(page);
+        model.addAttribute("questions", questions);
         return "questions/list";
     }
 
     @LoginRequest
     @GetMapping("/questions/create")
-    public String provideQuestionForm(@LoginUser User user,
-                                      Model model)
+    public String provideQuestionForm(Model model)
     {
-        model.addAttribute("user", user);
         model.addAttribute("questionCreateForm", new QuestionCreateForm());
         model.addAttribute("categories", categoryMapper.findAllCategory());
 
@@ -58,14 +55,12 @@ public class QuestionController
 
     @LoginRequest
     @PostMapping("/questions/create")
-    public String saveQuestion(@LoginUser User user,
-                               @Valid @ModelAttribute("questionCreateForm") QuestionCreateForm createForm,
+    public String saveQuestion(@Valid @ModelAttribute("questionCreateForm") QuestionCreateForm createForm,
                                BindingResult result,
                                Model model)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("user", user);
             model.addAttribute("questionCreateForm", createForm);
             model.addAttribute("categories", categoryMapper.findAllCategory());
 
@@ -81,13 +76,11 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/questions/{questionId}")
-    public String provideQuestionDetail(@LoginUser User user,
-                                        @PathVariable Long questionId,
+    public String provideQuestionDetail(@PathVariable Long questionId,
                                         Model model)
     {
         questionService.increaseView(questionId);
 
-        model.addAttribute("user", user);
         model.addAttribute("answerCreateForm", new AnswerCreateForm());
         model.addAttribute("commentCreateForm", new CommentCreateForm());
         model.addAttribute("question", questionService.provideQuestion(questionId));
@@ -112,7 +105,6 @@ public class QuestionController
                 question.getTitle(),
                 question.getContent());
 
-        model.addAttribute("user", user);
         model.addAttribute("questionEditForm", questionEditForm);
         model.addAttribute("categories", categoryMapper.findAllCategory());
 
@@ -127,7 +119,6 @@ public class QuestionController
         if (result.hasErrors()) return "questions/edit";
 
         questionService.updateQuestion(questionEditForm);
-
         return REDIRECT_QUESTIONS_MAIN_PAGE_URL;
     }
 
@@ -136,7 +127,7 @@ public class QuestionController
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long questionId)
     {
         questionService.deleteQuestion(questionId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @LoginRequest
@@ -147,10 +138,10 @@ public class QuestionController
         if (questionService.hasAlreadyLiked(questionId, user.getId()))
         {
             return ResponseEntity
-                    .status(HttpStatus.CONFLICT).build();
+                    .status(HttpStatus.CONFLICT).body(null);
         }
 
         questionService.increaseLike(questionId, user.getId());
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

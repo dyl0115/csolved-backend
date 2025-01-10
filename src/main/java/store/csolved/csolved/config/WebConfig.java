@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import store.csolved.csolved.auth.etc.LoginRequestInterceptor;
 import store.csolved.csolved.auth.etc.LoginUserArgumentResolver;
+import store.csolved.csolved.domain.common.page.etc.PageRequestArgumentResolver;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer
 {
     private final LoginUserArgumentResolver loginUserArgumentResolver;
+    private final PageRequestArgumentResolver pageRequestArgumentResolver;
     private final LoginRequestInterceptor loginRequestInterceptor;
 
     @Override
@@ -29,5 +31,8 @@ public class WebConfig implements WebMvcConfigurer
     {
         // @LoginUser가 있는 User타입 변수에 현재 로그인한 회원정보를 바인딩합니다.
         resolvers.add(loginUserArgumentResolver);
+
+        // @PageInfo가 있는 Page타입 변수에 사용자가 요청한 page정보를 바인딩합니다.
+        resolvers.add(pageRequestArgumentResolver);
     }
 }

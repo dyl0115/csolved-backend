@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.common;
+package store.csolved.csolved.domain.common.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class Page
     private final Long offset;
     private final Long rowCount;
 
-    public static Page create(String requestPage, Long totalRecordsCount)
+    public static Page validateAndCreate(String requestPage, Long totalRecordsCount)
     {
         Long currentPage = createCurrentPage(requestPage, totalRecordsCount);
         Long totalPage = createTotalPage(totalRecordsCount);

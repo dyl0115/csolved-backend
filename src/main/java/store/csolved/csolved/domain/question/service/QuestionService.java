@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.question.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.common.Page;
+import store.csolved.csolved.domain.common.page.Page;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.question.dto.QuestionCreateForm;
 import store.csolved.csolved.domain.question.dto.QuestionDto;
