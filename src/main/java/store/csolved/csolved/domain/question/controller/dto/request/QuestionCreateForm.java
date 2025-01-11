@@ -21,13 +21,13 @@ public class QuestionCreateForm
     private String tags;
 
     @NotBlank(message = "제목을 입력해주세요.")
-    @Size(min = 2, max = 80, message = "제목은 최소 2글자에서 80자까지 가능합니다.")
+    @Size(min = 2, max = 50, message = "제목은 최소 2글자에서 50자까지 가능합니다.")
     private String title;
 
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
-    public Question toQuestion()
+    public Question toCommand()
     {
         return Question.create(
                 null,

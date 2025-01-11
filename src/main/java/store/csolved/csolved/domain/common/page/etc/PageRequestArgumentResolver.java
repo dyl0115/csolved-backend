@@ -30,7 +30,7 @@ public class PageRequestArgumentResolver implements HandlerMethodArgumentResolve
                                                                          WebDataBinderFactory binderFactory)
     {
         String pageString = webRequest.getParameter("page");
-        store.csolved.csolved.domain.common.page.Page page = store.csolved.csolved.domain.common.page.Page.validateAndCreate(pageString, questionService.provideAllQuestionsCount());
+        store.csolved.csolved.domain.common.page.Page page = store.csolved.csolved.domain.common.page.Page.validateAndCreate(pageString, questionService.getAllQuestionCount());
         if (mavContainer != null) mavContainer.addAttribute("page", page);
         return page;
     }

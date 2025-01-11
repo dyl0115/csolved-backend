@@ -20,17 +20,17 @@ public class QuestionService
     private final QuestionMapper questionMapper;
     private final TagService tagService;
 
-    public Long provideAllQuestionsCount()
+    public Long getAllQuestionCount()
     {
         return questionMapper.findAllQuestionsCount();
     }
 
-    public List<QuestionDto> provideQuestions(Page page)
+    public List<QuestionDto> getPagedQuestionList(Page page)
     {
         return questionMapper.findAllQuestions(page);
     }
 
-    public QuestionDto provideQuestion(Long questionId)
+    public QuestionDto getQuestionDetail(Long questionId)
     {
         return questionMapper.findQuestionByQuestionId(questionId);
     }
@@ -38,7 +38,7 @@ public class QuestionService
     @Transactional
     public void saveQuestion(QuestionCreateForm form)
     {
-        Question question = form.toQuestion();
+        Question question = form.toCommand();
         questionMapper.insertQuestion(question);
         tagService.saveQuestionTags(question.getId(), form.getTags());
     }
@@ -46,7 +46,7 @@ public class QuestionService
     @Transactional
     public void updateQuestion(QuestionEditForm form)
     {
-        Question question = form.toQuestion();
+        Question question = form.toCommand();
         questionMapper.updateQuestion(question);
         tagService.updateQuestionTags(question.getId(), form.getTags());
     }

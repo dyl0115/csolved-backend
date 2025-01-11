@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.annotation.LoginRequest;
 import store.csolved.csolved.auth.annotation.LoginUser;
 import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
+import store.csolved.csolved.domain.answer.dto.AnswerDto;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.category.mapper.CategoryMapper;
@@ -25,16 +26,15 @@ import store.csolved.csolved.domain.user.User;
 
 import java.util.List;
 
-
 @RequiredArgsConstructor
 @Controller
 public class QuestionController
 {
+    public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "questions/create";
+
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final CategoryMapper categoryMapper;
-
-    public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "questions/create";
 
     @ModelAttribute("categories")
     public List<Category> findAllCategory()
@@ -46,7 +46,7 @@ public class QuestionController
     @GetMapping("/questions")
     public String findQuestionList(@PageInfo Page page, Model model)
     {
-        List<QuestionDto> questions = questionService.provideQuestions(page);
+        List<QuestionDto> questions = questionService.getPagedQuestionList(page);
         model.addAttribute("questions", questions);
         return "questions/list";
     }
@@ -81,11 +81,13 @@ public class QuestionController
                                Model model)
     {
         questionService.increaseView(questionId);
+        QuestionDto question = questionService.getQuestionDetail(questionId);
+        List<AnswerDto> answers = answerService.getAllAnswer(questionId);
 
         model.addAttribute("answerCreateForm", new AnswerCreateForm());
         model.addAttribute("commentCreateForm", new CommentCreateForm());
-        model.addAttribute("question", questionService.provideQuestion(questionId));
-        model.addAttribute("answers", answerService.provideAllAnswersByQuestionId(questionId));
+        model.addAttribute("question", question);
+        model.addAttribute("answers", answers);
 
         return "questions/detail";
     }
@@ -96,8 +98,7 @@ public class QuestionController
                                @PathVariable Long questionId,
                                Model model)
     {
-        // 내일 개선.!
-        QuestionDto question = questionService.provideQuestion(questionId);
+        QuestionDto question = questionService.getQuestionDetail(questionId);
         QuestionEditForm questionEditForm = new QuestionEditForm(
                 questionId,
                 user.getId(),

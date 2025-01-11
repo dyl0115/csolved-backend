@@ -25,7 +25,7 @@ public class AnswerService
         answerMapper.insertAnswer(answer);
     }
 
-    public List<AnswerDto> provideAllAnswersByQuestionId(Long questionId)
+    public List<AnswerDto> getAllAnswer(Long questionId)
     {
         return answerMapper.findAllAnswersByQuestionId(questionId);
     }
