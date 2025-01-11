@@ -4,10 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.question.Question;
-
-import java.util.List;
 
 @Data
 public class QuestionCreateForm
@@ -16,8 +13,6 @@ public class QuestionCreateForm
 
     @NotNull(message = "실명/익명 여부를 선택해주세요.")
     private Boolean anonymous;
-
-    private List<Category> categoryList;
 
     @NotNull(message = "카테고리를 하나 선택해주세요.")
     private Long categoryId;

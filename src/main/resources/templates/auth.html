@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
+        <th:block th:insert="~{common/head.html}"/>
         <meta charset="UTF-8">
         <title>CS Interview Platform - Auth</title>
         <style>
@@ -15,37 +16,6 @@
             body {
                 background-color: #f0f2f5;
                 font-family: Arial, sans-serif;
-            }
-
-            /* Navigation Bar */
-            .nav-bar {
-                background-color: white;
-                height: 60px;
-                width: 100%;
-                border-bottom: 1px solid #e1e4e8;
-                display: flex;
-                align-items: center;
-                padding: 0 20px;
-                position: relative;
-                z-index: 2;
-            }
-
-            .logo {
-                display: flex;
-                align-items: center;
-                gap: 20px;
-            }
-
-            .logo-circle {
-                width: 40px;
-                height: 40px;
-                background-color: #4a90e2;
-                border-radius: 50%;
-            }
-
-            .logo-text {
-                font-size: 16px;
-                font-weight: bold;
             }
 
             /* Auth Card Container */
@@ -119,47 +89,6 @@
                 overflow-y: auto;
             }
 
-            .form-group {
-                margin-bottom: 20px;
-            }
-
-            .form-label {
-                display: block;
-                margin-bottom: 4px;
-                color: #333333;
-                font-size: 14px;
-            }
-
-            .form-sublabel {
-                display: block;
-                margin-bottom: 8px;
-                color: #666666;
-                font-size: 12px;
-            }
-
-            .form-input {
-                width: 100%;
-                height: 40px;
-                border: 1px solid #e1e4e8;
-                border-radius: 4px;
-                padding: 0 12px;
-                background-color: #f8f9fa;
-            }
-
-            /* Button Styles */
-            .auth-button {
-                width: 100%;
-                height: 45px;
-                background-color: #4a90e2;
-                color: white;
-                border: none;
-                border-radius: 22.5px;
-                font-size: 16px;
-                font-weight: bold;
-                cursor: pointer;
-                margin: 20px 0;
-            }
-
             /* Checkbox Styles */
             .checkbox-group {
                 display: flex;
@@ -183,32 +112,20 @@
                 border-top: 1px solid #e1e4e8;
                 margin: 20px 0;
             }
-
-            /* Error Styles */
-            .form-error {
-                color: #dc3545;
-                font-size: 12px;
-                margin-top: 4px;
-                display: none;
-            }
+        
         </style>
     </head>
     <body>
-        <!-- Navigation Bar -->
-        <div class="nav-bar">
-            <div class="logo">
-                <div class="logo-circle"></div>
-                <span class="logo-text">CS Interview Platform</span>
-            </div>
-        </div>
+        <!-- 기본 네비게이션 바 -->
+        <nav th:replace="~{common/navigation::default-navigation}"></nav>
         
-        <!-- Main Container -->
+        <!-- 로그인/회원가입 창 -->
         <div class="main-container">
-            <!-- Auth Card with conditional flipping -->
             <div class="auth-card"
                  th:with="isSignUpPage=${signUpForm != null and (#fields.hasErrors('signUpForm.*') or param.error != null)}"
                  th:classappend="${isSignUpPage ? 'flipped' : ''}">
-                <!-- Login Card (Front) -->
+                
+                <!-- 로그인 창 (카드 앞면) -->
                 <div class="card-face card-front">
                     <div class="tab-container">
                         <div class="tab" th:classappend="${!isSignUpPage ? 'active' : ''}" onclick="flipCard()">로그인
@@ -218,68 +135,68 @@
                     </div>
                     <div class="form-container">
                         <form th:action="@{/auth/signin}" th:object="${signInForm}" method="post">
-                            <div class="form-group">
-                                <label class="form-label">이메일</label>
-                                <input type="email" name="email" class="form-input" required>
-                                <div class="form-error"
-                                     th:if="${#fields.hasGlobalErrors()}"
-                                     th:each="error : ${#fields.globalErrors()}"
-                                     th:text="${error}"
-                                     style="display: block; margin-bottom: 20px;">
-                                </div>
+                            
+                            <!-- 로그인 이메일 입력창-->
+                            <th:block
+                                    th:replace="~{fragments/inputField::input (type='email', label='이메일', name='email', placeholder='이메일을 입력해주세요.')}"/>
+                            
+                            <th:block
+                                    th:replace="~{fragments/inputField::input (type='password', label='비밀번호', name='password', placeholder='비밀번호를 입력해주세요.')}"/>
+                            
+                            <!-- 글로벌 에러 메시지 창 -->
+                            <div class="text-sm font-medium text-red-500"
+                                 th:if="${#fields.hasGlobalErrors()}"
+                                 th:each="error : ${#fields.globalErrors()}"
+                                 th:text="${error}"> 글로벌 에러 메시지
                             </div>
                             
-                            <div class="form-group">
-                                <label class="form-label">비밀번호</label>
-                                <input type="password" name="password" class="form-input" required>
-                            </div>
-                            <button type="submit" class="auth-button">로그인</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                로그인
+                            </button>
                         </form>
                         <div class="divider"></div>
                     </div>
                 </div>
                 
-                <!-- Sign Up Card (Back) -->
+                <!-- 회원가입 창 (카드 뒷면) -->
                 <div class="card-face card-back">
+                    
                     <div class="tab-container">
                         <div class="tab" onclick="flipCard()">로그인</div>
                         <div class="tab active">회원가입</div>
                     </div>
+                    
                     <div class="form-container">
-                        <form th:action="@{/users/signup}" th:object="${signUpForm}" method="post"
+                        <form th:action="@{/auth/signup}" th:object="${signUpForm}" method="post"
                               onsubmit="return validateSignupForm()">
-                            <div class="form-group">
-                                <label class="form-label">이메일</label>
-                                <div class="form-sublabel">로그인 시 사용할 이메일 주소</div>
-                                <input type="email" th:field="*{email}" class="form-input" required>
-                                <div class="form-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                                     style="display: block;"></div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">닉네임</label>
-                                <div class="form-sublabel">커뮤니티에서 사용할 닉네임 (2-10자)</div>
-                                <input type="text" th:field="*{nickname}" class="form-input" required minlength="2"
-                                       maxlength="10">
-                                <div class="form-error" th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"
-                                     style="display: block;"></div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">비밀번호</label>
-                                <div class="form-sublabel">8자 이상, 영문/숫자/특수문자 조합</div>
-                                <input type="password" th:field="*{password}" class="form-input" required
-                                       pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">비밀번호 확인</label>
-                                <input type="password" name="passwordConfirm" id="passwordConfirm" class="form-input"
-                                       required>
-                                <div class="form-error" id="passwordError">비밀번호가 일치하지 않습니다.</div>
-                            </div>
+                            
+                            <!-- 회원가입 이메일 입력창-->
+                            <th:block
+                                    th:replace="~{fragments/inputField::input (type='email', label='이메일 주소', name='email', placeholder='로그인 시 사용할 이메일 주소')}"/>
+                            
+                            <!-- 회원가입 닉네임 입력창ㅣ-->
+                            <th:block
+                                    th:replace="~{fragments/inputField::input(type='text', label='닉네임', name='nickname', placeholder='커뮤니티에서 사용할 닉네임 (2-10자)')}"/>
+                            
+                            <!-- 회원가입 비밀번호 입력창-->
+                            <th:block
+                                    th:replace="~{fragments/inputField::input (type='password', label='비밀번호', name='password', placeholder='8자 이상, 영문/숫자/특수문자 조합')}"/>
+                            
+                            <!-- 회원가입 비밀번호 확인 입력창-->
+                            <th:block
+                                    th:replace="~{fragments/inputField::input (type='password', label='비밀번호 확인', name='passwordConfirm', placeholder='')}"/>
+                            
+                            
+                            <!-- 개인정보 처리 동의 체크박스-->
                             <div class="checkbox-group">
                                 <input type="checkbox" class="checkbox-input" required>
                                 <label class="checkbox-label">이용약관 및 개인정보처리방침에 동의합니다</label>
                             </div>
-                            <button type="submit" class="auth-button">회원가입</button>
+                            
+                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                회원가입
+                            </button>
+                        
                         </form>
                     </div>
                 </div>

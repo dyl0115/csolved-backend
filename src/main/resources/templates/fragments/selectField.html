@@ -41,13 +41,12 @@
                             </div>
                         </label>
                     </div>
+                    
+                    <!--오류 메시지 -->
+                    <th:block th:if="${#fields.hasErrors(name)}">
+                        <div class="text-red-500 text-sm mt-1" th:errors="*{__${name}__}">에러 메시지</div>
+                    </th:block>
                 </div>
-                
-                <!--오류 메시지 -->
-                <th:block th:if="${#fields.hasErrors(name)}">
-                    <div class="text-red-500 text-sm mt-1" th:errors="*{__${name}__}">에러 메시지</div>
-                </th:block>
-            </div>
         </th:block>
     </body>
 </html>

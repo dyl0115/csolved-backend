@@ -62,19 +62,15 @@ public class QuestionController
     @LoginRequest
     @PostMapping("/questions/create")
     public String processCreateForm(@Valid @ModelAttribute("questionCreateForm") QuestionCreateForm createForm,
-                                    BindingResult result,
-                                    Model model)
+                                    BindingResult result)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("questionCreateForm", createForm);
-
             return "questions/create";
         }
         else
         {
             questionService.saveQuestion(createForm);
-
             return "redirect:/questions?page=1";
         }
     }
@@ -100,6 +96,7 @@ public class QuestionController
                                @PathVariable Long questionId,
                                Model model)
     {
+        // 내일 개선.!
         QuestionDto question = questionService.provideQuestion(questionId);
         QuestionEditForm questionEditForm = new QuestionEditForm(
                 questionId,

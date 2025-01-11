@@ -18,6 +18,7 @@
                       th:object="${questionCreateForm}">
                     <div class="space-y-6">
                         
+                        <!-- 유저 정보를 넣어줌-->
                         <input type="hidden" name="authorId" th:value="${user.id}">
                         
                         <!-- 익명/실명 토글-->
@@ -39,7 +40,7 @@
                         <th:block
                                 th:replace="~{fragments/inputField::input ('textarea', '내용', 'content', '내용을 입력하세요.')}"/>
                         
-                        <!-- Action Buttons -->
+                        <!-- 저장 버튼-->
                         <div class="flex justify-between pt-2">
                             <button type="button"
                                     onclick="saveDraft()"
