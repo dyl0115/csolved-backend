@@ -8,8 +8,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import store.csolved.csolved.auth.AuthConstants;
 import store.csolved.csolved.auth.annotation.LoginUser;
+import store.csolved.csolved.auth.service.AuthService;
 import store.csolved.csolved.domain.user.User;
 
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver
                                 NativeWebRequest webRequest,
                                 WebDataBinderFactory binderFactory)
     {
-        User user = (User) httpSession.getAttribute(AuthConstants.LOGIN_USER_SESSION_KEY);
+        User user = (User) httpSession.getAttribute(AuthService.LOGIN_USER_SESSION_KEY);
 
         // mavContainer 자체에 넣어버리고 해당 참조 값을 반환하면,
         // 컨트롤러 내에서 업데이트 된 user객체가 view로 전달된다.

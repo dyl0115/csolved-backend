@@ -11,12 +11,14 @@ import store.csolved.csolved.auth.dto.SignUpForm;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
 import store.csolved.csolved.utils.PasswordUtils;
 
-import static store.csolved.csolved.auth.AuthConstants.*;
-
 @RequiredArgsConstructor
 @Component
 public class AuthService
 {
+    public static final String LOGIN_USER_SESSION_KEY = "loginUser";
+
+    private final HttpSession httpSession;
+
     private final UserMapper userMapper;
 
     @Transactional
@@ -29,30 +31,31 @@ public class AuthService
         userMapper.insertUser(form.toUser());
     }
 
-    public void signIn(HttpSession session, SignInForm form)
+    public void signIn(SignInForm form)
     {
         User loginUser = userMapper.findUserByEmail(form.getEmail());
-        session.setAttribute(LOGIN_USER_SESSION_KEY, loginUser);
+        httpSession.setAttribute(LOGIN_USER_SESSION_KEY, loginUser);
     }
 
-    public void signOut(HttpSession session)
+    public void signOut()
     {
-        session.removeAttribute(LOGIN_USER_SESSION_KEY);
+        httpSession.removeAttribute(LOGIN_USER_SESSION_KEY);
     }
 
     @Transactional
     public void withdraw(User user)
     {
+        httpSession.removeAttribute(LOGIN_USER_SESSION_KEY);
         userMapper.deleteUserById(user.getId());
     }
 
-    public void isSignUpValid(SignUpForm form, BindingResult errors)
+    public void checkSignUpValid(SignUpForm form, BindingResult result)
     {
-        checkEmailDuplicate(form, errors);
+        checkEmailDuplicate(form, result);
 
-        checkNicknameDuplicate(form, errors);
+        checkNicknameDuplicate(form, result);
 
-        checkPasswordMatch(form, errors);
+        checkPasswordMatch(form, result);
     }
 
     public void checkUserExist(SignInForm form, BindingResult signInErrors)

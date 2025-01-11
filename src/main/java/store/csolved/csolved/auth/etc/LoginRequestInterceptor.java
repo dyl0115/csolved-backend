@@ -12,7 +12,7 @@ import store.csolved.csolved.auth.annotation.LoginRequest;
 import store.csolved.csolved.domain.user.User;
 
 
-import static store.csolved.csolved.auth.AuthConstants.*;
+import static store.csolved.csolved.auth.service.AuthService.LOGIN_USER_SESSION_KEY;
 
 
 @RequiredArgsConstructor
@@ -38,7 +38,7 @@ public class LoginRequestInterceptor implements HandlerInterceptor
         User user = (User) httpSession.getAttribute(LOGIN_USER_SESSION_KEY);
         if (user == null)
         {
-            response.sendRedirect(LOGIN_PAGE_URL);
+            response.sendRedirect("/auth");
             return false;
         }
 

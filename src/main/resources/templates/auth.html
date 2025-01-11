@@ -144,7 +144,7 @@
                                     th:replace="~{fragments/inputField::input (type='password', label='비밀번호', name='password', placeholder='비밀번호를 입력해주세요.')}"/>
                             
                             <!-- 글로벌 에러 메시지 창 -->
-                            <div class="text-sm font-medium text-red-500"
+                            <div class="text-sm font-medium text-red-500 mb-4"
                                  th:if="${#fields.hasGlobalErrors()}"
                                  th:each="error : ${#fields.globalErrors()}"
                                  th:text="${error}"> 글로벌 에러 메시지

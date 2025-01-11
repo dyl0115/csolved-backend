@@ -1,6 +1,5 @@
 package store.csolved.csolved.auth.controller;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,62 +12,76 @@ import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.auth.dto.SignInForm;
 import store.csolved.csolved.auth.dto.SignUpForm;
 
-import static store.csolved.csolved.auth.AuthConstants.*;
-
 @RequiredArgsConstructor
 @Controller
-@RequestMapping(LOGIN_PAGE_URL)
+@RequestMapping("/auth")
 public class AuthController
 {
+    public final static String VIEWS_AUTH_FORM = "/auth";
+
     private final AuthService authService;
 
-    @GetMapping
-    public String authForm(@ModelAttribute("signInForm") SignInForm signInForm,
-                           @ModelAttribute("signUpForm") SignUpForm signUpForm)
+    @ModelAttribute("signInForm")
+    public SignInForm initSignInForm()
     {
-        return LOGIN_PAGE_URL;
+        return new SignInForm();
+    }
+
+    @ModelAttribute("signUpForm")
+    public SignUpForm initSignUpForm()
+    {
+        return new SignUpForm();
+    }
+
+    @GetMapping
+    public String initAuthForm()
+    {
+        return VIEWS_AUTH_FORM;
     }
 
     @PostMapping("/signup")
-    public String signUp(@Valid @ModelAttribute("signUpForm") SignUpForm signUpForm,
-                         BindingResult result,
-                         @ModelAttribute("signInForm") SignInForm signInForm)
+    public String processSignUp(@Valid @ModelAttribute("signUpForm") SignUpForm signUpForm,
+                                BindingResult result)
     {
-        authService.isSignUpValid(signUpForm, result);
-        if (result.hasErrors()) return LOGIN_PAGE_URL;
+        authService.checkSignUpValid(signUpForm, result);
+
+        if (result.hasErrors())
+        {
+            return VIEWS_AUTH_FORM;
+        }
 
         authService.signUp(signUpForm);
-        return REDIRECT_LOGIN_PAGE_URL;
+        return "redirect:/auth";
     }
 
     @PostMapping("/signin")
-    public String signIn(HttpSession session,
-                         @ModelAttribute("signUpForm") SignUpForm signUpForm,
-                         @Valid @ModelAttribute("signInForm") SignInForm signInForm,
-                         BindingResult result)
+    public String processSignIn(@Valid @ModelAttribute("signInForm") SignInForm signInForm,
+                                BindingResult result)
     {
         authService.checkUserExist(signInForm, result);
-        if (result.hasErrors()) return LOGIN_PAGE_URL;
 
-        authService.signIn(session, signInForm);
+        if (result.hasErrors())
+        {
+            return VIEWS_AUTH_FORM;
+        }
+
+        authService.signIn(signInForm);
         return "redirect:/questions?page=1";
     }
 
     @LoginRequest
     @GetMapping("/signout")
-    public String signOut(HttpSession session)
+    public String processSignOut()
     {
-        authService.signOut(session);
-        return REDIRECT_LOGIN_PAGE_URL;
+        authService.signOut();
+        return "redirect:/auth";
     }
 
     @LoginRequest
     @DeleteMapping("/withdraw")
-    public String withdraw(@LoginUser User user,
-                           @ModelAttribute("signUpForm") SignUpForm signUpForm,
-                           @ModelAttribute("signInForm") SignInForm signInForm)
+    public String processWithdraw(@LoginUser User user)
     {
         authService.withdraw(user);
-        return LOGIN_PAGE_URL;
+        return "redirect:/auth";
     }
 }
