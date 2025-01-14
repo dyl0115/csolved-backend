@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.annotation.LoginRequest;
 import store.csolved.csolved.auth.annotation.LoginUser;
-import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
+import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.user.User;
 

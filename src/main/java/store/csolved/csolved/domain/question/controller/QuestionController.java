@@ -10,21 +10,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.annotation.LoginRequest;
 import store.csolved.csolved.auth.annotation.LoginUser;
-import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
-import store.csolved.csolved.domain.answer.dto.AnswerDto;
-import store.csolved.csolved.domain.answer.service.AnswerService;
-import store.csolved.csolved.domain.category.Category;
-import store.csolved.csolved.domain.category.mapper.CategoryMapper;
-import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
+import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
+import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.common.page.Page;
 import store.csolved.csolved.domain.common.page.etc.PageInfo;
-import store.csolved.csolved.domain.question.controller.dto.request.QuestionCreateForm;
-import store.csolved.csolved.domain.question.controller.dto.QuestionDto;
-import store.csolved.csolved.domain.question.controller.dto.QuestionEditForm;
-import store.csolved.csolved.domain.question.service.QuestionService;
+import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionListViewModel;
+import store.csolved.csolved.domain.question.facade.QuestionFacade;
 import store.csolved.csolved.domain.user.User;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -32,94 +27,78 @@ public class QuestionController
 {
     public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "questions/create";
 
-    private final QuestionService questionService;
-    private final AnswerService answerService;
-    private final CategoryMapper categoryMapper;
-
-    @ModelAttribute("categories")
-    public List<Category> findAllCategory()
-    {
-        return categoryMapper.findAllCategory();
-    }
+    private final QuestionFacade questionFacade;
 
     @LoginRequest
     @GetMapping("/questions")
-    public String findQuestionList(@PageInfo Page page, Model model)
+    public String getQuestions(@PageInfo Page page, Model model)
     {
-        List<QuestionDto> questions = questionService.getPagedQuestionList(page);
-        model.addAttribute("questions", questions);
+        QuestionListViewModel viewModel = questionFacade.getQuestions(page);
+        model.addAttribute("questionListViewModel", viewModel);
         return "questions/list";
     }
 
     @LoginRequest
-    @GetMapping("/questions/create")
-    public String initCreateForm(Model model)
+    @GetMapping("/questions/{questionId}")
+    public String getQuestion(@PathVariable Long questionId,
+                              Model model)
     {
-        model.addAttribute("questionCreateForm", new QuestionCreateForm());
+        QuestionDetailViewModel viewModel = questionFacade.getQuestionWithAnswersAndComments(questionId);
+        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+        model.addAttribute("questionDetails", viewModel);
+        return "questions/detail";
+    }
+
+    @LoginRequest
+    @GetMapping("/questions/create")
+    public String getQuestionCreateForm(Model model)
+    {
+        QuestionCreateUpdateViewModel createViewModel = questionFacade.getQuestionCreateUpdateViewModel();
+        model.addAttribute("questionCreateForm", createViewModel);
         return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
     }
 
     @LoginRequest
     @PostMapping("/questions/create")
-    public String processCreateForm(@Valid @ModelAttribute("questionCreateForm") QuestionCreateForm createForm,
+    public String processCreateForm(@LoginUser User user,
+                                    @Valid @ModelAttribute("questionCreateForm") QuestionCreateUpdateForm form,
                                     BindingResult result)
     {
         if (result.hasErrors())
         {
-            return "questions/create";
+            return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
         }
         else
         {
-            questionService.saveQuestion(createForm);
+            questionFacade.saveQuestion(user.getId(), form);
             return "redirect:/questions?page=1";
         }
     }
 
     @LoginRequest
-    @GetMapping("/questions/{questionId}")
-    public String findQuestion(@PathVariable Long questionId,
-                               Model model)
-    {
-        questionService.increaseView(questionId);
-        QuestionDto question = questionService.getQuestionDetail(questionId);
-        List<AnswerDto> answers = answerService.getAllAnswer(questionId);
-
-        model.addAttribute("answerCreateForm", new AnswerCreateForm());
-        model.addAttribute("commentCreateForm", new CommentCreateForm());
-        model.addAttribute("question", question);
-        model.addAttribute("answers", answers);
-
-        return "questions/detail";
-    }
-
-    @LoginRequest
     @GetMapping("/questions/{questionId}/edit-form")
-    public String initEditForm(@LoginUser User user,
-                               @PathVariable Long questionId,
-                               Model model)
+    public String initUpdateForm(@PathVariable Long questionId,
+                                 Model model)
     {
-        QuestionDto question = questionService.getQuestionDetail(questionId);
-        QuestionEditForm questionEditForm = new QuestionEditForm(
-                questionId,
-                user.getId(),
-                question.isAnonymous(),
-                question.getCategoryId(),
-                question.getTags().toString(),
-                question.getTitle(),
-                question.getContent());
-
-        model.addAttribute("questionEditForm", questionEditForm);
+        QuestionCreateUpdateForm questionUpdateForm = questionFacade.getQuestionUpdateForm(questionId);
+        model.addAttribute("questionEditForm", questionUpdateForm);
         return "questions/edit";
     }
 
     @LoginRequest
     @PutMapping("/questions/{questionId}")
-    public String processEditForm(@Valid @ModelAttribute("questionEditForm") QuestionEditForm questionEditForm,
-                                  BindingResult result)
+    public String processUpdateForm(@LoginUser User user,
+                                    @PathVariable("questionId") Long questionId,
+                                    @Valid @ModelAttribute("questionEditForm") QuestionCreateUpdateForm form,
+                                    BindingResult result)
     {
-        if (result.hasErrors()) return "questions/edit";
+        if (result.hasErrors())
+        {
+            return "questions/edit";
+        }
 
-        questionService.updateQuestion(questionEditForm);
+        questionFacade.updateQuestion(questionId, user.getId(), form);
         return "redirect:/questions?page=1";
     }
 
@@ -127,7 +106,7 @@ public class QuestionController
     @DeleteMapping("/api/questions/{questionId}")
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long questionId)
     {
-        questionService.deleteQuestion(questionId);
+        questionFacade.deleteQuestion(questionId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
@@ -136,13 +115,13 @@ public class QuestionController
     public ResponseEntity<Void> increaseLikes(@LoginUser User user,
                                               @PathVariable Long questionId)
     {
-        if (questionService.hasAlreadyLiked(questionId, user.getId()))
+        boolean valid = questionFacade.increaseQuestionLikes(questionId, user.getId());
+
+        if (!valid)
         {
-            return ResponseEntity
-                    .status(HttpStatus.CONFLICT).body(null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
 
-        questionService.increaseLike(questionId, user.getId());
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

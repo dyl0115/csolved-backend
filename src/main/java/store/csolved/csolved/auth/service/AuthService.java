@@ -18,7 +18,6 @@ public class AuthService
     public static final String LOGIN_USER_SESSION_KEY = "loginUser";
 
     private final HttpSession httpSession;
-
     private final UserMapper userMapper;
 
     @Transactional
@@ -52,9 +51,7 @@ public class AuthService
     public void checkSignUpValid(SignUpForm form, BindingResult result)
     {
         checkEmailDuplicate(form, result);
-
         checkNicknameDuplicate(form, result);
-
         checkPasswordMatch(form, result);
     }
 

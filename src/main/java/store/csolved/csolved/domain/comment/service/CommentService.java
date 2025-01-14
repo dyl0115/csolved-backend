@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.comment.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.comment.dto.CommentCreateForm;
+import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.comment.mapper.CommentMapper;
 import store.csolved.csolved.domain.user.User;
 

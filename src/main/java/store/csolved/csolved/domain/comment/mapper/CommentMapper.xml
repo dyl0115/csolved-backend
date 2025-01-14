@@ -3,10 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.comment.mapper.CommentMapper">
+
     <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
         insert into comments(answer_id,
                              user_id,
-                             is_anonymous,
+                             anonymous,
                              content,
                              created_at,
                              deleted_at)
@@ -18,18 +19,29 @@
                 #{deletedAt});
     </insert>
 
-    <select id="findAllCommentsByAnswerId">
-        select c.id,
-               c.answer_id,
-               c.user_id,
-               c.is_anonymous,
-               u.nickname,
-               c.content,
-               c.created_at
-        from comments as c
-                 left join users as u on c.user_id = u.id
-        where c.answer_id = #{answerId}
-          and c.deleted_at IS NULL;
+    <resultMap id="answerCommentMap" type="store.csolved.csolved.domain.comment.service.dto.CommentDetailListRecord">
+        <id property="answerId" column="answer_id"/>
+        <collection property="comments" javaType="java.util.ArrayList"
+                    ofType="store.csolved.csolved.domain.comment.service.dto.CommentDetailRecord">
+            <id property="id" column="id"/>
+            <result property="authorNickname" column="author_nickname"/>
+            <result property="anonymous" column="anonymous"/>
+            <result property="content" column="content"/>
+            <result property="createdAt" column="created_at"/>
+        </collection>
+    </resultMap>
+
+    <select id="getCommentsByAnswerIds" resultMap="answerCommentMap">
+        select c.*,
+        u.nickname author_nickname
+        from comments c
+        left join users u on u.id = c.user_id
+        <if test="list != null and list.size() > 0">
+            where c.answer_id in
+            <foreach collection="list" item="answerId" open="(" separator="," close=")">
+                #{answerId}
+            </foreach>
+        </if>
     </select>
 
     <delete id="deleteCommentByCommentId">
@@ -37,4 +49,5 @@
         from comments
         where id = #{commentId}
     </delete>
+
 </mapper>

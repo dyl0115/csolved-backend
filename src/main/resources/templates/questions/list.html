@@ -9,14 +9,14 @@
         <th:block th:replace="~{common/navigation :: profile-navigation}"/>
         
         <!--메인 컨텐츠-->
-        <div class="max-w-7xl mx-auto mt-8 px-4">
+        <div class="max-w-7xl mx-auto mt-8 px-4" th:object="${questionListViewModel}">
             <th:block th:replace="~{common/searching-bar :: searching-bar}"/>
             
             <div class="flex items-center mb-8 gap-4">
                 <!-- 검색 결과 수 -->
                 <div class="flex items-center gap-2">
                     <span class="text-gray-500">총</span>
-                    <span th:text="${questions.size()}"
+                    <span th:text="*{questionSummaries.size()}"
                           class="font-semibold text-gray-900 bg-white px-3 py-1 rounded-lg border border-gray-200">24</span>
                     <span class="text-gray-500">개의 질문</span>
                 </div>
@@ -33,52 +33,54 @@
             
             <!--질문 리스트 출력-->
             <div class="space-y-4">
-                <div th:each="question : ${questions}"
+                <div th:each="questionSummary : *{questionSummaries}"
                      class="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-400 transition-all duration-200">
-                    <a th:href="@{'/questions/' + ${question.questionId}}" class="block p-6">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <h2 class="text-xl font-bold text-gray-900 mb-3" th:text="${question.title}">질문 제목</h2>
-                                
-                                <div class="flex flex-wrap gap-2 mb-4">
-                                <span th:each="tag : ${question.tags}"
+                    <div th:with="question=${questionSummary.question}, tags=${questionSummary.tags}">
+                        <a th:href="@{'/questions/' + ${question.id}}" class="block p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <h2 class="text-xl font-bold text-gray-900 mb-3" th:text="${question.title}">질문
+                                                                                                                 제목</h2>
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                <span th:each="tag : ${tags}"
                                       class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors duration-200"
-                                      th:text="${tag}">
+                                      th:text="${tag.name}">
                                 </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="flex items-center text-sm text-gray-500 gap-4">
-                            <div class="flex items-center">
-                                <i data-lucide="book-text" class="w-4 h-4 mr-1"></i>
-                                <span th:text="${question.categoryName}"></span>
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="message-circle" class="w-4 h-4 mr-1"></i>
-                                <span th:text="|${question.answerCount}개|"></span>
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="heart" class="w-4 h-4 mr-1"></i>
-                                <span th:text="${question.likes}"></span>
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
-                                <span th:text="${question.views}"></span>
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="user" class="w-4 h-4 mr-1"></i>
-                                <span th:text="${question.anonymous ? '익명' : question.authorNickname}"></span>
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
-                                <span class="timeago"
-                                      th:data-date="${question.createdAt}"
-                                      th:text="${#temporals.format(question.createdAt, 'yyyy/MM/dd hh:mm')}">
+                            
+                            <div class="flex items-center text-sm text-gray-500 gap-4">
+                                <div class="flex items-center">
+                                    <i data-lucide="book-text" class="w-4 h-4 mr-1"></i>
+                                    <span th:text="${question.categoryName}"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="message-circle" class="w-4 h-4 mr-1"></i>
+                                    <span th:text="|${question.answerCount}개|"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="heart" class="w-4 h-4 mr-1"></i>
+                                    <span th:text="${question.likes}"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                                    <span th:text="${question.views}"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="user" class="w-4 h-4 mr-1"></i>
+                                    <span th:text="${question.anonymous ? '익명' : question.authorNickname}"></span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                                    <span class="timeago"
+                                          th:data-date="${question.createdAt}"
+                                          th:text="${#temporals.format(question.createdAt, 'yyyy/MM/dd hh:mm')}">
                             </span>
+                                </div>
                             </div>
-                        </div>
-                    </a>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

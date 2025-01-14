@@ -1,9 +1,11 @@
-package store.csolved.csolved.domain.comment.dto;
+package store.csolved.csolved.domain.comment.controller.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 import store.csolved.csolved.domain.comment.Comment;
 
+@Builder
 @Data
 public class CommentCreateForm
 {
@@ -15,6 +17,11 @@ public class CommentCreateForm
     private boolean anonymous;
 
     private String content;
+
+    public static CommentCreateForm empty()
+    {
+        return CommentCreateForm.builder().build();
+    }
 
     public Comment toComment()
     {

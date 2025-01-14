@@ -14,7 +14,7 @@ public class Page
     private final Long currentPage;
     private final Long totalPage;
     private final Long offset;
-    private final Long rowCount;
+    private final Long size;
 
     public static Page validateAndCreate(String requestPage, Long totalRecordsCount)
     {

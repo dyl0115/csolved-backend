@@ -9,7 +9,7 @@
         
         <main class="max-w-5xl mx-auto mt-8 px-4 pb-12">
             <!-- 질문글 상세 섹션 -->
-            <section class="question-detail mb-8" th:object="${question}">
+            <section class="question-detail mb-8" th:object="${questionDetails}">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <!-- 헤더 영역 -->
                     <div class="p-6 border-b border-gray-100">
@@ -19,7 +19,7 @@
                                 <div class="flex flex-wrap gap-2 mb-4">
                                 <span th:each="tag : *{tags}"
                                       class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors"
-                                      th:text="${tag}">
+                                      th:text="${tag.name}">
                                 </span>
                                 </div>
                                 <div class="flex items-center gap-4 text-sm text-gray-600">
@@ -38,37 +38,37 @@
                                     <div class="flex items-center gap-1">
                                         <i data-lucide="clock" class="w-4 h-4"></i>
                                         <span class="timeago" th:data-date="*{createdAt}"
-                                              th:text="${#temporals.format(question.createdAt, 'yyyy/MM/dd hh:mm')}">
+                                              th:text="${#temporals.format(questionDetails.createdAt, 'yyyy/MM/dd hh:mm')}">
                                     </span>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- 수정/삭제 버튼 -->
-                            <div class="flex gap-2" th:if="${user.id == question.authorId}">
-                                <a th:href="@{/questions/{id}/edit-form(id=*{questionId})}"
-                                   class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                                    <i data-lucide="edit" class="w-4 h-4"></i>
-                                    수정
-                                </a>
-                                <button th:onclick="'deleteQuestion(' + *{questionId} + ')'"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                    삭제
-                                </button>
-                            </div>
+                            <!--                            <div class="flex gap-2" th:if="${user.id == question.authorId}">-->
+                            <!--                                <a th:href="@{/questions/{id}/edit-form(id=*{id})}"-->
+                            <!--                                   class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">-->
+                            <!--                                    <i data-lucide="edit" class="w-4 h-4"></i>-->
+                            <!--                                    수정-->
+                            <!--                                </a>-->
+                            <!--                                <button th:onclick="'deleteQuestion(' + *{id} + ')'"-->
+                            <!--                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">-->
+                            <!--                                    <i data-lucide="trash-2" class="w-4 h-4"></i>-->
+                            <!--                                    삭제-->
+                            <!--                                </button>-->
+                            <!--                            </div>-->
                         </div>
                     </div>
                     
                     <!-- 본문 영역 -->
                     <div class="p-6 bg-white">
-                        <div class="prose max-w-none" th:utext="*{content}">질문글 내용</div>
+                        <div class="prose max-w-none" th:text="*{content}">질문글 내용</div>
                     </div>
                     
                     <!-- 하단 액션 영역 -->
                     <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
                         <div class="flex items-center gap-4">
-                            <button th:onclick="|increaseLikes(*{questionId})|"
+                            <button th:onclick="|increaseLikes(*{id})|"
                                     class="inline-flex items-center gap-2 px-4 py-2 bg-white text-gray-700 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
                                 <i data-lucide="thumbs-up" class="w-5 h-5"></i>
                                 <span th:text="*{likes}" class="font-medium"></span>
@@ -84,10 +84,10 @@
             </section>
             
             <!-- 답변 작성 폼 -->
-            <section id="answer-form" class="answer-create-form hidden mb-8" th:object="${question}">
+            <section id="answer-form" class="answer-create-form hidden mb-8">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">답변 작성하기</h2>
-                    <form th:action="@{/questions/{id}/answers(id=*{questionId})}" method="POST">
+                    <form th:action="@{/questions/{id}/answers(id=*{id})}" method="POST">
                     <textarea name="content"
                               class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               rows="6"
@@ -114,125 +114,127 @@
             
             <!-- 답변 목록 -->
             <section class="space-y-6">
-                <h2 class="text-xl font-bold text-gray-900 mb-4" th:text="|답변 ${answers.size()}개|">답변 0개</h2>
+                <!--                <h2 class="text-xl font-bold text-gray-900 mb-4" th:text="|답변 *{answers.size()}개|">답변 0개</h2>-->
                 
-                <div th:each="answer : ${answers}" th:object="${answer}"
+                <div th:each="answer : *{answers}"
                      class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <!-- 답변 헤더 -->
-                    <div class="p-6 flex items-start justify-between border-b border-gray-100">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                                <i data-lucide="user" class="w-6 h-6 text-gray-500"></i>
-                            </div>
-                            <div>
-                                <div class="font-medium text-gray-900"
-                                     th:text="*{anonymous} ? '익명' : *{authorNickname}">답변자
+                    <div th:object="${answer}">
+                        <!-- 답변 헤더 -->
+                        <div class="p-6 flex items-start justify-between border-b border-gray-100">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i data-lucide="user" class="w-6 h-6 text-gray-500"></i>
                                 </div>
-                                <div class="text-sm text-gray-500">
+                                <div>
+                                    <div class="font-medium text-gray-900"
+                                         th:text="*{anonymous} ? '익명' : *{authorNickname}">답변자
+                                    </div>
+                                    <div class="text-sm text-gray-500">
                                 <span class="timeago" th:data-date="*{createdAt}"
                                       th:text="${#temporals.format(answer.createdAt, 'yyyy/MM/dd hh:mm')}">
                                 </span>
+                                    </div>
                                 </div>
+                            </div>
+                            
+                            <!-- 평점 & 삭제 버튼 -->
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center" th:attr="data-answer-id=*{id}">
+                                    <div class="flex gap-1">
+                                        <th:block th:each="i : ${#numbers.sequence(1, 5)}">
+                                            <button type="button"
+                                                    th:onclick="|rateAnswer(*{id}, ${i})|"
+                                                    class="focus:outline-none transition-transform hover:scale-110"
+                                                    th:attr="data-rating=${i}">
+                                                <!--                                                <i data-lucide="star"-->
+                                                <!--                                                   th:class="|w-5 h-5 ${i <= answer.averageScore ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} transition-colors|">-->
+                                                <!--                                                </i>-->
+                                            </button>
+                                        </th:block>
+                                    </div>
+                                    <!--                                    <span class="ml-2 text-sm text-gray-600"-->
+                                    <!--                                          th:text="|*{averageScore} (*{voterCount}명)|"></span>-->
+                                </div>
+                                
+                                <!--                                <div th:if="${user.id == answer.userId}">-->
+                                <!--                                    <button th:onclick="'deleteAnswer(' + *{id} + ')'"-->
+                                <!--                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">-->
+                                <!--                                        <i data-lucide="trash-2" class="w-4 h-4"></i>-->
+                                <!--                                        삭제-->
+                                <!--                                    </button>-->
+                                <!--                                </div>-->
                             </div>
                         </div>
                         
-                        <!-- 평점 & 삭제 버튼 -->
-                        <div class="flex items-center gap-4">
-                            <div class="flex items-center" th:attr="data-answer-id=*{answerId}">
-                                <div class="flex gap-1">
-                                    <th:block th:each="i : ${#numbers.sequence(1, 5)}">
-                                        <button type="button"
-                                                th:onclick="|rateAnswer(*{answerId}, ${i})|"
-                                                class="focus:outline-none transition-transform hover:scale-110"
-                                                th:attr="data-rating=${i}">
-                                            <i data-lucide="star"
-                                               th:class="|w-5 h-5 ${i <= answer.averageScore ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} transition-colors|">
-                                            </i>
-                                        </button>
-                                    </th:block>
-                                </div>
-                                <span class="ml-2 text-sm text-gray-600"
-                                      th:text="|*{averageScore} (*{voterCount}명)|"></span>
-                            </div>
-                            
-                            <div th:if="${user.id == answer.userId}">
-                                <button th:onclick="'deleteAnswer(' + *{answerId} + ')'"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                    삭제
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 답변 내용 -->
-                    <div class="p-6">
-                        <div class="prose max-w-none" th:text="*{content}">답변 내용</div>
-                    </div>
-                    
-                    <!-- 댓글 섹션 -->
-                    <div class="border-t border-gray-100">
+                        <!-- 답변 내용 -->
                         <div class="p-6">
-                            <div class="space-y-4">
-                                <!-- 댓글 목록 -->
-                                <div th:each="comment : ${answer.comments}" th:object="${comment}"
-                                     class="flex items-start gap-3 pb-4">
-                                    <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="user" class="w-5 h-5 text-gray-500"></i>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-2">
-                                            <span class="font-medium text-gray-900"
-                                                  th:text="*{anonymous} ? '익명' : *{authorNickname}">댓글작성자</span>
-                                                <span class="text-sm text-gray-500 timeago"
-                                                      th:data-date="*{createdAt}"
-                                                      th:text="${#temporals.format(comment.createdAt, 'yyyy/MM/dd hh:mm')}">
-                                            </span>
-                                            </div>
-                                            <button th:if="${user.id == comment.authorId}"
-                                                    th:onclick="'deleteComment(' + *{commentId} + ')'"
-                                                    class="text-gray-400 hover:text-red-600">
-                                                <i data-lucide="x" class="w-4 h-4"></i>
-                                            </button>
+                            <div class="prose max-w-none" th:text="*{content}">답변 내용</div>
+                        </div>
+                        
+                        <!-- 댓글 섹션 -->
+                        <div class="border-t border-gray-100">
+                            <div class="p-6">
+                                <div class="space-y-4">
+                                    <!-- 댓글 목록 -->
+                                    <div th:each="comment : *{comments}" th:object="${comment}"
+                                         class="flex items-start gap-3 pb-4">
+                                        <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                                            <i data-lucide="user" class="w-5 h-5 text-gray-500"></i>
                                         </div>
-                                        <p class="text-gray-700 mt-1" th:text="*{content}">댓글 내용</p>
-                                    </div>
-                                </div>
-                                
-                                <!-- 댓글 작성 폼 -->
-                                <div class="mt-4">
-                                    <button onclick="toggleCommentForm(this)"
-                                            th:attr="data-answer-id=*{answerId}"
-                                            class="text-blue-600 hover:text-blue-700 text-sm font-medium focus:outline-none">
-                                        댓글 달기
-                                    </button>
-                                    
-                                    <div th:id="'commentForm-' + *{answerId}" class="hidden mt-3">
-                                        <form th:action="@{/questions/{questionId}/answers/{answerId}/comment(questionId=${question.questionId},answerId=*{answerId})}"
-                                              method="POST"
-                                              class="flex flex-col gap-3">
-                                        <textarea name="content"
-                                                  class="w-full p-3 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                  rows="2"
-                                                  placeholder="댓글을 입력하세요..."></textarea>
+                                        <div class="flex-1">
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center gap-2">
-                                                    <input type="checkbox"
-                                                           th:id="'anonymous-' + *{answerId}"
-                                                           th:field="${commentCreateForm.anonymous}"
-                                                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                                    <label th:for="'anonymous-' + *{answerId}"
-                                                           class="text-sm text-gray-600">
-                                                        익명으로 작성하기
-                                                    </label>
+                                            <span class="font-medium text-gray-900"
+                                                  th:text="*{anonymous} ? '익명' : *{authorNickname}">댓글작성자</span>
+                                                    <span class="text-sm text-gray-500 timeago"
+                                                          th:data-date="*{createdAt}"
+                                                          th:text="${#temporals.format(comment.createdAt, 'yyyy/MM/dd hh:mm')}">
+                                            </span>
                                                 </div>
-                                                <button type="submit"
-                                                        class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
-                                                    댓글 등록
-                                                </button>
+                                                <!--                                                <button th:if="${user.id == comment.authorId}"-->
+                                                <!--                                                        th:onclick="'deleteComment(' + *{commentId} + ')'"-->
+                                                <!--                                                        class="text-gray-400 hover:text-red-600">-->
+                                                <!--                                                    <i data-lucide="x" class="w-4 h-4"></i>-->
+                                                <!--                                                </button>-->
                                             </div>
-                                        </form>
+                                            <p class="text-gray-700 mt-1" th:text="*{content}">댓글 내용</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 댓글 작성 폼 -->
+                                    <div class="mt-4">
+                                        <button onclick="toggleCommentForm(this)"
+                                                th:attr="data-answer-id=*{id}"
+                                                class="text-blue-600 hover:text-blue-700 text-sm font-medium focus:outline-none">
+                                            댓글 달기
+                                        </button>
+                                        
+                                        <!--                                        <div th:id="'commentForm-' + *{id}" class="hidden mt-3">-->
+                                        <!--                                            <form th:action="@{/questions/{questionId}/answers/{answerId}/comment(questionId=${question.questionId},answerId=*{answerId})}"-->
+                                        <!--                                                  method="POST"-->
+                                        <!--                                                  class="flex flex-col gap-3">-->
+                                        <!--                                        <textarea name="content"-->
+                                        <!--                                                  class="w-full p-3 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
+                                        <!--                                                  rows="2"-->
+                                        <!--                                                  placeholder="댓글을 입력하세요..."></textarea>-->
+                                        <!--                                                <div class="flex items-center justify-between">-->
+                                        <!--                                                    <div class="flex items-center gap-2">-->
+                                        <!--                                                        <input type="checkbox"-->
+                                        <!--                                                               th:id="'anonymous-' + *{answerId}"-->
+                                        <!--                                                               th:field="${commentCreateForm.anonymous}"-->
+                                        <!--                                                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">-->
+                                        <!--                                                        <label th:for="'anonymous-' + *{answerId}"-->
+                                        <!--                                                               class="text-sm text-gray-600">-->
+                                        <!--                                                            익명으로 작성하기-->
+                                        <!--                                                        </label>-->
+                                        <!--                                                    </div>-->
+                                        <!--                                                    <button type="submit"-->
+                                        <!--                                                            class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">-->
+                                        <!--                                                        댓글 등록-->
+                                        <!--                                                    </button>-->
+                                        <!--                                                </div>-->
+                                        <!--                                            </form>-->
+                                        <!--                                        </div>-->
                                     </div>
                                 </div>
                             </div>

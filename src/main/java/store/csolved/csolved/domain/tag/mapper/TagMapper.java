@@ -1,20 +1,27 @@
 package store.csolved.csolved.domain.tag.mapper;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import store.csolved.csolved.domain.tag.Tag;
+import store.csolved.csolved.domain.tag.service.dto.QuestionTagNameRecord;
+import store.csolved.csolved.domain.tag.service.dto.TagNameRecord;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface TagMapper
 {
-    void insertTag(Tag tag);
+    List<TagNameRecord> getTagsByQuestionId(Long questionId);
 
-    List<Tag> findTagsByNames(List<String> name);
+    @MapKey("questionId")
+    Map<Long, QuestionTagNameRecord> getTagsByQuestionIdList(List<Long> questionIds);
 
-    List<String> findAllTagNames();
+    List<TagNameRecord> getTagsByNameIfExist(List<String> tagNames);
 
-    void insertQuestionAndTag(Long questionId, Long tagId);
+    void insertTags(List<Tag> tags);
 
-    void deleteQuestionAndTagByQuestionId(Long questionId);
+    void insertQuestionTags(List<Tag> tags);
+
+    void deleteQuestionTagByQuestionId(Long questionId);
 }

@@ -5,7 +5,7 @@
 <mapper namespace="store.csolved.csolved.domain.question.mapper.QuestionMapper">
 
     <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id">
-        insert into questions(author_id,
+        insert into questions(user_id,
                               anonymous,
                               title,
                               content,
@@ -23,11 +23,11 @@
 
     <update id="updateQuestion">
         update questions
-        set anonymous   = #{anonymous},
-            title       = #{title},
-            content     = #{content},
-            category_id = #{categoryId}
-        where id = #{id};
+        set anonymous   = #{question.anonymous},
+            title       = #{question.title},
+            content     = #{question.content},
+            category_id = #{question.categoryId}
+        where id = #{questionId};
     </update>
 
     <select id="findAllQuestionsCount">
@@ -36,57 +36,28 @@
         where deleted_at is null;
     </select>
 
-    <select id="findAllQuestions" resultMap="QuestionDtoMap">
-        SELECT q.*,
-               u.nickname  AS author_nickname,
-               COUNT(a.id) AS answer_count,
-               c.name      AS category_name,
-               t.name      AS tag_name
-        FROM (SELECT *
-              FROM questions
-              WHERE deleted_at IS NULL
-              ORDER BY created_at DESC
-              LIMIT #{offset} , #{rowCount}) AS q
-                 LEFT JOIN
-             users AS u ON q.author_id = u.id
-                 LEFT JOIN
-             answers AS a ON q.id = a.question_id
-                 LEFT JOIN
-             category AS c ON q.category_id = c.id
-                 LEFT JOIN
-             question_tags AS qt ON q.id = qt.question_id
-                 LEFT JOIN
-             tags AS t ON qt.tag_id = t.id
-        GROUP BY q.id, t.id;
+
+    <select id="getQuestions">
+        select q.*,
+               u.nickname author_nickname,
+               c.id       category_id,
+               c.name     category_name
+        from questions q
+                 left join users u on q.user_id = u.id
+                 left join category c on q.category_id = c.id
+        order by q.id desc
+        limit #{offset}, #{size};
     </select>
 
-    <resultMap id="QuestionDtoMap" type="store.csolved.csolved.domain.question.controller.dto.QuestionDto" autoMapping="true">
-        <id property="questionId" column="id"/>
-        <result property="authorId" column="author_id"/>
-        <collection property="tags" ofType="java.lang.String">
-            <result column="tag_name"/>
-        </collection>
-    </resultMap>
-
-    <select id="findQuestionByQuestionId" resultMap="QuestionDtoMap">
-        SELECT q.*,
-               u.nickname  AS author_nickname,
-               COUNT(a.id) AS answer_count,
-               c.name      AS category_name,
-               t.name      AS tag_name
-        FROM questions AS q
-                 LEFT JOIN
-             users AS u ON q.author_id = u.id
-                 LEFT JOIN
-             answers AS a ON q.id = a.question_id
-                 LEFT JOIN
-             category AS c ON q.category_id = c.id
-                 LEFT JOIN
-             question_tags AS qt ON q.id = qt.question_id
-                 LEFT JOIN
-             tags AS t ON qt.tag_id = t.id
-        where q.id = #{questionId}
-        group by q.id, t.id;
+    <select id="getQuestionDetail">
+        select q.*,
+               u.nickname author_nickname,
+               c.id       category_id,
+               c.name     category_name
+        from questions q
+                 left join users u on q.user_id = u.id
+                 left join category c on q.category_id = c.id
+        where q.id = #{questionId};
     </select>
 
     <update id="softDeleteQuestionByQuestionId">
@@ -113,7 +84,7 @@
         values (#{questionId}, #{authorId});
     </insert>
 
-    <update id="increaseViewInQuestions">
+    <update id="increaseView">
         update questions
         set views = views + 1
         where id = #{questionId};

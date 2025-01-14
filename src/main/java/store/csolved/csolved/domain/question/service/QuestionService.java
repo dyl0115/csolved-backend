@@ -4,12 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.common.page.Page;
-import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.question.controller.dto.request.QuestionCreateForm;
-import store.csolved.csolved.domain.question.controller.dto.QuestionDto;
-import store.csolved.csolved.domain.question.controller.dto.QuestionEditForm;
+import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
+import store.csolved.csolved.domain.question.domain.Question;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
-import store.csolved.csolved.domain.tag.service.TagService;
+import store.csolved.csolved.domain.question.service.dto.QuestionDetailDTO;
+import store.csolved.csolved.domain.question.service.dto.record.QuestionDetailRecord;
+import store.csolved.csolved.domain.tag.mapper.TagMapper;
+import store.csolved.csolved.domain.tag.service.dto.TagNameRecord;
 
 import java.util.List;
 
@@ -18,37 +19,51 @@ import java.util.List;
 public class QuestionService
 {
     private final QuestionMapper questionMapper;
-    private final TagService tagService;
+    private final TagMapper tagMapper;
 
     public Long getAllQuestionCount()
     {
         return questionMapper.findAllQuestionsCount();
     }
 
-    public List<QuestionDto> getPagedQuestionList(Page page)
+    public List<QuestionDetailDTO> getQuestions(Page page)
     {
-        return questionMapper.findAllQuestions(page);
+        List<QuestionDetailRecord> questions = questionMapper.getQuestions(page.getOffset(), page.getSize());
+
+        return QuestionDetailDTO.from(questions);
     }
 
-    public QuestionDto getQuestionDetail(Long questionId)
+    // 질문글의 조회수를 1만큼 올리고, 질문 상세를 보여줌.
+    @Transactional
+    public QuestionDetailDTO getQuestionWithViewIncrease(Long questionId)
     {
-        return questionMapper.findQuestionByQuestionId(questionId);
+        questionMapper.increaseView(questionId);
+        QuestionDetailRecord question = questionMapper.getQuestionDetail(questionId);
+        return QuestionDetailDTO.from(question);
+    }
+
+    // 기존 질문글의 데이터를 수정폼에 담아줌.
+    public QuestionCreateUpdateForm getQuestionUpdateForm(Long questionId)
+    {
+        QuestionDetailRecord question = questionMapper.getQuestionDetail(questionId);
+        List<TagNameRecord> tags = tagMapper.getTagsByQuestionId(questionId);
+
+        return QuestionCreateUpdateForm.from(question, tags);
     }
 
     @Transactional
-    public void saveQuestion(QuestionCreateForm form)
+    public Long saveQuestion(Long userId, QuestionCreateUpdateForm form)
     {
-        Question question = form.toCommand();
+        Question question = form.toQuestion(userId);
         questionMapper.insertQuestion(question);
-        tagService.saveQuestionTags(question.getId(), form.getTags());
+        return question.getId();
     }
 
     @Transactional
-    public void updateQuestion(QuestionEditForm form)
+    public void updateQuestion(Long questionId, Long userId, QuestionCreateUpdateForm form)
     {
-        Question question = form.toCommand();
-        questionMapper.updateQuestion(question);
-        tagService.updateQuestionTags(question.getId(), form.getTags());
+        Question question = form.toQuestion(userId);
+        questionMapper.updateQuestion(questionId, question);
     }
 
     @Transactional
@@ -57,21 +72,15 @@ public class QuestionService
         questionMapper.softDeleteQuestionByQuestionId(questionId);
     }
 
-    public boolean hasAlreadyLiked(Long questionId, Long userId)
-    {
-        return questionMapper.existUserInQuestionLikes(questionId, userId);
-    }
-
     @Transactional
-    public void increaseLike(Long questionId, Long userId)
+    public boolean increaseLike(Long questionId, Long userId)
     {
+        boolean alreadyLiked = questionMapper.existUserInQuestionLikes(questionId, userId);
+
+        if (alreadyLiked) return false;
+
         questionMapper.insertUserInQuestionLikes(questionId, userId);
         questionMapper.increaseLikesInQuestions(questionId);
-    }
-
-    @Transactional
-    public void increaseView(Long questionId)
-    {
-        questionMapper.increaseViewInQuestions(questionId);
+        return true;
     }
 }

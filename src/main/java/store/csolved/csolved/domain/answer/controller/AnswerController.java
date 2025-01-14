@@ -8,7 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.annotation.LoginRequest;
 import store.csolved.csolved.auth.annotation.LoginUser;
-import store.csolved.csolved.domain.answer.dto.AnswerCreateForm;
+import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.user.User;
 

@@ -1,9 +1,9 @@
 package store.csolved.csolved.domain.question.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import store.csolved.csolved.domain.common.page.Page;
-import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.question.controller.dto.QuestionDto;
+import org.apache.ibatis.annotations.Param;
+import store.csolved.csolved.domain.question.domain.Question;
+import store.csolved.csolved.domain.question.service.dto.record.QuestionDetailRecord;
 
 import java.util.List;
 
@@ -12,13 +12,15 @@ public interface QuestionMapper
 {
     void insertQuestion(Question question);
 
-    void updateQuestion(Question question);
+    void updateQuestion(@Param("questionId") Long QuestionId, @Param("question") Question question);
 
     Long findAllQuestionsCount();
 
-    List<QuestionDto> findAllQuestions(Page page);
+    // 질문글들 조회
+    List<QuestionDetailRecord> getQuestions(Long offset, Long size);
 
-    QuestionDto findQuestionByQuestionId(Long questionId);
+    // 질문글 조회
+    QuestionDetailRecord getQuestionDetail(Long questionId);
 
     void softDeleteQuestionByQuestionId(Long questionId);
 
@@ -32,6 +34,6 @@ public interface QuestionMapper
     void insertUserInQuestionLikes(Long questionId, Long authorId);
 
     // 질문 테이블의 Views 1증가
-    void increaseViewInQuestions(Long questionId);
+    void increaseView(Long questionId);
 
 }

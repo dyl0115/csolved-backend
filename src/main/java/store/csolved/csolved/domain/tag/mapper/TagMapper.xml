@@ -3,35 +3,60 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.tag.mapper.TagMapper">
-    <insert id="insertTag" useGeneratedKeys="true" keyProperty="id">
-        insert
-        ignore into tags(name)
-        values(
-        #{name}
-        );
+
+    <insert id="insertTags" useGeneratedKeys="true" keyProperty="id">
+        insert into tags(name)
+        values
+        <foreach collection="tags" item="tag" separator=",">
+            (#{tag.name})
+        </foreach>
     </insert>
 
-    <select id="findTagsByNames">
-        select *
-        from tags
-        where name in
-        <foreach collection="list" item="name" open="(" separator="," close=")">
-            #{name}
+    <insert id="insertQuestionTags">
+        insert into question_tags(question_id, tag_id)
+        values
+        <foreach collection="tags" item="tag" separator=",">
+            (#{tag.questionId}, #{tag.id})
+        </foreach>
+    </insert>
+
+    <select id="getTagsByQuestionId">
+        select qt.question_id question_id, t.*
+        from question_tags qt
+                 left join tags t on qt.tag_id = t.id
+        where qt.question_id = #{questionId};
+    </select>
+
+    <resultMap id="questionTagMap" type="store.csolved.csolved.domain.tag.service.dto.QuestionTagNameRecord">
+        <id property="questionId" column="question_id"/>
+        <collection property="tags" ofType="store.csolved.csolved.domain.tag.service.dto.TagNameRecord">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+        </collection>
+    </resultMap>
+
+    <select id="getTagsByQuestionIdList" resultMap="questionTagMap">
+        select q.id question_id, t.*
+        from questions q
+        left join question_tags qt on qt.question_id = q.id
+        left join tags t on t.id = qt.tag_id
+        where q.id in
+        <foreach collection="list" item="questionId" open="(" separator="," close=")">
+            #{questionId}
         </foreach>
     </select>
 
-    <select id="findAllTagNames">
-        select name
+    <select id="getTagsByNameIfExist">
+        select *
         from tags
+        where name in
+        <foreach collection="tagNames" item="tagName" open="(" separator="," close=")">
+            #{tagName}
+        </foreach>
     </select>
 
-    <insert id="insertQuestionAndTag">
-        insert
-        into question_tags(question_id, tag_id)
-        values (#{questionId}, #{tagId});
-    </insert>
 
-    <delete id="deleteQuestionAndTagByQuestionId">
+    <delete id="deleteQuestionTagByQuestionId">
         delete
         from question_tags
         where question_id = #{questionId};
