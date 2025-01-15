@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:insert="common/head.html">
+    <head th:insert="fragments/head.html">
         <title>CS Interview Platform</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
     </head>
     <body class="bg-gray-50">
-        <th:block th:replace="~{common/navigation :: default-navigation}"/>
+        <th:block th:replace="~{fragments/navigation :: default-navigation}"/>
         
-        <main class="max-w-5xl mx-auto mt-8 px-4 pb-12">
+        <main class="max-w-5xl mx-auto mt-8 px-4 pb-12" th:object="${questionDetails}">
             <!-- 질문글 상세 섹션 -->
-            <section class="question-detail mb-8" th:object="${questionDetails}">
+            <section class="question-detail mb-8" th:object="${questionDetails.question}">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                     <!-- 헤더 영역 -->
                     <div class="p-6 border-b border-gray-100">
@@ -17,7 +17,7 @@
                             <div class="flex-1">
                                 <h1 class="text-2xl font-bold text-gray-900 mb-3" th:text="*{title}">질문글 제목</h1>
                                 <div class="flex flex-wrap gap-2 mb-4">
-                                <span th:each="tag : *{tags}"
+                                <span th:each="tag : ${tags}"
                                       class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors"
                                       th:text="${tag.name}">
                                 </span>
@@ -38,25 +38,25 @@
                                     <div class="flex items-center gap-1">
                                         <i data-lucide="clock" class="w-4 h-4"></i>
                                         <span class="timeago" th:data-date="*{createdAt}"
-                                              th:text="${#temporals.format(questionDetails.createdAt, 'yyyy/MM/dd hh:mm')}">
+                                              th:text="${#temporals.format(createdAt, 'yyyy/MM/dd hh:mm')}">
                                     </span>
                                     </div>
                                 </div>
                             </div>
                             
-                            <!-- 수정/삭제 버튼 -->
-                            <!--                            <div class="flex gap-2" th:if="${user.id == question.authorId}">-->
-                            <!--                                <a th:href="@{/questions/{id}/edit-form(id=*{id})}"-->
-                            <!--                                   class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">-->
-                            <!--                                    <i data-lucide="edit" class="w-4 h-4"></i>-->
-                            <!--                                    수정-->
-                            <!--                                </a>-->
-                            <!--                                <button th:onclick="'deleteQuestion(' + *{id} + ')'"-->
-                            <!--                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">-->
-                            <!--                                    <i data-lucide="trash-2" class="w-4 h-4"></i>-->
-                            <!--                                    삭제-->
-                            <!--                                </button>-->
-                            <!--                            </div>-->
+                            <!--수정/삭제 버튼-->
+                            <div class="flex gap-2" th:if="${user.id == authorId}">
+                                <a th:href="@{/templates/question/{id}/edit-form(id=*{id})}"
+                                   class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                    수정
+                                </a>
+                                <button th:onclick="'deleteQuestion(' + *{id} + ')'"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    삭제
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
@@ -87,7 +87,7 @@
             <section id="answer-form" class="answer-create-form hidden mb-8">
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <h2 class="text-lg font-bold text-gray-900 mb-4">답변 작성하기</h2>
-                    <form th:action="@{/questions/{id}/answers(id=*{id})}" method="POST">
+                    <form th:action="@{/answers(questionId=*{question.id})}" method="POST">
                     <textarea name="content"
                               class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                               rows="6"
@@ -114,7 +114,7 @@
             
             <!-- 답변 목록 -->
             <section class="space-y-6">
-                <!--                <h2 class="text-xl font-bold text-gray-900 mb-4" th:text="|답변 *{answers.size()}개|">답변 0개</h2>-->
+                <h2 class="text-xl font-bold text-gray-900 mb-4" th:text="|답변 ${#lists.size(answers)}개|">답변 0개</h2>
                 
                 <div th:each="answer : *{answers}"
                      class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -131,7 +131,7 @@
                                     </div>
                                     <div class="text-sm text-gray-500">
                                 <span class="timeago" th:data-date="*{createdAt}"
-                                      th:text="${#temporals.format(answer.createdAt, 'yyyy/MM/dd hh:mm')}">
+                                      th:text="${#temporals.format(*{createdAt}, 'yyyy/MM/dd hh:mm')}">
                                 </span>
                                     </div>
                                 </div>
@@ -156,13 +156,13 @@
                                     <!--                                          th:text="|*{averageScore} (*{voterCount}명)|"></span>-->
                                 </div>
                                 
-                                <!--                                <div th:if="${user.id == answer.userId}">-->
-                                <!--                                    <button th:onclick="'deleteAnswer(' + *{id} + ')'"-->
-                                <!--                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">-->
-                                <!--                                        <i data-lucide="trash-2" class="w-4 h-4"></i>-->
-                                <!--                                        삭제-->
-                                <!--                                    </button>-->
-                                <!--                                </div>-->
+                                <div th:if="${user.id == *{authorId}}">
+                                    <button th:onclick="'deleteAnswer(' + *{id} + ')'"
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        삭제
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         
@@ -176,26 +176,25 @@
                             <div class="p-6">
                                 <div class="space-y-4">
                                     <!-- 댓글 목록 -->
-                                    <div th:each="comment : *{comments}" th:object="${comment}"
-                                         class="flex items-start gap-3 pb-4">
+                                    <div th:each="comment : *{comments}" class="flex items-start gap-3 pb-4">
                                         <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
                                             <i data-lucide="user" class="w-5 h-5 text-gray-500"></i>
                                         </div>
-                                        <div class="flex-1">
+                                        <div class="flex-1" th:object="${comment}">
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center gap-2">
                                             <span class="font-medium text-gray-900"
                                                   th:text="*{anonymous} ? '익명' : *{authorNickname}">댓글작성자</span>
                                                     <span class="text-sm text-gray-500 timeago"
                                                           th:data-date="*{createdAt}"
-                                                          th:text="${#temporals.format(comment.createdAt, 'yyyy/MM/dd hh:mm')}">
+                                                          th:text="${#temporals.format(*{createdAt}, 'yyyy/MM/dd hh:mm')}">
                                             </span>
                                                 </div>
-                                                <!--                                                <button th:if="${user.id == comment.authorId}"-->
-                                                <!--                                                        th:onclick="'deleteComment(' + *{commentId} + ')'"-->
-                                                <!--                                                        class="text-gray-400 hover:text-red-600">-->
-                                                <!--                                                    <i data-lucide="x" class="w-4 h-4"></i>-->
-                                                <!--                                                </button>-->
+                                                <button th:if="${user.id == *{authorId}}"
+                                                        th:onclick="'deleteComment(' + *{id} + ')'"
+                                                        class="text-gray-400 hover:text-red-600">
+                                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                                </button>
                                             </div>
                                             <p class="text-gray-700 mt-1" th:text="*{content}">댓글 내용</p>
                                         </div>
@@ -209,32 +208,33 @@
                                             댓글 달기
                                         </button>
                                         
-                                        <!--                                        <div th:id="'commentForm-' + *{id}" class="hidden mt-3">-->
-                                        <!--                                            <form th:action="@{/questions/{questionId}/answers/{answerId}/comment(questionId=${question.questionId},answerId=*{answerId})}"-->
-                                        <!--                                                  method="POST"-->
-                                        <!--                                                  class="flex flex-col gap-3">-->
-                                        <!--                                        <textarea name="content"-->
-                                        <!--                                                  class="w-full p-3 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"-->
-                                        <!--                                                  rows="2"-->
-                                        <!--                                                  placeholder="댓글을 입력하세요..."></textarea>-->
-                                        <!--                                                <div class="flex items-center justify-between">-->
-                                        <!--                                                    <div class="flex items-center gap-2">-->
-                                        <!--                                                        <input type="checkbox"-->
-                                        <!--                                                               th:id="'anonymous-' + *{answerId}"-->
-                                        <!--                                                               th:field="${commentCreateForm.anonymous}"-->
-                                        <!--                                                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">-->
-                                        <!--                                                        <label th:for="'anonymous-' + *{answerId}"-->
-                                        <!--                                                               class="text-sm text-gray-600">-->
-                                        <!--                                                            익명으로 작성하기-->
-                                        <!--                                                        </label>-->
-                                        <!--                                                    </div>-->
-                                        <!--                                                    <button type="submit"-->
-                                        <!--                                                            class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">-->
-                                        <!--                                                        댓글 등록-->
-                                        <!--                                                    </button>-->
-                                        <!--                                                </div>-->
-                                        <!--                                            </form>-->
-                                        <!--                                        </div>-->
+                                        <div th:id="'commentForm-' + *{id}" class="hidden mt-3">
+                                            <!-- 요기 수정-->
+                                            <form th:action="@{/comments(answerId=*{id})}"
+                                                  method="POST"
+                                                  class="flex flex-col gap-3">
+                                                                                <textarea name="content"
+                                                                                          class="w-full p-3 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                                                          rows="2"
+                                                                                          placeholder="댓글을 입력하세요..."></textarea>
+                                                <div class="flex items-center justify-between">
+                                                    <div class="flex items-center gap-2">
+                                                        <input type="checkbox"
+                                                               th:id="'anonymous-' + *{id}"
+                                                               th:field="${commentCreateForm.anonymous}"
+                                                               class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                                        <label th:for="'anonymous-' + *{id}"
+                                                               class="text-sm text-gray-600">
+                                                            익명으로 작성하기
+                                                        </label>
+                                                    </div>
+                                                    <button type="submit"
+                                                            class="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors">
+                                                        댓글 등록
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

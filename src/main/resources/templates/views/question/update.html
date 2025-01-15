@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:x-bind="http://www.w3.org/1999/xhtml">
-    <head th:insert="common/head.html">
+    <head th:insert="fragments/head.html">
         <title>
             CS Interview Platform
         </title>
     </head>
     
     <body>
-        <th:block th:replace="~{common/navigation :: default-navigation}"/>
+        <th:block th:replace="~{fragments/navigation :: default-navigation}"/>
         
         <div class="bg-gray-50 p-6 w-full">
             <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto">
@@ -17,7 +17,7 @@
                 </div>
                 
                 <!-- Form Fields -->
-                <form th:action="@{|/questions/${questionEditForm.questionId}|}"
+                <form th:action="@{|/templates/question/${questionEditForm.questionId}|}"
                       th:object="${questionEditForm}"
                       method="post"
                       id="questionForm"

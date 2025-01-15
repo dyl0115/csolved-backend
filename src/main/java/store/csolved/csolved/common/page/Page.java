@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.common.page;
+package store.csolved.csolved.common.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

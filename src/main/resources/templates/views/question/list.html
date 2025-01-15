@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:insert="common/head.html">
+    <head th:insert="fragments/head.html">
         <title>CS Interview Platform</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
     </head>
     <body class="bg-gray-50">
         <!--네비게이션 바-->
-        <th:block th:replace="~{common/navigation :: profile-navigation}"/>
+        <th:block th:replace="~{fragments/navigation :: profile-navigation}"/>
         
         <!--메인 컨텐츠-->
         <div class="max-w-7xl mx-auto mt-8 px-4" th:object="${questionListViewModel}">
-            <th:block th:replace="~{common/searching-bar :: searching-bar}"/>
+            <th:block th:replace="~{fragments/searching-bar :: searching-bar}"/>
             
             <div class="flex items-center mb-8 gap-4">
                 <!-- 검색 결과 수 -->
@@ -21,7 +21,7 @@
                     <span class="text-gray-500">개의 질문</span>
                 </div>
                 
-                <th:block th:replace="~{common/sorting-bar::sorting-bar}"/>
+                <th:block th:replace="~{fragments/sorting-bar::sorting-bar}"/>
                 <div class="ml-auto">
                     <a href="/questions/create"
                        class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm">
@@ -85,8 +85,8 @@
             </div>
         </div>
         
-        <th:block th:replace="~{common/paging-bar::paging-bar}"/>
-        <th:block th:replace="~{common/footer::footer}"/>
+        <th:block th:replace="~{fragments/paging-bar::paging-bar}"/>
+        <th:block th:replace="~{fragments/footer::footer}"/>
         
         <script>
             // Lucide 아이콘 초기화
