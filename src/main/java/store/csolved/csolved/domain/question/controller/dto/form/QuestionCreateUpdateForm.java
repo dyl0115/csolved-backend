@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.question.domain.Question;
+import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.question.service.dto.record.QuestionDetailRecord;
 import store.csolved.csolved.domain.tag.service.dto.TagNameRecord;
 

@@ -9,7 +9,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Data
 public class Page
 {
-    public static final Long DEFAULT_SINGLE_PAGE_COUNT = 2L;
+    public static final Long DEFAULT_SINGLE_PAGE_COUNT = 7L;
 
     private final Long currentPage;
     private final Long totalPage;

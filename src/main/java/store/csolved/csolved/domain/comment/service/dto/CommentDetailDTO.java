@@ -12,8 +12,9 @@ public class CommentDetailDTO
 {
     private Long id;
     private Long answerId;
-    private boolean anonymous;
+    private Long authorId;
     private String authorNickname;
+    private boolean anonymous;
     private String content;
     private LocalDateTime createdAt;
 
@@ -21,8 +22,9 @@ public class CommentDetailDTO
     {
         return CommentDetailDTO.builder()
                 .id(record.getId())
-                .anonymous(record.isAnonymous())
+                .authorId(record.getAuthorId())
                 .authorNickname(record.getAuthorNickname())
+                .anonymous(record.isAnonymous())
                 .content(record.getContent())
                 .createdAt(record.getCreatedAt())
                 .build();

@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import store.csolved.csolved.auth.etc.LoginRequestInterceptor;
 import store.csolved.csolved.auth.etc.LoginUserArgumentResolver;
-import store.csolved.csolved.domain.common.page.etc.PageRequestArgumentResolver;
+import store.csolved.csolved.common.page.etc.PageRequestArgumentResolver;
 
 import java.util.List;
 

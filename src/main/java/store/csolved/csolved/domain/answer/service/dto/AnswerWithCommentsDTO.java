@@ -2,6 +2,7 @@ package store.csolved.csolved.domain.answer.service.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import store.csolved.csolved.domain.answer.service.dto.record.AnswerDetailRecord;
 import store.csolved.csolved.domain.comment.service.dto.CommentDetailDTO;
 import store.csolved.csolved.domain.comment.service.dto.CommentDetailListRecord;
 import store.csolved.csolved.domain.comment.service.dto.CommentDetailRecord;
@@ -15,8 +16,9 @@ import java.util.Map;
 public class AnswerWithCommentsDTO
 {
     private Long id;
-    private boolean anonymous;
+    private Long authorId;
     private String authorNickname;
+    private boolean anonymous;
     private String content;
     private LocalDateTime createdAt;
     private List<CommentDetailDTO> comments;
@@ -26,8 +28,9 @@ public class AnswerWithCommentsDTO
     {
         return AnswerWithCommentsDTO.builder()
                 .id(answer.getId())
-                .anonymous(answer.isAnonymous())
+                .authorId(answer.getAuthorId())
                 .authorNickname(answer.getAuthorNickname())
+                .anonymous(answer.isAnonymous())
                 .content(answer.getContent())
                 .createdAt(answer.getCreatedAt())
                 .comments(CommentDetailDTO.from(comments))

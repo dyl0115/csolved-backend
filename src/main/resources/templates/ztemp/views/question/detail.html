@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head th:insert="fragments/head.html">
+    <head th:insert="fragments/layout/head.html">
         <title>CS Interview Platform</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.min.js"></script>
     </head>
     <body class="bg-gray-50">
-        <th:block th:replace="~{fragments/navigation :: default-navigation}"/>
+        <th:block th:replace="~{fragments/navigation/nav-bar :: default-navigation}"/>
         
         <main class="max-w-5xl mx-auto mt-8 px-4 pb-12" th:object="${questionDetails}">
             <!-- 질문글 상세 섹션 -->
@@ -112,6 +112,8 @@
                 </div>
             </section>
             
+            
+            <!--  여기  !! -->
             <!-- 답변 목록 -->
             <section class="space-y-6">
                 <h2 class="text-xl font-bold text-gray-900 mb-4" th:text="|답변 ${#lists.size(answers)}개|">답변 0개</h2>
@@ -121,6 +123,7 @@
                     <div th:object="${answer}">
                         <!-- 답변 헤더 -->
                         <div class="p-6 flex items-start justify-between border-b border-gray-100">
+                            <!--사용자 정보 -->
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
                                     <i data-lucide="user" class="w-6 h-6 text-gray-500"></i>
@@ -130,9 +133,9 @@
                                          th:text="*{anonymous} ? '익명' : *{authorNickname}">답변자
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                <span class="timeago" th:data-date="*{createdAt}"
-                                      th:text="${#temporals.format(*{createdAt}, 'yyyy/MM/dd hh:mm')}">
-                                </span>
+                                            <span class="timeago" th:data-date="*{createdAt}"
+                                                  th:text="${#temporals.format(*{createdAt}, 'yyyy/MM/dd hh:mm')}">
+                                            </span>
                                     </div>
                                 </div>
                             </div>
@@ -183,12 +186,12 @@
                                         <div class="flex-1" th:object="${comment}">
                                             <div class="flex items-center justify-between">
                                                 <div class="flex items-center gap-2">
-                                            <span class="font-medium text-gray-900"
-                                                  th:text="*{anonymous} ? '익명' : *{authorNickname}">댓글작성자</span>
+                                                        <span class="font-medium text-gray-900"
+                                                              th:text="*{anonymous} ? '익명' : *{authorNickname}">댓글작성자</span>
                                                     <span class="text-sm text-gray-500 timeago"
                                                           th:data-date="*{createdAt}"
                                                           th:text="${#temporals.format(*{createdAt}, 'yyyy/MM/dd hh:mm')}">
-                                            </span>
+                                                        </span>
                                                 </div>
                                                 <button th:if="${user.id == *{authorId}}"
                                                         th:onclick="'deleteComment(' + *{id} + ')'"
@@ -213,10 +216,10 @@
                                             <form th:action="@{/comments(answerId=*{id})}"
                                                   method="POST"
                                                   class="flex flex-col gap-3">
-                                                                                <textarea name="content"
-                                                                                          class="w-full p-3 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                                                          rows="2"
-                                                                                          placeholder="댓글을 입력하세요..."></textarea>
+                                                                                            <textarea name="content"
+                                                                                                      class="w-full p-3 text-sm border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                                                                      rows="2"
+                                                                                                      placeholder="댓글을 입력하세요..."></textarea>
                                                 <div class="flex items-center justify-between">
                                                     <div class="flex items-center gap-2">
                                                         <input type="checkbox"

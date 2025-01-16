@@ -3,58 +3,34 @@ package store.csolved.csolved.auth.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.auth.annotation.LoginRequest;
+import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.auth.service.AuthService;
-import store.csolved.csolved.auth.annotation.LoginUser;
+import store.csolved.csolved.auth.etc.annotation.LoginUser;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.auth.dto.SignInForm;
-import store.csolved.csolved.auth.dto.SignUpForm;
+import store.csolved.csolved.auth.controller.dto.SignInForm;
+import store.csolved.csolved.auth.controller.dto.SignUpForm;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/auth")
 public class AuthController
 {
-    public final static String VIEWS_AUTH_FORM = "/auth";
+    public final static String VIEWS_SIGN_IN_FORM = "/views/auth/signIn";
+    public final static String VIEWS_SIGN_UP_FORM = "/views/auth/signUp";
 
     private final AuthService authService;
 
-    @ModelAttribute("signInForm")
-    public SignInForm initSignInForm()
+    @GetMapping("/signIn")
+    public String initSignIn(Model model)
     {
-        return new SignInForm();
+        model.addAttribute("signInForm", SignInForm.empty());
+        return VIEWS_SIGN_IN_FORM;
     }
 
-    @ModelAttribute("signUpForm")
-    public SignUpForm initSignUpForm()
-    {
-        return new SignUpForm();
-    }
-
-    @GetMapping
-    public String initAuthForm()
-    {
-        return VIEWS_AUTH_FORM;
-    }
-
-    @PostMapping("/signup")
-    public String processSignUp(@Valid @ModelAttribute("signUpForm") SignUpForm signUpForm,
-                                BindingResult result)
-    {
-        authService.checkSignUpValid(signUpForm, result);
-
-        if (result.hasErrors())
-        {
-            return VIEWS_AUTH_FORM;
-        }
-
-        authService.signUp(signUpForm);
-        return "redirect:/auth";
-    }
-
-    @PostMapping("/signin")
+    @PostMapping("/signIn")
     public String processSignIn(@Valid @ModelAttribute("signInForm") SignInForm signInForm,
                                 BindingResult result)
     {
@@ -62,19 +38,42 @@ public class AuthController
 
         if (result.hasErrors())
         {
-            return VIEWS_AUTH_FORM;
+            return VIEWS_SIGN_IN_FORM;
         }
 
         authService.signIn(signInForm);
         return "redirect:/questions?page=1";
     }
 
+    @GetMapping("/signUp")
+    public String initSignUp(Model model)
+    {
+        model.addAttribute("signUpForm", SignUpForm.empty());
+        return VIEWS_SIGN_UP_FORM;
+    }
+
+    @PostMapping("/signUp")
+    public String processSignUp(@Valid @ModelAttribute("signUpForm") SignUpForm signUpForm,
+                                BindingResult result)
+    {
+        authService.checkSignUpValid(signUpForm, result);
+
+        if (result.hasErrors())
+        {
+            return VIEWS_SIGN_UP_FORM;
+        }
+
+        authService.signUp(signUpForm);
+        return "redirect:/auth/signIn";
+    }
+
+
     @LoginRequest
-    @GetMapping("/signout")
+    @GetMapping("/signOut")
     public String processSignOut()
     {
         authService.signOut();
-        return "redirect:/auth";
+        return "redirect:/auth/signIn";
     }
 
     @LoginRequest
@@ -82,6 +81,6 @@ public class AuthController
     public String processWithdraw(@LoginUser User user)
     {
         authService.withdraw(user);
-        return "redirect:/auth";
+        return "redirect:/auth/signIn";
     }
 }

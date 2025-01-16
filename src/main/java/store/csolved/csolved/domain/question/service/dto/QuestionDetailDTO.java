@@ -13,6 +13,7 @@ public class QuestionDetailDTO
 {
     private Long id;
     private String title;
+    private Long authorId;
     private String authorNickname;
     private boolean anonymous;
     private String content;
@@ -28,6 +29,7 @@ public class QuestionDetailDTO
         return QuestionDetailDTO.builder()
                 .id(record.getId())
                 .title(record.getTitle())
+                .authorId(record.getAuthorId())
                 .authorNickname(record.getAuthorNickname())
                 .anonymous(record.isAnonymous())
                 .content(record.getContent())

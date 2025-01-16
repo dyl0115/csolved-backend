@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.answer.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import store.csolved.csolved.domain.answer.Answer;
-import store.csolved.csolved.domain.answer.service.dto.AnswerDetailRecord;
+import store.csolved.csolved.domain.answer.service.dto.record.AnswerDetailRecord;
 
 import java.util.List;
 

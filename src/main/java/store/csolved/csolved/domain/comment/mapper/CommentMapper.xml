@@ -24,6 +24,7 @@
         <collection property="comments" javaType="java.util.ArrayList"
                     ofType="store.csolved.csolved.domain.comment.service.dto.CommentDetailRecord">
             <id property="id" column="id"/>
+            <result property="authorId" column="author_id"/>
             <result property="authorNickname" column="author_nickname"/>
             <result property="anonymous" column="anonymous"/>
             <result property="content" column="content"/>
@@ -33,6 +34,7 @@
 
     <select id="getCommentsByAnswerIds" resultMap="answerCommentMap">
         select c.*,
+        u.id author_id,
         u.nickname author_nickname
         from comments c
         left join users u on u.id = c.user_id

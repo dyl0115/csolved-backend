@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout/guest-layout :: guest-template(~{::title},~{::section})}">
+    <head>
+        <meta charset="UTF-8">
+        <title>Csolved 로그인</title>
+    </head>
+    <body>
+        <section class="bg-gray-100">
+            <div class="min-h-screen flex items-center justify-center p-4">
+                <div class="w-full max-w-md bg-white rounded-lg shadow-lg">
+                    <!-- 로고 -->
+                    <div th:replace="~{fragments/common/logo::auth-logo}"></div>
+                    
+                    <!-- 로그인 입력 폼 -->
+                    <div class="p-6">
+                        <form th:action="@{/auth/signIn}" th:object="${signInForm}" method="post" class="space-y-4">
+                            <th:block
+                                    th:replace="~{fragments/common/inputField::input (type='email', label='이메일', name='email', placeholder='이메일을 입력하세요.')}"/>
+                            <th:block
+                                    th:replace="~{fragments/common/inputField::input (type='password', label='비밀번호', name='password', placeholder='비밀번호를 입력하세요.')}"/>
+                            
+                            <div th:if="${#fields.hasGlobalErrors()}"
+                                 class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">
+                                <p th:each="error : ${#fields.globalErrors()}" th:text="${error}">글로벌 에러 메시지</p>
+                            </div>
+                            
+                            <th:block
+                                    th:replace="~{fragments/common/button::button(type='submit', icon='log-in', color='blue', text='로그인')}"/>
+                            
+                            <div class="text-center text-sm text-gray-600">
+                                아직 회원이 아니신가요?
+                                <a href="#" th:href="@{/auth/signUp}" class="text-blue-500 hover:text-blue-600">
+                                    회원가입
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

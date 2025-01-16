@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <th:block th:insert="~{common/head.html}"/>
+        <th:block th:insert="~{fragments/head.html}"/>
         <meta charset="UTF-8">
         <title>CS Interview Platform - Auth</title>
         <style>
@@ -117,7 +117,7 @@
     </head>
     <body>
         <!-- 기본 네비게이션 바 -->
-        <nav th:replace="~{common/navigation::default-navigation}"></nav>
+        <nav th:replace="~{fragments/navigation::default-navigation}"></nav>
         
         <!-- 로그인/회원가입 창 -->
         <div class="main-container">

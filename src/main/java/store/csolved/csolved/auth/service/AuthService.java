@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.auth.dto.SignInForm;
-import store.csolved.csolved.auth.dto.SignUpForm;
+import store.csolved.csolved.auth.controller.dto.SignInForm;
+import store.csolved.csolved.auth.controller.dto.SignUpForm;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
 import store.csolved.csolved.utils.PasswordUtils;
 
@@ -23,11 +23,8 @@ public class AuthService
     @Transactional
     public void signUp(SignUpForm form)
     {
-        // 비밀번호 암호화
         String hashedPassword = PasswordUtils.hashPassword(form.getPassword());
-        form.setPassword(hashedPassword);
-
-        userMapper.insertUser(form.toUser());
+        userMapper.insertUser(SignUpForm.createEncodedUser(form, hashedPassword));
     }
 
     public void signIn(SignInForm form)

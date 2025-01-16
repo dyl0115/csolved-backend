@@ -1,17 +1,14 @@
-package store.csolved.csolved.auth.dto;
+package store.csolved.csolved.auth.controller.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import store.csolved.csolved.domain.user.User;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Builder
 public class SignUpForm
 {
     @NotBlank(message = "이메일을 입력해주세요.")
@@ -31,9 +28,18 @@ public class SignUpForm
     @Size(min = 2, max = 10, message = "길이가 2에서 10 사이여야 합니다.")
     private String nickname;
 
-    public User toUser()
+    public static SignUpForm empty()
     {
-        return User.create(email, password, nickname,
-                null, false);
+        return SignUpForm.builder().build();
+    }
+
+    public static User createEncodedUser(SignUpForm form, String hashedPassword)
+    {
+        return User.create(
+                form.getEmail(),
+                hashedPassword,
+                form.getNickname(),
+                null,
+                false);
     }
 }

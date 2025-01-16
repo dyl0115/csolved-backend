@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import store.csolved.csolved.auth.annotation.LoginRequest;
+import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.user.User;
 
 
@@ -38,7 +38,7 @@ public class LoginRequestInterceptor implements HandlerInterceptor
         User user = (User) httpSession.getAttribute(LOGIN_USER_SESSION_KEY);
         if (user == null)
         {
-            response.sendRedirect("/auth");
+            response.sendRedirect("/auth/signIn");
             return false;
         }
 

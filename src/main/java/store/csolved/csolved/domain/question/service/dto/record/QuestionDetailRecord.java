@@ -9,6 +9,7 @@ public class QuestionDetailRecord
 {
     private Long id;
     private String title;
+    private Long authorId;
     private String authorNickname;
     private boolean anonymous;
     private String content;

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.auth.annotation.LoginRequest;
-import store.csolved.csolved.auth.annotation.LoginUser;
+import store.csolved.csolved.auth.etc.annotation.LoginRequest;
+import store.csolved.csolved.auth.etc.annotation.LoginUser;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
-import store.csolved.csolved.domain.common.page.Page;
-import store.csolved.csolved.domain.common.page.etc.PageInfo;
+import store.csolved.csolved.common.page.Page;
+import store.csolved.csolved.common.page.etc.PageInfo;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
@@ -25,17 +25,20 @@ import store.csolved.csolved.domain.user.User;
 @Controller
 public class QuestionController
 {
-    public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "questions/create";
+    public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "views/question/create";
+    public final static String VIEWS_QUESTION_LIST = "views/domain/question/list";
+    public final static String VIEWS_QUESTION_DETAIL = "views/question/detail";
 
     private final QuestionFacade questionFacade;
 
     @LoginRequest
     @GetMapping("/questions")
-    public String getQuestions(@PageInfo Page page, Model model)
+    public String getQuestions(@PageInfo Page page,
+                               Model model)
     {
         QuestionListViewModel viewModel = questionFacade.getQuestions(page);
         model.addAttribute("questionListViewModel", viewModel);
-        return "questions/list";
+        return VIEWS_QUESTION_LIST;
     }
 
     @LoginRequest
@@ -43,11 +46,11 @@ public class QuestionController
     public String getQuestion(@PathVariable Long questionId,
                               Model model)
     {
-        QuestionDetailViewModel viewModel = questionFacade.getQuestionWithAnswersAndComments(questionId);
+        QuestionDetailViewModel viewModel = questionFacade.getQuestion(questionId);
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         model.addAttribute("questionDetails", viewModel);
-        return "questions/detail";
+        return VIEWS_QUESTION_DETAIL;
     }
 
     @LoginRequest
@@ -55,7 +58,8 @@ public class QuestionController
     public String getQuestionCreateForm(Model model)
     {
         QuestionCreateUpdateViewModel createViewModel = questionFacade.getQuestionCreateUpdateViewModel();
-        model.addAttribute("questionCreateForm", createViewModel);
+        model.addAttribute("questionViewModel", createViewModel);
+        model.addAttribute("questionCreateForm", QuestionCreateUpdateForm.empty());
         return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
     }
 
@@ -83,7 +87,7 @@ public class QuestionController
     {
         QuestionCreateUpdateForm questionUpdateForm = questionFacade.getQuestionUpdateForm(questionId);
         model.addAttribute("questionEditForm", questionUpdateForm);
-        return "questions/edit";
+        return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
     }
 
     @LoginRequest
@@ -95,7 +99,7 @@ public class QuestionController
     {
         if (result.hasErrors())
         {
-            return "questions/edit";
+            return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
         }
 
         questionFacade.updateQuestion(questionId, user.getId(), form);

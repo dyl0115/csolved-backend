@@ -7,7 +7,7 @@ import store.csolved.csolved.domain.answer.Answer;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.dto.AnswerWithCommentsDTO;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
-import store.csolved.csolved.domain.answer.service.dto.AnswerDetailRecord;
+import store.csolved.csolved.domain.answer.service.dto.record.AnswerDetailRecord;
 import store.csolved.csolved.domain.comment.mapper.CommentMapper;
 import store.csolved.csolved.domain.comment.service.dto.CommentDetailListRecord;
 import store.csolved.csolved.domain.user.User;

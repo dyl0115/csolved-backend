@@ -1,0 +1,49 @@
+<div th:fragment="paging-bar" class="flex justify-center p-4 mt-6" th:object="${page}">
+    <nav class="flex items-center gap-6">
+        <!-- 이전 페이지 버튼 -->
+        <a th:if="*{currentPage > 1}"
+           href="#"
+           th:onclick="updatePage([[${page.currentPage - 1}]]); return false;"
+           class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm">
+            이전 페이지
+        </a>
+        <button th:unless="*{currentPage > 1}"
+                disabled
+                class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg opacity-50 cursor-not-allowed shadow-sm">
+            이전 페이지
+        </button>
+        
+        <!-- 페이지 입력 영역 -->
+        <div class="inline">
+            <input
+                    type="text"
+                    th:value="*{currentPage}"
+                    th:min="1"
+                    th:max="*{totalPage}"
+                    th:onchange="updatePage(this.value)"
+                    class="w-20 px-3 py-2 text-center border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
+            <span class="text-sm text-gray-500" th:text="${' / ' + page.totalPage}"></span>
+        </div>
+        
+        <!-- 다음 페이지 버튼 -->
+        <a th:if="*{currentPage < totalPage}"
+           href="#"
+           th:onclick="updatePage([[${page.currentPage + 1}]]); return false;"
+           class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm">
+            다음 페이지
+        </a>
+        <button th:unless="*{currentPage < totalPage}"
+                disabled
+                class="px-6 py-2 text-sm font-semibold text-white bg-blue-600 rounded-lg opacity-50 cursor-not-allowed shadow-sm">
+            다음 페이지
+        </button>
+    </nav>
+    
+    <script>
+        function updatePage(page) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', page);
+            window.location.href = url.toString();
+        }
+    </script>
+</div>

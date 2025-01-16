@@ -51,6 +51,7 @@
 
     <select id="getQuestionDetail">
         select q.*,
+               u.id       author_id,
                u.nickname author_nickname,
                c.id       category_id,
                c.name     category_name

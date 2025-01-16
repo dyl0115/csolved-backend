@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.question.domain;
+package store.csolved.csolved.domain.question;
 
 import lombok.*;
 

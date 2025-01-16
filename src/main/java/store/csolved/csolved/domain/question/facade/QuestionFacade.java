@@ -7,7 +7,7 @@ import store.csolved.csolved.domain.answer.service.dto.AnswerWithCommentsDTO;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.service.dto.CategoryDetailDTO;
 import store.csolved.csolved.domain.category.service.CategoryService;
-import store.csolved.csolved.domain.common.page.Page;
+import store.csolved.csolved.common.page.Page;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
@@ -80,7 +80,7 @@ public class QuestionFacade
     }
 
     // 상세 질문글, 태그, 답변, 댓글 조회
-    public QuestionDetailViewModel getQuestionWithAnswersAndComments(Long questionId)
+    public QuestionDetailViewModel getQuestion(Long questionId)
     {
         QuestionDetailDTO question = questionService.getQuestionWithViewIncrease(questionId);
         List<TagNameDTO> tags = tagService.getTags(questionId);

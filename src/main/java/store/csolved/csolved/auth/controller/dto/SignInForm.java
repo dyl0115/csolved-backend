@@ -1,14 +1,11 @@
-package store.csolved.csolved.auth.dto;
+package store.csolved.csolved.auth.controller.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Builder
 public class SignInForm
 {
     @NotBlank(message = "이메일을 입력해주세요.")
@@ -17,4 +14,9 @@ public class SignInForm
 
     @NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
+
+    public static SignInForm empty()
+    {
+        return SignInForm.builder().build();
+    }
 }

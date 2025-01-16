@@ -1,4 +1,4 @@
-package store.csolved.csolved.auth.annotation;
+package store.csolved.csolved.auth.etc.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
