@@ -1,5 +1,5 @@
-<div th:fragment="paging-bar" class="flex justify-center p-4 mt-6" th:object="${page}">
-    <nav class="flex items-center gap-6">
+<div th:fragment="paging-bar(page)" class="flex justify-center p-4 mt-6">
+    <nav class="flex items-center gap-6" th:object="${page}">
         <!-- 이전 페이지 버튼 -->
         <a th:if="*{currentPage > 1}"
            href="#"

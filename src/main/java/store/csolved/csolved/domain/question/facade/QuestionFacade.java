@@ -9,7 +9,7 @@ import store.csolved.csolved.domain.answer.service.dto.AnswerWithCommentsDTO;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.service.dto.CategoryDetailDTO;
 import store.csolved.csolved.domain.category.service.CategoryService;
-import store.csolved.csolved.common.search.PageRequest;
+import store.csolved.csolved.common.search.PageDetailDTO;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
@@ -28,6 +28,8 @@ import java.util.Map;
 @Service
 public class QuestionFacade
 {
+    private final static Long DEFAULT_QUESTION_COUNT_ON_SINGLE_PAGE = 7L;
+
     private final QuestionService questionService;
     private final TagService tagService;
     private final AnswerService answerService;
@@ -72,16 +74,20 @@ public class QuestionFacade
     }
 
     // 질문글 리스트 조회
-    public QuestionListViewModel getQuestions(PageRequest pageInfo,
+    public QuestionListViewModel getQuestions(Long requestPage,
                                               SortType sortInfo,
                                               FilterRequest filterInfo)
     {
-        List<QuestionDetailDTO> questions = questionService.getQuestions(pageInfo, sortInfo, filterInfo);
+        Long questionsCount = questionService.getQuestionsCount(filterInfo);
+
+        PageDetailDTO page = PageDetailDTO.create(requestPage, questionsCount, DEFAULT_QUESTION_COUNT_ON_SINGLE_PAGE);
+
+        List<QuestionDetailDTO> questions = questionService.getQuestions(page, sortInfo, filterInfo);
         Map<Long, List<TagNameDTO>> tagMap = tagService.getTags(new ArrayList<>(questions.stream().map(QuestionDetailDTO::getId).toList()));
         List<CategoryDetailDTO> categories = categoryService.getAllCategories();
         List<QuestionSummaryDTO> questionSummary = QuestionSummaryDTO.from(questions, tagMap);
 
-        return QuestionListViewModel.from(pageInfo, categories, questionSummary);
+        return QuestionListViewModel.from(page, categories, questionSummary);
     }
 
     // 상세 질문글, 태그, 답변, 댓글 조회

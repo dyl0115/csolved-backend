@@ -16,7 +16,7 @@ import store.csolved.csolved.common.search.etc.FilterInfo;
 import store.csolved.csolved.common.search.etc.SortInfo;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
-import store.csolved.csolved.common.search.PageRequest;
+import store.csolved.csolved.common.search.PageDetailDTO;
 import store.csolved.csolved.common.search.etc.PageInfo;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
@@ -37,12 +37,12 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/questions")
-    public String getQuestions(@PageInfo PageRequest pageInfo,
+    public String getQuestions(@PageInfo Long page,
                                @SortInfo SortType sortInfo,
                                @FilterInfo FilterRequest filterInfo,
                                Model model)
     {
-        QuestionListViewModel viewModel = questionFacade.getQuestions(pageInfo, sortInfo, filterInfo);
+        QuestionListViewModel viewModel = questionFacade.getQuestions(page, sortInfo, filterInfo);
         model.addAttribute("questionListViewModel", viewModel);
         return VIEWS_QUESTION_LIST;
     }

@@ -14,7 +14,8 @@ public interface QuestionMapper
 
     void updateQuestion(@Param("questionId") Long QuestionId, @Param("question") Question question);
 
-    Long findAllQuestionsCount();
+    //질문글들 개수 조회
+    Long getQuestionsCount(String filterType, Long filterValue);
 
     // 질문글들 조회
     List<QuestionDetailRecord> getQuestions(Long offset, Long size, String sortType, String filterType, Long filterValue);
