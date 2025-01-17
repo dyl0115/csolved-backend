@@ -1,4 +1,4 @@
-package store.csolved.csolved.common.page;
+package store.csolved.csolved.common.search;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import static lombok.AccessLevel.PRIVATE;
 
 @AllArgsConstructor(access = PRIVATE)
 @Data
-public class Page
+public class PageRequest
 {
     public static final Long DEFAULT_SINGLE_PAGE_COUNT = 7L;
 
@@ -16,14 +16,14 @@ public class Page
     private final Long offset;
     private final Long size;
 
-    public static Page validateAndCreate(String requestPage, Long totalRecordsCount)
+    public static PageRequest validateAndCreate(String requestPage, Long totalRecordsCount)
     {
         Long currentPage = createCurrentPage(requestPage, totalRecordsCount);
         Long totalPage = createTotalPage(totalRecordsCount);
         Long offset = createOffset(currentPage);
         Long rowCount = createRowCount();
 
-        return new Page(
+        return new PageRequest(
                 currentPage,
                 totalPage,
                 offset,

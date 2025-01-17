@@ -3,7 +3,9 @@ package store.csolved.csolved.domain.question.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.common.page.Page;
+import store.csolved.csolved.common.search.FilterRequest;
+import store.csolved.csolved.common.search.PageRequest;
+import store.csolved.csolved.common.search.SortType;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
@@ -26,10 +28,9 @@ public class QuestionService
         return questionMapper.findAllQuestionsCount();
     }
 
-    public List<QuestionDetailDTO> getQuestions(Page page)
+    public List<QuestionDetailDTO> getQuestions(PageRequest page, SortType sort, FilterRequest filter)
     {
-        List<QuestionDetailRecord> questions = questionMapper.getQuestions(page.getOffset(), page.getSize());
-
+        List<QuestionDetailRecord> questions = questionMapper.getQuestions(page.getOffset(), page.getSize(), sort.name(), filter.getFilterType(), filter.getFilterValue());
         return QuestionDetailDTO.from(questions);
     }
 

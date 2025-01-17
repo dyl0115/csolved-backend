@@ -1,9 +1,11 @@
 package store.csolved.csolved.domain.category.service.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 @Builder
 public class CategoryDetailDTO
 {

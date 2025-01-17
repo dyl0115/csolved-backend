@@ -1,36 +1,33 @@
-<div th:fragment="sorting-bar" class="flex items-center gap-2">
-    <!-- 정렬 기준 -->
+<div th:fragment="filtering-bar(categories)" class="flex items-center gap-2">
     <div class="relative group">
-        <select th:onchange="handleSortChange(this.value)"
-                th:with="currentSort=${param.sort != null ? param.sort[0] : 'recent'}"
+        <select th:onchange="handleFilterChange(this.value)"
+                th:with="currentCategoryId=${param.filterValue != null ? param.filterValue[0] : '0' }"
                 class="appearance-none pl-9 pr-8 py-2 rounded-lg bg-white border border-gray-200 hover:border-indigo-300 text-sm text-gray-600 group-hover:text-gray-900 cursor-pointer focus:outline-none focus:border-indigo-500 transition-all duration-200">
-            <option value="recent" th:selected="${currentSort == 'recent'}">최신순</option>
-            <option value="views" th:selected="${currentSort == 'views'}">조회순</option>
-            <option value="likes" th:selected="${currentSort == 'likes'}">좋아요순</option>
-            <option value="answers" th:selected="${currentSort == 'answers'}">답변순</option>
+            <option th:value="0"
+                    th:selected="${currentCategoryId == '0'}">전체 카테고리
+            </option>
+            <option th:each="category : ${categories}"
+                    th:selected="${category.id.toString() == currentCategoryId}"
+                    th:value="${category.id}"
+                    th:text="${category.name}"></option>
+            th:text="${category.name}"></option>
         </select>
-        <i data-lucide="bar-chart-2"
+        <i data-lucide="filter"
            class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200"></i>
         <i data-lucide="chevron-down"
            class="w-3 h-3 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200"></i>
     </div>
     
     <script>
-
-
-        function handleSortChange(value) {
-            // 현재 URL의 파라미터들을 가져옵니다
+        function handleFilterChange(value) {
             const urlParams = new URLSearchParams(window.location.search);
+            urlParams.set('filterType', "CATEGORY")
+            urlParams.set('filterValue', value);
 
-            // 정렬 파라미터 설정
-            urlParams.set('sort', value);
-
-            // 페이지 파라미터가 있다면 1로 초기화
             if (urlParams.has('page')) {
                 urlParams.set('page', '1');
             }
 
-            // 새로운 URL 생성
             let newUrl = '/questions';
             const params = urlParams.toString();
 
@@ -38,7 +35,6 @@
                 newUrl += '?' + params;
             }
 
-            // 페이지 이동
             window.location.href = newUrl;
         }
     </script>

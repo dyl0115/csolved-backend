@@ -39,13 +39,23 @@
 
     <select id="getQuestions">
         select q.*,
-               u.nickname author_nickname,
-               c.id       category_id,
-               c.name     category_name
+        u.nickname author_nickname,
+        c.id category_id,
+        c.name category_name
         from questions q
-                 left join users u on q.user_id = u.id
-                 left join category c on q.category_id = c.id
-        order by q.id desc
+        left join users u on q.user_id = u.id
+        left join category c on q.category_id = c.id
+        where q.deleted_at IS NULL
+        <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
+            and q.category_id = #{filterValue}
+        </if>
+        order by
+        <choose>
+            <when test="sortType == 'RECENT'">q.created_at desc</when>
+            <when test="sortType == 'VIEWS'">q.views desc</when>
+            <when test="sortType == 'LIKES'">q.likes desc</when>
+            <when test="sortType == 'ANSWERS'">q.answer_count desc</when>
+        </choose>
         limit #{offset}, #{size};
     </select>
 

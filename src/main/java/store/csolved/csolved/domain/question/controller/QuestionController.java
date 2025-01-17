@@ -10,10 +10,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.auth.etc.annotation.LoginUser;
+import store.csolved.csolved.common.search.FilterRequest;
+import store.csolved.csolved.common.search.SortType;
+import store.csolved.csolved.common.search.etc.FilterInfo;
+import store.csolved.csolved.common.search.etc.SortInfo;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
-import store.csolved.csolved.common.page.Page;
-import store.csolved.csolved.common.page.etc.PageInfo;
+import store.csolved.csolved.common.search.PageRequest;
+import store.csolved.csolved.common.search.etc.PageInfo;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
@@ -33,10 +37,12 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/questions")
-    public String getQuestions(@PageInfo Page page,
+    public String getQuestions(@PageInfo PageRequest pageInfo,
+                               @SortInfo SortType sortInfo,
+                               @FilterInfo FilterRequest filterInfo,
                                Model model)
     {
-        QuestionListViewModel viewModel = questionFacade.getQuestions(page);
+        QuestionListViewModel viewModel = questionFacade.getQuestions(pageInfo, sortInfo, filterInfo);
         model.addAttribute("questionListViewModel", viewModel);
         return VIEWS_QUESTION_LIST;
     }

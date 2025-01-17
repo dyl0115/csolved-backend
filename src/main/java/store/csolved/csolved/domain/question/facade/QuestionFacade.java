@@ -3,11 +3,13 @@ package store.csolved.csolved.domain.question.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import store.csolved.csolved.common.search.FilterRequest;
+import store.csolved.csolved.common.search.SortType;
 import store.csolved.csolved.domain.answer.service.dto.AnswerWithCommentsDTO;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.service.dto.CategoryDetailDTO;
 import store.csolved.csolved.domain.category.service.CategoryService;
-import store.csolved.csolved.common.page.Page;
+import store.csolved.csolved.common.search.PageRequest;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
@@ -70,13 +72,16 @@ public class QuestionFacade
     }
 
     // 질문글 리스트 조회
-    public QuestionListViewModel getQuestions(Page page)
+    public QuestionListViewModel getQuestions(PageRequest pageInfo,
+                                              SortType sortInfo,
+                                              FilterRequest filterInfo)
     {
-        List<QuestionDetailDTO> questions = questionService.getQuestions(page);
+        List<QuestionDetailDTO> questions = questionService.getQuestions(pageInfo, sortInfo, filterInfo);
         Map<Long, List<TagNameDTO>> tagMap = tagService.getTags(new ArrayList<>(questions.stream().map(QuestionDetailDTO::getId).toList()));
+        List<CategoryDetailDTO> categories = categoryService.getAllCategories();
         List<QuestionSummaryDTO> questionSummary = QuestionSummaryDTO.from(questions, tagMap);
 
-        return QuestionListViewModel.from(page, questionSummary);
+        return QuestionListViewModel.from(pageInfo, categories, questionSummary);
     }
 
     // 상세 질문글, 태그, 답변, 댓글 조회

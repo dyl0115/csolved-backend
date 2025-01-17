@@ -17,7 +17,7 @@ public interface QuestionMapper
     Long findAllQuestionsCount();
 
     // 질문글들 조회
-    List<QuestionDetailRecord> getQuestions(Long offset, Long size);
+    List<QuestionDetailRecord> getQuestions(Long offset, Long size, String sortType, String filterType, Long filterValue);
 
     // 질문글 조회
     QuestionDetailRecord getQuestionDetail(Long questionId);

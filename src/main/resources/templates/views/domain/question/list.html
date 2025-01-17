@@ -11,10 +11,13 @@
                 
                 <div class="flex items-center mb-8 gap-4">
                     
-                    <!-- 정렬 바-->
+                    <!-- 필터 바 -->
+                    <th:block th:replace="~{fragments/common/search/filtering-bar::filtering-bar(*{categories})}"/>
+                    
+                    <!-- 정렬 바 -->
                     <th:block th:replace="~{fragments/common/search/sorting-bar::sorting-bar}"/>
                     
-                    <!--질문하기 버튼-->
+                    <!-- 질문하기 버튼 -->
                     <div class="ml-auto">
                         <th:block
                                 th:replace="~{fragments/common/button::link(icon='plus-circle', color='blue', text='질문하기', href='/questions/create')}"/>
