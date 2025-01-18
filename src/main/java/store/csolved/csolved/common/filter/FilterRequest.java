@@ -1,4 +1,4 @@
-package store.csolved.csolved.common.search;
+package store.csolved.csolved.common.filter;
 
 import lombok.Builder;
 import lombok.Getter;

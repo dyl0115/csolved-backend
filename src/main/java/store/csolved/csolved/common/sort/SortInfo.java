@@ -1,4 +1,4 @@
-package store.csolved.csolved.common.search.etc;
+package store.csolved.csolved.common.sort;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -8,6 +8,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(RUNTIME)
 @Target(PARAMETER)
-public @interface PageInfo
+public @interface SortInfo
 {
 }

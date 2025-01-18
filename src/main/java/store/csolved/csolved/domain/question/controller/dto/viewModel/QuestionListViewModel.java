@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.question.controller.dto.viewModel;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.common.search.PageDetailDTO;
+import store.csolved.csolved.common.page.PageDetailDTO;
 import store.csolved.csolved.domain.category.service.dto.CategoryDetailDTO;
 import store.csolved.csolved.domain.question.service.dto.QuestionSummaryDTO;
 

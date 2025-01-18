@@ -10,14 +10,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.auth.etc.annotation.LoginUser;
-import store.csolved.csolved.common.search.FilterRequest;
-import store.csolved.csolved.common.search.SortType;
-import store.csolved.csolved.common.search.etc.FilterInfo;
-import store.csolved.csolved.common.search.etc.SortInfo;
+import store.csolved.csolved.common.filter.FilterRequest;
+import store.csolved.csolved.common.search.SearchInfo;
+import store.csolved.csolved.common.search.SearchRequest;
+import store.csolved.csolved.common.sort.SortType;
+import store.csolved.csolved.common.filter.FilterInfo;
+import store.csolved.csolved.common.sort.SortInfo;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
-import store.csolved.csolved.common.search.PageDetailDTO;
-import store.csolved.csolved.common.search.etc.PageInfo;
+import store.csolved.csolved.common.page.PageInfo;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
@@ -40,9 +41,10 @@ public class QuestionController
     public String getQuestions(@PageInfo Long page,
                                @SortInfo SortType sortInfo,
                                @FilterInfo FilterRequest filterInfo,
+                               @SearchInfo SearchRequest searchInfo,
                                Model model)
     {
-        QuestionListViewModel viewModel = questionFacade.getQuestions(page, sortInfo, filterInfo);
+        QuestionListViewModel viewModel = questionFacade.getQuestions(page, sortInfo, filterInfo, searchInfo);
         model.addAttribute("questionListViewModel", viewModel);
         return VIEWS_QUESTION_LIST;
     }

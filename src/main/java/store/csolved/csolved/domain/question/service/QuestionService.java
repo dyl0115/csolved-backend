@@ -3,9 +3,10 @@ package store.csolved.csolved.domain.question.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.common.search.FilterRequest;
-import store.csolved.csolved.common.search.PageDetailDTO;
-import store.csolved.csolved.common.search.SortType;
+import store.csolved.csolved.common.filter.FilterRequest;
+import store.csolved.csolved.common.page.PageDetailDTO;
+import store.csolved.csolved.common.search.SearchRequest;
+import store.csolved.csolved.common.sort.SortType;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
@@ -23,14 +24,29 @@ public class QuestionService
     private final QuestionMapper questionMapper;
     private final TagMapper tagMapper;
 
-    public Long getQuestionsCount(FilterRequest filter)
+    public Long getQuestionsCount(FilterRequest filter, SearchRequest search)
     {
-        return questionMapper.getQuestionsCount(filter.getFilterType(), filter.getFilterValue());
+        return questionMapper.getQuestionsCount(
+                filter.getFilterType(),
+                filter.getFilterValue(),
+                search.getSearchType(),
+                search.getKeyword());
     }
 
-    public List<QuestionDetailDTO> getQuestions(PageDetailDTO page, SortType sort, FilterRequest filter)
+    public List<QuestionDetailDTO> getQuestions(PageDetailDTO page,
+                                                SortType sort,
+                                                FilterRequest filter,
+                                                SearchRequest search)
     {
-        List<QuestionDetailRecord> questions = questionMapper.getQuestions(page.getOffset(), page.getSize(), sort.name(), filter.getFilterType(), filter.getFilterValue());
+        List<QuestionDetailRecord> questions = questionMapper.getQuestions(
+                page.getOffset(),
+                page.getSize(),
+                sort.name(),
+                filter.getFilterType(),
+                filter.getFilterValue(),
+                search.getSearchType(),
+                search.getKeyword());
+
         return QuestionDetailDTO.from(questions);
     }
 

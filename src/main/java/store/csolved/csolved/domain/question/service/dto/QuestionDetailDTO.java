@@ -47,4 +47,11 @@ public class QuestionDetailDTO
                 .map(QuestionDetailDTO::from)
                 .toList();
     }
+
+    public static List<Long> getIdList(List<QuestionDetailDTO> questions)
+    {
+        return questions.stream()
+                .map(QuestionDetailDTO::getId)
+                .toList();
+    }
 }

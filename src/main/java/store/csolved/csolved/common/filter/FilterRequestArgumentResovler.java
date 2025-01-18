@@ -1,4 +1,4 @@
-package store.csolved.csolved.common.search.etc;
+package store.csolved.csolved.common.filter;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -6,11 +6,13 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import store.csolved.csolved.common.search.FilterRequest;
 
 @Component
 public class FilterRequestArgumentResovler implements HandlerMethodArgumentResolver
 {
+    public final static String FILTER_TYPE_PARAMETER_NAME = "filterType";
+    public final static String FILTER_VALUE_PARAMETER_NAME = "filterValue";
+
     @Override
     public boolean supportsParameter(MethodParameter parameter)
     {
@@ -25,9 +27,9 @@ public class FilterRequestArgumentResovler implements HandlerMethodArgumentResol
                                          NativeWebRequest webRequest,
                                          WebDataBinderFactory binderFactory)
     {
-        String filterType = webRequest.getParameter("filterType");
-        String filterValue = webRequest.getParameter("filterValue");
-        
+        String filterType = webRequest.getParameter(FILTER_TYPE_PARAMETER_NAME);
+        String filterValue = webRequest.getParameter(FILTER_VALUE_PARAMETER_NAME);
+
         if (filterValue == null) return FilterRequest.create(filterType, 0L);
         return FilterRequest.create(filterType, Long.parseLong(filterValue));
     }

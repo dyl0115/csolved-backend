@@ -40,10 +40,12 @@
         from questions q
         left join question_tags qt on qt.question_id = q.id
         left join tags t on t.id = qt.tag_id
-        where q.id in
-        <foreach collection="list" item="questionId" open="(" separator="," close=")">
-            #{questionId}
-        </foreach>
+        <if test="list !=null and list.size() >0 ">
+            where q.id in
+            <foreach collection="list" item="questionId" open="(" separator="," close=")">
+                #{questionId}
+            </foreach>
+        </if>
     </select>
 
     <select id="getTagsByNameIfExist">

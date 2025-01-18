@@ -7,9 +7,10 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import store.csolved.csolved.auth.etc.LoginRequestInterceptor;
 import store.csolved.csolved.auth.etc.LoginUserArgumentResolver;
-import store.csolved.csolved.common.search.etc.FilterRequestArgumentResovler;
-import store.csolved.csolved.common.search.etc.PageRequestArgumentResolver;
-import store.csolved.csolved.common.search.etc.SortRequestArgumentResolver;
+import store.csolved.csolved.common.filter.FilterRequestArgumentResovler;
+import store.csolved.csolved.common.page.PageRequestArgumentResolver;
+import store.csolved.csolved.common.search.SearchRequestArgumentResolver;
+import store.csolved.csolved.common.sort.SortRequestArgumentResolver;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class WebConfig implements WebMvcConfigurer
     private final PageRequestArgumentResolver pageRequestArgumentResolver;
     private final SortRequestArgumentResolver sortRequestArgumentResolver;
     private final FilterRequestArgumentResovler filterRequestArgumentResovler;
+    private final SearchRequestArgumentResolver searchRequestArgumentResolver;
     private final LoginRequestInterceptor loginRequestInterceptor;
 
     @Override
@@ -44,5 +46,8 @@ public class WebConfig implements WebMvcConfigurer
 
         // @FilterInfo가 있는 FilterRequest 변수에 사용자가 요청한 filter정보를 바인딩합니다.
         resolvers.add(filterRequestArgumentResovler);
+
+        // @SearchInfo가 있는 SearchRequest 변수에 search정보를 바인딩합니다.
+        resolvers.add(searchRequestArgumentResolver);
     }
 }

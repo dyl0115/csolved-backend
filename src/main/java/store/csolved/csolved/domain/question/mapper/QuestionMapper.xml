@@ -34,12 +34,21 @@
         select count(q.id)
         from questions q
         left join category c on q.category_id = c.id
+        left join users u on q.user_id = u.id
         where q.deleted_at is null
         <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
-            and q.category_id = #{filterValue};
+            and q.category_id = #{filterValue}
         </if>
+        <choose>
+            <when test="searchType == 'TITLE' and searchKeyword != null and searchKeyword != ''">
+                and q.title like concat('%', #{searchKeyword}, '%')
+            </when>
+            <when test="searchType == 'AUTHOR' and searchKeyword != null and searchKeyword != ''">
+                and u.nickname like #{searchKeyword}
+                and q.anonymous = false
+            </when>
+        </choose>
     </select>
-
 
     <select id="getQuestions">
         select q.*,
@@ -53,6 +62,15 @@
         <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
             and q.category_id = #{filterValue}
         </if>
+        <choose>
+            <when test="searchType == 'TITLE' and searchKeyword != null and searchKeyword != ''">
+                and q.title like concat('%', #{searchKeyword}, '%')
+            </when>
+            <when test="searchType == 'AUTHOR' and searchKeyword != null and searchKeyword != ''">
+                and u.nickname like #{searchKeyword}
+                and q.anonymous = false
+            </when>
+        </choose>
         order by
         <choose>
             <when test="sortType == 'RECENT'">q.created_at desc</when>

@@ -1,4 +1,4 @@
-package store.csolved.csolved.common.search;
+package store.csolved.csolved.common.page;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +14,7 @@ public class PageDetailDTO
     private final Long offset;
     private final Long size;
 
+    // 1 0 7
     public static PageDetailDTO create(Long requestPage,
                                        Long totalRecordsCount,
                                        Long recordsCountOnSinglePage)
@@ -32,7 +33,7 @@ public class PageDetailDTO
     private static Long createTotalPage(Long totalRecordsCount,
                                         Long recordsCountOnSinglePage)
     {
-        return (totalRecordsCount + recordsCountOnSinglePage - 1) / recordsCountOnSinglePage;
+        return Math.max((totalRecordsCount + recordsCountOnSinglePage - 1) / recordsCountOnSinglePage, 1);
     }
 
     private static Long createCurrentPage(Long requestPage,

@@ -1,22 +1,12 @@
-<!-- 검색 섹션 -->
+<!-- 검색 fragment -->
 <div th:fragment="searching-bar" class="bg-white p-6 rounded-2xl border border-gray-200 mb-6 shadow-lg space-y-4">
     <!-- 검색 상단 영역 -->
     <div class="flex gap-3">
-        <!-- 카테고리 선택 -->
-<!--        <div class="relative group flex-shrink-0">-->
-<!--            <select class="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 hover:border-indigo-300 transition-all duration-200 cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white text-gray-600 text-sm w-36">-->
-<!--                <option value="">전체 카테고리</option>-->
-<!--                <option value="algorithm">알고리즘</option>-->
-<!--                <option value="database">데이터베이스</option>-->
-<!--                <option value="network">네트워크</option>-->
-<!--            </select>-->
-<!--            <i data-lucide="chevron-down"-->
-<!--               class="w-4 h-4 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-indigo-500 transition-colors duration-200"></i>-->
-<!--        </div>-->
-        
         <!-- 검색 타입 선택 -->
         <div class="relative group flex-shrink-0">
-            <select class="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 hover:border-indigo-300 transition-all duration-200 cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white text-gray-600 text-sm w-28">
+            <select id="searchType"
+                    class="appearance-none bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 hover:border-indigo-300 transition-all duration-200 cursor-pointer focus:outline-none focus:border-indigo-500 focus:bg-white text-gray-600 text-sm w-28"
+                    th:value="${param.searchType}">
                 <option value="title">제목</option>
                 <option value="author">작성자</option>
             </select>
@@ -27,6 +17,8 @@
         <!-- 검색창 -->
         <div class="relative group flex-grow">
             <input type="text"
+                   id="searchKeyword"
+                   th:value="${param.searchKeyword}"
                    placeholder="검색어를 입력하세요"
                    class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg hover:border-indigo-300 transition-all duration-200 focus:outline-none focus:border-indigo-500 focus:bg-white pl-10 text-sm text-gray-600 placeholder-gray-400">
             <i data-lucide="search"
@@ -34,26 +26,61 @@
         </div>
     </div>
     
-    <!-- 태그 영역 -->
-<!--    <div class="flex items-center gap-2 px-1">-->
-    <!--        <div class="flex items-center text-sm text-gray-500 pr-3 border-r border-gray-200">-->
-    <!--            <i data-lucide="tags" class="w-4 h-4 mr-2"></i>-->
-    <!--            태그-->
-    <!--        </div>-->
-    <!--        <div class="flex flex-wrap gap-2 items-center">-->
-    <!--            <button class="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg text-sm font-medium transition-all duration-200 group">-->
-    <!--                Java-->
-    <!--                <i data-lucide="x" class="w-4 h-4 ml-1.5 opacity-60 group-hover:opacity-100"></i>-->
-    <!--            </button>-->
-    <!--            <button class="inline-flex items-center px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-lg text-sm font-medium transition-all duration-200 group">-->
-    <!--                Spring-->
-    <!--                <i data-lucide="x" class="w-4 h-4 ml-1.5 opacity-60 group-hover:opacity-100"></i>-->
-    <!--            </button>-->
-    <!--            <button class="inline-flex items-center px-3 py-1.5 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-lg text-sm font-medium transition-all duration-200 group">-->
-    <!--                <i data-lucide="plus"-->
-    <!--                   class="w-4 h-4 mr-1.5 group-hover:scale-110 transition-transform duration-200"></i>-->
-    <!--                태그 추가-->
-    <!--            </button>-->
-    <!--        </div>-->
-    <!--    </div>-->
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchKeywordInput = document.getElementById('searchKeyword');
+            const searchTypeSelect = document.getElementById('searchType');
+
+            // URL 쿼리 파라미터로부터 초기값 설정
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('searchType')) {
+                searchTypeSelect.value = urlParams.get('searchType');
+            }
+            if (urlParams.has('searchKeyword')) {
+                searchKeywordInput.value = urlParams.get('searchKeyword');
+            }
+
+            // 검색 실행 함수
+            function performSearch() {
+                const searchType = searchTypeSelect.value;
+                const searchKeyword = searchKeywordInput.value.trim();
+
+                // 현재 URL의 기존 파라미터 유지
+                const currentUrl = new URL(window.location.href);
+                const searchParams = currentUrl.searchParams;
+
+                // searchType과 searchKeyword 업데이트
+                if (searchKeyword) {
+                    searchParams.set('searchType', searchType);
+                    searchParams.set('searchKeyword', searchKeyword);
+                } else {
+                    // 검색어가 비어있으면 검색 파라미터 제거
+                    searchParams.delete('searchType');
+                    searchParams.delete('searchKeyword');
+                }
+
+                // 새로운 URL로 이동
+                window.location.href = currentUrl.toString();
+            }
+
+            // 엔터 키 이벤트 리스너
+            searchKeywordInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    performSearch();
+                }
+            });
+
+            // 선택박스 변경 시 검색 타입만 변경 (새로고침 없음)
+            searchTypeSelect.addEventListener('change', function () {
+                // 변경된 값을 URL에 반영하되 페이지 새로고침은 하지 않음
+                const currentUrl = new URL(window.location.href);
+                const searchParams = currentUrl.searchParams;
+                searchParams.set('searchType', this.value);
+
+                // URL 히스토리 업데이트 (페이지 새로고침 없음)
+                window.history.replaceState({}, '', currentUrl.toString());
+            });
+        });
+    </script>
 </div>

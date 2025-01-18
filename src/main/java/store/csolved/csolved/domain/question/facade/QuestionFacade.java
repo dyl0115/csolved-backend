@@ -3,13 +3,14 @@ package store.csolved.csolved.domain.question.facade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.common.search.FilterRequest;
-import store.csolved.csolved.common.search.SortType;
+import store.csolved.csolved.common.filter.FilterRequest;
+import store.csolved.csolved.common.search.SearchRequest;
+import store.csolved.csolved.common.sort.SortType;
 import store.csolved.csolved.domain.answer.service.dto.AnswerWithCommentsDTO;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.service.dto.CategoryDetailDTO;
 import store.csolved.csolved.domain.category.service.CategoryService;
-import store.csolved.csolved.common.search.PageDetailDTO;
+import store.csolved.csolved.common.page.PageDetailDTO;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
@@ -20,7 +21,6 @@ import store.csolved.csolved.domain.question.service.dto.QuestionDetailDTO;
 import store.csolved.csolved.domain.tag.dto.TagNameDTO;
 import store.csolved.csolved.domain.tag.service.TagService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -74,20 +74,38 @@ public class QuestionFacade
     }
 
     // 질문글 리스트 조회
-    public QuestionListViewModel getQuestions(Long requestPage,
-                                              SortType sortInfo,
-                                              FilterRequest filterInfo)
+    public QuestionListViewModel getQuestions(Long requestedPageNumber,
+                                              SortType sortType,
+                                              FilterRequest filter,
+                                              SearchRequest search)
     {
-        Long questionsCount = questionService.getQuestionsCount(filterInfo);
+        // DB에서 질문글 개수를 가져옴.
+        Long filteredQuestionCount = questionService.getQuestionsCount(filter, search);
 
-        PageDetailDTO page = PageDetailDTO.create(requestPage, questionsCount, DEFAULT_QUESTION_COUNT_ON_SINGLE_PAGE);
+        // 사용자가 요청한 페이지 번호, 질문글 개수를 사용하여 페이지 정보를 생성.
+        PageDetailDTO pageInfo = PageDetailDTO.create(
+                requestedPageNumber,
+                filteredQuestionCount,
+                DEFAULT_QUESTION_COUNT_ON_SINGLE_PAGE);
 
-        List<QuestionDetailDTO> questions = questionService.getQuestions(page, sortInfo, filterInfo);
-        Map<Long, List<TagNameDTO>> tagMap = tagService.getTags(new ArrayList<>(questions.stream().map(QuestionDetailDTO::getId).toList()));
-        List<CategoryDetailDTO> categories = categoryService.getAllCategories();
-        List<QuestionSummaryDTO> questionSummary = QuestionSummaryDTO.from(questions, tagMap);
+        // 페이지 정보를 사용해서 DB에 필요한 질문글만 조회.
+        List<QuestionDetailDTO> pagedQuestions = questionService.getQuestions(
+                pageInfo,
+                sortType,
+                filter,
+                search);
 
-        return QuestionListViewModel.from(page, categories, questionSummary);
+        // 페이징된 질문글과 관련된 태그를 모두 가져옴.
+        Map<Long, List<TagNameDTO>> questionTagsMap = tagService.getTags(QuestionDetailDTO.getIdList(pagedQuestions));
+
+        // 질문글 정보, 태그 정보를 모두 가져와서 조립함.
+        List<QuestionSummaryDTO> questionSummaries = QuestionSummaryDTO.from(pagedQuestions, questionTagsMap);
+
+        // 카테고리 정보를 모두 가져옴.
+        List<CategoryDetailDTO> sidebarCategories = categoryService.getAllCategories();
+
+        // 모든 데이터를 사용하여 viewModel 생성 후 반환
+        return QuestionListViewModel.from(pageInfo, sidebarCategories, questionSummaries);
     }
 
     // 상세 질문글, 태그, 답변, 댓글 조회
