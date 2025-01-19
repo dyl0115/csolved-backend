@@ -15,13 +15,13 @@ import java.util.Map;
 @Component
 public class SortRequestArgumentResolver implements HandlerMethodArgumentResolver
 {
-    private final static Map<String, SortType> SORT_TYPE_MAP = new HashMap<>();
+    private final static Map<String, Sorting> SORT_TYPE_MAP = new HashMap<>();
     private final static String SORT_PARAMETER_NAME = "sort";
 
     @PostConstruct
     public void init()
     {
-        Arrays.stream(SortType.values())
+        Arrays.stream(Sorting.values())
                 .forEach(e -> SORT_TYPE_MAP.put(e.name().toLowerCase(), e));
     }
 
@@ -29,18 +29,18 @@ public class SortRequestArgumentResolver implements HandlerMethodArgumentResolve
     public boolean supportsParameter(MethodParameter parameter)
     {
         boolean hasSortInfoAnnotation = parameter.hasParameterAnnotation(SortInfo.class);
-        boolean isSortType = parameter.getParameterType().equals(SortType.class);
+        boolean isSortType = parameter.getParameterType().equals(Sorting.class);
         return hasSortInfoAnnotation && isSortType;
     }
 
     @Override
-    public SortType resolveArgument(MethodParameter parameter,
-                                    ModelAndViewContainer mavContainer,
-                                    NativeWebRequest webRequest,
-                                    WebDataBinderFactory binderFactory)
+    public Sorting resolveArgument(MethodParameter parameter,
+                                   ModelAndViewContainer mavContainer,
+                                   NativeWebRequest webRequest,
+                                   WebDataBinderFactory binderFactory)
     {
         String sortString = webRequest.getParameter(SORT_PARAMETER_NAME);
-        if (sortString == null) return SortType.RECENT;
-        return SORT_TYPE_MAP.getOrDefault(sortString, SortType.RECENT);
+        if (sortString == null) return Sorting.RECENT;
+        return SORT_TYPE_MAP.getOrDefault(sortString, Sorting.RECENT);
     }
 }

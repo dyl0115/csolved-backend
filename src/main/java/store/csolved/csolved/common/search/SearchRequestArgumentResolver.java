@@ -30,20 +30,20 @@ public class SearchRequestArgumentResolver implements HandlerMethodArgumentResol
     public boolean supportsParameter(MethodParameter parameter)
     {
         boolean hasSearchInfoAnnotation = parameter.hasParameterAnnotation(SearchInfo.class);
-        boolean isSearchRequestType = parameter.getParameterType().equals(SearchRequest.class);
+        boolean isSearchRequestType = parameter.getParameterType().equals(Searching.class);
         return hasSearchInfoAnnotation && isSearchRequestType;
     }
 
     @Override
-    public SearchRequest resolveArgument(MethodParameter parameter,
-                                         ModelAndViewContainer mavContainer,
-                                         NativeWebRequest webRequest,
-                                         WebDataBinderFactory binderFactory)
+    public Searching resolveArgument(MethodParameter parameter,
+                                     ModelAndViewContainer mavContainer,
+                                     NativeWebRequest webRequest,
+                                     WebDataBinderFactory binderFactory)
     {
         String requestedSearchType = webRequest.getParameter(SEARCH_TYPE_PARAMETER_NAME);
         SearchType searchType = SEARCH_TYPE_MAP.getOrDefault(requestedSearchType, SearchType.NONE);
 
         String searchValue = webRequest.getParameter(SEARCH_VALUE_PARAMETER_NAME);
-        return SearchRequest.create(searchType.name(), searchValue);
+        return Searching.create(searchType.name(), searchValue);
     }
 }

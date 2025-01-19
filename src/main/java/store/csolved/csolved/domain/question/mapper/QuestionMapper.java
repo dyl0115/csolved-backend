@@ -2,15 +2,14 @@ package store.csolved.csolved.domain.question.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.question.service.dto.record.QuestionDetailRecord;
+import store.csolved.csolved.domain.question.entity.Question;
 
 import java.util.List;
 
 @Mapper
 public interface QuestionMapper
 {
-    void insert(Question question);
+    void save(Question question);
 
     void update(@Param("questionId") Long QuestionId, @Param("question") Question question);
 
@@ -21,16 +20,16 @@ public interface QuestionMapper
                         String searchKeyword);
 
     // 질문글들 조회
-    List<QuestionDetailRecord> getQuestions(Long offset,
-                                            Long size,
-                                            String sortType,
-                                            String filterType,
-                                            Long filterValue,
-                                            String searchType,
-                                            String searchKeyword);
+    List<Question> getQuestions(Long offset,
+                                Long size,
+                                String sortType,
+                                String filterType,
+                                Long filterValue,
+                                String searchType,
+                                String searchKeyword);
 
     // 질문글 조회
-    QuestionDetailRecord getQuestionDetail(Long questionId);
+    Question getQuestion(Long questionId);
 
     // 논리적으로 게시글을 삭제
     void softDelete(Long questionId);

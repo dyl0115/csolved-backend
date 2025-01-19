@@ -1,6 +1,6 @@
 package store.csolved.csolved.common.sort;
 
-public enum SortType
+public enum Sorting
 {
     RECENT,
     VIEWS,

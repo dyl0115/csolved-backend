@@ -4,7 +4,7 @@
 
 <mapper namespace="store.csolved.csolved.domain.tag.mapper.TagMapper">
 
-    <insert id="insertTags" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveTags" useGeneratedKeys="true" keyProperty="id">
         insert into tags(name)
         values
         <foreach collection="tags" item="tag" separator=",">
@@ -12,43 +12,15 @@
         </foreach>
     </insert>
 
-    <insert id="insertQuestionTags">
+    <insert id="saveQuestionTags">
         insert into question_tags(question_id, tag_id)
         values
         <foreach collection="tags" item="tag" separator=",">
-            (#{tag.questionId}, #{tag.id})
+            (#{questionId}, #{tag.id})
         </foreach>
     </insert>
 
-    <select id="getTagsByQuestionId">
-        select qt.question_id question_id, t.*
-        from question_tags qt
-                 left join tags t on qt.tag_id = t.id
-        where qt.question_id = #{questionId};
-    </select>
-
-    <resultMap id="questionTagMap" type="store.csolved.csolved.domain.tag.service.dto.QuestionTagNameRecord">
-        <id property="questionId" column="question_id"/>
-        <collection property="tags" ofType="store.csolved.csolved.domain.tag.service.dto.TagNameRecord">
-            <id property="id" column="id"/>
-            <result property="name" column="name"/>
-        </collection>
-    </resultMap>
-
-    <select id="getTagsByQuestionIdList" resultMap="questionTagMap">
-        select q.id question_id, t.*
-        from questions q
-        left join question_tags qt on qt.question_id = q.id
-        left join tags t on t.id = qt.tag_id
-        <if test="list !=null and list.size() >0 ">
-            where q.id in
-            <foreach collection="list" item="questionId" open="(" separator="," close=")">
-                #{questionId}
-            </foreach>
-        </if>
-    </select>
-
-    <select id="getTagsByNameIfExist">
+    <select id="getTagsByNames">
         select *
         from tags
         where name in
@@ -57,8 +29,7 @@
         </foreach>
     </select>
 
-
-    <delete id="deleteQuestionTagByQuestionId">
+    <delete id="deleteQuestionTag">
         delete
         from question_tags
         where question_id = #{questionId};

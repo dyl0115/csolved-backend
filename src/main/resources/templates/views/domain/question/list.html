@@ -27,9 +27,9 @@
                 
                 <!--질문글 리스트-->
                 <div class="space-y-4">
-                    <div th:each="summary : *{questionSummaries}"
+                    <div th:each="question : *{questions}"
                          class="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-400 transition-all duration-200">
-                        <div th:with="question=${summary.question}, tags=${summary.tags}">
+                        <div th:with="question=${question}, tags=${question.tags}">
                             <a th:href="@{'/questions/' + ${question.id}}" class="block p-6">
                                 <div class="flex items-start justify-between">
                                     <div class="flex-1">

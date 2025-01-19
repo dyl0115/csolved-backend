@@ -19,4 +19,5 @@ mybatis:
 logging:
   level:
     root: INFO
+    store.csolved.csolved.domain.question.mapper: TRACE
 

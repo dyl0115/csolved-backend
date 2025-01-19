@@ -2,18 +2,19 @@ package store.csolved.csolved.common.filter;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
-public class FilterRequest
+public class Filtering
 {
     private String filterType;
     private Long filterValue;
 
-    public static FilterRequest create(String filterType,
-                                       Long filterValue)
+    public static Filtering create(String filterType,
+                                   Long filterValue)
     {
-        return FilterRequest.builder()
+        return Filtering.builder()
                 .filterType(filterType)
                 .filterValue(filterValue)
                 .build();

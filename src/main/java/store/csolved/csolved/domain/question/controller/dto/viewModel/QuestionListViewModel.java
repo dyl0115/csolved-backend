@@ -2,9 +2,9 @@ package store.csolved.csolved.domain.question.controller.dto.viewModel;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.common.page.PageDetailDTO;
-import store.csolved.csolved.domain.category.service.dto.CategoryDetailDTO;
-import store.csolved.csolved.domain.question.service.dto.QuestionSummaryDTO;
+import store.csolved.csolved.common.page.Pagination;
+import store.csolved.csolved.domain.category.service.dto.CategoryDTO;
+import store.csolved.csolved.domain.question.entity.Question;
 
 import java.util.List;
 
@@ -12,18 +12,18 @@ import java.util.List;
 @Builder
 public class QuestionListViewModel
 {
-    private PageDetailDTO page;
-    private List<CategoryDetailDTO> categories;
-    private List<QuestionSummaryDTO> questionSummaries;
+    private Pagination page;
+    private List<CategoryDTO> categories;
+    private List<Question> questions;
 
-    public static QuestionListViewModel from(PageDetailDTO page,
-                                             List<CategoryDetailDTO> categories,
-                                             List<QuestionSummaryDTO> questionSummaries)
+    public static QuestionListViewModel of(Pagination page,
+                                           List<CategoryDTO> categories,
+                                           List<Question> questions)
     {
         return QuestionListViewModel.builder()
                 .page(page)
                 .categories(categories)
-                .questionSummaries(questionSummaries)
+                .questions(questions)
                 .build();
     }
 }

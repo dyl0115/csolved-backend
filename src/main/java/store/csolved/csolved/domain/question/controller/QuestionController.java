@@ -10,18 +10,18 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.auth.etc.annotation.LoginUser;
-import store.csolved.csolved.common.filter.FilterRequest;
+import store.csolved.csolved.common.filter.Filtering;
 import store.csolved.csolved.common.search.SearchInfo;
-import store.csolved.csolved.common.search.SearchRequest;
-import store.csolved.csolved.common.sort.SortType;
+import store.csolved.csolved.common.search.Searching;
+import store.csolved.csolved.common.sort.Sorting;
 import store.csolved.csolved.common.filter.FilterInfo;
 import store.csolved.csolved.common.sort.SortInfo;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.common.page.PageInfo;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
-import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateViewModel;
-import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailViewModel;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateVM;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailVM;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionListViewModel;
 import store.csolved.csolved.domain.question.facade.QuestionFacade;
 import store.csolved.csolved.domain.user.User;
@@ -30,7 +30,7 @@ import store.csolved.csolved.domain.user.User;
 @Controller
 public class QuestionController
 {
-    public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "views/question/create";
+    public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "views/domain/question/create";
     public final static String VIEWS_QUESTION_LIST = "views/domain/question/list";
     public final static String VIEWS_QUESTION_DETAIL = "views/question/detail";
 
@@ -39,12 +39,12 @@ public class QuestionController
     @LoginRequest
     @GetMapping("/questions")
     public String getQuestions(@PageInfo Long page,
-                               @SortInfo SortType sortInfo,
-                               @FilterInfo FilterRequest filterInfo,
-                               @SearchInfo SearchRequest searchInfo,
+                               @SortInfo Sorting sort,
+                               @FilterInfo Filtering filter,
+                               @SearchInfo Searching search,
                                Model model)
     {
-        QuestionListViewModel viewModel = questionFacade.getQuestions(page, sortInfo, filterInfo, searchInfo);
+        QuestionListViewModel viewModel = questionFacade.getQuestions(page, sort, filter, search);
         model.addAttribute("questionListViewModel", viewModel);
         return VIEWS_QUESTION_LIST;
     }
@@ -54,28 +54,27 @@ public class QuestionController
     public String getQuestion(@PathVariable Long questionId,
                               Model model)
     {
-        QuestionDetailViewModel viewModel = questionFacade.getQuestion(questionId);
+        QuestionDetailVM questionVM = questionFacade.getQuestion(questionId);
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-        model.addAttribute("questionDetails", viewModel);
+        model.addAttribute("questionDetails", questionVM);
         return VIEWS_QUESTION_DETAIL;
     }
 
     @LoginRequest
     @GetMapping("/questions/create")
-    public String getQuestionCreateForm(Model model)
+    public String initSave(Model model)
     {
-        QuestionCreateUpdateViewModel createViewModel = questionFacade.getQuestionCreateUpdateViewModel();
-        model.addAttribute("questionViewModel", createViewModel);
-        model.addAttribute("questionCreateForm", QuestionCreateUpdateForm.empty());
+        QuestionCreateUpdateVM viewModel = questionFacade.initCreate();
+        model.addAttribute("questionCreateVM", viewModel);
+        model.addAttribute("createForm", QuestionCreateUpdateForm.empty());
         return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
     }
 
     @LoginRequest
     @PostMapping("/questions/create")
-    public String processCreateForm(@LoginUser User user,
-                                    @Valid @ModelAttribute("questionCreateForm") QuestionCreateUpdateForm form,
-                                    BindingResult result)
+    public String processSave(@Valid @ModelAttribute("createForm") QuestionCreateUpdateForm form,
+                              BindingResult result)
     {
         if (result.hasErrors())
         {
@@ -83,51 +82,50 @@ public class QuestionController
         }
         else
         {
-            questionFacade.saveQuestion(user.getId(), form);
+            questionFacade.save(form);
             return "redirect:/questions?page=1";
         }
     }
 
     @LoginRequest
     @GetMapping("/questions/{questionId}/edit-form")
-    public String initUpdateForm(@PathVariable Long questionId,
-                                 Model model)
+    public String initUpdate(@PathVariable Long questionId,
+                             Model model)
     {
-        QuestionCreateUpdateForm questionUpdateForm = questionFacade.getQuestionUpdateForm(questionId);
+        QuestionCreateUpdateForm questionUpdateForm = questionFacade.initUpdate(questionId);
         model.addAttribute("questionEditForm", questionUpdateForm);
         return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
     }
 
     @LoginRequest
     @PutMapping("/questions/{questionId}")
-    public String processUpdateForm(@LoginUser User user,
-                                    @PathVariable("questionId") Long questionId,
-                                    @Valid @ModelAttribute("questionEditForm") QuestionCreateUpdateForm form,
-                                    BindingResult result)
+    public String processUpdate(@PathVariable("questionId") Long questionId,
+                                @Valid @ModelAttribute("questionEditForm") QuestionCreateUpdateForm form,
+                                BindingResult result)
     {
         if (result.hasErrors())
         {
             return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
         }
 
-        questionFacade.updateQuestion(questionId, user.getId(), form);
+        questionFacade.update(questionId, form);
         return "redirect:/questions?page=1";
     }
 
     @LoginRequest
     @DeleteMapping("/api/questions/{questionId}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Long questionId)
+    public ResponseEntity<Void> delete(@PathVariable Long questionId)
     {
-        questionFacade.deleteQuestion(questionId);
+        questionFacade.delete(questionId);
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     @LoginRequest
     @PostMapping("/api/questions/{questionId}/likes")
-    public ResponseEntity<Void> increaseLikes(@LoginUser User user,
-                                              @PathVariable Long questionId)
+    public ResponseEntity<Void> addLike(@LoginUser User user,
+                                        @PathVariable Long questionId)
     {
-        boolean valid = questionFacade.increaseQuestionLikes(questionId, user.getId());
+        boolean valid = questionFacade.addLike(questionId, user.getId());
 
         if (!valid)
         {

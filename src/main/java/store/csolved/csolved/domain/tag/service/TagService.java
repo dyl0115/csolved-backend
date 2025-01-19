@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
-import store.csolved.csolved.domain.tag.Tag;
-import store.csolved.csolved.domain.tag.dto.TagNameDTO;
+import store.csolved.csolved.domain.tag.entity.Tag;
 import store.csolved.csolved.domain.tag.mapper.TagMapper;
-import store.csolved.csolved.domain.tag.service.dto.QuestionTagNameRecord;
-import store.csolved.csolved.domain.tag.service.dto.TagNameRecord;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,68 +19,55 @@ public class TagService
 {
     private final TagMapper tagMapper;
 
-    public Map<Long, List<TagNameDTO>> getTags(List<Long> questionIds)
-    {
-        Map<Long, QuestionTagNameRecord> tags = tagMapper.getTagsByQuestionIdList(questionIds);
-        return TagNameDTO.from(tags);
-    }
-
-    public List<TagNameDTO> getTags(Long questionId)
-    {
-        List<TagNameRecord> tags = tagMapper.getTagsByQuestionId(questionId);
-        return TagNameDTO.from(tags);
-    }
-
     // 태그 저장
     @Transactional
-    public void saveTags(Long questionId, QuestionCreateUpdateForm form)
+    public void saveTags(Long questionId, List<Tag> tags)
     {
-        List<Tag> tags = createTags(questionId, form);
-
         List<Tag> existTags = filterExistTags(tags);
-        tagMapper.insertQuestionTags(existTags);
+        if (!existTags.isEmpty())
+        {
+            tagMapper.saveQuestionTags(questionId, existTags);
+        }
 
         List<Tag> newTags = filterNewTags(tags);
-        tagMapper.insertTags(newTags);
-        tagMapper.insertQuestionTags(newTags);
+        if (!newTags.isEmpty())
+        {
+            tagMapper.saveTags(newTags);
+            tagMapper.saveQuestionTags(questionId, newTags);
+        }
     }
 
     // 질문글 업데이트 시 태그도 업데이트
     @Transactional
-    public void updateTags(Long questionId, QuestionCreateUpdateForm form)
+    public void updateTags(Long questionId, List<Tag> tags)
     {
-        tagMapper.deleteQuestionTagByQuestionId(questionId);
-        saveTags(questionId, form);
+        tagMapper.deleteQuestionTag(questionId);
+        saveTags(questionId, tags);
     }
 
-    private List<Tag> createTags(Long questionId, QuestionCreateUpdateForm form)
+    private List<String> extractTagNames(List<Tag> tags)
     {
-        return form.getTags().stream()
-                .map(tagName -> Tag.create(questionId, tagName))
+        return tags.stream()
+                .map(Tag::getName)
                 .toList();
     }
 
     private List<Tag> filterExistTags(List<Tag> tags)
     {
-        List<String> tagNames = tags.stream()
-                .map(Tag::getName)
-                .toList();
-
-        return tagMapper.getTagsByNameIfExist(tagNames).stream()
-                .map(tag -> Tag.create(tag.getId(), tag.getName()))
-                .toList();
+        List<String> tagNames = extractTagNames(tags);
+        return tagMapper.getTagsByNames(tagNames);
     }
 
     private List<Tag> filterNewTags(List<Tag> tags)
     {
+        List<String> tagNames = extractTagNames(tags);
+
         List<Tag> existTags = filterExistTags(tags);
+        Set<String> existTagNames = new HashSet<>(extractTagNames(existTags));
 
-        Set<String> existTagNames = existTags.stream()
-                .map(Tag::getName)
-                .collect(Collectors.toSet());
-
-        return tags.stream()
-                .filter(tag -> !existTagNames.contains(tag.getName()))
+        return tagNames.stream()
+                .filter(name -> !existTagNames.contains(name))
+                .map(Tag::from)
                 .toList();
     }
 }

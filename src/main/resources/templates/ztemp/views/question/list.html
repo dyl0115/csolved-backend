@@ -16,7 +16,7 @@
                 <!-- 검색 결과 수 -->
                 <div class="flex items-center gap-2">
                     <span class="text-gray-500">총</span>
-                    <span th:text="*{questionSummaries.size()}"
+                    <span th:text="*{questions.size()}"
                           class="font-semibold text-gray-900 bg-white px-3 py-1 rounded-lg border border-gray-200">24</span>
                     <span class="text-gray-500">개의 질문</span>
                 </div>
@@ -33,9 +33,9 @@
             
             <!--질문 리스트 출력-->
             <div class="space-y-4">
-                <div th:each="questionSummary : *{questionSummaries}"
+                <div th:each="question : *{questions}"
                      class="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-400 transition-all duration-200">
-                    <div th:with="question=${questionSummary.question}, tags=${questionSummary.tags}">
+                    <div th:with="question=${questions.question}, tags=${question.tags}">
                         <a th:href="@{'/questions/' + ${question.id}}" class="block p-6">
                             <div class="flex items-start justify-between">
                                 <div class="flex-1">
@@ -76,7 +76,7 @@
                                     <span class="timeago"
                                           th:data-date="${question.createdAt}"
                                           th:text="${#temporals.format(question.createdAt, 'yyyy/MM/dd hh:mm')}">
-                            </span>
+                                    </span>
                                 </div>
                             </div>
                         </a>

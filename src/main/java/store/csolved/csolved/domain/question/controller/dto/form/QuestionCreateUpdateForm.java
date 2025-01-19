@@ -4,20 +4,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.question.service.dto.record.QuestionDetailRecord;
-import store.csolved.csolved.domain.tag.service.dto.TagNameRecord;
+import store.csolved.csolved.domain.question.entity.Question;
+import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static lombok.AccessLevel.PRIVATE;
-
 @Getter
-@AllArgsConstructor(access = PRIVATE)
 @Builder
 public class QuestionCreateUpdateForm
 {
@@ -27,6 +22,9 @@ public class QuestionCreateUpdateForm
 
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
+
+    @NotNull
+    private Long authorId;
 
     @NotNull(message = "실명/익명 여부를 선택해주세요.")
     private boolean anonymous;
@@ -42,32 +40,44 @@ public class QuestionCreateUpdateForm
         return new QuestionCreateUpdateForm(
                 "",
                 "",
+                null,
                 false,
                 null,
                 new ArrayList<>());
     }
 
-    public Question toQuestion(Long userId)
-    {
-        return Question.create(
-                null,
-                title,
-                content,
-                userId,
-                anonymous,
-                categoryId);
-    }
-
-    public static QuestionCreateUpdateForm from(QuestionDetailRecord question, List<TagNameRecord> tags)
+    public static QuestionCreateUpdateForm of(Question question)
     {
         return QuestionCreateUpdateForm.builder()
                 .title(question.getTitle())
                 .content(question.getContent())
+                .authorId(question.getAuthorId())
                 .anonymous(question.isAnonymous())
                 .categoryId(question.getCategoryId())
-                .tags(tags.stream()
-                        .map(TagNameRecord::getName)
+                .tags(question.getTags().stream()
+                        .map(Tag::getName)
                         .toList())
                 .build();
     }
+
+    public Question getQuestion()
+    {
+        return Question.builder()
+                .title(title)
+                .content(content)
+                .authorId(authorId)
+                .anonymous(anonymous)
+                .categoryId(categoryId)
+                .build();
+    }
+
+    public List<Tag> getTags()
+    {
+        return tags.stream()
+                .map(name -> Tag.builder()
+                        .name(name)
+                        .build())
+                .toList();
+    }
+
 }

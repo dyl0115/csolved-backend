@@ -13,7 +13,7 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class AnswerWithCommentsDTO
+public class AnswerWithComments
 {
     private Long id;
     private Long authorId;
@@ -23,10 +23,10 @@ public class AnswerWithCommentsDTO
     private LocalDateTime createdAt;
     private List<CommentDetailDTO> comments;
 
-    public static AnswerWithCommentsDTO from(AnswerDetailRecord answer,
-                                             List<CommentDetailRecord> comments)
+    public static AnswerWithComments from(AnswerDetailRecord answer,
+                                          List<CommentDetailRecord> comments)
     {
-        return AnswerWithCommentsDTO.builder()
+        return AnswerWithComments.builder()
                 .id(answer.getId())
                 .authorId(answer.getAuthorId())
                 .authorNickname(answer.getAuthorNickname())
@@ -37,8 +37,8 @@ public class AnswerWithCommentsDTO
                 .build();
     }
 
-    public static List<AnswerWithCommentsDTO> from(List<AnswerDetailRecord> answers,
-                                                   Map<Long, CommentDetailListRecord> commentMap)
+    public static List<AnswerWithComments> from(List<AnswerDetailRecord> answers,
+                                                Map<Long, CommentDetailListRecord> commentMap)
     {
         return answers.stream()
                 .map(
@@ -46,7 +46,7 @@ public class AnswerWithCommentsDTO
                         {
                             Long answerId = answer.getId();
                             List<CommentDetailRecord> comments = commentMap.get(answerId).getComments();
-                            return AnswerWithCommentsDTO.from(answer, comments);
+                            return AnswerWithComments.from(answer, comments);
                         }
                 ).toList();
     }

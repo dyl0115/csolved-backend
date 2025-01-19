@@ -7,23 +7,23 @@ import java.util.List;
 
 @Getter
 @Builder
-public class CategoryDetailDTO
+public class CategoryDTO
 {
     private Long id;
     private String name;
 
-    public static CategoryDetailDTO from(CategoryDetailRecord record)
+    public static CategoryDTO from(CategoryDetailRecord record)
     {
-        return CategoryDetailDTO.builder()
+        return CategoryDTO.builder()
                 .id(record.getId())
                 .name(record.getName())
                 .build();
     }
 
-    public static List<CategoryDetailDTO> from(List<CategoryDetailRecord> records)
+    public static List<CategoryDTO> from(List<CategoryDetailRecord> records)
     {
         return records.stream()
-                .map(CategoryDetailDTO::from)
+                .map(CategoryDTO::from)
                 .toList();
     }
 }

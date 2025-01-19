@@ -17,20 +17,20 @@ public class FilterRequestArgumentResovler implements HandlerMethodArgumentResol
     public boolean supportsParameter(MethodParameter parameter)
     {
         boolean hasFilterInfoAnnotation = parameter.hasParameterAnnotation(FilterInfo.class);
-        boolean isFilterRequestType = parameter.getParameterType().equals(FilterRequest.class);
+        boolean isFilterRequestType = parameter.getParameterType().equals(Filtering.class);
         return hasFilterInfoAnnotation && isFilterRequestType;
     }
 
     @Override
-    public FilterRequest resolveArgument(MethodParameter parameter,
-                                         ModelAndViewContainer mavContainer,
-                                         NativeWebRequest webRequest,
-                                         WebDataBinderFactory binderFactory)
+    public Filtering resolveArgument(MethodParameter parameter,
+                                     ModelAndViewContainer mavContainer,
+                                     NativeWebRequest webRequest,
+                                     WebDataBinderFactory binderFactory)
     {
         String filterType = webRequest.getParameter(FILTER_TYPE_PARAMETER_NAME);
         String filterValue = webRequest.getParameter(FILTER_VALUE_PARAMETER_NAME);
 
-        if (filterValue == null) return FilterRequest.create(filterType, 0L);
-        return FilterRequest.create(filterType, Long.parseLong(filterValue));
+        if (filterValue == null) return Filtering.create(filterType, 0L);
+        return Filtering.create(filterType, Long.parseLong(filterValue));
     }
 }

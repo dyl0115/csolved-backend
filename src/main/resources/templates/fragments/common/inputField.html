@@ -31,7 +31,7 @@
                     <div th:class="${'p-2 rounded-lg shadow-sm ' +
                                      (#fields.hasErrors(name) ?
                                       'border border-red-500 focus-within:border-red-500' :
-                                      'border border-gray-300 focus-within:border-blue-500')}">
+                                      'border border-white-300 focus-within:border-blue-500')}">
                         <div class="flex flex-wrap items-center">
                             <div th:id="${name + '-tagContainer'}" class="flex flex-wrap gap-2">
                                 <!-- 태그들이 동적으로 추가될 영역 -->
@@ -54,90 +54,90 @@
                     <div class="text-red-500 text-sm mt-1" th:errors="*{__${name}__}">에러 메시지</div>
                 </th:block>
             </div>
-        </th:block>
-        
-        <!-- Tag Manager Script -->
-        <script th:fragment="tagManagerScript">
-            class TagManager {
-                constructor(containerId) {
-                    this.tags = [];
-                    this.tagInput = document.getElementById(containerId + '-tagInput');
-                    this.tagContainer = document.getElementById(containerId + '-tagContainer');
-                    this.hiddenTags = document.getElementById(containerId + '-hiddenTags');
+            
+            <!-- Tag Manager Script -->
+            <script th:fragment="tagManagerScript">
+                class TagManager {
+                    constructor(containerId) {
+                        this.tags = [];
+                        this.tagInput = document.getElementById(containerId + '-tagInput');
+                        this.tagContainer = document.getElementById(containerId + '-tagContainer');
+                        this.hiddenTags = document.getElementById(containerId + '-hiddenTags');
 
-                    if (this.tagInput && this.tagContainer && this.hiddenTags) {
-                        this.bindEvents();
+                        if (this.tagInput && this.tagContainer && this.hiddenTags) {
+                            this.bindEvents();
 
-                        // 초기 태그값이 있다면 로드
-                        if (this.hiddenTags.value) {
-                            this.tags = this.hiddenTags.value.split(',').filter(tag => tag.trim() !== '');
+                            // 초기 태그값이 있다면 로드
+                            if (this.hiddenTags.value) {
+                                this.tags = this.hiddenTags.value.split(',').filter(tag => tag.trim() !== '');
+                                this.render();
+                            }
+                        }
+                    }
+
+                    bindEvents() {
+                        this.tagInput.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter' || e.key === ',') {
+                                e.preventDefault();
+                                this.addTag();
+                            } else if (e.key === 'Backspace' && this.tagInput.value === '' && this.tags.length > 0) {
+                                this.removeTag(this.tags.length - 1);
+                            }
+                        });
+                    }
+
+                    addTag() {
+                        const value = this.tagInput.value.trim();
+                        if (value !== '' && !this.tags.includes(value)) {
+                            this.tags.push(value);
+                            this.tagInput.value = '';
                             this.render();
                         }
                     }
-                }
 
-                bindEvents() {
-                    this.tagInput.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ',') {
-                            e.preventDefault();
-                            this.addTag();
-                        } else if (e.key === 'Backspace' && this.tagInput.value === '' && this.tags.length > 0) {
-                            this.removeTag(this.tags.length - 1);
-                        }
-                    });
-                }
-
-                addTag() {
-                    const value = this.tagInput.value.trim();
-                    if (value !== '' && !this.tags.includes(value)) {
-                        this.tags.push(value);
-                        this.tagInput.value = '';
+                    removeTag(index) {
+                        this.tags.splice(index, 1);
                         this.render();
                     }
-                }
 
-                removeTag(index) {
-                    this.tags.splice(index, 1);
-                    this.render();
-                }
+                    render() {
+                        // Update hidden input
+                        this.hiddenTags.value = this.tags.join(',');
 
-                render() {
-                    // Update hidden input
-                    this.hiddenTags.value = this.tags.join(',');
+                        // Clear and rebuild tag elements
+                        this.tagContainer.innerHTML = '';
 
-                    // Clear and rebuild tag elements
-                    this.tagContainer.innerHTML = '';
+                        this.tags.forEach((tag, index) => {
+                            const tagElement = document.createElement('span');
+                            tagElement.className = 'inline-flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm';
 
-                    this.tags.forEach((tag, index) => {
-                        const tagElement = document.createElement('span');
-                        tagElement.className = 'inline-flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm';
+                            const tagText = document.createElement('span');
+                            tagText.textContent = tag;
 
-                        const tagText = document.createElement('span');
-                        tagText.textContent = tag;
+                            const removeButton = document.createElement('button');
+                            removeButton.type = 'button';
+                            removeButton.className = 'ml-2 text-blue-600 hover:text-blue-800';
+                            removeButton.textContent = '×';
+                            removeButton.onclick = () => this.removeTag(index);
 
-                        const removeButton = document.createElement('button');
-                        removeButton.type = 'button';
-                        removeButton.className = 'ml-2 text-blue-600 hover:text-blue-800';
-                        removeButton.textContent = '×';
-                        removeButton.onclick = () => this.removeTag(index);
-
-                        tagElement.appendChild(tagText);
-                        tagElement.appendChild(removeButton);
-                        this.tagContainer.appendChild(tagElement);
-                    });
-                }
-            }
-
-            // Initialize all tag managers on page load
-            document.addEventListener('DOMContentLoaded', () => {
-                const tagContainers = document.querySelectorAll('[id$="-container"]');
-                tagContainers.forEach(container => {
-                    if (container.id.endsWith('-container')) {
-                        const baseId = container.id.replace('-container', '');
-                        new TagManager(baseId);
+                            tagElement.appendChild(tagText);
+                            tagElement.appendChild(removeButton);
+                            this.tagContainer.appendChild(tagElement);
+                        });
                     }
+                }
+
+                // Initialize all tag managers on page load
+                document.addEventListener('DOMContentLoaded', () => {
+                    const tagContainers = document.querySelectorAll('[id$="-container"]');
+                    tagContainers.forEach(container => {
+                        if (container.id.endsWith('-container')) {
+                            const baseId = container.id.replace('-container', '');
+                            new TagManager(baseId);
+                        }
+                    });
                 });
-            });
-        </script>
+            </script>
+        </th:block>
     </body>
 </html>
