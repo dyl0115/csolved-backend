@@ -44,7 +44,6 @@ public class SearchRequestArgumentResolver implements HandlerMethodArgumentResol
         SearchType searchType = SEARCH_TYPE_MAP.getOrDefault(requestedSearchType, SearchType.NONE);
 
         String searchValue = webRequest.getParameter(SEARCH_VALUE_PARAMETER_NAME);
-        System.out.println("argumentResolver " + searchValue);
         return SearchRequest.create(searchType.name(), searchValue);
     }
 }

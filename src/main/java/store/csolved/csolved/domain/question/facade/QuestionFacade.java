@@ -38,7 +38,7 @@ public class QuestionFacade
     // 질문글, 질문글의 태그 저장.
     public void saveQuestion(Long userId, QuestionCreateUpdateForm form)
     {
-        Long questionIdSaved = questionService.saveQuestion(userId, form);
+        Long questionIdSaved = questionService.save(userId, form);
         tagService.saveTags(questionIdSaved, form);
     }
 
@@ -52,20 +52,20 @@ public class QuestionFacade
     // 질문글 업데이트 시 기존 질문글 제공
     public QuestionCreateUpdateForm getQuestionUpdateForm(Long questionId)
     {
-        return questionService.getQuestionUpdateForm(questionId);
+        return questionService.prepareUpdate(questionId);
     }
 
     // 질문글 업데이트
     @Transactional
     public void updateQuestion(Long questionId, Long userId, QuestionCreateUpdateForm form)
     {
-        questionService.updateQuestion(questionId, userId, form);
+        questionService.update(questionId, userId, form);
         tagService.updateTags(questionId, form);
     }
 
     public boolean increaseQuestionLikes(Long questionId, Long userId)
     {
-        return questionService.increaseLike(questionId, userId);
+        return questionService.addLike(questionId, userId);
     }
 
     public void deleteQuestion(Long questionId)
@@ -80,7 +80,7 @@ public class QuestionFacade
                                               SearchRequest search)
     {
         // DB에서 질문글 개수를 가져옴.
-        Long filteredQuestionCount = questionService.getQuestionsCount(filter, search);
+        Long filteredQuestionCount = questionService.countQuestions(filter, search);
 
         // 사용자가 요청한 페이지 번호, 질문글 개수를 사용하여 페이지 정보를 생성.
         PageDetailDTO pageInfo = PageDetailDTO.create(
@@ -102,16 +102,16 @@ public class QuestionFacade
         List<QuestionSummaryDTO> questionSummaries = QuestionSummaryDTO.from(pagedQuestions, questionTagsMap);
 
         // 카테고리 정보를 모두 가져옴.
-        List<CategoryDetailDTO> sidebarCategories = categoryService.getAllCategories();
+        List<CategoryDetailDTO> categories = categoryService.getAllCategories();
 
         // 모든 데이터를 사용하여 viewModel 생성 후 반환
-        return QuestionListViewModel.from(pageInfo, sidebarCategories, questionSummaries);
+        return QuestionListViewModel.from(pageInfo, categories, questionSummaries);
     }
 
     // 상세 질문글, 태그, 답변, 댓글 조회
     public QuestionDetailViewModel getQuestion(Long questionId)
     {
-        QuestionDetailDTO question = questionService.getQuestionWithViewIncrease(questionId);
+        QuestionDetailDTO question = questionService.viewQuestion(questionId);
         List<TagNameDTO> tags = tagService.getTags(questionId);
         List<AnswerWithCommentsDTO> answers = answerService.getAnswersWithComments(questionId);
 

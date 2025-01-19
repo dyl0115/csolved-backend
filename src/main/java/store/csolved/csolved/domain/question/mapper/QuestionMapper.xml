@@ -4,24 +4,14 @@
 
 <mapper namespace="store.csolved.csolved.domain.question.mapper.QuestionMapper">
 
-    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id">
-        insert into questions(user_id,
-                              anonymous,
-                              title,
-                              content,
-                              category_id,
-                              views,
-                              deleted_at)
-        values (#{authorId},
-                #{anonymous},
-                #{title},
-                #{content},
-                #{categoryId},
-                #{views},
-                #{deletedAt});
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into questions(user_id, anonymous, title, content,
+                              category_id, views, deleted_at)
+        values (#{authorId}, #{anonymous}, #{title},
+                #{content}, #{categoryId}, #{views}, #{deletedAt});
     </insert>
 
-    <update id="updateQuestion">
+    <update id="update">
         update questions
         set anonymous   = #{question.anonymous},
             title       = #{question.title},
@@ -30,7 +20,7 @@
         where id = #{questionId};
     </update>
 
-    <select id="getQuestionsCount">
+    <select id="countQuestions">
         select count(q.id)
         from questions q
         left join category c on q.category_id = c.id
@@ -93,26 +83,26 @@
         where q.id = #{questionId};
     </select>
 
-    <update id="softDeleteQuestionByQuestionId">
+    <update id="softDelete">
         update questions
         set deleted_at = current_timestamp
         where id = #{questionId};
     </update>
 
-    <select id="existUserInQuestionLikes">
+    <select id="hasUserLiked">
         select exists(select 1
                       from question_likes
                       where user_id = #{authorId}
                         and question_id = #{questionId});
     </select>
 
-    <update id="increaseLikesInQuestions">
+    <update id="incrementLikes">
         update questions
         set likes = likes + 1
         where id = #{questionId};
     </update>
 
-    <insert id="insertUserInQuestionLikes">
+    <insert id="addUserLike">
         insert into question_likes(question_id, user_id)
         values (#{questionId}, #{authorId});
     </insert>

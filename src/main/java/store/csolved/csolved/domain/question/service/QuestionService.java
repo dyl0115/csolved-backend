@@ -24,9 +24,9 @@ public class QuestionService
     private final QuestionMapper questionMapper;
     private final TagMapper tagMapper;
 
-    public Long getQuestionsCount(FilterRequest filter, SearchRequest search)
+    public Long countQuestions(FilterRequest filter, SearchRequest search)
     {
-        return questionMapper.getQuestionsCount(
+        return questionMapper.countQuestions(
                 filter.getFilterType(),
                 filter.getFilterValue(),
                 search.getSearchType(),
@@ -52,7 +52,7 @@ public class QuestionService
 
     // 질문글의 조회수를 1만큼 올리고, 질문 상세를 보여줌.
     @Transactional
-    public QuestionDetailDTO getQuestionWithViewIncrease(Long questionId)
+    public QuestionDetailDTO viewQuestion(Long questionId)
     {
         questionMapper.increaseView(questionId);
         QuestionDetailRecord question = questionMapper.getQuestionDetail(questionId);
@@ -60,44 +60,44 @@ public class QuestionService
     }
 
     // 기존 질문글의 데이터를 수정폼에 담아줌.
-    public QuestionCreateUpdateForm getQuestionUpdateForm(Long questionId)
+    public QuestionCreateUpdateForm prepareUpdate(Long questionId)
     {
         QuestionDetailRecord question = questionMapper.getQuestionDetail(questionId);
         List<TagNameRecord> tags = tagMapper.getTagsByQuestionId(questionId);
-
         return QuestionCreateUpdateForm.from(question, tags);
     }
 
     @Transactional
-    public Long saveQuestion(Long userId, QuestionCreateUpdateForm form)
+    public Long save(Long userId, QuestionCreateUpdateForm form)
     {
         Question question = form.toQuestion(userId);
-        questionMapper.insertQuestion(question);
+        questionMapper.insert(question);
         return question.getId();
     }
 
     @Transactional
-    public void updateQuestion(Long questionId, Long userId, QuestionCreateUpdateForm form)
+    public void update(Long questionId, Long userId, QuestionCreateUpdateForm form)
     {
         Question question = form.toQuestion(userId);
-        questionMapper.updateQuestion(questionId, question);
+        questionMapper.update(questionId, question);
     }
 
     @Transactional
     public void deleteQuestion(Long questionId)
     {
-        questionMapper.softDeleteQuestionByQuestionId(questionId);
+        questionMapper.softDelete(questionId);
     }
 
     @Transactional
-    public boolean increaseLike(Long questionId, Long userId)
+    public boolean addLike(Long questionId, Long userId)
     {
-        boolean alreadyLiked = questionMapper.existUserInQuestionLikes(questionId, userId);
+        if (questionMapper.hasUserLiked(questionId, userId))
+        {
+            return false;
+        }
 
-        if (alreadyLiked) return false;
-
-        questionMapper.insertUserInQuestionLikes(questionId, userId);
-        questionMapper.increaseLikesInQuestions(questionId);
+        questionMapper.addUserLike(questionId, userId);
+        questionMapper.incrementLikes(questionId);
         return true;
     }
 }
