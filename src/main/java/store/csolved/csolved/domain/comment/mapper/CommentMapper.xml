@@ -3,38 +3,45 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.comment.mapper.CommentMapper">
-    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
-        insert into comments(answer_id,
-                             user_id,
-                             is_anonymous,
-                             content,
-                             created_at,
-                             deleted_at)
-        values (#{answerId},
-                #{userId},
-                #{anonymous},
-                #{content},
-                #{createdAt},
-                #{deletedAt});
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into comments(answer_id, user_id, anonymous,
+                             content, created_at, deleted_at)
+        values (#{answerId}, #{userId}, #{anonymous},
+                #{content}, #{createdAt}, #{deletedAt});
     </insert>
 
-    <select id="findAllCommentsByAnswerId">
-        select c.id,
-               c.answer_id,
-               c.user_id,
-               c.is_anonymous,
-               u.nickname,
-               c.content,
-               c.created_at
-        from comments as c
-                 left join users as u on c.user_id = u.id
-        where c.answer_id = #{answerId}
-          and c.deleted_at IS NULL;
+    <resultMap id="answerCommentMap" type="store.csolved.csolved.domain.comment.entity.AnswerCommentMap">
+        <id property="answerId" column="answer_id"/>
+        <collection property="comments" javaType="java.util.ArrayList"
+                    ofType="store.csolved.csolved.domain.comment.entity.Comment">
+            <id property="id" column="id"/>
+            <result property="authorId" column="author_id"/>
+            <result property="authorNickname" column="author_nickname"/>
+            <result property="anonymous" column="anonymous"/>
+            <result property="content" column="content"/>
+            <result property="createdAt" column="created_at"/>
+        </collection>
+    </resultMap>
+
+    <select id="getComments" resultMap="answerCommentMap">
+        select c.*,
+        u.id author_id,
+        u.nickname author_nickname
+        from comments c
+        left join users u on u.id = c.user_id
+        <if test="answerIds != null and answerIds.size() > 0">
+            where c.answer_id in
+            <foreach collection="answerIds" item="answerId" open="(" separator="," close=")">
+                #{answerId}
+            </foreach>
+        </if>
     </select>
 
-    <delete id="deleteCommentByCommentId">
+    <delete id="delete">
         delete
         from comments
         where id = #{commentId}
     </delete>
+
 </mapper>

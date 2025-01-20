@@ -4,116 +4,145 @@
 
 <mapper namespace="store.csolved.csolved.domain.question.mapper.QuestionMapper">
 
-    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="id">
-        insert into questions(author_id,
-                              anonymous,
-                              title,
-                              content,
-                              category_id,
-                              views,
-                              deleted_at)
-        values (#{authorId},
-                #{anonymous},
-                #{title},
-                #{content},
-                #{categoryId},
-                #{views},
-                #{deletedAt});
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into questions(user_id, anonymous, title,
+                              content, category_id)
+        values (#{authorId}, #{anonymous}, #{title},
+                #{content}, #{categoryId});
     </insert>
 
-    <update id="updateQuestion">
+    <update id="update">
         update questions
-        set anonymous   = #{anonymous},
-            title       = #{title},
-            content     = #{content},
-            category_id = #{categoryId}
-        where id = #{id};
+        set anonymous   = #{question.anonymous},
+            title       = #{question.title},
+            content     = #{question.content},
+            category_id = #{question.categoryId}
+        where id = #{questionId};
     </update>
 
-    <select id="findAllQuestionsCount">
-        select count(*)
-        from questions
-        where deleted_at is null;
+    <select id="countQuestions">
+        select count(q.id)
+        from questions q
+        left join category c on q.category_id = c.id
+        left join users u on q.user_id = u.id
+        where q.deleted_at is null
+        <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
+            and q.category_id = #{filterValue}
+        </if>
+        <choose>
+            <when test="searchType == 'TITLE' and searchKeyword != null and searchKeyword != ''">
+                and q.title like concat('%', #{searchKeyword}, '%')
+            </when>
+            <when test="searchType == 'AUTHOR' and searchKeyword != null and searchKeyword != ''">
+                and u.nickname like #{searchKeyword}
+                and q.anonymous is false
+            </when>
+        </choose>
     </select>
 
-    <select id="findAllQuestions" resultMap="QuestionDtoMap">
-        SELECT q.*,
-               u.nickname  AS author_nickname,
-               COUNT(a.id) AS answer_count,
-               c.name      AS category_name,
-               t.name      AS tag_name
-        FROM (SELECT *
-              FROM questions
-              WHERE deleted_at IS NULL
-              ORDER BY created_at DESC
-              LIMIT #{offset} , #{rowCount}) AS q
-                 LEFT JOIN
-             users AS u ON q.author_id = u.id
-                 LEFT JOIN
-             answers AS a ON q.id = a.question_id
-                 LEFT JOIN
-             category AS c ON q.category_id = c.id
-                 LEFT JOIN
-             question_tags AS qt ON q.id = qt.question_id
-                 LEFT JOIN
-             tags AS t ON qt.tag_id = t.id
-        GROUP BY q.id, t.id;
-    </select>
-
-    <resultMap id="QuestionDtoMap" type="store.csolved.csolved.domain.question.controller.dto.QuestionDto" autoMapping="true">
-        <id property="questionId" column="id"/>
+    <resultMap id="QuestionResultMap" type="store.csolved.csolved.domain.question.entity.Question">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
         <result property="authorId" column="author_id"/>
-        <collection property="tags" ofType="java.lang.String">
-            <result column="tag_name"/>
+        <result property="authorNickname" column="author_nickname"/>
+        <result property="anonymous" column="anonymous"/>
+        <result property="content" column="content"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="views" column="views"/>
+        <result property="likes" column="likes"/>
+        <result property="answerCount" column="answer_count"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="tags" ofType="store.csolved.csolved.domain.tag.entity.Tag">
+            <id property="id" column="tag_id"/>
+            <result property="name" column="tag_name"/>
         </collection>
     </resultMap>
 
-    <select id="findQuestionByQuestionId" resultMap="QuestionDtoMap">
-        SELECT q.*,
-               u.nickname  AS author_nickname,
-               COUNT(a.id) AS answer_count,
-               c.name      AS category_name,
-               t.name      AS tag_name
-        FROM questions AS q
-                 LEFT JOIN
-             users AS u ON q.author_id = u.id
-                 LEFT JOIN
-             answers AS a ON q.id = a.question_id
-                 LEFT JOIN
-             category AS c ON q.category_id = c.id
-                 LEFT JOIN
-             question_tags AS qt ON q.id = qt.question_id
-                 LEFT JOIN
-             tags AS t ON qt.tag_id = t.id
-        where q.id = #{questionId}
-        group by q.id, t.id;
+    <select id="getQuestions" resultMap="QuestionResultMap">
+        SELECT
+        q.id id,
+        q.title title,
+        q.anonymous anonymous,
+        q.content content,
+        q.views views,
+        q.likes likes,
+        q.answer_count answer_count,
+        q.created_at created_at,
+        u.id author_id,
+        u.nickname author_nickname,
+        c.id category_id,
+        c.name category_name,
+        t.id tag_id,
+        t.name tag_name
+        FROM (
+        SELECT *
+        FROM questions
+        WHERE deleted_at IS NULL
+        <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
+            AND category_id = #{filterValue}
+        </if>
+        <if test="searchType == 'TITLE' and searchKeyword != null and searchKeyword != ''">
+            AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        ORDER BY
+        <if test="sortType == 'RECENT'">created_at DESC</if>
+        <if test="sortType == 'VIEWS'">views DESC</if>
+        <if test="sortType == 'LIKES'">likes DESC</if>
+        <if test="sortType == 'ANSWERS'">answer_count DESC</if>
+        LIMIT #{offset}, #{size}
+        ) q
+        LEFT JOIN users u ON u.id = q.user_id
+        <if test="searchType == 'AUTHOR' and searchKeyword != null and searchKeyword != ''">
+            AND u.nickname LIKE #{searchKeyword}
+            AND q.anonymous IS FALSE
+        </if>
+        LEFT JOIN category c ON c.id = q.category_id
+        LEFT JOIN question_tags qt ON qt.question_id = q.id
+        LEFT JOIN tags t ON t.id = qt.tag_id
     </select>
 
-    <update id="softDeleteQuestionByQuestionId">
+    <select id="getQuestion" resultMap="QuestionResultMap">
+        select q.*,
+               u.id       author_id,
+               u.nickname author_nickname,
+               c.id       category_id,
+               c.name     category_name,
+               t.id       tag_id,
+               t.name     tag_name
+        from questions q
+                 left join users u on q.user_id = u.id
+                 left join category c on q.category_id = c.id
+                 left join question_tags qt on q.id = qt.question_id
+                 left join tags t on t.id = qt.tag_id
+        where q.id = #{questionId};
+    </select>
+
+    <update id="softDelete">
         update questions
         set deleted_at = current_timestamp
         where id = #{questionId};
     </update>
 
-    <select id="existUserInQuestionLikes">
+    <select id="hasUserLiked">
         select exists(select 1
                       from question_likes
                       where user_id = #{authorId}
                         and question_id = #{questionId});
     </select>
 
-    <update id="increaseLikesInQuestions">
+    <update id="incrementLikes">
         update questions
         set likes = likes + 1
         where id = #{questionId};
     </update>
 
-    <insert id="insertUserInQuestionLikes">
+    <insert id="addUserLike">
         insert into question_likes(question_id, user_id)
         values (#{questionId}, #{authorId});
     </insert>
 
-    <update id="increaseViewInQuestions">
+    <update id="increaseView">
         update questions
         set views = views + 1
         where id = #{questionId};

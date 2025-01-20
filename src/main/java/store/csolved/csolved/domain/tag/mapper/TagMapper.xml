@@ -3,35 +3,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.tag.mapper.TagMapper">
-    <insert id="insertTag" useGeneratedKeys="true" keyProperty="id">
-        insert
-        ignore into tags(name)
-        values(
-        #{name}
-        );
+
+    <insert id="saveTags" useGeneratedKeys="true" keyProperty="id">
+        insert into tags(name)
+        values
+        <foreach collection="tags" item="tag" separator=",">
+            (#{tag.name})
+        </foreach>
     </insert>
 
-    <select id="findTagsByNames">
+    <insert id="saveQuestionTags">
+        insert into question_tags(question_id, tag_id)
+        values
+        <foreach collection="tags" item="tag" separator=",">
+            (#{questionId}, #{tag.id})
+        </foreach>
+    </insert>
+
+    <select id="getTagsByNames">
         select *
         from tags
         where name in
-        <foreach collection="list" item="name" open="(" separator="," close=")">
-            #{name}
+        <foreach collection="tagNames" item="tagName" open="(" separator="," close=")">
+            #{tagName}
         </foreach>
     </select>
 
-    <select id="findAllTagNames">
-        select name
-        from tags
-    </select>
-
-    <insert id="insertQuestionAndTag">
-        insert
-        into question_tags(question_id, tag_id)
-        values (#{questionId}, #{tagId});
-    </insert>
-
-    <delete id="deleteQuestionAndTagByQuestionId">
+    <delete id="deleteQuestionTag">
         delete
         from question_tags
         where question_id = #{questionId};

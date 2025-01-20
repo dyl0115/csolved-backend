@@ -3,13 +3,12 @@ package store.csolved.csolved.domain.question.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.common.page.Page;
-import store.csolved.csolved.domain.question.Question;
-import store.csolved.csolved.domain.question.controller.dto.request.QuestionCreateForm;
-import store.csolved.csolved.domain.question.controller.dto.QuestionDto;
-import store.csolved.csolved.domain.question.controller.dto.QuestionEditForm;
+import store.csolved.csolved.common.filter.Filtering;
+import store.csolved.csolved.common.page.Pagination;
+import store.csolved.csolved.common.search.Searching;
+import store.csolved.csolved.common.sort.Sorting;
 import store.csolved.csolved.domain.question.mapper.QuestionMapper;
-import store.csolved.csolved.domain.tag.service.TagService;
+import store.csolved.csolved.domain.question.entity.Question;
 
 import java.util.List;
 
@@ -18,60 +17,74 @@ import java.util.List;
 public class QuestionService
 {
     private final QuestionMapper questionMapper;
-    private final TagService tagService;
 
-    public Long provideAllQuestionsCount()
+    public Long countQuestions(Filtering filter, Searching search)
     {
-        return questionMapper.findAllQuestionsCount();
+        return questionMapper.countQuestions(
+                filter.getFilterType(),
+                filter.getFilterValue(),
+                search.getSearchType(),
+                search.getKeyword());
     }
 
-    public List<QuestionDto> provideQuestions(Page page)
+    public Question getQuestion(Long questionId)
     {
-        return questionMapper.findAllQuestions(page);
+        return questionMapper.getQuestion(questionId);
     }
 
-    public QuestionDto provideQuestion(Long questionId)
+    public List<Question> getQuestions(Pagination page,
+                                       Sorting sort,
+                                       Filtering filter,
+                                       Searching search)
     {
-        return questionMapper.findQuestionByQuestionId(questionId);
+        return questionMapper.getQuestions(
+                page.getOffset(),
+                page.getSize(),
+                sort.name(),
+                filter.getFilterType(),
+                filter.getFilterValue(),
+                search.getSearchType(),
+                search.getKeyword());
+    }
+
+    // 질문글의 조회수를 1만큼 올리고, 질문 상세를 보여줌.
+    @Transactional
+    public Question viewQuestion(Long questionId)
+    {
+        questionMapper.increaseView(questionId);
+        return questionMapper.getQuestion(questionId);
     }
 
     @Transactional
-    public void saveQuestion(QuestionCreateForm form)
+    public Long save(Question question)
     {
-        Question question = form.toQuestion();
-        questionMapper.insertQuestion(question);
-        tagService.saveQuestionTags(question.getId(), form.getTags());
+        questionMapper.save(question);
+        return question.getId();
     }
 
     @Transactional
-    public void updateQuestion(QuestionEditForm form)
+    public Long update(Long questionId, Question question)
     {
-        Question question = form.toQuestion();
-        questionMapper.updateQuestion(question);
-        tagService.updateQuestionTags(question.getId(), form.getTags());
+        questionMapper.update(questionId, question);
+        return questionId;
     }
 
     @Transactional
-    public void deleteQuestion(Long questionId)
+    public void delete(Long questionId)
     {
-        questionMapper.softDeleteQuestionByQuestionId(questionId);
-    }
-
-    public boolean hasAlreadyLiked(Long questionId, Long userId)
-    {
-        return questionMapper.existUserInQuestionLikes(questionId, userId);
+        questionMapper.softDelete(questionId);
     }
 
     @Transactional
-    public void increaseLike(Long questionId, Long userId)
+    public boolean addLike(Long questionId, Long userId)
     {
-        questionMapper.insertUserInQuestionLikes(questionId, userId);
-        questionMapper.increaseLikesInQuestions(questionId);
-    }
+        if (questionMapper.hasUserLiked(questionId, userId))
+        {
+            return false;
+        }
 
-    @Transactional
-    public void increaseView(Long questionId)
-    {
-        questionMapper.increaseViewInQuestions(questionId);
+        questionMapper.addUserLike(questionId, userId);
+        questionMapper.incrementLikes(questionId);
+        return true;
     }
 }

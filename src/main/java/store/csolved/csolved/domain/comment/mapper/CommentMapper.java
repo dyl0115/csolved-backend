@@ -1,17 +1,20 @@
 package store.csolved.csolved.domain.comment.mapper;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
-import store.csolved.csolved.domain.comment.Comment;
-import store.csolved.csolved.domain.comment.dto.CommentDto;
+import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.entity.AnswerCommentMap;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CommentMapper
 {
-    void insertComment(Comment comment);
+    void save(Comment comment);
 
-    List<CommentDto> findAllCommentsByAnswerId(Long answerId);
+    @MapKey("answerId")
+    Map<Long, AnswerCommentMap> getComments(List<Long> answerIds);
 
-    void deleteCommentByCommentId(Long commentId);
+    void delete(Long commentId);
 }

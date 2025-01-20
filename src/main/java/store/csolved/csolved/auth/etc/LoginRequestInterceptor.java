@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import store.csolved.csolved.auth.annotation.LoginRequest;
+import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.user.User;
 
 
@@ -38,7 +38,7 @@ public class LoginRequestInterceptor implements HandlerInterceptor
         User user = (User) httpSession.getAttribute(LOGIN_USER_SESSION_KEY);
         if (user == null)
         {
-            response.sendRedirect("/auth");
+            response.sendRedirect("/auth/signIn");
             return false;
         }
 
@@ -47,7 +47,10 @@ public class LoginRequestInterceptor implements HandlerInterceptor
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
+    public void postHandle(HttpServletRequest request,
+                           HttpServletResponse response,
+                           Object handler,
+                           ModelAndView modelAndView) throws Exception
     {
         // modelAndView가 null인 경우, 즉 api 요청인 경우 아무런 데이터도 넘겨주지 않고 지나간다.
 

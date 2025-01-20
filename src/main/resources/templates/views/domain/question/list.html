@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/user-layout :: user-template(${user},~{::title},~{::section})}">
+    <head>
+        <meta charset="UTF-8">
+        <title>testView</title>
+    </head>
+    <body>
+        <section>
+            <div class="max-w-7xl mx-auto mt-8 px-4" th:object="${questionListViewModel}">
+                <!-- 검색 바 -->
+                <th:block th:replace="~{fragments/common/search/searching-bar :: searching-bar}"/>
+                
+                <div class="flex items-center mb-8 gap-4">
+                    
+                    <!-- 필터 바 -->
+                    <th:block th:replace="~{fragments/common/search/filtering-bar::filtering-bar(*{categories})}"/>
+                    
+                    <!-- 정렬 바 -->
+                    <th:block th:replace="~{fragments/common/search/sorting-bar::sorting-bar}"/>
+                    
+                    <!-- 질문하기 버튼 -->
+                    <div class="ml-auto">
+                        <th:block
+                                th:replace="~{fragments/common/button::link(icon='plus-circle', color='blue', text='질문하기', href='/questions/create')}"/>
+                    </div>
+                </div>
+                
+                <!--질문글 리스트-->
+                <div class="space-y-4">
+                    <div th:each="question : *{questions}"
+                         class="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-400 transition-all duration-200">
+                        <div th:with="question=${question}, tags=${question.tags}">
+                            <a th:href="@{'/questions/' + ${question.id}}" class="block p-6">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <h2 class="text-xl font-bold text-gray-900 mb-3" th:text="${question.title}">질문
+                                                                                                                     제목</h2>
+                                        <div class="flex flex-wrap gap-2 mb-4">
+                                <span th:each="tag : ${tags}"
+                                      class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium hover:bg-blue-100 transition-colors duration-200"
+                                      th:text="${tag.name}">
+                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center text-sm text-gray-500 gap-4">
+                                    <div class="flex items-center">
+                                        <i data-lucide="book-text" class="w-4 h-4 mr-1"></i>
+                                        <span th:text="${question.categoryName}"></span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i data-lucide="message-circle" class="w-4 h-4 mr-1"></i>
+                                        <span th:text="|${question.answerCount}개|"></span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i data-lucide="heart" class="w-4 h-4 mr-1"></i>
+                                        <span th:text="${question.likes}"></span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i data-lucide="eye" class="w-4 h-4 mr-1"></i>
+                                        <span th:text="${question.views}"></span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i data-lucide="user" class="w-4 h-4 mr-1"></i>
+                                        <span th:text="${question.anonymous ? '익명' : question.authorNickname}"></span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i data-lucide="clock" class="w-4 h-4 mr-1"></i>
+                                        <span class="timeago"
+                                              th:data-date="${question.createdAt}"
+                                              th:text="${#temporals.format(question.createdAt, 'yyyy/MM/dd hh:mm')}">
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <th:block th:replace="~{fragments/common/search/paging-bar::paging-bar(*{page})}"/>
+            </div>
+        </section>
+    </body>
+</html>

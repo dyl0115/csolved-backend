@@ -1,31 +1,30 @@
 package store.csolved.csolved.domain.answer.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import store.csolved.csolved.domain.answer.Answer;
-import store.csolved.csolved.domain.answer.dto.AnswerDto;
+import store.csolved.csolved.domain.answer.entity.Answer;
 
 import java.util.List;
 
 @Mapper
 public interface AnswerMapper
 {
-    void insertAnswer(Answer answer);
+    Long save(Answer answer);
 
-    List<AnswerDto> findAllAnswersByQuestionId(Long questionId);
+    List<Answer> getAnswers(Long questionId);
 
-    Double findAverageScoreByAnswerId(Long answerId);
+    Answer getAnswer(Long answerId);
 
-    Long findVoterCountByAnswerId(Long answerId);
+    boolean hasAlreadyScored(Long answerId, Long userId);
 
-    boolean existUserInAnswerRatings(Long answerId, Long userId);
+    void score(Long answerId, Long score);
 
-    void insertAnswerScore(Long answerId, Long userId, int score);
+    void saveVoter(Long answerId, Long userId, Long score);
 
-    boolean existCommentInAnswer(Long answerId);
+    boolean existComments(Long answerId);
 
-    void softDeleteAnswer(Long answerId);
+    void hardDeleteScores(Long answerId);
 
-    void hardDeleteAnswerRatings(Long answerId);
+    void softDelete(Long answerId);
 
-    void hardDeleteAnswer(Long answerId);
+    void hardDelete(Long answerId);
 }

@@ -3,131 +3,76 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.answer.mapper.AnswerMapper">
-    <insert id="insertAnswer" useGeneratedKeys="true" keyProperty="id">
-        insert into answers(question_id,
-                            user_id,
-                            is_anonymous,
-                            content,
-                            created_at,
-                            deleted_at)
-        values (#{questionId},
-                #{userId},
-                #{anonymous},
-                #{content},
-                #{createdAt},
-                #{deletedAt});
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into answers(question_id, author_id, anonymous,
+                            content, created_at)
+        values (#{questionId}, #{authorId}, #{anonymous},
+                #{content}, #{createdAt});
     </insert>
 
-    <select id="findAllAnswersByQuestionId" resultMap="answerDtoMap">
-        select a.id            as answer_id,
-               a.question_id   as question_id,
-               a.user_id       as user_id,
-               a.is_anonymous  as answer_is_anonymous,
-               avg(ar.score)   as answer_average_score,
-               count(ar.score) as answer_voter_count,
-               qu.nickname     as answer_user_nickname,
-               a.content       as answer_content,
-               a.created_at    as answer_created_at,
-
-               c.id            as comment_id,
-               c.answer_id     as comment_answer_id,
-               c.user_id       as comment_user_id,
-               c.is_anonymous  as comment_is_anonymous,
-               au.nickname     as comment_user_nickname,
-               c.content       as comment_content,
-               c.created_at    as comment_created_at
-        from answers as a
-                 left join answer_ratings as ar on a.id = ar.answer_id
-                 left join users as qu on a.user_id = qu.id
-                 left join comments as c on a.id = c.answer_id
-                 left join users as au on au.id = c.user_id
-        where a.question_id = #{questionId}
-        group by a.id,
-                 a.question_id,
-                 a.user_id,
-                 a.is_anonymous,
-                 qu.nickname,
-                 a.content,
-                 a.created_at,
-                 c.id,
-                 c.answer_id,
-                 c.user_id,
-                 c.is_anonymous,
-                 au.nickname,
-                 c.content,
-                 c.created_at
-        order by a.created_at;
+    <select id="getAnswers">
+        select a.id,
+               u.id       author_id,
+               u.nickname author_nickname,
+               a.anonymous,
+               a.content,
+               a.total_score,
+               a.voter_count,
+               a.created_at
+        from answers a
+                 left join users u on u.id = a.author_id
+        where question_id = #{questionId};
     </select>
 
-    <resultMap id="answerDtoMap" type="store.csolved.csolved.domain.answer.dto.AnswerDto">
-        <id property="answerId" column="answer_id"/>
-        <result property="questionId" column="question_id"/>
-        <result property="userId" column="user_id"/>
-        <result property="authorNickname" column="answer_user_nickname"/>
-        <result property="anonymous" column="answer_is_anonymous"/>
-        <result property="content" column="answer_content"/>
-        <result property="averageScore" column="answer_average_score"/>
-        <result property="voterCount" column="answer_voter_count"/>
-        <result property="createdAt" column="answer_created_at"/>
-        <collection property="comments" ofType="store.csolved.csolved.domain.comment.dto.CommentDto">
-            <id property="commentId" column="comment_id"/>
-            <result property="answerId" column="comment_answer_id"/>
-            <result property="authorId" column="comment_user_id"/>
-            <result property="anonymous" column="comment_is_anonymous"/>
-            <result property="authorNickname" column="comment_user_nickname"/>
-            <result property="content" column="comment_content"/>
-            <result property="createdAt" column="comment_created_at"/>
-        </collection>
-    </resultMap>
+    <select id="getAnswer">
+        select a.*,
+               u.id       author_id,
+               u.nickname author_nickname
+        from answers a
+                 left join users u on u.id = a.author_id
+        where a.id = #{answerId};
 
-    <select id="findAverageScoreByAnswerId">
-        select coalesce(avg(score), 0)
-        from answer_ratings
-        where answer_id = #{answerId};
     </select>
 
-    <select id="findVoterCountByAnswerId">
-        select coalesce(count(*), 0)
-        from answer_ratings
-        where answer_id = #{answerId};
-    </select>
-
-    <select id="existUserInAnswerRatings">
+    <select id="hasAlreadyScored">
         select exists(select 1
                       from answer_ratings
                       where answer_id = #{answerId}
                         and user_id = #{userId});
     </select>
 
-    <insert id="insertAnswerScore">
-        insert into answer_ratings(answer_id,
-                                   user_id,
-                                   score)
-        values (#{answerId},
-                #{userId},
-                #{score});
+    <update id="score">
+        update answers
+        set total_score = total_score + #{score},
+            voter_count = voter_count + 1
+        where id = #{answerId};
+    </update>
+
+    <insert id="saveVoter">
+        insert into answer_ratings(answer_id, user_id, score)
+        values (#{answerId}, #{userId}, #{score});
     </insert>
 
-    <select id="existCommentInAnswer">
+    <select id="existComments">
         select exists(select 1
                       from comments
                       where answer_id = #{answerId})
     </select>
 
-    <update id="softDeleteAnswer">
+    <delete id="hardDeleteScores">
+        delete
+        from answer_ratings
+        where answer_id = #{answerId};
+    </delete>
+
+    <update id="softDelete">
         update answers
         set content    = '[삭제된 답변입니다.]',
             deleted_at = current_timestamp
         where id = #{answerId}
     </update>
 
-    <delete id="hardDeleteAnswerRatings">
-        delete
-        from answer_ratings
-        where answer_id = #{answerId};
-    </delete>
-
-    <delete id="hardDeleteAnswer">
+    <delete id="hardDelete">
         delete
         from answers
         where id = #{answerId}

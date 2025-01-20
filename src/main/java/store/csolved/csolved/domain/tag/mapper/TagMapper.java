@@ -1,20 +1,21 @@
 package store.csolved.csolved.domain.tag.mapper;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
-import store.csolved.csolved.domain.tag.Tag;
+import org.apache.ibatis.annotations.Param;
+import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface TagMapper
 {
-    void insertTag(Tag tag);
+    void saveTags(List<Tag> tags);
 
-    List<Tag> findTagsByNames(List<String> name);
+    void saveQuestionTags(Long questionId, List<Tag> tags);
 
-    List<String> findAllTagNames();
+    List<Tag> getTagsByNames(List<String> tagNames);
 
-    void insertQuestionAndTag(Long questionId, Long tagId);
-
-    void deleteQuestionAndTagByQuestionId(Long questionId);
+    void deleteQuestionTag(Long questionId);
 }

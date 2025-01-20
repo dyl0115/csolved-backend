@@ -8,7 +8,7 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import store.csolved.csolved.auth.annotation.LoginUser;
+import store.csolved.csolved.auth.etc.annotation.LoginUser;
 import store.csolved.csolved.auth.service.AuthService;
 import store.csolved.csolved.domain.user.User;
 
