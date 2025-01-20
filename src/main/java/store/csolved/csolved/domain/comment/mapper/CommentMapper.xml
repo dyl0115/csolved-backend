@@ -5,24 +5,16 @@
 <mapper namespace="store.csolved.csolved.domain.comment.mapper.CommentMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into comments(answer_id,
-                             user_id,
-                             anonymous,
-                             content,
-                             created_at,
-                             deleted_at)
-        values (#{answerId},
-                #{userId},
-                #{anonymous},
-                #{content},
-                #{createdAt},
-                #{deletedAt});
+        insert into comments(answer_id, user_id, anonymous,
+                             content, created_at, deleted_at)
+        values (#{answerId}, #{userId}, #{anonymous},
+                #{content}, #{createdAt}, #{deletedAt});
     </insert>
 
-    <resultMap id="answerCommentMap" type="store.csolved.csolved.domain.comment.service.dto.CommentDetailListRecord">
+    <resultMap id="answerCommentMap" type="store.csolved.csolved.domain.comment.entity.AnswerComments">
         <id property="answerId" column="answer_id"/>
         <collection property="comments" javaType="java.util.ArrayList"
-                    ofType="store.csolved.csolved.domain.comment.service.dto.CommentDetailRecord">
+                    ofType="store.csolved.csolved.domain.comment.entity.Comment">
             <id property="id" column="id"/>
             <result property="authorId" column="author_id"/>
             <result property="authorNickname" column="author_nickname"/>

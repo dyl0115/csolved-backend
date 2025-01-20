@@ -9,7 +9,7 @@ import store.csolved.csolved.domain.answer.service.dto.AnswerWithComments;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
 import store.csolved.csolved.domain.answer.service.dto.record.AnswerDetailRecord;
 import store.csolved.csolved.domain.comment.mapper.CommentMapper;
-import store.csolved.csolved.domain.comment.service.dto.CommentDetailListRecord;
+import store.csolved.csolved.domain.comment.entity.AnswerComments;
 import store.csolved.csolved.domain.user.User;
 
 import java.util.List;
@@ -38,8 +38,8 @@ public class AnswerService
 
         List<Long> idList = answers.stream().map(AnswerDetailRecord::getId).toList();
         System.out.println("?? " + idList);
-        
-        Map<Long, CommentDetailListRecord> comments = commentMapper.getComments(idList);
+
+        Map<Long, AnswerComments> comments = commentMapper.getComments(idList);
         System.out.println("?? " + comments);
         return AnswerWithComments.from(answers, comments);
     }

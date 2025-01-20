@@ -47,7 +47,10 @@ public class LoginRequestInterceptor implements HandlerInterceptor
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception
+    public void postHandle(HttpServletRequest request,
+                           HttpServletResponse response,
+                           Object handler,
+                           ModelAndView modelAndView) throws Exception
     {
         // modelAndView가 null인 경우, 즉 api 요청인 경우 아무런 데이터도 넘겨주지 않고 지나간다.
 

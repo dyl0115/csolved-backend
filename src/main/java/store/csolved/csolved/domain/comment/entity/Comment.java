@@ -1,13 +1,14 @@
-package store.csolved.csolved.domain.comment.service.dto;
+package store.csolved.csolved.domain.comment.entity;
 
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class CommentDetailRecord
+@Builder
+public class Comment
 {
     private Long id;
     private Long authorId;

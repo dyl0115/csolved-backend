@@ -42,7 +42,7 @@
                             </div>
                             
                             <!--수정/삭제 버튼-->
-                            <div class="flex gap-2" th:if="${user.id == authorId}">
+                            <div class="flex gap-2" th:if="${user.id == questionDetails.question.authorId}">
                                 <a th:href="@{/templates/question/{id}/edit-form(id=*{id})}"
                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                                     <i data-lucide="edit" class="w-4 h-4"></i>
@@ -111,7 +111,8 @@
             
             <!-- 답변 목록 -->
             <section class="space-y-6">
-                <h2 class="text-xl font-bold text-gray-900 mb-4" th:text="|답변 ${#lists.size(questionDetails.answers)}개|">답변 0개</h2>
+                <h2 class="text-xl font-bold text-gray-900 mb-4"
+                    th:text="|답변 ${#lists.size(questionDetails.answers)}개|">답변 0개</h2>
                 
                 <div th:each="answer : ${questionDetails.answers}"
                      class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -129,7 +130,7 @@
                                     </div>
                                     <div class="text-sm text-gray-500">
                                             <span class="timeago" th:data-date="*{createdAt}"
-                                                  th:text="${#temporals.format(*{createdAt}, 'yyyy/MM/dd hh:mm')}">
+                                                  th:text="${#temporals.format(createdAt, 'yyyy/MM/dd hh:mm')}">
                                             </span>
                                     </div>
                                 </div>
@@ -153,8 +154,7 @@
                                     <!--                                    <span class="ml-2 text-sm text-gray-600"-->
                                     <!--                                          th:text="|*{averageScore} (*{voterCount}명)|"></span>-->
                                 </div>
-                                
-                                <div th:if="${user.id == *{authorId}}">
+                                <div th:if="${user.id == answer.authorId}">
                                     <button th:onclick="'deleteAnswer(' + *{id} + ')'"
                                             class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition-colors">
                                         <i data-lucide="trash-2" class="w-4 h-4"></i>
@@ -185,10 +185,10 @@
                                                               th:text="*{anonymous} ? '익명' : *{authorNickname}">댓글작성자</span>
                                                     <span class="text-sm text-gray-500 timeago"
                                                           th:data-date="*{createdAt}"
-                                                          th:text="${#temporals.format(*{createdAt}, 'yyyy/MM/dd hh:mm')}">
+                                                          th:text="${#temporals.format(createdAt, 'yyyy/MM/dd hh:mm')}">
                                                         </span>
                                                 </div>
-                                                <button th:if="${user.id == *{authorId}}"
+                                                <button th:if="${user.id == comment.authorId}"
                                                         th:onclick="'deleteComment(' + *{id} + ')'"
                                                         class="text-gray-400 hover:text-red-600">
                                                     <i data-lucide="x" class="w-4 h-4"></i>
