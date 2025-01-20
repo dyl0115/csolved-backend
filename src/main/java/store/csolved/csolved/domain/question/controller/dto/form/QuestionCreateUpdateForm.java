@@ -67,6 +67,9 @@ public class QuestionCreateUpdateForm
                 .content(content)
                 .authorId(authorId)
                 .anonymous(anonymous)
+                .views(0L)
+                .likes(0L)
+                .answerCount(0L)
                 .categoryId(categoryId)
                 .build();
     }
