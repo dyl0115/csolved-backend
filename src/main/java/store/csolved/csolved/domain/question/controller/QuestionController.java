@@ -54,8 +54,7 @@ public class QuestionController
     public String getQuestion(@PathVariable Long questionId,
                               Model model)
     {
-        QuestionDetailVM questionVM = questionFacade.getQuestion(questionId);
-        model.addAttribute("questionDetails", questionVM);
+        model.addAttribute("questionDetails", questionFacade.getQuestion(questionId));
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         return VIEWS_QUESTION_DETAIL;
@@ -100,7 +99,7 @@ public class QuestionController
     @LoginRequest
     @PutMapping("/questions/{questionId}")
     public String processUpdate(@PathVariable("questionId") Long questionId,
-                                @Valid @ModelAttribute("questionEditForm") QuestionCreateUpdateForm form,
+                                @Valid @ModelAttribute("questionCreateUpdateForm") QuestionCreateUpdateForm form,
                                 BindingResult result)
     {
         if (result.hasErrors())

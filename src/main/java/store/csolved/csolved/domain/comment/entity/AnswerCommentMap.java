@@ -7,7 +7,7 @@ import java.util.List;
 
 @ToString
 @Getter
-public class AnswerComments
+public class AnswerCommentMap
 {
     private Long answerId;
     private List<Comment> comments;

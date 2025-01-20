@@ -11,7 +11,7 @@
                 #{content}, #{createdAt}, #{deletedAt});
     </insert>
 
-    <resultMap id="answerCommentMap" type="store.csolved.csolved.domain.comment.entity.AnswerComments">
+    <resultMap id="answerCommentMap" type="store.csolved.csolved.domain.comment.entity.AnswerCommentMap">
         <id property="answerId" column="answer_id"/>
         <collection property="comments" javaType="java.util.ArrayList"
                     ofType="store.csolved.csolved.domain.comment.entity.Comment">

@@ -87,17 +87,30 @@
         th:text="|답변 ${post.answerCount}개|">답변 0개</h2>
     
     <!--포스팅 댓글 작성 영역-->
-    <section id="answer-form" class="answer-create-form hidden mb-8" th:object="${answerCreateForm}">
+    <section id="answer-form"
+             class="answer-create-form mb-8"
+             th:classappend="${#fields.hasErrors('${answerCreateForm.*}')} ? '' : 'hidden'"
+             th:object="${answerCreateForm}">
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h2 class="text-lg font-bold text-gray-900 mb-4">답변 작성하기</h2>
             <form th:action="@{/{type}/{postId}/answers(type=${type}, postId=${post.id})}" method="POST">
                    
-                    <textarea
-                            th:field="*{content}"
-                            class="w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            rows="6"
-                            placeholder="답변을 입력하세요...">
-                    </textarea>
+                <textarea
+                        th:field="*{content}"
+                        th:class="${#fields.hasErrors('content')} ?
+                            'w-full p-4 border border-red-500 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500' :
+                            'w-full p-4 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500'"
+                        rows="6"
+                        placeholder="답변을 입력하세요...">
+                </textarea>
+                
+                <!-- 에러 메시지 표시 -->
+                <div th:if="${#fields.hasErrors('content')}"
+                     class="mt-2 text-sm text-red-600"
+                     th:errors="*{content}">
+                </div>
+                
+                <input type="hidden" name="authorId" th:value="${user.id}">
                 
                 <div class="flex items-center justify-between mt-4">
                     <div class="flex items-center gap-2">

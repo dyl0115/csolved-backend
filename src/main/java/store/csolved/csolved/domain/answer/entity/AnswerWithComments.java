@@ -1,10 +1,9 @@
-package store.csolved.csolved.domain.answer.service.dto;
+package store.csolved.csolved.domain.answer.entity;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.answer.service.dto.record.AnswerDetailRecord;
 import store.csolved.csolved.domain.comment.entity.Comment;
-import store.csolved.csolved.domain.comment.entity.AnswerComments;
+import store.csolved.csolved.domain.comment.entity.AnswerCommentMap;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -20,10 +19,12 @@ public class AnswerWithComments
     private String authorNickname;
     private boolean anonymous;
     private String content;
+    private Long total_score;
+    private Long voter_count;
     private LocalDateTime createdAt;
     private List<Comment> comments;
 
-    public static AnswerWithComments from(AnswerDetailRecord answer,
+    public static AnswerWithComments from(Answer answer,
                                           List<Comment> comments)
     {
         return AnswerWithComments.builder()
@@ -37,15 +38,15 @@ public class AnswerWithComments
                 .build();
     }
 
-    public static List<AnswerWithComments> from(List<AnswerDetailRecord> answers,
-                                                Map<Long, AnswerComments> commentMap)
+    public static List<AnswerWithComments> from(List<Answer> answers,
+                                                Map<Long, AnswerCommentMap> commentMap)
     {
         return answers.stream()
                 .map(
                         answer ->
                         {
                             Long answerId = answer.getId();
-                            AnswerComments answerComments = commentMap.getOrDefault(answerId, null);
+                            AnswerCommentMap answerComments = commentMap.getOrDefault(answerId, null);
                             if (answerComments != null)
                             {
                                 List<Comment> comments = commentMap.get(answerId).getComments();

@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.question.controller.dto.viewModel;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.answer.service.dto.AnswerWithComments;
+import store.csolved.csolved.domain.answer.entity.AnswerWithComments;
 import store.csolved.csolved.domain.question.entity.Question;
 
 import java.util.List;

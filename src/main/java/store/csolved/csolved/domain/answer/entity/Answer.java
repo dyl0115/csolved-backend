@@ -1,18 +1,22 @@
-package store.csolved.csolved.domain.answer.service.dto.record;
+package store.csolved.csolved.domain.answer.entity;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class AnswerDetailRecord
+@Builder
+public class Answer
 {
     private Long id;
+    private Long questionId;
     private Long authorId;
     private String authorNickname;
     private boolean anonymous;
     private String content;
+    private Long totalScore;
+    private Long voterCount;
     private LocalDateTime createdAt;
 }

@@ -3,14 +3,11 @@ package store.csolved.csolved.domain.answer.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.answer.Answer;
-import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
-import store.csolved.csolved.domain.answer.service.dto.AnswerWithComments;
+import store.csolved.csolved.domain.answer.entity.Answer;
+import store.csolved.csolved.domain.answer.entity.AnswerWithComments;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
-import store.csolved.csolved.domain.answer.service.dto.record.AnswerDetailRecord;
 import store.csolved.csolved.domain.comment.mapper.CommentMapper;
-import store.csolved.csolved.domain.comment.entity.AnswerComments;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.comment.entity.AnswerCommentMap;
 
 import java.util.List;
 import java.util.Map;
@@ -23,61 +20,52 @@ public class AnswerService
     private final CommentMapper commentMapper;
 
     @Transactional
-    public void saveAnswer(User user, AnswerCreateForm form)
+    public void save(Answer answer)
     {
-        form.setUserId(user.getId());
-        Answer answer = form.toAnswer();
-        answerMapper.insertAnswer(answer);
+        answerMapper.save(answer);
     }
 
     // 질문글에 대한 답변글들, 각각의 답변글에 대한 댓글들을 모두 반환.
     public List<AnswerWithComments> getAnswersWithComments(Long questionId)
     {
-        List<AnswerDetailRecord> answers = answerMapper.getAnswers(questionId);
-        System.out.println("?? " + answers);
-
-        List<Long> idList = answers.stream().map(AnswerDetailRecord::getId).toList();
-        System.out.println("?? " + idList);
-
-        Map<Long, AnswerComments> comments = commentMapper.getComments(idList);
-        System.out.println("?? " + comments);
-        return AnswerWithComments.from(answers, comments);
+        List<Answer> answers = answerMapper.getAnswers(questionId);
+        Map<Long, AnswerCommentMap> commentMap = commentMapper.getComments(extractIds(answers));
+        return AnswerWithComments.from(answers, commentMap);
     }
 
-    public boolean hasAlreadyRated(Long answerId, Long userId)
+    private List<Long> extractIds(List<Answer> answers)
     {
-        return answerMapper.existUserInAnswerRatings(answerId, userId);
+        return answers.stream()
+                .map(Answer::getId)
+                .toList();
     }
 
-    public Double findAverageScore(Long answerId)
+    public boolean hasAlreadyScored(Long answerId, Long userId)
     {
-        return answerMapper.findAverageScoreByAnswerId(answerId);
-    }
-
-    public Long findVoterCount(Long answerId)
-    {
-        return answerMapper.findVoterCountByAnswerId(answerId);
+        return answerMapper.hasAlreadyScored(answerId, userId);
     }
 
     @Transactional
-    public void rateAnswer(Long answerId, Long userId, Integer score)
+    public Answer score(Long answerId, Long userId, Long score)
     {
-        answerMapper.insertAnswerScore(answerId, userId, score);
+        answerMapper.score(answerId, score);
+        answerMapper.saveVoter(answerId, userId, score);
+        return answerMapper.getAnswer(answerId);
     }
 
     @Transactional
-    public void deleteAnswer(Long answerId)
+    public void delete(Long answerId)
     {
-        boolean commentsExist = answerMapper.existCommentInAnswer(answerId);
+        boolean commentsExist = answerMapper.existComments(answerId);
 
         if (commentsExist)
         {
-            answerMapper.softDeleteAnswer(answerId);
+            answerMapper.softDelete(answerId);
         }
         else
         {
-            answerMapper.hardDeleteAnswerRatings(answerId);
-            answerMapper.hardDeleteAnswer(answerId);
+            answerMapper.hardDeleteScores(answerId);
+            answerMapper.hardDelete(answerId);
         }
     }
 }

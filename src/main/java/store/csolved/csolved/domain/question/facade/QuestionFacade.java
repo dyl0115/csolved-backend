@@ -7,7 +7,7 @@ import store.csolved.csolved.common.filter.Filtering;
 import store.csolved.csolved.common.page.PaginationUtils;
 import store.csolved.csolved.common.search.Searching;
 import store.csolved.csolved.common.sort.Sorting;
-import store.csolved.csolved.domain.answer.service.dto.AnswerWithComments;
+import store.csolved.csolved.domain.answer.entity.AnswerWithComments;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.service.dto.CategoryDTO;
 import store.csolved.csolved.domain.category.service.CategoryService;
