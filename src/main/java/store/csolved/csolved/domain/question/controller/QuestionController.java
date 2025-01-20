@@ -32,7 +32,7 @@ public class QuestionController
 {
     public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "views/domain/question/create";
     public final static String VIEWS_QUESTION_LIST = "views/domain/question/list";
-    public final static String VIEWS_QUESTION_DETAIL = "views/question/detail";
+    public final static String VIEWS_QUESTION_DETAIL = "views/domain/question/detail";
 
     private final QuestionFacade questionFacade;
 
@@ -55,9 +55,9 @@ public class QuestionController
                               Model model)
     {
         QuestionDetailVM questionVM = questionFacade.getQuestion(questionId);
+        model.addAttribute("questionDetails", questionVM);
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-        model.addAttribute("questionDetails", questionVM);
         return VIEWS_QUESTION_DETAIL;
     }
 

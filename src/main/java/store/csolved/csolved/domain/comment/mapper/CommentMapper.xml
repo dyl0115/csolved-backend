@@ -4,7 +4,7 @@
 
 <mapper namespace="store.csolved.csolved.domain.comment.mapper.CommentMapper">
 
-    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into comments(answer_id,
                              user_id,
                              anonymous,
@@ -32,21 +32,21 @@
         </collection>
     </resultMap>
 
-    <select id="getCommentsByAnswerIds" resultMap="answerCommentMap">
+    <select id="getComments" resultMap="answerCommentMap">
         select c.*,
         u.id author_id,
         u.nickname author_nickname
         from comments c
         left join users u on u.id = c.user_id
-        <if test="list != null and list.size() > 0">
+        <if test="answerIds != null and answerIds.size() > 0">
             where c.answer_id in
-            <foreach collection="list" item="answerId" open="(" separator="," close=")">
+            <foreach collection="answerIds" item="answerId" open="(" separator="," close=")">
                 #{answerId}
             </foreach>
         </if>
     </select>
 
-    <delete id="deleteCommentByCommentId">
+    <delete id="delete">
         delete
         from comments
         where id = #{commentId}

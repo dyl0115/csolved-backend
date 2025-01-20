@@ -17,12 +17,12 @@ public class CommentService
     public void saveComment(User user, CommentCreateForm form)
     {
         form.setAuthorId(user.getId());
-        commentMapper.insertComment(form.toComment());
+        commentMapper.save(form.toComment());
     }
 
     @Transactional
     public void deleteComment(Long commentId)
     {
-        commentMapper.deleteCommentByCommentId(commentId);
+        commentMapper.delete(commentId);
     }
 }

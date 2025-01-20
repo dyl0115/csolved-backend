@@ -14,17 +14,11 @@ import static lombok.AccessLevel.PRIVATE;
 public class Answer
 {
     private final Long id;
-
     private final Long questionId;
-
     private final Long userId;
-
     private final boolean isAnonymous;
-
     private final String content;
-
     private final LocalDateTime createdAt;
-
     private final LocalDateTime deletedAt;
 
     public static Answer create(Long questionId,

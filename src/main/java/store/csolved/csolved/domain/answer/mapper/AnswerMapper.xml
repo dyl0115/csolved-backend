@@ -18,7 +18,7 @@
                 #{deletedAt});
     </insert>
 
-    <select id="getAnswersByQuestionId">
+    <select id="getAnswers">
         select a.id,
                u.id       author_id,
                u.nickname author_nickname,

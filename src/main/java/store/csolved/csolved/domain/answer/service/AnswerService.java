@@ -33,8 +33,14 @@ public class AnswerService
     // 질문글에 대한 답변글들, 각각의 답변글에 대한 댓글들을 모두 반환.
     public List<AnswerWithComments> getAnswersWithComments(Long questionId)
     {
-        List<AnswerDetailRecord> answers = answerMapper.getAnswersByQuestionId(questionId);
-        Map<Long, CommentDetailListRecord> comments = commentMapper.getCommentsByAnswerIds(answers.stream().map(AnswerDetailRecord::getId).toList());
+        List<AnswerDetailRecord> answers = answerMapper.getAnswers(questionId);
+        System.out.println("?? " + answers);
+
+        List<Long> idList = answers.stream().map(AnswerDetailRecord::getId).toList();
+        System.out.println("?? " + idList);
+        
+        Map<Long, CommentDetailListRecord> comments = commentMapper.getComments(idList);
+        System.out.println("?? " + comments);
         return AnswerWithComments.from(answers, comments);
     }
 

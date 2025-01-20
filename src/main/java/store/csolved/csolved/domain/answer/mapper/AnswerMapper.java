@@ -11,7 +11,7 @@ public interface AnswerMapper
 {
     void insertAnswer(Answer answer);
 
-    List<AnswerDetailRecord> getAnswersByQuestionId(Long questionId);
+    List<AnswerDetailRecord> getAnswers(Long questionId);
 
     Double findAverageScoreByAnswerId(Long answerId);
 

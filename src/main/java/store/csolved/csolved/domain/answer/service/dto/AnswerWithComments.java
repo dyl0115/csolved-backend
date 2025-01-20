@@ -8,6 +8,8 @@ import store.csolved.csolved.domain.comment.service.dto.CommentDetailListRecord;
 import store.csolved.csolved.domain.comment.service.dto.CommentDetailRecord;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +42,7 @@ public class AnswerWithComments
     public static List<AnswerWithComments> from(List<AnswerDetailRecord> answers,
                                                 Map<Long, CommentDetailListRecord> commentMap)
     {
-        return answers.stream()
+        answers.stream()
                 .map(
                         answer ->
                         {
@@ -49,5 +51,7 @@ public class AnswerWithComments
                             return AnswerWithComments.from(answer, comments);
                         }
                 ).toList();
+
+
     }
 }
