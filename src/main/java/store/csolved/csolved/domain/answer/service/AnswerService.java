@@ -7,10 +7,8 @@ import store.csolved.csolved.domain.answer.entity.Answer;
 import store.csolved.csolved.domain.answer.entity.AnswerWithComments;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
 import store.csolved.csolved.domain.comment.mapper.CommentMapper;
-import store.csolved.csolved.domain.comment.entity.AnswerCommentMap;
 
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -26,18 +24,9 @@ public class AnswerService
     }
 
     // 질문글에 대한 답변글들, 각각의 답변글에 대한 댓글들을 모두 반환.
-    public List<AnswerWithComments> getAnswersWithComments(Long questionId)
+    public List<Answer> getAnswers(Long questionId)
     {
-        List<Answer> answers = answerMapper.getAnswers(questionId);
-        Map<Long, AnswerCommentMap> commentMap = commentMapper.getComments(extractIds(answers));
-        return AnswerWithComments.from(answers, commentMap);
-    }
-
-    private List<Long> extractIds(List<Answer> answers)
-    {
-        return answers.stream()
-                .map(Answer::getId)
-                .toList();
+        return answerMapper.getAnswers(questionId);
     }
 
     public boolean hasAlreadyScored(Long answerId, Long userId)
