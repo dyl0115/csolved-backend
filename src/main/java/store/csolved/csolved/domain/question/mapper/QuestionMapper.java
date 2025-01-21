@@ -34,11 +34,15 @@ public interface QuestionMapper
     // 논리적으로 게시글을 삭제
     void softDelete(Long questionId);
 
+    void increaseAnswerCount(Long questionId);
+
+    void decreaseAnswerCount(Long questionId);
+
     // 질문-좋아요 테이블에 저장된 유저인지 체크
     boolean hasUserLiked(Long questionId, Long authorId);
 
     // 질문 테이블의 Likes 1증가
-    void incrementLikes(Long questionId);
+    void increaseLikes(Long questionId);
 
     // 질문-좋아요 테이블에 questionId, userId 저장 (중복 좋아요 방지)
     void addUserLike(Long questionId, Long authorId);

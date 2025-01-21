@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.answer.entity.Answer;
-import store.csolved.csolved.domain.answer.entity.AnswerWithComments;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
-import store.csolved.csolved.domain.comment.mapper.CommentMapper;
+import store.csolved.csolved.domain.question.mapper.QuestionMapper;
 
 import java.util.List;
 
@@ -15,12 +14,13 @@ import java.util.List;
 public class AnswerService
 {
     private final AnswerMapper answerMapper;
-    private final CommentMapper commentMapper;
+    private final QuestionMapper questionMapper;
 
     @Transactional
-    public void save(Answer answer)
+    public void saveAnswer(Answer answer)
     {
-        answerMapper.save(answer);
+        questionMapper.increaseAnswerCount(answer.getQuestionId());
+        answerMapper.saveAnswer(answer);
     }
 
     // 질문글에 대한 답변글들, 각각의 답변글에 대한 댓글들을 모두 반환.
@@ -29,16 +29,25 @@ public class AnswerService
         return answerMapper.getAnswers(questionId);
     }
 
-    public boolean hasAlreadyScored(Long answerId, Long userId)
+    public Long getScore(Long answerId, Long userId)
     {
-        return answerMapper.hasAlreadyScored(answerId, userId);
+        return answerMapper.getScore(answerId, userId);
     }
 
     @Transactional
-    public Answer score(Long answerId, Long userId, Long score)
+    public Answer saveScore(Long answerId, Long userId, Long score)
     {
-        answerMapper.score(answerId, score);
+        answerMapper.saveScore(answerId, score);
         answerMapper.saveVoter(answerId, userId, score);
+        return answerMapper.getAnswer(answerId);
+    }
+
+    @Transactional
+    public Answer updateScore(Long answerId, Long userId, Long score)
+    {
+        Long prevScore = answerMapper.getScore(answerId, userId);
+        answerMapper.updateScore(answerId, prevScore, score);
+        answerMapper.updateVoter(answerId, userId, score);
         return answerMapper.getAnswer(answerId);
     }
 
@@ -46,6 +55,8 @@ public class AnswerService
     public void delete(Long answerId)
     {
         boolean commentsExist = answerMapper.existComments(answerId);
+        Answer answer = answerMapper.getAnswer(answerId);
+        questionMapper.decreaseAnswerCount(answer.getQuestionId());
 
         if (commentsExist)
         {

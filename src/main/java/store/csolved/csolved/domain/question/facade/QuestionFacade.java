@@ -9,7 +9,7 @@ import store.csolved.csolved.common.search.Searching;
 import store.csolved.csolved.common.sort.Sorting;
 import store.csolved.csolved.domain.answer.entity.Answer;
 import store.csolved.csolved.domain.answer.service.AnswerService;
-import store.csolved.csolved.domain.category.service.dto.CategoryDTO;
+import store.csolved.csolved.domain.category.entity.Category;
 import store.csolved.csolved.domain.category.service.CategoryService;
 import store.csolved.csolved.common.page.Pagination;
 import store.csolved.csolved.domain.comment.entity.Comment;
@@ -47,7 +47,7 @@ public class QuestionFacade
     // 최초 질문글 작성 viewModel 제공
     public QuestionCreateUpdateVM initCreate()
     {
-        List<CategoryDTO> categories = categoryService.getCategories();
+        List<Category> categories = categoryService.getAll();
         return QuestionCreateUpdateVM.of(categories);
     }
 
@@ -90,7 +90,7 @@ public class QuestionFacade
         List<Question> questions = questionService.getQuestions(page, sort, filter, search);
 
         // 카테고리 정보를 모두 가져옴.
-        List<CategoryDTO> categories = categoryService.getCategories();
+        List<Category> categories = categoryService.getAll();
 
         // 모든 데이터를 사용하여 viewModel 생성 후 반환
         return QuestionListViewModel.of(page, categories, questions);

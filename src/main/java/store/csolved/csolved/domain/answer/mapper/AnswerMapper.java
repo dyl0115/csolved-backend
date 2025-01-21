@@ -8,15 +8,19 @@ import java.util.List;
 @Mapper
 public interface AnswerMapper
 {
-    Long save(Answer answer);
+    Long saveAnswer(Answer answer);
 
     List<Answer> getAnswers(Long questionId);
 
     Answer getAnswer(Long answerId);
 
-    boolean hasAlreadyScored(Long answerId, Long userId);
+    Long getScore(Long answerId, Long userId);
 
-    void score(Long answerId, Long score);
+    void saveScore(Long answerId, Long score);
+
+    void updateScore(Long answerId, Long oldScore, Long newScore);
+
+    void updateVoter(Long answerId, Long userId, Long score);
 
     void saveVoter(Long answerId, Long userId, Long score);
 

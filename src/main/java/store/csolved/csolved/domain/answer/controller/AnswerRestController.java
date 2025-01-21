@@ -19,18 +19,30 @@ public class AnswerRestController
 
     @LoginRequest
     @PostMapping("/{answerId}/score")
-    @ResponseStatus(HttpStatus.CREATED)
-    public AnswerScoreResponse score(@LoginUser User user,
-                                     @PathVariable Long answerId,
-                                     @RequestBody Long score)
+    @ResponseStatus(HttpStatus.OK)
+    public AnswerScoreResponse saveScore(@LoginUser User user,
+                                         @PathVariable Long answerId,
+                                         @RequestBody Long score)
     {
-        if (answerService.hasAlreadyScored(answerId, user.getId()))
+        Long prevScore = answerService.getScore(answerId, user.getId());
+        if (prevScore != null)
         {
-            throw new AlreadyScoredException("이미 평가한 답변입니다.");
+            return AnswerScoreResponse.duplicate(prevScore);
         }
 
-        Answer answer = answerService.score(answerId, user.getId(), score);
-        return AnswerScoreResponse.from(answer);
+        Answer answer = answerService.saveScore(answerId, user.getId(), score);
+        return AnswerScoreResponse.success(answer);
+    }
+
+    @LoginRequest
+    @PutMapping("/{answerId}/score")
+    @ResponseStatus(HttpStatus.OK)
+    public AnswerScoreResponse updateScore(@LoginUser User user,
+                                           @PathVariable Long answerId,
+                                           @RequestBody Long score)
+    {
+        Answer answer = answerService.updateScore(answerId, user.getId(), score);
+        return AnswerScoreResponse.success(answer);
     }
 
     @LoginRequest
@@ -39,14 +51,5 @@ public class AnswerRestController
     public void delete(@PathVariable Long answerId)
     {
         answerService.delete(answerId);
-    }
-
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public static class AlreadyScoredException extends RuntimeException
-    {
-        public AlreadyScoredException(String message)
-        {
-            super(message);
-        }
     }
 }

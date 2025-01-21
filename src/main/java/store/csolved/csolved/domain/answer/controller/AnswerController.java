@@ -2,24 +2,15 @@ package store.csolved.csolved.domain.answer.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.etc.annotation.LoginRequest;
-import store.csolved.csolved.auth.etc.annotation.LoginUser;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
-import store.csolved.csolved.domain.answer.entity.Answer;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.question.facade.QuestionFacade;
-import store.csolved.csolved.domain.question.service.QuestionService;
-import store.csolved.csolved.domain.user.User;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -43,7 +34,7 @@ public class AnswerController
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
             return VIEWS_QUESTION_DETAIL;
         }
-        answerService.save(form.toAnswer());
+        answerService.saveAnswer(form.toAnswer());
         return "redirect:/questions/" + questionId;
     }
 }
