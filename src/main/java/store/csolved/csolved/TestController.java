@@ -1,26 +1,35 @@
 package store.csolved.csolved;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.user.mapper.UserMapper;
+import org.springframework.web.bind.annotation.RestController;
+import store.csolved.csolved.domain.answer.entity.Answer;
+import store.csolved.csolved.domain.answer.service.AnswerService;
+import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.service.CommentService;
 
-@Controller
+import java.util.List;
+import java.util.Map;
+
+@RequiredArgsConstructor
+@RestController
 public class TestController
 {
-    @GetMapping("/view")
-    public String testView(Model model)
-    {
-        User user = User.create("dyl0115@naver.com",
-                "endyd132!!",
-                "Test User",
-                "company",
-                false);
+    private final AnswerService answerService;
+    private final CommentService commentService;
 
-        model.addAttribute("user", user);
-        return "/test-view";
+    @GetMapping("/test")
+    public Map<Long, List<Comment>> testView()
+    {
+        List<Answer> answers = answerService.getAnswers(2L);
+        return commentService.getComments(getIds(answers));
+    }
+
+    private List<Long> getIds(List<Answer> answers)
+    {
+        return answers.stream()
+                .map(Answer::getId)
+                .toList();
     }
 }

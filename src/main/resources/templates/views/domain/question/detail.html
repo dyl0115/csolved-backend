@@ -28,9 +28,9 @@
                                          th:text="*{anonymous} ? '익명' : *{authorNickname}">답변자
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                            <span class="timeago" th:data-date="*{createdAt}"
-                                                  th:text="${#temporals.format(createdAt, 'yyyy/MM/dd hh:mm')}">
-                                            </span>
+                                        <span class="timeago" th:data-date="*{createdAt}"
+                                              th:text="${#temporals.format(createdAt, 'yyyy/MM/dd hh:mm')}">
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -39,19 +39,21 @@
                             <div class="flex items-center gap-4">
                                 <div class="flex items-center" th:attr="data-answer-id=*{id}">
                                     <div class="flex gap-1">
+                                        
+                                        <!-- 별점 버튼-->
                                         <th:block th:each="i : ${#numbers.sequence(1, 5)}">
                                             <button type="button"
-                                                    th:onclick="|rateAnswer(*{id}, ${i})|"
+                                                    th:onclick="|handleScore(*{id}, ${i})|"
                                                     class="focus:outline-none transition-transform hover:scale-110"
-                                                    th:attr="data-rating=${i}">
-                                                <!--                                                <i data-lucide="star"-->
-                                                <!--                                                   th:class="|w-5 h-5 ${i <= answer.averageScore ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} transition-colors|">-->
-                                                <!--                                                </i>-->
+                                                    th:data-rating="${i}">
+                                                <i data-lucide="star"
+                                                   th:class="|w-5 h-5 ${i <= answer.averageScore ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'} transition-colors|">
+                                                </i>
                                             </button>
                                         </th:block>
                                     </div>
-                                    <!--                                    <span class="ml-2 text-sm text-gray-600"-->
-                                    <!--                                          th:text="|*{averageScore} (*{voterCount}명)|"></span>-->
+                                    <span th:text="|${#numbers.formatDecimal(answer.averageScore, 1, 1)} (${answer.voterCount}명)|"></span>
+                                
                                 </div>
                                 <div th:if="${user.id == answer.authorId}">
                                     <button th:onclick="'deleteAnswer(' + *{id} + ')'"
@@ -142,57 +144,72 @@
         </main>
         
         <script>
-            // Lucide 아이콘 초기화
-            lucide.createIcons();
-
-            // 별점 평가 함수
-            async function rateAnswer(answerId, rating) {
+            async function handleScore(answerId, score) {
                 try {
-                    const response = await fetch(`/api/answers/${answerId}/rate`, {
+                    const response = await fetch(`/api/answers/${answerId}/score`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify(rating)
+                        body: JSON.stringify(score)
                     });
-
-                    if (response.status === 409) {
-                        alert('이미 평가한 답변입니다. 답변당 한 번만 평가할 수 있습니다.');
-                        return;
-                    }
 
                     if (!response.ok) {
                         throw new Error('평가 제출에 실패했습니다.');
                     }
 
                     const result = await response.json();
-                    updateStarRating(answerId, rating);
 
-                    const ratingContainer = document.querySelector(`[data-answer-id="${answerId}"]`)
-                        .querySelector('span');
-                    ratingContainer.textContent = `${result.averageScore.toFixed(1)} (${result.voterCount}명)`;
+                    if (result.duplicate) {
+
+                        const prevScore = result.prevScore;
+                        const willModify = confirm(`이미 평가한 답변입니다(이전 평점: ${prevScore}점). 수정하시겠습니까?`);
+
+                        if (willModify) {
+                            const putResponse = await fetch(`/api/answers/${answerId}/score`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(score)
+                            });
+
+                            const putResult = await putResponse.json();
+                            updateUI(answerId, score, putResult);
+                        }
+                        return;
+                    }
+
+                    updateUI(answerId, score, result);
 
                 } catch (error) {
-                    console.error('Error:', error);
                     alert('평가 제출 중 오류가 발생했습니다.');
                 }
             }
 
-            // 별점 UI 업데이트 함수
-            function updateStarRating(answerId, selectedRating) {
-                const stars = document.querySelector(`[data-answer-id="${answerId}"]`)
-                    .querySelectorAll('i[data-lucide="star"]');
+            function updateUI(answerId, rating, result) {
+                // 별점 컨테이너를 먼저 찾고
+                const container = document.querySelector(`[data-answer-id="${answerId}"]`);
+
+                // svg 요소를 직접 선택 (Lucide는 i 태그를 svg로 변환합니다)
+                const stars = container.querySelectorAll('svg[data-lucide="star"]');
 
                 stars.forEach((star, index) => {
-                    if (index < selectedRating) {
-                        star.classList.remove('text-gray-300');
+                    if (index < result.averageScore) {
                         star.classList.add('text-yellow-400', 'fill-yellow-400');
+                        star.classList.remove('text-gray-300');
                     } else {
+                        // 평균 점수보다 높은 별은 회색으로
                         star.classList.remove('text-yellow-400', 'fill-yellow-400');
                         star.classList.add('text-gray-300');
                     }
                 });
+
+                // 점수 텍스트 업데이트 (첫 번째 span 요소를 선택)
+                const span = container.querySelector('span');
+                span.textContent = `${result.averageScore.toFixed(1)} (${result.voterCount}명)`;
             }
+
 
             // 댓글 폼 토글 함수
             function toggleCommentForm(button) {

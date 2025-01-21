@@ -84,7 +84,7 @@ public class QuestionService
         }
 
         questionMapper.addUserLike(questionId, userId);
-        questionMapper.incrementLikes(questionId);
+        questionMapper.increaseLikes(questionId);
         return true;
     }
 }

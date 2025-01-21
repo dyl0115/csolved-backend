@@ -7,11 +7,13 @@ import store.csolved.csolved.common.filter.Filtering;
 import store.csolved.csolved.common.page.PaginationUtils;
 import store.csolved.csolved.common.search.Searching;
 import store.csolved.csolved.common.sort.Sorting;
-import store.csolved.csolved.domain.answer.entity.AnswerWithComments;
+import store.csolved.csolved.domain.answer.entity.Answer;
 import store.csolved.csolved.domain.answer.service.AnswerService;
-import store.csolved.csolved.domain.category.service.dto.CategoryDTO;
+import store.csolved.csolved.domain.category.entity.Category;
 import store.csolved.csolved.domain.category.service.CategoryService;
 import store.csolved.csolved.common.page.Pagination;
+import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateVM;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailVM;
@@ -21,6 +23,7 @@ import store.csolved.csolved.domain.question.service.QuestionService;
 import store.csolved.csolved.domain.tag.service.TagService;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -32,6 +35,7 @@ public class QuestionFacade
     private final CategoryService categoryService;
 
     private final PaginationUtils paginationUtils;
+    private final CommentService commentService;
 
     // 질문글, 질문글의 태그 저장.
     public void save(QuestionCreateUpdateForm form)
@@ -43,7 +47,7 @@ public class QuestionFacade
     // 최초 질문글 작성 viewModel 제공
     public QuestionCreateUpdateVM initCreate()
     {
-        List<CategoryDTO> categories = categoryService.getCategories();
+        List<Category> categories = categoryService.getAll();
         return QuestionCreateUpdateVM.of(categories);
     }
 
@@ -73,10 +77,8 @@ public class QuestionFacade
     }
 
     // 질문글 리스트 조회
-    public QuestionListViewModel getQuestions(Long pageNumber,
-                                              Sorting sort,
-                                              Filtering filter,
-                                              Searching search)
+    public QuestionListViewModel getQuestions(Long pageNumber, Sorting sort,
+                                              Filtering filter, Searching search)
     {
         // DB에서 질문글 개수를 가져옴.
         Long total = questionService.countQuestions(filter, search);
@@ -85,14 +87,10 @@ public class QuestionFacade
         Pagination page = paginationUtils.createPagination(pageNumber, total);
 
         // 페이지 정보를 사용해서 DB에 필요한 질문글만 조회.
-        List<Question> questions = questionService.getQuestions(
-                page,
-                sort,
-                filter,
-                search);
+        List<Question> questions = questionService.getQuestions(page, sort, filter, search);
 
         // 카테고리 정보를 모두 가져옴.
-        List<CategoryDTO> categories = categoryService.getCategories();
+        List<Category> categories = categoryService.getAll();
 
         // 모든 데이터를 사용하여 viewModel 생성 후 반환
         return QuestionListViewModel.of(page, categories, questions);
@@ -102,7 +100,15 @@ public class QuestionFacade
     public QuestionDetailVM getQuestion(Long questionId)
     {
         Question question = questionService.viewQuestion(questionId);
-        List<AnswerWithComments> answers = answerService.getAnswersWithComments(questionId);
-        return QuestionDetailVM.of(question, answers);
+        List<Answer> answers = answerService.getAnswers(questionId);
+        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
+        return QuestionDetailVM.of(question, answers, comments);
+    }
+
+    private List<Long> extractIds(List<Answer> answers)
+    {
+        return answers.stream()
+                .map(Answer::getId)
+                .toList();
     }
 }

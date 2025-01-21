@@ -1,3 +1,4 @@
+<!--Submit 버튼-->
 <th:block th:fragment="button(type, icon, color, text)">
     <button th:if="${type == 'submit'}"
             th:class="${
@@ -12,6 +13,7 @@
     </button>
 </th:block>
 
+<!--Link 버튼-->
 <th:block th:fragment="link(icon, color, text, href)">
     <a th:href="${href}"
        th:class="${

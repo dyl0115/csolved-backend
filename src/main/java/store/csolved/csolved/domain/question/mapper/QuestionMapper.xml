@@ -124,6 +124,18 @@
         where id = #{questionId};
     </update>
 
+    <update id="increaseAnswerCount">
+        update questions
+        set answer_count = answer_count + 1
+        where id = #{questionId};
+    </update>
+
+    <update id="decreaseAnswerCount">
+        update questions
+        set answer_count = answer_count - 1
+        where id = #{questionId};
+    </update>
+
     <select id="hasUserLiked">
         select exists(select 1
                       from question_likes
@@ -131,7 +143,7 @@
                         and question_id = #{questionId});
     </select>
 
-    <update id="incrementLikes">
+    <update id="increaseLikes">
         update questions
         set likes = likes + 1
         where id = #{questionId};

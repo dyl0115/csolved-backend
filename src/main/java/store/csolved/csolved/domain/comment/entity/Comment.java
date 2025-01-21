@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 public class Comment
 {
     private Long id;
+    private Long answerId;
     private Long authorId;
     private String authorNickname;
     private boolean anonymous;

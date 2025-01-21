@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.question.controller.dto.viewModel;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.category.service.dto.CategoryDTO;
+import store.csolved.csolved.domain.category.entity.Category;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @Builder
 public class QuestionCreateUpdateVM
 {
-    private List<CategoryDTO> categories;
+    private List<Category> categories;
 
-    public static QuestionCreateUpdateVM of(List<CategoryDTO> categories)
+    public static QuestionCreateUpdateVM of(List<Category> categories)
     {
         return QuestionCreateUpdateVM.builder()
                 .categories(categories)

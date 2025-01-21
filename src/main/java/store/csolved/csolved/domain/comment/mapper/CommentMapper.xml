@@ -5,31 +5,23 @@
 <mapper namespace="store.csolved.csolved.domain.comment.mapper.CommentMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into comments(answer_id, user_id, anonymous,
+        insert into comments(answer_id, author_id, anonymous,
                              content, created_at, deleted_at)
-        values (#{answerId}, #{userId}, #{anonymous},
+        values (#{answerId}, #{authorId}, #{anonymous},
                 #{content}, #{createdAt}, #{deletedAt});
     </insert>
-
-    <resultMap id="answerCommentMap" type="store.csolved.csolved.domain.comment.entity.AnswerCommentMap">
-        <id property="answerId" column="answer_id"/>
-        <collection property="comments" javaType="java.util.ArrayList"
-                    ofType="store.csolved.csolved.domain.comment.entity.Comment">
-            <id property="id" column="id"/>
-            <result property="authorId" column="author_id"/>
-            <result property="authorNickname" column="author_nickname"/>
-            <result property="anonymous" column="anonymous"/>
-            <result property="content" column="content"/>
-            <result property="createdAt" column="created_at"/>
-        </collection>
-    </resultMap>
-
-    <select id="getComments" resultMap="answerCommentMap">
-        select c.*,
-        u.id author_id,
-        u.nickname author_nickname
+    
+    <select id="getComments">
+        select
+        c.answer_id answer_id,
+        c.id comment_id,
+        c.author_id author_id,
+        u.nickname author_nickname,
+        c.anonymous anonymous,
+        c.content content,
+        c.created_at created_at
         from comments c
-        left join users u on u.id = c.user_id
+        left join users u on c.author_id = u.id
         <if test="answerIds != null and answerIds.size() > 0">
             where c.answer_id in
             <foreach collection="answerIds" item="answerId" open="(" separator="," close=")">

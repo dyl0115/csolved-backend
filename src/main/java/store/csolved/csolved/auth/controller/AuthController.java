@@ -69,7 +69,7 @@ public class AuthController
 
 
     @LoginRequest
-    @GetMapping("/signOut")
+    @PostMapping("/signOut")
     public String processSignOut()
     {
         authService.signOut();

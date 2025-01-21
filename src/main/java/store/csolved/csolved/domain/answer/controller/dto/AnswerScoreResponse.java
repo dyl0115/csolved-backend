@@ -8,17 +8,29 @@ import store.csolved.csolved.domain.answer.entity.Answer;
 @Builder
 public class AnswerScoreResponse
 {
+    private boolean duplicate;
+    private Long prevScore;
+
     private Double averageScore;
     private Long voterCount;
 
-    public static AnswerScoreResponse from(Answer answer)
+    public static AnswerScoreResponse success(Answer answer)
     {
         Long totalScore = answer.getTotalScore();
         Long voterCount = answer.getVoterCount();
 
         return AnswerScoreResponse.builder()
+                .duplicate(false)
                 .averageScore(calculateAverageScore(totalScore, voterCount))
                 .voterCount(voterCount)
+                .build();
+    }
+
+    public static AnswerScoreResponse duplicate(Long prevScore)
+    {
+        return AnswerScoreResponse.builder()
+                .duplicate(true)
+                .prevScore(prevScore)
                 .build();
     }
 

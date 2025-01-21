@@ -3,7 +3,6 @@ package store.csolved.csolved.domain.answer.entity;
 import lombok.Builder;
 import lombok.Getter;
 import store.csolved.csolved.domain.comment.entity.Comment;
-import store.csolved.csolved.domain.comment.entity.AnswerCommentMap;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -19,10 +18,16 @@ public class AnswerWithComments
     private String authorNickname;
     private boolean anonymous;
     private String content;
-    private Long total_score;
-    private Long voter_count;
+    private Double averageScore;
+    private Long voterCount;
     private LocalDateTime createdAt;
     private List<Comment> comments;
+
+    private static Double calcAverageScore(Long totalScore, Long voterCount)
+    {
+        if (voterCount == 0) return 0D;
+        return totalScore.doubleValue() / voterCount;
+    }
 
     public static AnswerWithComments from(Answer answer,
                                           List<Comment> comments)
@@ -33,23 +38,24 @@ public class AnswerWithComments
                 .authorNickname(answer.getAuthorNickname())
                 .anonymous(answer.isAnonymous())
                 .content(answer.getContent())
+                .averageScore(calcAverageScore(answer.getTotalScore(), answer.getVoterCount()))
+                .voterCount(answer.getVoterCount())
                 .createdAt(answer.getCreatedAt())
                 .comments(comments)
                 .build();
     }
 
     public static List<AnswerWithComments> from(List<Answer> answers,
-                                                Map<Long, AnswerCommentMap> commentMap)
+                                                Map<Long, List<Comment>> commentMap)
     {
         return answers.stream()
                 .map(
                         answer ->
                         {
                             Long answerId = answer.getId();
-                            AnswerCommentMap answerComments = commentMap.getOrDefault(answerId, null);
-                            if (answerComments != null)
+                            List<Comment> comments = commentMap.getOrDefault(answerId, null);
+                            if (comments != null)
                             {
-                                List<Comment> comments = commentMap.get(answerId).getComments();
                                 return AnswerWithComments.from(answer, comments);
                             }
                             return AnswerWithComments.from(answer, Collections.emptyList());

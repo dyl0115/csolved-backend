@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.answer.mapper.AnswerMapper">
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <insert id="saveAnswer" useGeneratedKeys="true" keyProperty="id">
         insert into answers(question_id, author_id, anonymous,
                             content, created_at)
         values (#{questionId}, #{authorId}, #{anonymous},
@@ -34,14 +34,27 @@
 
     </select>
 
-    <select id="hasAlreadyScored">
-        select exists(select 1
-                      from answer_ratings
-                      where answer_id = #{answerId}
-                        and user_id = #{userId});
+    <select id="getScore">
+        select score
+        from answer_ratings
+        where answer_id = #{answerId}
+          and user_id = #{userId};
     </select>
 
-    <update id="score">
+    <update id="updateScore">
+        update answers
+        set total_score = total_score - #{oldScore} + #{newScore}
+        where id = #{answerId}
+    </update>
+
+    <update id="updateVoter">
+        update answer_ratings
+        set score = #{score}
+        where answer_id = #{answerId}
+          and user_id = #{userId};
+    </update>
+
+    <update id="saveScore">
         update answers
         set total_score = total_score + #{score},
             voter_count = voter_count + 1
