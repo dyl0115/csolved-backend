@@ -51,6 +51,88 @@
                         </div>
                     </div>
                     <p class="mt-1 text-sm text-gray-500">엔터 키를 눌러 태그를 추가하세요</p>
+                    
+                    <!-- 태그 입력 자바스크립트 -->
+                    <script th:inline="javascript">
+                        class TagManager {
+                            constructor(containerId) {
+                                this.tags = [];
+                                this.tagInput = document.getElementById(containerId + '-tagInput');
+                                this.tagContainer = document.getElementById(containerId + '-tagContainer');
+                                this.hiddenTags = document.getElementById(containerId + '-hiddenTags');
+
+                                if (this.tagInput && this.tagContainer && this.hiddenTags) {
+                                    this.bindEvents();
+
+                                    // 초기 태그값이 있다면 로드
+                                    if (this.hiddenTags.value) {
+                                        this.tags = this.hiddenTags.value.split(',').filter(tag => tag.trim() !== '');
+                                        this.render();
+                                    }
+                                }
+                            }
+
+                            bindEvents() {
+                                this.tagInput.addEventListener('keydown', (e) => {
+                                    if (e.key === 'Enter' || e.key === ',') {
+                                        e.preventDefault();
+                                        this.addTag();
+                                    } else if (e.key === 'Backspace' && this.tagInput.value === '' && this.tags.length > 0) {
+                                        this.removeTag(this.tags.length - 1);
+                                    }
+                                });
+                            }
+
+                            addTag() {
+                                const value = this.tagInput.value.trim();
+                                if (value !== '' && !this.tags.includes(value)) {
+                                    this.tags.push(value);
+                                    this.tagInput.value = '';
+                                    this.render();
+                                }
+                            }
+
+                            removeTag(index) {
+                                this.tags.splice(index, 1);
+                                this.render();
+                            }
+
+                            render() {
+                                // Update hidden input
+                                this.hiddenTags.value = this.tags.join(',');
+
+                                // Clear and rebuild tag elements
+                                this.tagContainer.innerHTML = '';
+
+                                this.tags.forEach((tag, index) => {
+                                    const tagElement = document.createElement('span');
+                                    tagElement.className = 'inline-flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm';
+
+                                    const tagText = document.createElement('span');
+                                    tagText.textContent = tag;
+
+                                    const removeButton = document.createElement('button');
+                                    removeButton.type = 'button';
+                                    removeButton.className = 'ml-2 text-blue-600 hover:text-blue-800';
+                                    removeButton.textContent = '×';
+                                    removeButton.onclick = () => this.removeTag(index);
+
+                                    tagElement.appendChild(tagText);
+                                    tagElement.appendChild(removeButton);
+                                    this.tagContainer.appendChild(tagElement);
+                                });
+                            }
+                        }
+
+                        // Initialize all tag managers on page load
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const tagContainer = document.querySelector('[id$="-container"]');
+                            if (tagContainer) {
+                                const baseId = tagContainer.id.replace('-container', '');
+                                new TagManager(baseId);
+                            }
+                        });
+                    </script>
                 </div>
                 
                 <!-- 에러 메시지 -->
@@ -58,88 +140,6 @@
                     <div class="text-red-500 text-sm mt-1" th:errors="*{__${name}__}">에러 메시지</div>
                 </th:block>
             </div>
-            
-            <!-- 태그 입력 스크립트 -->
-            <script th:fragment="tagManagerScript">
-                class TagManager {
-                    constructor(containerId) {
-                        this.tags = [];
-                        this.tagInput = document.getElementById(containerId + '-tagInput');
-                        this.tagContainer = document.getElementById(containerId + '-tagContainer');
-                        this.hiddenTags = document.getElementById(containerId + '-hiddenTags');
-
-                        if (this.tagInput && this.tagContainer && this.hiddenTags) {
-                            this.bindEvents();
-
-                            // 초기 태그값이 있다면 로드
-                            if (this.hiddenTags.value) {
-                                this.tags = this.hiddenTags.value.split(',').filter(tag => tag.trim() !== '');
-                                this.render();
-                            }
-                        }
-                    }
-
-                    bindEvents() {
-                        this.tagInput.addEventListener('keydown', (e) => {
-                            if (e.key === 'Enter' || e.key === ',') {
-                                e.preventDefault();
-                                this.addTag();
-                            } else if (e.key === 'Backspace' && this.tagInput.value === '' && this.tags.length > 0) {
-                                this.removeTag(this.tags.length - 1);
-                            }
-                        });
-                    }
-
-                    addTag() {
-                        const value = this.tagInput.value.trim();
-                        if (value !== '' && !this.tags.includes(value)) {
-                            this.tags.push(value);
-                            this.tagInput.value = '';
-                            this.render();
-                        }
-                    }
-
-                    removeTag(index) {
-                        this.tags.splice(index, 1);
-                        this.render();
-                    }
-
-                    render() {
-                        // Update hidden input
-                        this.hiddenTags.value = this.tags.join(',');
-
-                        // Clear and rebuild tag elements
-                        this.tagContainer.innerHTML = '';
-
-                        this.tags.forEach((tag, index) => {
-                            const tagElement = document.createElement('span');
-                            tagElement.className = 'inline-flex items-center bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm';
-
-                            const tagText = document.createElement('span');
-                            tagText.textContent = tag;
-
-                            const removeButton = document.createElement('button');
-                            removeButton.type = 'button';
-                            removeButton.className = 'ml-2 text-blue-600 hover:text-blue-800';
-                            removeButton.textContent = '×';
-                            removeButton.onclick = () => this.removeTag(index);
-
-                            tagElement.appendChild(tagText);
-                            tagElement.appendChild(removeButton);
-                            this.tagContainer.appendChild(tagElement);
-                        });
-                    }
-                }
-
-                // Initialize all tag managers on page load
-                document.addEventListener('DOMContentLoaded', () => {
-                    const tagContainer = document.querySelector('[id$="-container"]');
-                    if (tagContainer) {
-                        const baseId = tagContainer.id.replace('-container', '');
-                        new TagManager(baseId);
-                    }
-                });
-            </script>
         </th:block>
     </body>
 </html>
