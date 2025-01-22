@@ -15,9 +15,10 @@ import store.csolved.csolved.common.page.Pagination;
 import store.csolved.csolved.domain.comment.entity.Comment;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
-import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateVM;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateVM;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailVM;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionListViewModel;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionUpdateVM;
 import store.csolved.csolved.domain.question.entity.Question;
 import store.csolved.csolved.domain.question.service.QuestionService;
 import store.csolved.csolved.domain.tag.service.TagService;
@@ -41,21 +42,29 @@ public class QuestionFacade
     public void save(QuestionCreateUpdateForm form)
     {
         Long saveId = questionService.save(form.getQuestion());
-        tagService.saveTags(saveId, form.getTags());
+        tagService.saveTags(saveId, form.getTagList());
     }
 
     // 최초 질문글 작성 viewModel 제공
-    public QuestionCreateUpdateVM initCreate()
+    public QuestionCreateVM initCreate()
     {
         List<Category> categories = categoryService.getAll();
-        return QuestionCreateUpdateVM.of(categories);
+        return QuestionCreateVM.from(categories);
     }
 
     // 질문글 업데이트 시 기존 질문글 제공
-    public QuestionCreateUpdateForm initUpdate(Long questionId)
+    public QuestionUpdateVM initUpdate(Long questionId)
+    {
+        List<Category> categories = categoryService.getAll();
+//        Question question = questionService.getQuestion(questionId);
+//        QuestionCreateUpdateForm form = QuestionCreateUpdateForm.from(question);
+        return QuestionUpdateVM.from(categories);
+    }
+
+    public QuestionCreateUpdateForm initUpdateForm(Long questionId)
     {
         Question question = questionService.getQuestion(questionId);
-        return QuestionCreateUpdateForm.of(question);
+        return QuestionCreateUpdateForm.from(question);
     }
 
     // 질문글 업데이트
@@ -63,7 +72,7 @@ public class QuestionFacade
     public void update(Long questionId, QuestionCreateUpdateForm form)
     {
         questionService.update(questionId, form.getQuestion());
-        tagService.updateTags(questionId, form.getTags());
+        tagService.updateTags(questionId, form.getTagList());
     }
 
     public boolean addLike(Long questionId, Long userId)

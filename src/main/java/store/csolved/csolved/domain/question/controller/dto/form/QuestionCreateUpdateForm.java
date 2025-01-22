@@ -46,7 +46,7 @@ public class QuestionCreateUpdateForm
                 new ArrayList<>());
     }
 
-    public static QuestionCreateUpdateForm of(Question question)
+    public static QuestionCreateUpdateForm from(Question question)
     {
         return QuestionCreateUpdateForm.builder()
                 .title(question.getTitle())
@@ -74,7 +74,7 @@ public class QuestionCreateUpdateForm
                 .build();
     }
 
-    public List<Tag> getTags()
+    public List<Tag> getTagList()
     {
         return tags.stream()
                 .map(name -> Tag.builder()
@@ -82,5 +82,4 @@ public class QuestionCreateUpdateForm
                         .build())
                 .toList();
     }
-
 }

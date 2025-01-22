@@ -43,7 +43,7 @@
                     
                     <!--수정/삭제 버튼-->
                     <div class="flex gap-2" th:if="${user.id == post.authorId}">
-                        <a th:href="@{/${type}/{id}/update(id=${post.id})}"
+                        <a th:href="@{/{type}/{id}/update(type=${type}, id=${post.id})}"
                            class="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                             <i data-lucide="edit" class="w-4 h-4"></i>
                             수정

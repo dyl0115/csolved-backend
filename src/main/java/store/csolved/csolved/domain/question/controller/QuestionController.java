@@ -1,5 +1,6 @@
 package store.csolved.csolved.domain.question.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,17 +21,20 @@ import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.common.page.PageInfo;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
-import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateUpdateVM;
-import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailVM;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateVM;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionListViewModel;
+import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionUpdateVM;
 import store.csolved.csolved.domain.question.facade.QuestionFacade;
 import store.csolved.csolved.domain.user.User;
+
+import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Controller
 public class QuestionController
 {
-    public final static String VIEWS_QUESTION_CREATE_OR_UPDATE_FORM = "views/domain/question/create";
+    public final static String VIEWS_QUESTION_CREATE_FORM = "views/domain/question/create";
+    public final static String VIEWS_QUESTION_UPDATE_FORM = "views/domain/question/update";
     public final static String VIEWS_QUESTION_LIST = "views/domain/question/list";
     public final static String VIEWS_QUESTION_DETAIL = "views/domain/question/detail";
 
@@ -62,22 +66,25 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/questions/create")
-    public String initSave(Model model)
+    public String initCreate(Model model)
     {
-        QuestionCreateUpdateVM viewModel = questionFacade.initCreate();
-        model.addAttribute("questionCreateVM", viewModel);
+        QuestionCreateVM viewModel = questionFacade.initCreate();
+        model.addAttribute("createVM", viewModel);
         model.addAttribute("createForm", QuestionCreateUpdateForm.empty());
-        return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
+        return VIEWS_QUESTION_CREATE_FORM;
     }
 
     @LoginRequest
     @PostMapping("/questions/create")
-    public String processSave(@Valid @ModelAttribute("createForm") QuestionCreateUpdateForm form,
-                              BindingResult result)
+    public String processCreate(@Valid @ModelAttribute("createForm") QuestionCreateUpdateForm form,
+                                BindingResult result,
+                                Model model)
     {
         if (result.hasErrors())
         {
-            return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
+            QuestionCreateVM viewModel = questionFacade.initCreate();
+            model.addAttribute("createVM", viewModel);
+            return VIEWS_QUESTION_CREATE_FORM;
         }
         else
         {
@@ -87,24 +94,29 @@ public class QuestionController
     }
 
     @LoginRequest
-    @GetMapping("/questions/{questionId}/edit-form")
+    @GetMapping("/questions/{questionId}/update")
     public String initUpdate(@PathVariable Long questionId,
                              Model model)
     {
-        QuestionCreateUpdateForm questionUpdateForm = questionFacade.initUpdate(questionId);
-        model.addAttribute("questionEditForm", questionUpdateForm);
-        return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
+        QuestionUpdateVM viewModel = questionFacade.initUpdate(questionId);
+        model.addAttribute("updateVM", viewModel);
+        QuestionCreateUpdateForm form = questionFacade.initUpdateForm(questionId);
+        model.addAttribute("updateForm", form);
+        return VIEWS_QUESTION_UPDATE_FORM;
     }
 
     @LoginRequest
-    @PutMapping("/questions/{questionId}")
+    @PutMapping("/questions/{questionId}/update")
     public String processUpdate(@PathVariable("questionId") Long questionId,
-                                @Valid @ModelAttribute("questionCreateUpdateForm") QuestionCreateUpdateForm form,
-                                BindingResult result)
+                                @Valid @ModelAttribute("updateForm") QuestionCreateUpdateForm form,
+                                BindingResult result,
+                                Model model)
     {
         if (result.hasErrors())
         {
-            return VIEWS_QUESTION_CREATE_OR_UPDATE_FORM;
+            QuestionUpdateVM viewModel = questionFacade.initUpdate(questionId);
+            model.addAttribute("updateVM", viewModel);
+            return VIEWS_QUESTION_UPDATE_FORM;
         }
 
         questionFacade.update(questionId, form);

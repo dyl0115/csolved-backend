@@ -27,22 +27,26 @@
                           th:placeholder="${placeholder}"></textarea>
                 
                 <!--태그 타입 입력창 -->
-                <div th:if="${type == 'tag'}" th:id="${name + '-container'}">
+                <div th:if="${type == 'tag'}" th:id="|${name}-container|">
                     <div th:class="${'p-2 rounded-lg shadow-sm ' +
                                      (#fields.hasErrors(name) ?
                                       'border border-red-500 focus-within:border-red-500' :
                                       'border border-white-300 focus-within:border-blue-500')}">
                         <div class="flex flex-wrap items-center">
-                            <div th:id="${name + '-tagContainer'}" class="flex flex-wrap gap-2">
-                                <!-- 태그들이 동적으로 추가될 영역 -->
+                            <!--동적으로 태그들이 추가되는 영역-->
+                            <div th:id="|${name}-tagContainer|" class="flex flex-wrap gap-2">
+                            
                             </div>
+                            
+                            <!-- 사용자가 태그를 입력하는 영역 -->
                             <input type="text"
-                                   th:id="${name + '-tagInput'}"
+                                   th:id="|${name}-tagInput|"
                                    th:placeholder="${placeholder}"
                                    class="outline-none border-none bg-transparent w-full min-w-[300px] py-1 px-2"/>
+                            <!-- 원래 히든이었음.-->
                             <input type="hidden"
                                    th:name="${name}"
-                                   th:id="${name + '-hiddenTags'}"
+                                   th:id="|${name}-hiddenTags|"
                                    th:field="*{__${name}__}"/>
                         </div>
                     </div>
@@ -55,7 +59,7 @@
                 </th:block>
             </div>
             
-            <!-- Tag Manager Script -->
+            <!-- 태그 입력 스크립트 -->
             <script th:fragment="tagManagerScript">
                 class TagManager {
                     constructor(containerId) {
@@ -129,13 +133,11 @@
 
                 // Initialize all tag managers on page load
                 document.addEventListener('DOMContentLoaded', () => {
-                    const tagContainers = document.querySelectorAll('[id$="-container"]');
-                    tagContainers.forEach(container => {
-                        if (container.id.endsWith('-container')) {
-                            const baseId = container.id.replace('-container', '');
-                            new TagManager(baseId);
-                        }
-                    });
+                    const tagContainer = document.querySelector('[id$="-container"]');
+                    if (tagContainer) {
+                        const baseId = tagContainer.id.replace('-container', '');
+                        new TagManager(baseId);
+                    }
                 });
             </script>
         </th:block>

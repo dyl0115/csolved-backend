@@ -10,7 +10,9 @@
                 <h1 class="text-2xl font-bold text-gray-900"> 질문 등록</h1>
             </div>
             
-            <form id="questionForm" th:action="@{/questions/create}" method="post" th:object="${createForm}">
+            <form id="questionForm" th:action="@{/questions/{questionId}/update(questionId=${questionId})}"
+                  method="post" th:object="${updateForm}">
+                <input type="hidden" name="_method" value="PUT">
                 <div class="space-y-6">
                     
                     <!-- 익명/실명 토글-->
@@ -22,7 +24,7 @@
                     
                     <!-- 카테고리 선택창 -->
                     <th:block
-                            th:replace="~{fragments/common/selectField::selectOptions(type='selectBox', label='카테고리', name='categoryId', options=${createVM.categories}, selected=${createVM.categories[0].id})}"/>
+                            th:replace="~{fragments/common/selectField::selectOptions(type='selectBox', label='카테고리', name='categoryId', options=${updateVM.categories}, selected=${updateVM.categories[0].id})}"/>
                     
                     <!-- 태그 입력창-->
                     <th:block
