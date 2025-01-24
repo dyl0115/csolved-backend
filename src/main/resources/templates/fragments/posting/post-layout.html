@@ -86,7 +86,7 @@
     <h2 class="text-xl font-bold text-gray-900 mb-4"
         th:text="|답변 ${post.answerCount}개|">답변 0개</h2>
     
-    <!--포스팅 댓글 작성 영역-->
+    <!--포스팅 답변 작성 폼-->
     <section id="answer-form"
              class="answer-create-form mb-8"
              th:classappend="${#fields.hasErrors('${answerCreateForm.*}')} ? '' : 'hidden'"

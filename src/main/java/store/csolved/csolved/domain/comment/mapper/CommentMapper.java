@@ -12,5 +12,7 @@ public interface CommentMapper
 
     List<Comment> getComments(List<Long> answerIds);
 
+    Comment getComment(Long commentId);
+
     void delete(Long commentId);
 }

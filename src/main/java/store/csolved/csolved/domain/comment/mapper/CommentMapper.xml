@@ -6,15 +6,15 @@
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into comments(answer_id, author_id, anonymous,
-                             content, created_at, deleted_at)
+                             content)
         values (#{answerId}, #{authorId}, #{anonymous},
-                #{content}, #{createdAt}, #{deletedAt});
+                #{content});
     </insert>
     
     <select id="getComments">
         select
         c.answer_id answer_id,
-        c.id comment_id,
+        c.id id,
         c.author_id author_id,
         u.nickname author_nickname,
         c.anonymous anonymous,
@@ -28,6 +28,12 @@
                 #{answerId}
             </foreach>
         </if>
+    </select>
+
+    <select id="getComment">
+        select *
+        from comments
+        where id = #{commentId};
     </select>
 
     <delete id="delete">

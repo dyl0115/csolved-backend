@@ -3,13 +3,13 @@ package store.csolved.csolved.domain.comment.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.comment.entity.Comment;
 import store.csolved.csolved.domain.comment.mapper.CommentMapper;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.exception.AccessDeniedException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -19,10 +19,9 @@ public class CommentService
     private final CommentMapper commentMapper;
 
     @Transactional
-    public void saveComment(User user, CommentCreateForm form)
+    public void saveComment(Comment comment)
     {
-        form.setAuthorId(user.getId());
-        commentMapper.save(form.toComment());
+        commentMapper.save(comment);
     }
 
     public Map<Long, List<Comment>> getComments(List<Long> answerIds)
@@ -33,8 +32,13 @@ public class CommentService
     }
 
     @Transactional
-    public void deleteComment(Long commentId)
+    public void delete(Long userId, Long commentId)
     {
+        Comment comment = commentMapper.getComment(commentId);
+        if (!Objects.equals(comment.getAuthorId(), userId))
+        {
+            throw new AccessDeniedException("댓글 삭제 권한이 없습니다.");
+        }
         commentMapper.delete(commentId);
     }
 }
