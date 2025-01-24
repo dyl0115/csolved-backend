@@ -52,7 +52,7 @@
 
     </select>
 
-    <update id="updateUser">
+    <update id="update">
         update users
         set email      = #{email},
             password   = #{password},
@@ -63,15 +63,10 @@
         where id = #{id}
     </update>
 
-    <update id="deleteUserById">
+    <update id="delete">
         update users
         set deleted_at = CURRENT_TIMESTAMP
         where id = #{id}
     </update>
-
-    <delete id="hardDeleteAllUsers">
-        delete
-        from users
-    </delete>
 
 </mapper>

@@ -42,7 +42,7 @@ public class AuthService
     public void withdraw(User user)
     {
         httpSession.removeAttribute(LOGIN_USER_SESSION_KEY);
-        userMapper.deleteUserById(user.getId());
+        userMapper.delete(user.getId());
     }
 
     public void checkSignUpValid(SignUpForm form, BindingResult result)

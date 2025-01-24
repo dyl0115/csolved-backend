@@ -14,7 +14,7 @@ import java.util.Map;
 @Builder
 public class QuestionDetailVM
 {
-    private Question question;
+    private Question post;
     private List<AnswerWithComments> answers;
 
     public static QuestionDetailVM of(Question question,
@@ -23,7 +23,7 @@ public class QuestionDetailVM
     {
         return QuestionDetailVM.builder()
                 .answers(AnswerWithComments.from(answers, comments))
-                .question(question)
+                .post(question)
                 .build();
     }
 }

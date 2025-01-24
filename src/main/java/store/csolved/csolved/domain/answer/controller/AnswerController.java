@@ -10,14 +10,13 @@ import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
+import store.csolved.csolved.domain.question.controller.QuestionController;
 import store.csolved.csolved.domain.question.facade.QuestionFacade;
 
 @RequiredArgsConstructor
 @Controller
 public class AnswerController
 {
-    public final static String VIEWS_QUESTION_DETAIL = "views/domain/question/detail";
-
     private final QuestionFacade questionFacade;
     private final AnswerService answerService;
 
@@ -32,7 +31,7 @@ public class AnswerController
         {
             model.addAttribute("questionDetails", questionFacade.getQuestion(questionId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-            return VIEWS_QUESTION_DETAIL;
+            return QuestionController.VIEWS_QUESTION_DETAIL;
         }
         answerService.saveAnswer(form.toAnswer());
         return "redirect:/questions/" + questionId;

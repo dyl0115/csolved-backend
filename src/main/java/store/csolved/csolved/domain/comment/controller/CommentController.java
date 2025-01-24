@@ -23,7 +23,7 @@ public class CommentController
 
     @LoginRequest
     @PostMapping("/comments")
-    public String save(@RequestParam("questionId") Long questionId,
+    public String save(@RequestParam("postId") Long questionId,
                        @Valid @ModelAttribute("commentCreateForm") CommentCreateForm form,
                        BindingResult result,
                        Model model)

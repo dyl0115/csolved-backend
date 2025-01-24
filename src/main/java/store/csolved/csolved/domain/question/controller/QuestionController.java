@@ -1,6 +1,5 @@
 package store.csolved.csolved.domain.question.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,13 +21,10 @@ import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.common.page.PageInfo;
 import store.csolved.csolved.domain.question.controller.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCreateVM;
-import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionDetailVM;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionListViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionUpdateVM;
 import store.csolved.csolved.domain.question.facade.QuestionFacade;
 import store.csolved.csolved.domain.user.User;
-
-import java.util.Arrays;
 
 @RequiredArgsConstructor
 @Controller

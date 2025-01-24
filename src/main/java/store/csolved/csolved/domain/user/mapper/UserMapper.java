@@ -14,15 +14,11 @@ public interface UserMapper
 
     String findPasswordByEmail(String Email);
 
-    long getUserCount();
-
     boolean existsByEmail(String email);
 
     boolean existsByNickname(String nickname);
 
-    void updateUser(User user);
+    void update(User user);
 
-    void deleteUserById(Long id);
-
-    void hardDeleteAllUsers();
+    void delete(Long id);
 }

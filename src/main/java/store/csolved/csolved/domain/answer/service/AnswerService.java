@@ -56,7 +56,6 @@ public class AnswerService
     {
         boolean commentsExist = answerMapper.existComments(answerId);
         Answer answer = answerMapper.getAnswer(answerId);
-        questionMapper.decreaseAnswerCount(answer.getQuestionId());
 
         if (commentsExist)
         {
@@ -64,6 +63,7 @@ public class AnswerService
         }
         else
         {
+            questionMapper.decreaseAnswerCount(answer.getQuestionId());
             answerMapper.hardDeleteScores(answerId);
             answerMapper.hardDelete(answerId);
         }
