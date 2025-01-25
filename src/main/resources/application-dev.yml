@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/csolved
-    username: dyl0115
-    password: endyd132!!
+    username: ${DEV_DB_USERNAME}
+    password: ${DEV_DB_PASSWORD}
 
   messages:
     basename: messages/messages-ko
@@ -16,9 +16,16 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+    bucket-name: ${BUCKET_NAME}
+    region: ${AWS_REGION}
+
 logging:
   level:
-    web: DEBUG
+    #    web: DEBUG
     root: INFO
-    store.csolved.csolved.domain.answer.mapper: TRACE
+    store.csolved.csolved.domain.user.mapper: TRACE
 

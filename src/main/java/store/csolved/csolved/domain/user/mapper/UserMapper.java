@@ -18,7 +18,9 @@ public interface UserMapper
 
     boolean existsByNickname(String nickname);
 
-    void update(User user);
+    void updateProfileImage(Long userId, String profileImage);
+
+    void updateNickname(Long userId, String nickname);
 
     void delete(Long id);
 }

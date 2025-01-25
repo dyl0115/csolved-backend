@@ -12,6 +12,7 @@ import store.csolved.csolved.auth.etc.annotation.LoginUser;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.auth.controller.dto.SignInForm;
 import store.csolved.csolved.auth.controller.dto.SignUpForm;
+import store.csolved.csolved.utils.SessionManager;
 
 @RequiredArgsConstructor
 @Controller

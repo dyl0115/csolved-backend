@@ -10,14 +10,13 @@ import store.csolved.csolved.auth.controller.dto.SignInForm;
 import store.csolved.csolved.auth.controller.dto.SignUpForm;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
 import store.csolved.csolved.utils.PasswordUtils;
+import store.csolved.csolved.utils.SessionManager;
 
 @RequiredArgsConstructor
 @Component
 public class AuthService
 {
-    public static final String LOGIN_USER_SESSION_KEY = "loginUser";
-
-    private final HttpSession httpSession;
+    private final SessionManager sessionManager;
     private final UserMapper userMapper;
 
     @Transactional
@@ -30,18 +29,18 @@ public class AuthService
     public void signIn(SignInForm form)
     {
         User loginUser = userMapper.findUserByEmail(form.getEmail());
-        httpSession.setAttribute(LOGIN_USER_SESSION_KEY, loginUser);
+        sessionManager.setLoginUser(loginUser);
     }
 
     public void signOut()
     {
-        httpSession.removeAttribute(LOGIN_USER_SESSION_KEY);
+        sessionManager.invalidateSession();
     }
 
     @Transactional
     public void withdraw(User user)
     {
-        httpSession.removeAttribute(LOGIN_USER_SESSION_KEY);
+        sessionManager.invalidateSession();
         userMapper.delete(user.getId());
     }
 

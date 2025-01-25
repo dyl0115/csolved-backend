@@ -10,7 +10,7 @@
              x-cloak
              @click.away="open = false"
              class="absolute mt-2 w-48 bg-white shadow-lg rounded-lg z-50">
-            <a href="/#" class="block px-4 py-2 hover:bg-gray-100">프로필</a>
+            <a href="/users/profile" class="block px-4 py-2 hover:bg-gray-100">프로필</a>
             <a href="/#" class="block px-4 py-2 hover:bg-gray-100">설정</a>
             <hr class="my-1">
             <form th:action="@{/auth/signOut}" method="post" class="m-0">

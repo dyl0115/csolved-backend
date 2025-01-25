@@ -2,7 +2,6 @@ package store.csolved.csolved.auth.etc;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -10,16 +9,14 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.user.User;
-
-
-import static store.csolved.csolved.auth.service.AuthService.LOGIN_USER_SESSION_KEY;
+import store.csolved.csolved.utils.SessionManager;
 
 
 @RequiredArgsConstructor
 @Component
 public class LoginRequestInterceptor implements HandlerInterceptor
 {
-    private final HttpSession httpSession;
+    private final SessionManager sessionManager;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception
@@ -35,7 +32,7 @@ public class LoginRequestInterceptor implements HandlerInterceptor
         if (!hasRequestLoginAnnotation) return true;
 
         // 컨트롤러 메서드에 @RequestLogin이 있고, 로그아웃 상태라면 로그인 화면으로 리다이렉트
-        User user = (User) httpSession.getAttribute(LOGIN_USER_SESSION_KEY);
+        User user = sessionManager.getLoginUser();
         if (user == null)
         {
             response.sendRedirect("/auth/signIn");
@@ -57,7 +54,7 @@ public class LoginRequestInterceptor implements HandlerInterceptor
         // modelAndView가 null이 아닌 경우, View로 loginUser 데이터를 넘겨준다.
         if (modelAndView != null)
         {
-            User loginUser = (User) httpSession.getAttribute(LOGIN_USER_SESSION_KEY);
+            User loginUser = sessionManager.getLoginUser();
 
             // 만약 컨트롤러에서 user가 업데이트가 되어 modelAndView에 담겼다면,
             // 업데이트 된 user 정보를 넘겨준다.
