@@ -5,14 +5,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.auth.service.AuthService;
 import store.csolved.csolved.auth.etc.annotation.LoginUser;
+import store.csolved.csolved.auth.validator.SignInFormValidator;
+import store.csolved.csolved.auth.validator.SignUpFormValidator;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.auth.controller.dto.SignInForm;
 import store.csolved.csolved.auth.controller.dto.SignUpForm;
-import store.csolved.csolved.utils.SessionManager;
 
 @RequiredArgsConstructor
 @Controller
@@ -22,7 +24,22 @@ public class AuthController
     public final static String VIEWS_SIGN_IN_FORM = "/views/auth/signIn";
     public final static String VIEWS_SIGN_UP_FORM = "/views/auth/signUp";
 
+    private final SignUpFormValidator signUpFormValidator;
+    private final SignInFormValidator signInFormValidator;
+
     private final AuthService authService;
+
+    @InitBinder("signUpForm")
+    public void initSignUpBinder(WebDataBinder binder)
+    {
+        binder.addValidators(signUpFormValidator);
+    }
+
+    @InitBinder("signInForm")
+    public void initSignInBinder(WebDataBinder binder)
+    {
+        binder.addValidators(signInFormValidator);
+    }
 
     @GetMapping("/signIn")
     public String initSignIn(Model model)
@@ -35,8 +52,6 @@ public class AuthController
     public String processSignIn(@Valid @ModelAttribute("signInForm") SignInForm signInForm,
                                 BindingResult result)
     {
-        authService.checkUserExist(signInForm, result);
-
         if (result.hasErrors())
         {
             return VIEWS_SIGN_IN_FORM;
@@ -57,8 +72,6 @@ public class AuthController
     public String processSignUp(@Valid @ModelAttribute("signUpForm") SignUpForm signUpForm,
                                 BindingResult result)
     {
-        authService.checkSignUpValid(signUpForm, result);
-
         if (result.hasErrors())
         {
             return VIEWS_SIGN_UP_FORM;

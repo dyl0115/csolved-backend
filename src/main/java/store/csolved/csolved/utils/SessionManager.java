@@ -9,7 +9,6 @@ import store.csolved.csolved.domain.user.User;
 
 @RequiredArgsConstructor
 @Component
-@SessionScope
 public class SessionManager
 {
     private final static String LOGIN_USER_SESSION_KEY = "loginUser";

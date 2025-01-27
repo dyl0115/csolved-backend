@@ -48,7 +48,7 @@ public class AnswerRestController
     @LoginRequest
     @DeleteMapping("/{answerId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Long answerId)
+    public void deleteAnswer(@PathVariable Long answerId)
     {
         answerService.delete(answerId);
     }

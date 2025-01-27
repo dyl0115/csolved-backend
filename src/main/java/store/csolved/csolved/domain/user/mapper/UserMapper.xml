@@ -6,9 +6,9 @@
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
         insert into users(email, password, nickname,
-                          company, created_at, is_admin)
+                          company, admin)
         values (#{email}, #{password}, #{nickname},
-                #{company}, #{createdAt}, #{isAdmin})
+                #{company}, #{admin})
     </insert>
 
     <select id="findUserById">

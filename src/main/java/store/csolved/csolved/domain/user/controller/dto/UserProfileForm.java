@@ -14,17 +14,23 @@ import store.csolved.csolved.domain.user.User;
 public class UserProfileForm
 {
     private Long userId;
-
     @NotBlank(message = "닉네임을 입력해주세요.")
     @Size(min = 2, max = 10, message = "길이가 2에서 10 사이여야 합니다.")
     private String nickname;
-
+    private String currentProfileImage;
     private MultipartFile profileImage;
 
     public static UserProfileForm from(User user)
     {
         return UserProfileForm.builder()
                 .nickname(user.getNickname())
+                .currentProfileImage(user.getProfileImage())
                 .build();
+    }
+
+    public void bindCurrentProfileImage(String currentProfileImage)
+    {
+        this. currentProfileImage = currentProfileImage;
+
     }
 }

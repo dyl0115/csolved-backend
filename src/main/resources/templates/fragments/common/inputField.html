@@ -28,7 +28,7 @@
                 
                 <!--태그 타입 입력창 -->
                 <div th:if="${type == 'tag'}" th:id="|${name}-container|">
-                    <div th:class="${'p-2 rounded-lg shadow-sm ' +
+                    <div th:class="${'p-2 rounded-lg bg-white shadow-sm ' +
                                      (#fields.hasErrors(name) ?
                                       'border border-red-500 focus-within:border-red-500' :
                                       'border border-white-300 focus-within:border-blue-500')}">
@@ -43,7 +43,7 @@
                                    th:id="|${name}-tagInput|"
                                    th:placeholder="${placeholder}"
                                    class="outline-none border-none bg-transparent w-full min-w-[300px] py-1 px-2"/>
-                            <!-- 원래 히든이었음.-->
+                            <!-- 실제 데이터 전송을 위한 히든 인풋-->
                             <input type="hidden"
                                    th:name="${name}"
                                    th:id="|${name}-hiddenTags|"

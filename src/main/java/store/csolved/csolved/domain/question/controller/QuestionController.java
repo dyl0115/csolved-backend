@@ -119,27 +119,4 @@ public class QuestionController
         questionFacade.update(questionId, form);
         return "redirect:/questions?page=1";
     }
-
-    @LoginRequest
-    @DeleteMapping("/api/questions/{questionId}")
-    public ResponseEntity<Void> delete(@PathVariable Long questionId)
-    {
-        questionFacade.delete(questionId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
-
-    @LoginRequest
-    @PostMapping("/api/questions/{questionId}/likes")
-    public ResponseEntity<Void> addLike(@LoginUser User user,
-                                        @PathVariable Long questionId)
-    {
-        boolean valid = questionFacade.addLike(questionId, user.getId());
-
-        if (!valid)
-        {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
-
-        return ResponseEntity.status(HttpStatus.OK).body(null);
-    }
 }

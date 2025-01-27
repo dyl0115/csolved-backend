@@ -3,9 +3,11 @@ package store.csolved.csolved.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.user.controller.dto.UserProfileForm;
 import store.csolved.csolved.exception.ImageUploadException;
 import store.csolved.csolved.file.S3Service;
+import store.csolved.csolved.utils.SessionManager;
 
 import java.io.IOException;
 
@@ -15,6 +17,7 @@ public class UserProfileService
 {
     private final static String FOLDER_NAME_USER_PROFILE = "user";
 
+    private final SessionManager sessionManager;
     private final S3Service s3Service;
     private final UserService userService;
 
@@ -32,5 +35,14 @@ public class UserProfileService
             userService.updateProfile(form.getUserId(), profileUrl);
         }
         userService.updateNickname(form.getUserId(), form.getNickname());
+        User user = userService.getUser(form.getUserId());
+        form.bindCurrentProfileImage(user.getProfileImage());
+        sessionManager.setLoginUser(user);
+    }
+
+    public void restoreProfile(UserProfileForm form)
+    {
+        User user = userService.getUser(form.getUserId());
+        form.bindCurrentProfileImage(user.getProfileImage());
     }
 }

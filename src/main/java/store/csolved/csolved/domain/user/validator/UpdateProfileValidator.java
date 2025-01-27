@@ -4,14 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.user.controller.dto.UserProfileForm;
-import store.csolved.csolved.domain.user.service.UserService;
+import store.csolved.csolved.domain.user.mapper.UserMapper;
+
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Component
-public class UserUpdateProfileValidator implements Validator
+public class UpdateProfileValidator implements Validator
 {
-    private final UserService userService;
+    private final UserMapper userMapper;
 
     @Override
     public boolean supports(Class<?> clazz)
@@ -23,11 +26,24 @@ public class UserUpdateProfileValidator implements Validator
     public void validate(Object target, Errors errors)
     {
         UserProfileForm form = (UserProfileForm) target;
+        checkNicknameDuplicate(form, errors);
+    }
 
-        //닉네임 중복 체크
-        if (userService.existNickname(form.getNickname()))
+    // 닉네임 중복 체크
+    private void checkNicknameDuplicate(UserProfileForm form, Errors errors)
+    {
+        User user = userMapper.findUserById(form.getUserId());
+
+        // 자신의 닉네임이 그대로 입력된 경우
+        if (Objects.equals(user.getNickname(), form.getNickname()))
         {
-            errors.rejectValue("nickname", "duplicate", "이미 사용 중인 닉네임입니다.");
+            return;
+        }
+
+        // 이미 존재하는 닉네임인 경우
+        if (userMapper.existsByNickname(form.getNickname()))
+        {
+            errors.rejectValue("nickname", "duplicate", "이미 사용중인 닉네임입니다.");
         }
     }
 }

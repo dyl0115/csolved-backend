@@ -10,7 +10,6 @@ public class AnswerScoreResponse
 {
     private boolean duplicate;
     private Long prevScore;
-
     private Double averageScore;
     private Long voterCount;
 

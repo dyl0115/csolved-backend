@@ -2,7 +2,12 @@
 <th:block th:fragment="user-profile(user)">
     <div x-data="{ open: false, showWithdraw : false}">
         <button @click="open = !open" class="flex items-center space-x-2">
-            <div class="w-8 h-8 rounded-full bg-gray-500"></div>
+            <img th:if="${user.profileImage != null}"
+                 th:src="${user.profileImage}"
+                 class="w-8 h-8 rounded-full object-cover"
+                 alt="프로필 이미지">
+            <div th:if="${user.profileImage == null}"
+                 class="w-8 h-8 rounded-full bg-gray-500"></div>
             <span th:text="${user.nickname}">사용자</span>
         </button>
         
