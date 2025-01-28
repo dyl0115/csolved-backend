@@ -15,6 +15,7 @@ public class AnswerWithComments
 {
     private Long id;
     private Long authorId;
+    private String authorProfileImage;
     private String authorNickname;
     private boolean anonymous;
     private String content;
@@ -35,6 +36,7 @@ public class AnswerWithComments
         return AnswerWithComments.builder()
                 .id(answer.getId())
                 .authorId(answer.getAuthorId())
+                .authorProfileImage(answer.getAuthorProfileImage())
                 .authorNickname(answer.getAuthorNickname())
                 .anonymous(answer.isAnonymous())
                 .content(answer.getContent())

@@ -14,6 +14,7 @@ public class Comment
     private Long id;
     private Long answerId;
     private Long authorId;
+    private String authorProfileImage;
     private String authorNickname;
     private boolean anonymous;
     private String content;

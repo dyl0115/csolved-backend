@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/user-layout::user-template(${user},~{::title},~{::section})}"
+      th:fragment="post-create-template(postContentLayout)">
+    <head>
+        <meta charset="UTF-8">
+        <title>질문글 작성</title>
+    </head>
+    <body>
+        <section class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
+            <div class="flex justify-between items-center mb-8 border-b pb-4">
+                <h1 class="text-2xl font-bold text-gray-900">질문 등록</h1>
+                <span class="text-sm text-gray-500">* 필수 입력 항목</span>
+            </div>
+            
+            <form id="questionForm" th:action="@{/questions/create}" method="post" th:object="${createForm}">
+                <!-- 익명/실명 토글 -->
+                <div class="mb-6 bg-gray-50 p-4 rounded-lg">
+                    <th:block
+                            th:replace="~{fragments/common/selectField::selectOptions(
+                                type='radioButton',
+                                label='작성 방식',
+                                name='anonymous',
+                                options=${ {{text:'익명',value:true},{text:'실명',value:false}} },
+                                selected=false
+                            )}"/>
+                </div>
+                
+                <!-- 작성자 아이디 -->
+                <input type="hidden" name="authorId" th:value="${user.id}"/>
+                
+                <!-- 카테고리 선택창 -->
+                <div class="mb-6">
+                    <th:block
+                            th:replace="~{fragments/common/selectField::selectOptions(
+                                type='selectBox',
+                                label='카테고리 *',
+                                name='categoryId',
+                                options=${createVM.categories},
+                                selected=${createVM.categories[0].id}
+                            )}"/>
+                </div>
+                
+                <!-- 제목 입력창 -->
+                <div class="mb-6">
+                    <th:block
+                            th:replace="~{fragments/common/inputField::input (
+                                type='text',
+                                label='제목 *',
+                                name='title',
+                                placeholder='제목을 입력하세요.'
+                            )}"/>
+                </div>
+                
+                <!-- 태그 입력창 -->
+                <div class="mb-6">
+                    <th:block
+                            th:replace="~{fragments/common/inputField::input (
+                                type='tag',
+                                label='태그 *',
+                                name='tags',
+                                placeholder='태그를 입력하고 엔터를 누르세요.'
+                            )}"/>
+                </div>
+                
+                <!-- 내용 입력창 -->
+                <div class="mb-8">
+                    <th:block th:replace="${postContentLayout}"/>
+                </div>
+                
+                <!-- 버튼 그룹 -->
+                <div class="flex justify-end items-center gap-4 pt-6 border-t">
+                    <button type="button" onclick="history.back()"
+                            class="px-6 py-2 text-gray-600 hover:text-gray-800 transition-colors duration-200 border border-gray-300 rounded-lg hover:bg-gray-50 flex items-center">
+                        <i data-lucide="x" class="w-4 h-4 mr-2"></i>
+                        취소
+                    </button>
+                    <div class="w-32">
+                        <th:block
+                                th:replace="~{fragments/common/button::button(
+                                    type='submit',
+                                    icon='pencil',
+                                    color='blue',
+                                    text='등록'
+                                )}"/>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </body>
+</html>

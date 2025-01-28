@@ -16,6 +16,7 @@
         c.answer_id answer_id,
         c.id id,
         c.author_id author_id,
+        u.profile_image author_profile_image,
         u.nickname author_nickname,
         c.anonymous anonymous,
         c.content content,

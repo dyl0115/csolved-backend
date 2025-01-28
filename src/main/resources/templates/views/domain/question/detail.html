@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html th:replace="~{layout/post-detail-layout::post-template(postType='questions', postDetails=${questionDetails}, postContentLayout=~{::post-content-layout})}">
     <post-content-layout>
-        <span th:text="${questionDetails.post.content}">포스트 내용</span>
+        <div class="break-words" th:text="${questionDetails.post.content}">포스트 내용</div>
     </post-content-layout>
 </html>
