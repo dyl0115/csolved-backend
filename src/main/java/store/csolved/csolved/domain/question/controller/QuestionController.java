@@ -2,14 +2,11 @@ package store.csolved.csolved.domain.question.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.auth.etc.annotation.LoginRequest;
-import store.csolved.csolved.auth.etc.annotation.LoginUser;
 import store.csolved.csolved.common.filter.Filtering;
 import store.csolved.csolved.common.search.SearchInfo;
 import store.csolved.csolved.common.search.Searching;
@@ -24,7 +21,6 @@ import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionCr
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionListViewModel;
 import store.csolved.csolved.domain.question.controller.dto.viewModel.QuestionUpdateVM;
 import store.csolved.csolved.domain.question.facade.QuestionFacade;
-import store.csolved.csolved.domain.user.User;
 
 @RequiredArgsConstructor
 @Controller
