@@ -50,18 +50,6 @@
                             )}"/>
                 </div>
                 
-                <!-- 카테고리 선택창 -->
-                <div class="mb-6">
-                    <th:block
-                            th:replace="~{fragments/common/selectField::selectOptions(
-                                type='selectBox',
-                                label='카테고리 *',
-                                name='categoryId',
-                                options=${createVM.categories},
-                                selected=${createVM.categories[0].id}
-                            )}"/>
-                </div>
-                
                 <!-- 내용 입력창 -->
                 <div class="mb-8">
                     <th:block th:replace="${postContentLayout}"/>

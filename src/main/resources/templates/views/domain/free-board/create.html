@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+<!--        <title>코드 하이라이팅 에디터</title>-->
+<!--        &lt;!&ndash; TinyMCE &ndash;&gt;-->
+<!--        <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>-->
+<!--        &lt;!&ndash; Prism CSS &ndash;&gt;-->
+<!--        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>-->
+<!--        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"-->
+<!--              rel="stylesheet"/>-->
+<!--        &lt;!&ndash; compressor.js CDN 추가 &ndash;&gt;-->
+<!--        <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.1.1/dist/compressor.min.js"></script>-->
+<!--        &lt;!&ndash; 에디터 css 추가 &ndash;&gt;-->
+<!--        <link th:href="@{/css/editor.css}" rel="stylesheet">-->
+    
+    </head>
+    <body>
+        <div class="editor-container">
+            <form th:action="@{/test2/save}" method="post" id="editorForm">
+                <textarea id="editor" name="content"></textarea>
+                <button type="submit" class="submit-button">저장하기</button>
+            </form>
+        </div>
+        
+        <!-- Prism JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+        <!-- 주요 언어 지원 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+        <script th:src="@{/js/editor.js}" defer data-upload-image-url="/api/upload-image"></script>
+    </body>
+</html>
