@@ -2,30 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="store.csolved.csolved.domain.post.mapper.QuestionMapper">
+<mapper namespace="store.csolved.csolved.domain.post.mapper.PostMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into posts(post_type, user_id, anonymous, title,
                           content, category_id)
-        values (2, #{authorId}, #{anonymous}, #{title},
+        values (#{postType}, #{authorId}, #{anonymous}, #{title},
                 #{content}, #{categoryId});
     </insert>
 
     <update id="update">
         update posts
-        set anonymous   = #{question.anonymous},
-            title       = #{question.title},
-            content     = #{question.content},
-            category_id = #{question.categoryId}
-        where id = #{questionId};
+        set anonymous   = #{post.anonymous},
+            title       = #{post.title},
+            content     = #{post.content},
+            category_id = #{post.categoryId}
+        where id = #{postId};
     </update>
 
-    <select id="countQuestions">
+    <select id="countPosts">
         select count(p.id)
         from posts p
         left join category c on p.category_id = c.id
         left join users u on p.user_id = u.id
-        where p.deleted_at is null and p.post_type = 2
+        where p.deleted_at is null and post_type = #{postType}
         <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
             and p.category_id = #{filterValue}
         </if>
@@ -40,7 +40,7 @@
         </choose>
     </select>
 
-    <resultMap id="QuestionResultMap" type="store.csolved.csolved.domain.post.entity.Question">
+    <resultMap id="PostResultMap" type="store.csolved.csolved.domain.post.entity.Post">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="authorId" column="author_id"/>
@@ -59,7 +59,7 @@
         </collection>
     </resultMap>
 
-    <select id="getQuestions" resultMap="QuestionResultMap">
+    <select id="getPosts" resultMap="PostResultMap">
         SELECT
         p.id id,
         p.title title,
@@ -78,7 +78,7 @@
         FROM (
         SELECT *
         FROM posts
-        WHERE deleted_at IS NULL AND post_type = 2
+        WHERE deleted_at IS NULL AND post_type = #{postType}
         <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
             AND category_id = #{filterValue}
         </if>
@@ -103,7 +103,7 @@
         </if>
     </select>
 
-    <select id="getQuestion" resultMap="QuestionResultMap">
+    <select id="getPost" resultMap="PostResultMap">
         select p.*,
                u.id       author_id,
                u.nickname author_nickname,
@@ -116,48 +116,48 @@
                  left join category c on p.category_id = c.id
                  left join post_tags pt on p.id = pt.post_id
                  left join tags t on t.id = pt.tag_id
-        where p.id = #{questionId};
+        where p.id = #{postId};
     </select>
 
     <update id="softDelete">
         update posts
         set deleted_at = current_timestamp
-        where id = #{questionId};
+        where id = #{postId};
     </update>
 
     <update id="increaseAnswerCount">
         update posts
         set answer_count = answer_count + 1
-        where id = #{questionId};
+        where id = #{postId};
     </update>
 
     <update id="decreaseAnswerCount">
         update posts
         set answer_count = answer_count - 1
-        where id = #{questionId};
+        where id = #{postId};
     </update>
 
     <select id="hasUserLiked">
         select exists(select 1
                       from post_likes
                       where user_id = #{authorId}
-                        and post_id = #{questionId});
+                        and post_id = #{postId});
     </select>
 
     <update id="increaseLikes">
         update posts
         set likes = likes + 1
-        where id = #{questionId};
+        where id = #{postId};
     </update>
 
     <insert id="addUserLike">
         insert into post_likes(post_id, user_id)
-        values (#{questionId}, #{authorId});
+        values (#{postId}, #{authorId});
     </insert>
 
     <update id="increaseView">
         update posts
         set views = views + 1
-        where id = #{questionId};
+        where id = #{postId};
     </update>
 </mapper>

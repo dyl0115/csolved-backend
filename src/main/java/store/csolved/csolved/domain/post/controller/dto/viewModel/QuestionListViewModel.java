@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import store.csolved.csolved.domain.search.page.Pagination;
 import store.csolved.csolved.domain.category.entity.Category;
-import store.csolved.csolved.domain.post.entity.Question;
+import store.csolved.csolved.domain.post.entity.Post;
 
 import java.util.List;
 
@@ -14,11 +14,11 @@ public class QuestionListViewModel
 {
     private Pagination page;
     private List<Category> categories;
-    private List<Question> questions;
+    private List<Post> questions;
 
     public static QuestionListViewModel of(Pagination page,
                                            List<Category> categories,
-                                           List<Question> questions)
+                                           List<Post> questions)
     {
         return QuestionListViewModel.builder()
                 .page(page)

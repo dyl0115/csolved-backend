@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.post.entity.Question;
+import store.csolved.csolved.domain.post.entity.Post;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class QuestionCreateUpdateForm
                 new ArrayList<>());
     }
 
-    public static QuestionCreateUpdateForm from(Question question)
+    public static QuestionCreateUpdateForm from(Post question)
     {
         return QuestionCreateUpdateForm.builder()
                 .title(question.getTitle())
@@ -60,9 +60,9 @@ public class QuestionCreateUpdateForm
                 .build();
     }
 
-    public Question getQuestion()
+    public Post getQuestion()
     {
-        return Question.builder()
+        return Post.builder()
                 .title(title)
                 .content(content)
                 .authorId(authorId)

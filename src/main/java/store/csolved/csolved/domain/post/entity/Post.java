@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import store.csolved.csolved.domain.post.PostType;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.time.LocalDateTime;
@@ -14,9 +13,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Question
+public class Post
 {
     private Long id;
+    private int postType;
     private String title;
     private boolean anonymous;
     private String content;

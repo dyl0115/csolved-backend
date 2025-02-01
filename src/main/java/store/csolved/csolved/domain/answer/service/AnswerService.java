@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.answer.entity.Answer;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
-import store.csolved.csolved.domain.post.mapper.QuestionMapper;
+import store.csolved.csolved.domain.post.mapper.PostMapper;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 public class AnswerService
 {
     private final AnswerMapper answerMapper;
-    private final QuestionMapper questionMapper;
+    private final PostMapper questionMapper;
 
     @Transactional
     public void saveAnswer(Answer answer)

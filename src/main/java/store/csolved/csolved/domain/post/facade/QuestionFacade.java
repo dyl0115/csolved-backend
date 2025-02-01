@@ -19,7 +19,7 @@ import store.csolved.csolved.domain.post.controller.dto.viewModel.QuestionCreate
 import store.csolved.csolved.domain.post.controller.dto.viewModel.QuestionDetailVM;
 import store.csolved.csolved.domain.post.controller.dto.viewModel.QuestionListViewModel;
 import store.csolved.csolved.domain.post.controller.dto.viewModel.QuestionUpdateVM;
-import store.csolved.csolved.domain.post.entity.Question;
+import store.csolved.csolved.domain.post.entity.Post;
 import store.csolved.csolved.domain.post.service.QuestionService;
 import store.csolved.csolved.domain.tag.service.TagService;
 
@@ -61,7 +61,7 @@ public class QuestionFacade
 
     public QuestionCreateUpdateForm initUpdateForm(Long questionId)
     {
-        Question question = questionService.getQuestion(questionId);
+        Post question = questionService.getQuestion(questionId);
         return QuestionCreateUpdateForm.from(question);
     }
 
@@ -94,7 +94,7 @@ public class QuestionFacade
         Pagination page = paginationUtils.createPagination(pageNumber, total);
 
         // 페이지 정보를 사용해서 DB에 필요한 질문글만 조회.
-        List<Question> questions = questionService.getQuestions(page, sort, filter, search);
+        List<Post> questions = questionService.getQuestions(page, sort, filter, search);
 
         // 카테고리 정보를 모두 가져옴.
         List<Category> categories = categoryService.getAll();
@@ -106,7 +106,7 @@ public class QuestionFacade
     // 상세 질문글, 태그, 답변, 댓글 조회
     public QuestionDetailVM getQuestion(Long questionId)
     {
-        Question question = questionService.viewQuestion(questionId);
+        Post question = questionService.viewQuestion(questionId);
         List<Answer> answers = answerService.getAnswers(questionId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
         return QuestionDetailVM.of(question, answers, comments);
