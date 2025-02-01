@@ -27,6 +27,12 @@ tinymce.init({
     paste_merge_formats: true,
     browser_spellcheck: true,
 
+    // 코드블록 하이라이팅 이후, 한글 입력이 안되는 문제 해결
+    input_ime: true,
+    toolbar_sticky: false,
+    invalid_elements: '',
+    extended_valid_elements: '*[*]',
+
     // 이미지 업로드 설정
     images_upload_url: uploadUrl || '',
     images_upload_handler: function (blobInfo, progress) {
@@ -112,7 +118,7 @@ tinymce.init({
 });
 
 // 폼 제출 처리
-document.getElementById('editorForm').addEventListener('submit', function (e) {
+document.getElementById('createForm').addEventListener('submit', function (e) {
     e.preventDefault();
     const content = tinymce.get('editor').getContent();
     document.getElementById('editor').value = content;

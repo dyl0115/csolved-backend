@@ -12,7 +12,7 @@
                 <span class="text-sm text-gray-500">* 필수 입력 항목</span>
             </div>
             
-            <form id="questionForm" th:action="@{/questions/create}" method="post" th:object="${createForm}">
+            <form id="createForm" th:action="@{/questions/create}" method="post" th:object="${createForm}">
                 <!-- 익명/실명 토글 -->
                 <div class="mb-6 bg-gray-50 p-4 rounded-lg">
                     <th:block

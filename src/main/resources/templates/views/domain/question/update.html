@@ -37,7 +37,7 @@
                     
                     <!-- 내용 입력창-->
                     <th:block
-                            th:replace="~{fragments/common/inputField::input (type='textarea', label='내용', name='content', placeholder='내용을 입력하세요.')}"/>
+                            th:replace="~{fragments/common/editor::create-template(name='content', uploadImageUrl='/api/upload-image')}"/>
                     
                     <!-- 저장 버튼-->
                     <div class="flex justify-between pt-2">
