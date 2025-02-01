@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@Controller
+//@Controller
 public class TestController2
 {
     private final S3Service s3Service;

@@ -73,13 +73,8 @@ public class QuestionController
                                 BindingResult result,
                                 Model model)
     {
-        System.out.println("QuestionController? ");
-        System.out.println("title " + form.getQuestion().getTitle());
-        System.out.println("content " + form.getContent());
         if (result.hasErrors())
         {
-            System.out.println("errors?");
-            System.out.println(result.getAllErrors());
             QuestionCreateVM viewModel = questionFacade.initCreate();
             model.addAttribute("createVM", viewModel);
             return VIEWS_QUESTION_CREATE_FORM;
