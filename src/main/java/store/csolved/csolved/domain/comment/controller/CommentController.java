@@ -2,17 +2,16 @@ package store.csolved.csolved.domain.comment.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.auth.etc.annotation.LoginRequest;
+import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.comment.service.CommentService;
-import store.csolved.csolved.domain.question.controller.QuestionController;
-import store.csolved.csolved.domain.question.facade.QuestionFacade;
+import store.csolved.csolved.domain.post.controller.QuestionController;
+import store.csolved.csolved.domain.post.facade.QuestionFacade;
 
 @RequiredArgsConstructor
 @Controller

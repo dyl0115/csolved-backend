@@ -5,12 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import store.csolved.csolved.auth.etc.LoginRequestInterceptor;
-import store.csolved.csolved.auth.etc.LoginUserArgumentResolver;
-import store.csolved.csolved.common.filter.FilterRequestArgumentResovler;
-import store.csolved.csolved.common.page.PageRequestArgumentResolver;
-import store.csolved.csolved.common.search.SearchRequestArgumentResolver;
-import store.csolved.csolved.common.sort.SortRequestArgumentResolver;
+import store.csolved.csolved.domain.auth.etc.LoginRequestInterceptor;
+import store.csolved.csolved.domain.auth.etc.LoginUserArgumentResolver;
+import store.csolved.csolved.domain.search.filter.FilterRequestArgumentResovler;
+import store.csolved.csolved.domain.search.page.PageRequestArgumentResolver;
+import store.csolved.csolved.domain.search.search.SearchRequestArgumentResolver;
+import store.csolved.csolved.domain.search.sort.SortRequestArgumentResolver;
 
 import java.util.List;
 
