@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.user.controller.dto.UserProfileForm;
 import store.csolved.csolved.exception.ImageUploadException;
-import store.csolved.csolved.file.S3Service;
+import store.csolved.csolved.file.FileService;
 import store.csolved.csolved.utils.SessionManager;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class UserProfileService
     private final static String FOLDER_NAME_USER_PROFILE = "user";
 
     private final SessionManager sessionManager;
-    private final S3Service s3Service;
+    private final FileService s3Service;
     private final UserService userService;
 
     public void updateProfile(UserProfileForm form) throws IOException

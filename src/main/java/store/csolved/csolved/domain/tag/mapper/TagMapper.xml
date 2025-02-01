@@ -13,7 +13,7 @@
     </insert>
 
     <insert id="saveQuestionTags">
-        insert into question_tags(question_id, tag_id)
+        insert into post_tags(post_id, tag_id)
         values
         <foreach collection="tags" item="tag" separator=",">
             (#{questionId}, #{tag.id})
@@ -31,7 +31,7 @@
 
     <delete id="deleteQuestionTag">
         delete
-        from question_tags
-        where question_id = #{questionId};
+        from post_tags
+        where post_id = #{questionId};
     </delete>
 </mapper>

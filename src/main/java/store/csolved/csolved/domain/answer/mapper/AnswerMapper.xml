@@ -4,7 +4,7 @@
 
 <mapper namespace="store.csolved.csolved.domain.answer.mapper.AnswerMapper">
     <insert id="saveAnswer" useGeneratedKeys="true" keyProperty="id">
-        insert into answers(question_id, author_id, anonymous,
+        insert into answers(post_id, author_id, anonymous,
                             content, created_at)
         values (#{questionId}, #{authorId}, #{anonymous},
                 #{content}, #{createdAt});
@@ -22,7 +22,7 @@
                a.created_at
         from answers a
                  left join users u on u.id = a.author_id
-        where question_id = #{questionId};
+        where post_id = #{questionId};
     </select>
 
     <select id="getAnswer">
