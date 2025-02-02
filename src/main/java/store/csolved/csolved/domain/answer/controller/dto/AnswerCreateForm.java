@@ -1,10 +1,8 @@
 package store.csolved.csolved.domain.answer.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 import store.csolved.csolved.domain.answer.entity.Answer;
 
 import java.time.LocalDateTime;
@@ -13,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class AnswerCreateForm
 {
-    private Long questionId;
+    private Long postId;
     private Long authorId;
     private Boolean anonymous;
 
@@ -28,7 +26,7 @@ public class AnswerCreateForm
     public Answer toAnswer()
     {
         return Answer.builder()
-                .questionId(questionId)
+                .postId(postId)
                 .authorId(authorId)
                 .anonymous(anonymous)
                 .content(content)

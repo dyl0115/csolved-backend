@@ -10,7 +10,9 @@ import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
+import store.csolved.csolved.domain.post.controller.community.CommunityController;
 import store.csolved.csolved.domain.post.controller.question.QuestionController;
+import store.csolved.csolved.domain.post.facade.community.CommunityFacade;
 import store.csolved.csolved.domain.post.facade.question.QuestionFacade;
 
 @RequiredArgsConstructor
@@ -19,21 +21,39 @@ public class AnswerController
 {
     private final QuestionFacade questionFacade;
     private final AnswerService answerService;
+    private final CommunityFacade communityFacade;
 
     @LoginRequest
-    @PostMapping("/questions/{questionId}/answers")
-    public String saveAnswer(@PathVariable Long questionId,
-                             @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
-                             BindingResult result,
-                             Model model)
+    @PostMapping("/questions/{postId}/answers")
+    public String saveQuestionAnswers(@PathVariable Long postId,
+                                      @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
+                                      BindingResult result,
+                                      Model model)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("questionDetails", questionFacade.getQuestion(questionId));
+            model.addAttribute("questionDetails", questionFacade.getQuestion(postId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
             return QuestionController.VIEWS_QUESTION_DETAIL;
         }
         answerService.saveAnswer(form.toAnswer());
-        return "redirect:/questions/" + questionId;
+        return "redirect:/questions/" + postId;
+    }
+
+    @LoginRequest
+    @PostMapping("/community/{postId}/answers")
+    public String saveCommunityAnswers(@PathVariable Long postId,
+                                       @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
+                                       BindingResult result,
+                                       Model model)
+    {
+        if (result.hasErrors())
+        {
+            model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(postId));
+            model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+            return CommunityController.VIEWS_COMMUNITY_DETAIL;
+        }
+        answerService.saveAnswer(form.toAnswer());
+        return "redirect:/community/" + postId;
     }
 }

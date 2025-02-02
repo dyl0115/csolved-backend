@@ -19,7 +19,7 @@ public class AnswerService
     @Transactional
     public void saveAnswer(Answer answer)
     {
-        questionMapper.increaseAnswerCount(answer.getQuestionId());
+        questionMapper.increaseAnswerCount(answer.getPostId());
         answerMapper.saveAnswer(answer);
     }
 
@@ -63,7 +63,7 @@ public class AnswerService
         }
         else
         {
-            questionMapper.decreaseAnswerCount(answer.getQuestionId());
+            questionMapper.decreaseAnswerCount(answer.getPostId());
             answerMapper.hardDeleteScores(answerId);
             answerMapper.hardDelete(answerId);
         }

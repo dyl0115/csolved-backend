@@ -10,7 +10,7 @@ public interface AnswerMapper
 {
     Long saveAnswer(Answer answer);
 
-    List<Answer> getAnswers(Long questionId);
+    List<Answer> getAnswers(Long postId);
 
     Answer getAnswer(Long answerId);
 

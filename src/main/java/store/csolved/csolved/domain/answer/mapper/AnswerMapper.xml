@@ -6,7 +6,7 @@
     <insert id="saveAnswer" useGeneratedKeys="true" keyProperty="id">
         insert into answers(post_id, author_id, anonymous,
                             content, created_at)
-        values (#{questionId}, #{authorId}, #{anonymous},
+        values (#{postId}, #{authorId}, #{anonymous},
                 #{content}, #{createdAt});
     </insert>
 
@@ -22,7 +22,7 @@
                a.created_at
         from answers a
                  left join users u on u.id = a.author_id
-        where post_id = #{questionId};
+        where post_id = #{postId};
     </select>
 
     <select id="getAnswer">

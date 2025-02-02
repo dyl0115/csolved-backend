@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Answer
 {
     private Long id;
-    private Long questionId;
+    private Long postId;
     private Long authorId;
     private String authorProfileImage;
     private String authorNickname;
