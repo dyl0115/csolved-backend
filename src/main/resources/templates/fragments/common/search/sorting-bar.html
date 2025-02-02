@@ -16,8 +16,6 @@
     </div>
     
     <script>
-
-
         function handleSortChange(value) {
             // 현재 URL의 파라미터들을 가져옵니다
             const urlParams = new URLSearchParams(window.location.search);
@@ -31,7 +29,7 @@
             }
 
             // 새로운 URL 생성
-            let newUrl = '/questions';
+            let newUrl = window.location.pathname;
             const params = urlParams.toString();
 
             if (params) {

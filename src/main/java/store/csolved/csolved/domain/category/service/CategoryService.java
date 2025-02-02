@@ -13,8 +13,8 @@ public class CategoryService
 {
     private final CategoryMapper categoryMapper;
 
-    public List<Category> getAll()
+    public List<Category> getAll(int postType)
     {
-        return categoryMapper.getAll();
+        return categoryMapper.getAll(postType);
     }
 }

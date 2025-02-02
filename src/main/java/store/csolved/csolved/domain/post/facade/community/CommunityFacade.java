@@ -14,6 +14,7 @@ import store.csolved.csolved.domain.post.controller.community.dto.view_model.Com
 import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityDetailVM;
 import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityListVM;
 import store.csolved.csolved.domain.post.entity.Post;
+import store.csolved.csolved.domain.post.entity.PostType;
 import store.csolved.csolved.domain.post.service.PostService;
 import store.csolved.csolved.domain.search.filter.Filtering;
 import store.csolved.csolved.domain.search.page.Pagination;
@@ -49,14 +50,14 @@ public class CommunityFacade
     // 커뮤니티글 작성 시 viewModel 제공
     public CommunityCreateUpdateVM initCreate()
     {
-        List<Category> categories = categoryService.getAll();
+        List<Category> categories = categoryService.getAll(COMMUNITY.getCode());
         return CommunityCreateUpdateVM.from(categories);
     }
 
     // 커뮤니티글 업데이트 시 viewModel 제공
     public CommunityCreateUpdateVM initUpdate(Long postId)
     {
-        List<Category> categories = categoryService.getAll();
+        List<Category> categories = categoryService.getAll(COMMUNITY.getCode());
         return CommunityCreateUpdateVM.from(categories);
     }
 
@@ -103,7 +104,7 @@ public class CommunityFacade
         List<Post> posts = postService.getPosts(COMMUNITY.getCode(), page, sort, filter, search);
 
         // 카테고리의 정보를 모두 가져옴.
-        List<Category> categories = categoryService.getAll();
+        List<Category> categories = categoryService.getAll(COMMUNITY.getCode());
 
         // 모든 데이터를 사용하여 viewModel 생성 후 반환
         return CommunityListVM.from(page, categories, posts);

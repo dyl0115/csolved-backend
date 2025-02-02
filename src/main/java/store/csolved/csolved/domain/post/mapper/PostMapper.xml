@@ -25,7 +25,7 @@
         from posts p
         left join category c on p.category_id = c.id
         left join users u on p.user_id = u.id
-        where p.deleted_at is null and post_type = #{postType}
+        where p.deleted_at is null and p.post_type = #{postType}
         <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
             and p.category_id = #{filterValue}
         </if>

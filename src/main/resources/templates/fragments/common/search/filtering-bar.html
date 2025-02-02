@@ -28,7 +28,8 @@
                 urlParams.set('page', '1');
             }
 
-            let newUrl = '/questions';
+            // let newUrl = '/questions';
+            let newUrl = window.location.pathname;
             const params = urlParams.toString();
 
             if (params) {

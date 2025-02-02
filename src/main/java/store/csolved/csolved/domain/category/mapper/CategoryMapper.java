@@ -8,5 +8,5 @@ import java.util.List;
 @Mapper
 public interface CategoryMapper
 {
-    List<Category> getAll();
+    List<Category> getAll(int postTypeCode);
 }

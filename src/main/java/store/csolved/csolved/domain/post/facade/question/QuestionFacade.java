@@ -49,14 +49,14 @@ public class QuestionFacade
     // 질문글 작성시 viewModel 제공
     public QuestionCreateUpdateVM initCreate()
     {
-        List<Category> categories = categoryService.getAll();
+        List<Category> categories = categoryService.getAll(QUESTION.getCode());
         return QuestionCreateUpdateVM.from(categories);
     }
 
     // 질문글 업데이트 시 기존 viewModel 제공
     public QuestionCreateUpdateVM initUpdate(Long questionId)
     {
-        List<Category> categories = categoryService.getAll();
+        List<Category> categories = categoryService.getAll(QUESTION.getCode());
         return QuestionCreateUpdateVM.from(categories);
     }
 
@@ -103,7 +103,7 @@ public class QuestionFacade
         List<Post> questions = postService.getPosts(QUESTION.getCode(), page, sort, filter, search);
 
         // 카테고리 정보를 모두 가져옴.
-        List<Category> categories = categoryService.getAll();
+        List<Category> categories = categoryService.getAll(QUESTION.getCode());
 
         // 모든 데이터를 사용하여 viewModel 생성 후 반환
         return QuestionListVM.from(page, categories, questions);

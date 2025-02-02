@@ -4,8 +4,9 @@
 
 <mapper namespace="store.csolved.csolved.domain.category.mapper.CategoryMapper">
     <select id="getAll">
-        select *
+        select id, name, created_at
         from category
-        where deleted_at is null;
+        where deleted_at is null
+          and post_type = #{postType};
     </select>
 </mapper>
