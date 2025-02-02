@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import store.csolved.csolved.domain.post.entity.Post;
+import store.csolved.csolved.domain.post.entity.PostType;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class QuestionCreateUpdateForm
     public Post getQuestion()
     {
         return Post.builder()
+                .postType(PostType.QUESTION.getCode())
                 .title(title)
                 .content(content)
                 .authorId(authorId)

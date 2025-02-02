@@ -25,8 +25,8 @@ import store.csolved.csolved.domain.search.sort.Sorting;
 @Controller
 public class CommunityController
 {
-    public final static String VIEWS_COMMUNITY_CREATE_UPDATE_FORM = "views/domain/community/create-update";
-    //    public final static String VIEWS_COMMUNITY_UPDATE_FORM = "views/domain/community/update";
+    public final static String VIEWS_COMMUNITY_CREATE_FORM = "views/domain/community/create";
+    public final static String VIEWS_COMMUNITY_UPDATE_FORM = "views/domain/community/update";
     public final static String VIEWS_COMMUNITY_LIST = "views/domain/community/list";
     public final static String VIEWS_COMMUNITY_DETAIL = "views/domain/community/detail";
 
@@ -63,7 +63,7 @@ public class CommunityController
         CommunityCreateUpdateVM viewModel = communityFacade.initCreate();
         model.addAttribute("createVM", viewModel);
         model.addAttribute("createForm", CommunityCreateUpdateForm.empty());
-        return VIEWS_COMMUNITY_CREATE_UPDATE_FORM;
+        return VIEWS_COMMUNITY_CREATE_FORM;
     }
 
     @LoginRequest
@@ -76,7 +76,7 @@ public class CommunityController
         {
             CommunityCreateUpdateVM viewModel = communityFacade.initCreate();
             model.addAttribute("createVM", viewModel);
-            return VIEWS_COMMUNITY_CREATE_UPDATE_FORM;
+            return VIEWS_COMMUNITY_CREATE_FORM;
         }
         else
         {
@@ -94,7 +94,7 @@ public class CommunityController
         model.addAttribute("updateVM", viewModel);
         CommunityCreateUpdateForm form = communityFacade.initUpdateForm(postId);
         model.addAttribute("updateForm", form);
-        return VIEWS_COMMUNITY_CREATE_UPDATE_FORM;
+        return VIEWS_COMMUNITY_UPDATE_FORM;
     }
 
     @LoginRequest
@@ -108,7 +108,7 @@ public class CommunityController
         {
             CommunityCreateUpdateVM viewModel = communityFacade.initUpdate(postId);
             model.addAttribute("updateVM", viewModel);
-            return VIEWS_COMMUNITY_CREATE_UPDATE_FORM;
+            return VIEWS_COMMUNITY_UPDATE_FORM;
         }
 
         communityFacade.update(postId, form);

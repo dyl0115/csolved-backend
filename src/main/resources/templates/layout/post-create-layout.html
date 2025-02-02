@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html th:replace="~{layout/user-layout::user-template(${user},~{::title},~{::section})}"
-      th:fragment="post-create-template(postContentLayout)">
+      th:fragment="post-create-template(postType, postContentLayout)">
     <head>
         <meta charset="UTF-8">
         <title>질문글 작성</title>
@@ -12,7 +12,7 @@
                 <span class="text-sm text-gray-500">* 필수 입력 항목</span>
             </div>
             
-            <form id="createForm" th:action="@{/questions/create}" method="post" th:object="${createForm}">
+            <form id="createForm" th:action="@{/__${postType}__/create}" method="post" th:object="${createForm}">
                 <!-- 익명/실명 토글 -->
                 <div class="mb-6 bg-gray-50 p-4 rounded-lg">
                     <th:block

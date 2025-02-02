@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html th:replace="~{layout/user-layout :: user-template(${user},~{::title},~{::section})}"
-      th:fragment="post-list-template(title, postListViewModel)">
+      th:fragment="post-list-template(title, postType, postListViewModel)">
     <head>
         <meta charset="UTF-8">
         <title>면접 질문 모음 리스트</title>
@@ -22,7 +22,7 @@
                     <!-- 질문하기 버튼 -->
                     <div class="ml-auto">
                         <th:block
-                                th:replace="~{fragments/common/button::link(icon='plus-circle', color='blue', text='질문하기', href='/questions/create')}"/>
+                                th:replace="~{fragments/common/button::link(icon='plus-circle', color='blue', text='질문하기', href=@{'/'+__${postType}__+'/create'})}"/>
                     </div>
                 </div>
                 
@@ -31,7 +31,7 @@
                     <div th:each="post : *{posts}"
                          class="bg-white rounded-xl shadow-sm border border-gray-200 hover:border-blue-400 transition-all duration-200">
                         <div th:with="post=${post}, tags=${post.tags}">
-                            <a th:href="@{'/questions/' + ${post.id}}" class="block p-6">
+                            <a th:href="@{'/'+__${postType}__+'/' + ${post.id}}" class="block p-6">
                                 <div class="flex items-start justify-between">
                                     <div class="flex-1">
                                         <h2 class="text-xl font-bold text-gray-900 mb-3" th:text="${post.title}">질문

@@ -6,12 +6,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.post.controller.question.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.post.entity.Post;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static store.csolved.csolved.domain.post.entity.PostType.COMMUNITY;
 
 @Getter
 @Builder
@@ -64,6 +65,7 @@ public class CommunityCreateUpdateForm
     public Post getCommunity()
     {
         return Post.builder()
+                .postType(COMMUNITY.getCode())
                 .title(title)
                 .content(content)
                 .authorId(authorId)
