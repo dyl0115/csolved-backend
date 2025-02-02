@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post.controller.dto.viewModel;
+package store.csolved.csolved.domain.post.controller.question.dto.view_model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,20 +10,20 @@ import java.util.List;
 
 @Getter
 @Builder
-public class QuestionListViewModel
+public class QuestionListVM
 {
     private Pagination page;
     private List<Category> categories;
-    private List<Post> questions;
+    private List<Post> posts;
 
-    public static QuestionListViewModel of(Pagination page,
-                                           List<Category> categories,
-                                           List<Post> questions)
+    public static QuestionListVM from(Pagination page,
+                                      List<Category> categories,
+                                      List<Post> questions)
     {
-        return QuestionListViewModel.builder()
+        return QuestionListVM.builder()
                 .page(page)
                 .categories(categories)
-                .questions(questions)
+                .posts(questions)
                 .build();
     }
 }

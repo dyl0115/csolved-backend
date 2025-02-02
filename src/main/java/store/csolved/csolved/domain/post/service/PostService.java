@@ -12,36 +12,42 @@ import store.csolved.csolved.domain.post.entity.Post;
 
 import java.util.List;
 
-import static store.csolved.csolved.domain.post.PostType.QUESTION;
-
 @RequiredArgsConstructor
 @Service
-public class QuestionService
+public class PostService
 {
     private final PostMapper postMapper;
 
-    public Long countQuestions(Filtering filter, Searching search)
+    @Transactional
+    public Long save(Post post)
+    {
+        postMapper.save(post);
+        return post.getId();
+    }
+
+    public Long countPosts(int postTypeCode, Filtering filter, Searching search)
     {
         return postMapper.countPosts(
-                QUESTION.getCode(),
+                postTypeCode,
                 filter.getFilterType(),
                 filter.getFilterValue(),
                 search.getSearchType(),
                 search.getKeyword());
     }
 
-    public Post getQuestion(Long questionId)
+    public Post getPost(Long postId)
     {
-        return postMapper.getPost(questionId);
+        return postMapper.getPost(postId);
     }
 
-    public List<Post> getQuestions(Pagination page,
-                                   Sorting sort,
-                                   Filtering filter,
-                                   Searching search)
+    public List<Post> getPosts(int postTypeCode,
+                               Pagination page,
+                               Sorting sort,
+                               Filtering filter,
+                               Searching search)
     {
         return postMapper.getPosts(
-                QUESTION.getCode(),
+                postTypeCode,
                 page.getOffset(),
                 page.getSize(),
                 sort.name(),
@@ -53,42 +59,35 @@ public class QuestionService
 
     // 질문글의 조회수를 1만큼 올리고, 질문 상세를 보여줌.
     @Transactional
-    public Post viewQuestion(Long questionId)
+    public Post viewPost(Long postId)
     {
-        postMapper.increaseView(questionId);
-        return postMapper.getPost(questionId);
+        postMapper.increaseView(postId);
+        return postMapper.getPost(postId);
     }
 
     @Transactional
-    public Long save(Post question)
+    public Long update(Long postId, Post post)
     {
-        postMapper.save(question);
-        return question.getId();
+        postMapper.update(postId, post);
+        return postId;
     }
 
     @Transactional
-    public Long update(Long questionId, Post question)
+    public void delete(Long postId)
     {
-        postMapper.update(questionId, question);
-        return questionId;
+        postMapper.softDelete(postId);
     }
 
     @Transactional
-    public void delete(Long questionId)
+    public boolean addLike(Long postId, Long userId)
     {
-        postMapper.softDelete(questionId);
-    }
-
-    @Transactional
-    public boolean addLike(Long questionId, Long userId)
-    {
-        if (postMapper.hasUserLiked(questionId, userId))
+        if (postMapper.hasUserLiked(postId, userId))
         {
             return false;
         }
 
-        postMapper.addUserLike(questionId, userId);
-        postMapper.increaseLikes(questionId);
+        postMapper.addUserLike(postId, userId);
+        postMapper.increaseLikes(postId);
         return true;
     }
 }

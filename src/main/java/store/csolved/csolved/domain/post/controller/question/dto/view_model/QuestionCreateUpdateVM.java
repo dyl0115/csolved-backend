@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post.controller.dto.viewModel;
+package store.csolved.csolved.domain.post.controller.question.dto.view_model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,13 +8,13 @@ import java.util.List;
 
 @Getter
 @Builder
-public class QuestionCreateVM
+public class QuestionCreateUpdateVM
 {
     private List<Category> categories;
 
-    public static QuestionCreateVM from(List<Category> categories)
+    public static QuestionCreateUpdateVM from(List<Category> categories)
     {
-        return QuestionCreateVM.builder()
+        return QuestionCreateUpdateVM.builder()
                 .categories(categories)
                 .build();
     }

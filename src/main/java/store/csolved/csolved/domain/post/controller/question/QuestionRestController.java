@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post.controller;
+package store.csolved.csolved.domain.post.controller.question;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.auth.etc.annotation.LoginUser;
-import store.csolved.csolved.domain.post.facade.QuestionFacade;
+import store.csolved.csolved.domain.post.facade.question.QuestionFacade;
 import store.csolved.csolved.domain.user.User;
 
 @RequestMapping("/api/questions")

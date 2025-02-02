@@ -10,8 +10,8 @@ import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
-import store.csolved.csolved.domain.post.controller.QuestionController;
-import store.csolved.csolved.domain.post.facade.QuestionFacade;
+import store.csolved.csolved.domain.post.controller.question.QuestionController;
+import store.csolved.csolved.domain.post.facade.question.QuestionFacade;
 
 @RequiredArgsConstructor
 @Controller

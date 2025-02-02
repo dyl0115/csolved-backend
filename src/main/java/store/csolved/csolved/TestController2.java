@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import store.csolved.csolved.domain.file.FileService;
-import store.csolved.csolved.domain.post.PostType;
 
 import java.io.IOException;
 import java.util.HashMap;

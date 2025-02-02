@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post.controller;
+package store.csolved.csolved.domain.post.controller.question;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +16,10 @@ import store.csolved.csolved.domain.search.sort.SortInfo;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.search.page.PageInfo;
-import store.csolved.csolved.domain.post.controller.dto.form.QuestionCreateUpdateForm;
-import store.csolved.csolved.domain.post.controller.dto.viewModel.QuestionCreateVM;
-import store.csolved.csolved.domain.post.controller.dto.viewModel.QuestionListViewModel;
-import store.csolved.csolved.domain.post.controller.dto.viewModel.QuestionUpdateVM;
-import store.csolved.csolved.domain.post.facade.QuestionFacade;
+import store.csolved.csolved.domain.post.controller.question.dto.form.QuestionCreateUpdateForm;
+import store.csolved.csolved.domain.post.controller.question.dto.view_model.QuestionCreateUpdateVM;
+import store.csolved.csolved.domain.post.controller.question.dto.view_model.QuestionListVM;
+import store.csolved.csolved.domain.post.facade.question.QuestionFacade;
 
 @RequiredArgsConstructor
 @Controller
@@ -41,17 +40,17 @@ public class QuestionController
                                @SearchInfo Searching search,
                                Model model)
     {
-        QuestionListViewModel viewModel = questionFacade.getQuestions(page, sort, filter, search);
+        QuestionListVM viewModel = questionFacade.getQuestions(page, sort, filter, search);
         model.addAttribute("questionListViewModel", viewModel);
         return VIEWS_QUESTION_LIST;
     }
 
     @LoginRequest
-    @GetMapping("/questions/{questionId}")
-    public String getQuestion(@PathVariable Long questionId,
+    @GetMapping("/questions/{postId}")
+    public String getQuestion(@PathVariable Long postId,
                               Model model)
     {
-        model.addAttribute("questionDetails", questionFacade.getQuestion(questionId));
+        model.addAttribute("questionDetails", questionFacade.getQuestion(postId));
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         return VIEWS_QUESTION_DETAIL;
@@ -61,7 +60,7 @@ public class QuestionController
     @GetMapping("/questions/create")
     public String initCreate(Model model)
     {
-        QuestionCreateVM viewModel = questionFacade.initCreate();
+        QuestionCreateUpdateVM viewModel = questionFacade.initCreate();
         model.addAttribute("createVM", viewModel);
         model.addAttribute("createForm", QuestionCreateUpdateForm.empty());
         return VIEWS_QUESTION_CREATE_FORM;
@@ -75,7 +74,7 @@ public class QuestionController
     {
         if (result.hasErrors())
         {
-            QuestionCreateVM viewModel = questionFacade.initCreate();
+            QuestionCreateUpdateVM viewModel = questionFacade.initCreate();
             model.addAttribute("createVM", viewModel);
             return VIEWS_QUESTION_CREATE_FORM;
         }
@@ -87,32 +86,32 @@ public class QuestionController
     }
 
     @LoginRequest
-    @GetMapping("/questions/{questionId}/update")
-    public String initUpdate(@PathVariable Long questionId,
+    @GetMapping("/questions/{postId}/update")
+    public String initUpdate(@PathVariable Long postId,
                              Model model)
     {
-        QuestionUpdateVM viewModel = questionFacade.initUpdate(questionId);
+        QuestionCreateUpdateVM viewModel = questionFacade.initUpdate(postId);
         model.addAttribute("updateVM", viewModel);
-        QuestionCreateUpdateForm form = questionFacade.initUpdateForm(questionId);
+        QuestionCreateUpdateForm form = questionFacade.initUpdateForm(postId);
         model.addAttribute("updateForm", form);
         return VIEWS_QUESTION_UPDATE_FORM;
     }
 
     @LoginRequest
-    @PutMapping("/questions/{questionId}/update")
-    public String processUpdate(@PathVariable("questionId") Long questionId,
+    @PutMapping("/questions/{postId}/update")
+    public String processUpdate(@PathVariable("postId") Long postId,
                                 @Valid @ModelAttribute("updateForm") QuestionCreateUpdateForm form,
                                 BindingResult result,
                                 Model model)
     {
         if (result.hasErrors())
         {
-            QuestionUpdateVM viewModel = questionFacade.initUpdate(questionId);
+            QuestionCreateUpdateVM viewModel = questionFacade.initUpdate(postId);
             model.addAttribute("updateVM", viewModel);
             return VIEWS_QUESTION_UPDATE_FORM;
         }
 
-        questionFacade.update(questionId, form);
+        questionFacade.update(postId, form);
         return "redirect:/questions?page=1";
     }
 }

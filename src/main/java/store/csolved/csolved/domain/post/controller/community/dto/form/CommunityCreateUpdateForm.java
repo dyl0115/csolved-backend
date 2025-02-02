@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post.controller.dto.form;
+package store.csolved.csolved.domain.post.controller.community.dto.form;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
+import store.csolved.csolved.domain.post.controller.question.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.post.entity.Post;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class QuestionCreateUpdateForm
+public class CommunityCreateUpdateForm
 {
     @NotBlank(message = "제목을 입력해주세요.")
     @Size(min = 2, max = 50, message = "제목은 최소 2글자에서 50자까지 가능합니다.")
@@ -35,20 +36,9 @@ public class QuestionCreateUpdateForm
     @NotEmpty(message = "태그는 반드시 하나 이상 있어야 합니다.")
     private List<String> tags;
 
-    public static QuestionCreateUpdateForm empty()
+    public static CommunityCreateUpdateForm from(Post question)
     {
-        return new QuestionCreateUpdateForm(
-                "",
-                "",
-                null,
-                false,
-                null,
-                new ArrayList<>());
-    }
-
-    public static QuestionCreateUpdateForm from(Post question)
-    {
-        return QuestionCreateUpdateForm.builder()
+        return CommunityCreateUpdateForm.builder()
                 .title(question.getTitle())
                 .content(question.getContent())
                 .authorId(question.getAuthorId())
@@ -60,7 +50,18 @@ public class QuestionCreateUpdateForm
                 .build();
     }
 
-    public Post getQuestion()
+    public static CommunityCreateUpdateForm empty()
+    {
+        return new CommunityCreateUpdateForm(
+                "",
+                "",
+                null,
+                false,
+                null,
+                new ArrayList<>());
+    }
+
+    public Post getCommunity()
     {
         return Post.builder()
                 .title(title)

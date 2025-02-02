@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post.controller.dto.viewModel;
+package store.csolved.csolved.domain.post.controller.question.dto.view_model;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +17,9 @@ public class QuestionDetailVM
     private Post post;
     private List<AnswerWithComments> answers;
 
-    public static QuestionDetailVM of(Post question,
-                                      List<Answer> answers,
-                                      Map<Long, List<Comment>> comments)
+    public static QuestionDetailVM from(Post question,
+                                        List<Answer> answers,
+                                        Map<Long, List<Comment>> comments)
     {
         return QuestionDetailVM.builder()
                 .answers(AnswerWithComments.from(answers, comments))

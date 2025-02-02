@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post;
+package store.csolved.csolved.domain.post.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
