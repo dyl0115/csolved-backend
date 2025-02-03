@@ -7,8 +7,10 @@
     <body>
         <post-content-layout>
             <!-- 카테고리 선택창 -->
-            <th:block th:replace="~{fragments/common/selectField::selectOptions(type='selectBox',
-            label='카테고리명', name='categoryId', options=${createVM.categories}, selected=${createVM.categories[0]})}"/>
+            <div class="mb-12">
+                <th:block th:replace="~{fragments/common/selectField::selectOptions(type='selectBox',
+            label='카테고리 *', name='categoryId', options=${createVM.categories}, selected=${createVM.categories[0]})}"/>
+            </div>
             
             <!-- 게시글 입력창 -->
             <th:block
