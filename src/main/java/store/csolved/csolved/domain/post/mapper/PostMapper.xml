@@ -4,14 +4,14 @@
 
 <mapper namespace="store.csolved.csolved.domain.post.mapper.PostMapper">
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <insert id="savePost" useGeneratedKeys="true" keyProperty="id">
         insert into posts(post_type, user_id, anonymous, title,
                           content, category_id)
         values (#{postType}, #{authorId}, #{anonymous}, #{title},
                 #{content}, #{categoryId});
     </insert>
 
-    <update id="update">
+    <update id="updatePost">
         update posts
         set anonymous   = #{post.anonymous},
             title       = #{post.title},
@@ -119,7 +119,7 @@
         where p.id = #{postId};
     </select>
 
-    <update id="softDelete">
+    <update id="deletePost">
         update posts
         set deleted_at = current_timestamp
         where id = #{postId};

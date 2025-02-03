@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper
 public interface PostMapper
 {
-    void save(Post post);
+    void savePost(Post post);
 
-    void update(@Param("postId") Long postId, @Param("post") Post post);
+    void updatePost(@Param("postId") Long postId, @Param("post") Post post);
 
     // 게시글 개수 조회
     Long countPosts(int postType,
@@ -34,7 +34,7 @@ public interface PostMapper
     Post getPost(Long postId);
 
     // 논리적으로 게시글을 삭제
-    void softDelete(Long postId);
+    void deletePost(Long postId);
 
     void increaseAnswerCount(Long postId);
 

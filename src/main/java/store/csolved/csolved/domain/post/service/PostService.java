@@ -21,7 +21,7 @@ public class PostService
     @Transactional
     public Long save(Post post)
     {
-        postMapper.save(post);
+        postMapper.savePost(post);
         return post.getId();
     }
 
@@ -68,14 +68,14 @@ public class PostService
     @Transactional
     public Long update(Long postId, Post post)
     {
-        postMapper.update(postId, post);
+        postMapper.updatePost(postId, post);
         return postId;
     }
 
     @Transactional
     public void delete(Long postId)
     {
-        postMapper.softDelete(postId);
+        postMapper.deletePost(postId);
     }
 
     @Transactional
