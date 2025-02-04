@@ -18,28 +18,28 @@ public class TagService
 
     // 태그 저장
     @Transactional
-    public void saveTags(Long questionId, List<Tag> tags)
+    public void saveTags(Long postId, List<Tag> tags)
     {
         List<Tag> existTags = filterExistTags(tags);
         if (!existTags.isEmpty())
         {
-            tagMapper.saveQuestionTags(questionId, existTags);
+            tagMapper.savePostTags(postId, existTags);
         }
 
         List<Tag> newTags = filterNewTags(tags);
         if (!newTags.isEmpty())
         {
             tagMapper.saveTags(newTags);
-            tagMapper.saveQuestionTags(questionId, newTags);
+            tagMapper.savePostTags(postId, newTags);
         }
     }
 
     // 질문글 업데이트 시 태그도 업데이트
     @Transactional
-    public void updateTags(Long questionId, List<Tag> tags)
+    public void updateTags(Long postId, List<Tag> tags)
     {
-        tagMapper.deleteQuestionTag(questionId);
-        saveTags(questionId, tags);
+        tagMapper.deleteTag(postId);
+        saveTags(postId, tags);
     }
 
     private List<String> extractTagNames(List<Tag> tags)

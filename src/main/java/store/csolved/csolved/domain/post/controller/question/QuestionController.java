@@ -60,9 +60,10 @@ public class QuestionController
     @GetMapping("/questions/create")
     public String initCreate(Model model)
     {
-        QuestionCreateUpdateVM viewModel = questionFacade.initCreate();
+        QuestionCreateUpdateVM viewModel = questionFacade.initCreateUpdate();
+        QuestionCreateUpdateForm form = QuestionCreateUpdateForm.empty();
         model.addAttribute("createVM", viewModel);
-        model.addAttribute("createForm", QuestionCreateUpdateForm.empty());
+        model.addAttribute("createForm", form);
         return VIEWS_QUESTION_CREATE_FORM;
     }
 
@@ -74,7 +75,7 @@ public class QuestionController
     {
         if (result.hasErrors())
         {
-            QuestionCreateUpdateVM viewModel = questionFacade.initCreate();
+            QuestionCreateUpdateVM viewModel = questionFacade.initCreateUpdate();
             model.addAttribute("createVM", viewModel);
             return VIEWS_QUESTION_CREATE_FORM;
         }
@@ -90,7 +91,7 @@ public class QuestionController
     public String initUpdate(@PathVariable Long postId,
                              Model model)
     {
-        QuestionCreateUpdateVM viewModel = questionFacade.initUpdate(postId);
+        QuestionCreateUpdateVM viewModel = questionFacade.initCreateUpdate();
         model.addAttribute("updateVM", viewModel);
         QuestionCreateUpdateForm form = questionFacade.initUpdateForm(postId);
         model.addAttribute("updateForm", form);
@@ -106,7 +107,7 @@ public class QuestionController
     {
         if (result.hasErrors())
         {
-            QuestionCreateUpdateVM viewModel = questionFacade.initUpdate(postId);
+            QuestionCreateUpdateVM viewModel = questionFacade.initCreateUpdate();
             model.addAttribute("updateVM", viewModel);
             return VIEWS_QUESTION_UPDATE_FORM;
         }

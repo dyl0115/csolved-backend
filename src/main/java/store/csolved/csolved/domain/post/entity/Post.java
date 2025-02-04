@@ -1,16 +1,14 @@
 package store.csolved.csolved.domain.post.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Builder
 @Getter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post

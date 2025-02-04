@@ -42,49 +42,42 @@ public class QuestionFacade
     // 질문글, 질문글의 태그 저장.
     public void save(QuestionCreateUpdateForm form)
     {
-        Long saveId = postService.save(form.getQuestion());
-        tagService.saveTags(saveId, form.getTagList());
+        Long savedId = postService.save(form.getQuestion());
+        tagService.saveTags(savedId, form.getTagList());
     }
 
-    // 질문글 작성시 viewModel 제공
-    public QuestionCreateUpdateVM initCreate()
-    {
-        List<Category> categories = categoryService.getAll(QUESTION.getCode());
-        return QuestionCreateUpdateVM.from(categories);
-    }
-
-    // 질문글 업데이트 시 기존 viewModel 제공
-    public QuestionCreateUpdateVM initUpdate(Long questionId)
+    // 질문글 생성 및 업데이트 시 기존 viewModel 제공
+    public QuestionCreateUpdateVM initCreateUpdate()
     {
         List<Category> categories = categoryService.getAll(QUESTION.getCode());
         return QuestionCreateUpdateVM.from(categories);
     }
 
     // 질문글 업데이트 시 기존 게시글 제공
-    public QuestionCreateUpdateForm initUpdateForm(Long questionId)
+    public QuestionCreateUpdateForm initUpdateForm(Long postId)
     {
-        Post question = postService.getPost(questionId);
+        Post question = postService.getPost(postId);
         return QuestionCreateUpdateForm.from(question);
     }
 
     // 질문글 업데이트
     @Transactional
-    public void update(Long questionId, QuestionCreateUpdateForm form)
+    public void update(Long postId, QuestionCreateUpdateForm form)
     {
-        postService.update(questionId, form.getQuestion());
-        tagService.updateTags(questionId, form.getTagList());
+        postService.update(postId, form.getQuestion());
+        tagService.updateTags(postId, form.getTagList());
     }
 
     // 질문글 좋아요
-    public boolean addLike(Long questionId, Long userId)
+    public boolean addLike(Long postId, Long userId)
     {
-        return postService.addLike(questionId, userId);
+        return postService.addLike(postId, userId);
     }
 
     // 질문글 삭제
-    public void delete(Long questionId)
+    public void delete(Long postId)
     {
-        postService.delete(questionId);
+        postService.delete(postId);
     }
 
     // 질문글 리스트 조회
@@ -99,7 +92,7 @@ public class QuestionFacade
         // 사용자가 요청한 페이지 번호, 질문글 개수를 사용하여 페이지 정보를 생성.
         Pagination page = paginationUtils.createPagination(pageNumber, total);
 
-        // 페이지 정보를 사용하여 DB에 필요한 질문글만 조회.
+        // 페이지 정보를 사용하여 DB로부터 필요한 질문글만 조회.
         List<Post> questions = postService.getPosts(QUESTION.getCode(), page, sort, filter, search);
 
         // 카테고리 정보를 모두 가져옴.
@@ -110,10 +103,10 @@ public class QuestionFacade
     }
 
     // 질문글 상세 조회
-    public QuestionDetailVM getQuestion(Long questionId)
+    public QuestionDetailVM getQuestion(Long postId)
     {
-        Post question = postService.viewPost(questionId);
-        List<Answer> answers = answerService.getAnswers(questionId);
+        Post question = postService.viewPost(postId);
+        List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
         return QuestionDetailVM.from(question, answers, comments);
     }

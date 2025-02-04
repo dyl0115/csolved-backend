@@ -58,7 +58,7 @@ public class AuthController
         }
 
         authService.signIn(signInForm);
-        return "redirect:/questions?page=1";
+        return "redirect:/community?page=1";
     }
 
     @GetMapping("/signUp")

@@ -2,6 +2,132 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="store.csolved.csolved.">
-    
+<!--여기 부터-->
+<mapper namespace="store.csolved.csolved.domain.post.mapper.code_review.CodeReviewMapper">
+    <insert id="saveCodeReview" useGeneratedKeys="true" keyProperty="id">
+        insert into posts(post_type, user_id, anonymous, title, content, category_id)
+        values (#{postType}, #{authorId}, #{anonymous}, #{title}, #{content}, #{categoryId});
+    </insert>
+
+    <insert id="saveGithubUrl">
+        insert into code_reviews(post_id, github_url)
+        values (#{postId}, #{githubUrl});
+    </insert>
+
+    <update id="updateGithubUrl">
+        update code_reviews
+        set github_url = #{githubUrl}
+        where post_id = #{postId};
+    </update>
+
+    <select id="countCodeReviews">
+        select count(p.id)
+        from posts p
+        left join category c on p.category_id =c.id
+        left join code_reviews cr on p.id = cr.post_id
+        left join users u on p.user_id = u.id
+        where p.deleted_at is null and p.post_type = #{postType}
+        <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
+            and p.category_id = #{filterValue}
+        </if>
+        <choose>
+            <when test="searchType == 'TITLE' and searchKeyword != null and searchKeyword != ''">
+                and p.title like concat('%', #{searchKeyword}, '%')
+            </when>
+            <when test="searchType == 'AUTHOR' and searchKeyword != null and searchKeyword != ''">
+                and u.nickname like concat('%', #{searchKeyword}, '%')
+                and p.anonymous is false
+            </when>
+        </choose>
+    </select>
+
+    <resultMap id="codeReviewResultMap" type="store.csolved.csolved.domain.post.entity.code_review.CodeReview">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="authorId" column="author_id"/>
+        <result property="authorNickname" column="author_nickname"/>
+        <result property="anonymous" column="anonymous"/>
+        <result property="githubUrl" column="github_url"/>
+        <result property="content" column="content"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="views" column="views"/>
+        <result property="likes" column="likes"/>
+        <result property="answerCount" column="answer_count"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="tags" ofType="store.csolved.csolved.domain.tag.entity.Tag">
+            <id property="id" column="tag_id"/>
+            <result property="name" column="tag_name"/>
+        </collection>
+    </resultMap>
+
+    <select id="getCodeReviews" resultMap="codeReviewResultMap">
+        SELECT
+        p.id id,
+        p.title title,
+        p.anonymous anonymous,
+        p.content content,
+        p.views views,
+        p.likes likes,
+        p.answer_count answer_count,
+        p.created_at created_at,
+        u.id author_id,
+        u.nickname author_nickname,
+        c.id category_id,
+        c.name category_name,
+        t.id tag_id,
+        t.name tag_name
+        FROM (
+        SELECT *
+        FROM posts
+        WHERE deleted_at IS NULL AND post_type = #{postType}
+        <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">
+            AND category_id = #{filterValue}
+        </if>
+        <if test="searchType == 'TITLE' and searchKeyword != null and searchKeyword != ''">
+            AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+        </if>
+        ORDER BY
+        <if test="sortType == 'RECENT'">created_at DESC</if>
+        <if test="sortType == 'VIEWS'">views DESC</if>
+        <if test="sortType == 'LIKES'">likes DESC</if>
+        <if test="sortType == 'ANSWERS'">answer_count DESC</if>
+        LIMIT #{offset}, #{size}
+        ) p
+        LEFT JOIN users u ON u.id = p.user_id
+        LEFT JOIN category c ON c.id = p.category_id
+        LEFT JOIN post_tags pt ON pt.post_id = p.id
+        LEFT JOIN tags t ON t.id = pt.tag_id
+        where true
+        <if test="searchType == 'AUTHOR' and searchKeyword != null and searchKeyword != ''">
+            AND u.nickname LIKE concat('%',#{searchKeyword},'%')
+            AND p.anonymous IS FALSE
+        </if>
+    </select>
+
+    <select id="getCodeReview" resultMap="codeReviewResultMap">
+        select p.id           id,
+               p.post_type    post_type,
+               p.title        title,
+               p.anonymous    anonymous,
+               p.content      content,
+               p.views        views,
+               p.likes        likes,
+               p.answer_count answer_count,
+               p.created_at   created_at,
+               cr.github_url  github_url,
+               u.id           author_id,
+               u.nickname     author_nickname,
+               c.id           category_id,
+               c.name         category_name,
+               t.id           tag_id,
+               t.name         tag_name
+        from posts p
+                 left join users u on p.user_id = u.id
+                 left join code_reviews cr on p.id = cr.post_id
+                 left join category c on p.category_id = c.id
+                 left join post_tags pt on p.id = pt.post_id
+                 left join tags t on t.id = pt.tag_id
+        where p.id = #{postId};
+    </select>
 </mapper>

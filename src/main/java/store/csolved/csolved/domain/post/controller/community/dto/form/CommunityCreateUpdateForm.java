@@ -53,13 +53,9 @@ public class CommunityCreateUpdateForm
 
     public static CommunityCreateUpdateForm empty()
     {
-        return new CommunityCreateUpdateForm(
-                "",
-                "",
-                null,
-                false,
-                null,
-                new ArrayList<>());
+        return CommunityCreateUpdateForm.builder()
+                .anonymous(false)
+                .tags(new ArrayList<>()).build();
     }
 
     public Post getCommunity()
