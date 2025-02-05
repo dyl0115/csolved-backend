@@ -81,6 +81,12 @@
                                         this.removeTag(this.tags.length - 1);
                                     }
                                 });
+
+                                this.tagInput.addEventListener('blur', () => {
+                                    if (this.tagInput.value.trim()) {
+                                        this.addTag();
+                                    }
+                                });
                             }
 
                             addTag() {
@@ -90,12 +96,6 @@
                                     this.tagInput.value = '';
                                     this.render();
                                 }
-
-                                this.tagInput.addEventListener('blur', () => {
-                                    if (this.tagInput.value.trim()) {
-                                        this.addTag();
-                                    }
-                                });
                             }
 
                             removeTag(index) {
