@@ -9,12 +9,13 @@
         <section>
             <div class="max-w-7xl mx-auto mt-8 px-4" th:object="${postListViewModel}">
                 <!-- 배너 -->
-                <th:block th:replace="${banner}" class="mb-10"/>
+                <div class="mb-10">
+                    <th:block th:replace="${banner}"/>
+                </div>
                 
                 <!-- 검색 바 -->
                 <th:block th:replace="~{/fragments/common/search/searching-bar :: searching-bar}"/>
-                
-                <div class="flex items-center mb-8 gap-4">
+                <div class="flex items-center mb-8 gap-4 flex-wrap sm:gap-2 sm:text-sm">
                     
                     <!-- 필터 바 -->
                     <th:block th:replace="~{/fragments/common/search/filtering-bar::filtering-bar(*{categories})}"/>
