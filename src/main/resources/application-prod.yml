@@ -15,7 +15,7 @@ spring:
     password: ${DB_PASSWORD}
 
   thymeleaf:
-    prefix: classpath:/templates/
+    prefix: classpath:/templates
     suffix: .html
 
   messages:

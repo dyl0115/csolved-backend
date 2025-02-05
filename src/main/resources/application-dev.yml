@@ -13,6 +13,10 @@ spring:
     user: ${DEV_DB_USERNAME}
     password: ${DEV_DB_PASSWORD}
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
   messages:
     basename: messages/messages-ko
     encoding: UTF-8
