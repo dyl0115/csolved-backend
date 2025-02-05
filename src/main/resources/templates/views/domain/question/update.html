@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/user-layout::user-template(${user},~{::title},~{::section})}">
+<html th:replace="~{/layout/user-layout::user-template(${user},~{::title},~{::section})}">
     <head>
         <meta charset="UTF-8">
         <title>면접질문 수정</title>
@@ -17,31 +17,31 @@
                     
                     <!-- 익명/실명 토글-->
                     <th:block
-                            th:replace="~{fragments/common/selectField::selectOptions(type='radioButton', label='작성 방식', name='anonymous', options=${ {{text:'익명',value:true},{text:'실명',value:false}} }, selected=false)}"/>
+                            th:replace="~{/fragments/common/selectField::selectOptions(type='radioButton', label='작성 방식', name='anonymous', options=${ {{text:'익명',value:true},{text:'실명',value:false}} }, selected=false)}"/>
                     
                     <!-- 작성자 아이디 -->
                     <input type="hidden" name="authorId" th:value="${user.id}"/>
                     
                     <!-- 제목 입력창-->
                     <th:block
-                            th:replace="~{fragments/common/inputField::input (type='text', label='제목', name='title', placeholder='제목을 입력하세요.')}"/>
+                            th:replace="~{/fragments/common/inputField::input (type='text', label='제목', name='title', placeholder='제목을 입력하세요.')}"/>
                     
                     <!-- 태그 입력창-->
                     <th:block
-                            th:replace="~{fragments/common/inputField::input (type='tag', label='태그', name='tags', placeholder='태그를 입력하고 엔터를 누르세요.')}"/>
+                            th:replace="~{/fragments/common/inputField::input (type='tag', label='태그', name='tags', placeholder='태그를 입력하고 엔터를 누르세요.')}"/>
                     
                     <!-- 카테고리 선택창 -->
                     <th:block
-                            th:replace="~{fragments/common/selectField::selectOptions(type='selectBox', label='카테고리', name='categoryId', options=${updateVM.categories}, selected=${updateVM.categories[0].id})}"/>
+                            th:replace="~{/fragments/common/selectField::selectOptions(type='selectBox', label='카테고리', name='categoryId', options=${updateVM.categories}, selected=${updateVM.categories[0].id})}"/>
                     
                     <!-- 내용 입력창-->
                     <th:block
-                            th:replace="~{fragments/common/editor::create-template(name='content', uploadImageUrl='/api/upload-image')}"/>
+                            th:replace="~{/fragments/common/editor::create-template(name='content', uploadImageUrl='/api/upload-image')}"/>
                     
                     <!-- 저장 버튼-->
                     <div class="flex justify-between pt-2">
                         <th:block
-                                th:replace="~{fragments/common/button::button(type='submit', icon='pencil', color='blue', text='등록')}"/>
+                                th:replace="~{/fragments/common/button::button(type='submit', icon='pencil', color='blue', text='등록')}"/>
                     </div>
                 </div>
             </form>

@@ -24,10 +24,10 @@ import store.csolved.csolved.domain.search.sort.Sorting;
 @Controller
 public class CodeReviewController
 {
-    public final static String VIEWS_CODE_REVIEW_CREATE_FORM = "views/domain/code_review/create";
-    public final static String VIEWS_CODE_REVIEW_LIST = "views/domain/code_review/list";
-    public final static String VIEWS_CODE_REVIEW_DETAIL = "views/domain/code_review/detail";
-    public final static String VIEWS_CODE_REVIEW_UPDATE_FORM = "views/domain/code_review/update";
+    public final static String VIEWS_CODE_REVIEW_CREATE_FORM = "/views/domain/code_review/create";
+    public final static String VIEWS_CODE_REVIEW_LIST = "/views/domain/code_review/list";
+    public final static String VIEWS_CODE_REVIEW_DETAIL = "/views/domain/code_review/detail";
+    public final static String VIEWS_CODE_REVIEW_UPDATE_FORM = "/views/domain/code_review/update";
 
     private final CodeReviewFacade codeReviewFacade;
 

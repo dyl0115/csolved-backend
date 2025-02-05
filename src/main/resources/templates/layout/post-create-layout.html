@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/user-layout::user-template(${user},~{::title},~{::section})}"
+<html th:replace="~{/layout/user-layout::user-template(${user},~{::title},~{::section})}"
       th:fragment="post-create-template(postType, postContentLayout)">
     <head>
         <meta charset="UTF-8">
@@ -16,7 +16,7 @@
                 <!-- 익명/실명 토글 -->
                 <div class="mb-6 bg-gray-50 p-4 rounded-lg">
                     <th:block
-                            th:replace="~{fragments/common/selectField::selectOptions(
+                            th:replace="~{/fragments/common/selectField::selectOptions(
                                 type='radioButton',
                                 label='작성 방식',
                                 name='anonymous',
@@ -31,7 +31,7 @@
                 <!-- 제목 입력창 -->
                 <div class="mb-6">
                     <th:block
-                            th:replace="~{fragments/common/inputField::input (
+                            th:replace="~{/fragments/common/inputField::input (
                                 type='text',
                                 label='제목 *',
                                 name='title',
@@ -42,7 +42,7 @@
                 <!-- 태그 입력창 -->
                 <div class="mb-6">
                     <th:block
-                            th:replace="~{fragments/common/inputField::input (
+                            th:replace="~{/fragments/common/inputField::input (
                                 type='tag',
                                 label='태그 *',
                                 name='tags',
@@ -64,7 +64,7 @@
                     </button>
                     <div class="w-32">
                         <th:block
-                                th:replace="~{fragments/common/button::button(
+                                th:replace="~{/fragments/common/button::button(
                                     type='submit',
                                     icon='pencil',
                                     color='blue',

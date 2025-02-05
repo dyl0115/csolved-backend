@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/post-detail-layout::post-template(postType='community', postDetails=${communityPostDetails}, postContentLayout=~{::post-content-layout})}">
+<html th:replace="~{/layout/post-detail-layout::post-template(postType='community', postDetails=${communityPostDetails}, postContentLayout=~{::post-content-layout})}">
     <post-content-layout>
         <th:block
-                th:replace="~{fragments/common/editor::detail-template(content=${communityPostDetails.post.content})}"/>
+                th:replace="~{/fragments/common/editor::detail-template(content=${communityPostDetails.post.content})}"/>
     </post-content-layout>
 </html>

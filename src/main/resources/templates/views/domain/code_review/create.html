@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/post-create-layout::post-create-template(postType='code-review', postContentLayout=~{::post-content-layout})}">
+<html th:replace="~{/layout/post-create-layout::post-create-template(postType='code-review', postContentLayout=~{::post-content-layout})}">
     <head>
         <meta charset="UTF-8">
         <title>게시글 작성</title>
@@ -8,20 +8,20 @@
         <post-content-layout>
             <!-- 카테고리 선택창 -->
             <div class="mb-12">
-                <th:block th:replace="~{fragments/common/selectField::selectOptions(type='selectBox',
+                <th:block th:replace="~{/fragments/common/selectField::selectOptions(type='selectBox',
             label='카테고리 *', name='categoryId', options=${createVM.categories}, selected=${createVM.categories[0]})}"/>
             </div>
             
             <!-- 깃허브 주소 입력창 -->
             <div class="mb-12">
                 <th:block
-                        th:replace="~{fragments/common/inputField::input (type='text', label='깃허브 주소 *', name='githubUrl', placeholder='포트폴리오 깃허브 주소를 입력해주세요.')}"/>
+                        th:replace="~{/fragments/common/inputField::input (type='text', label='깃허브 주소 *', name='githubUrl', placeholder='포트폴리오 깃허브 주소를 입력해주세요.')}"/>
             </div>
             
             <!-- 게시글 입력창 -->
             <div>
                 <th:block
-                        th:replace="~{fragments/common/editor::create-template(name='content', uploadImageUrl='/api/upload-image')}">
+                        th:replace="~{/fragments/common/editor::create-template(name='content', uploadImageUrl='/api/upload-image')}">
                 </th:block>
             </div>
         </post-content-layout>

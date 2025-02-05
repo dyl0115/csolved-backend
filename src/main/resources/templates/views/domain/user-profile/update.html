@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/user-layout::user-template(user=${user},title=~{::title},content=~{::content})}">
+<html th:replace="~{/layout/user-layout::user-template(user=${user},title=~{::title},content=~{::content})}">
     <head>
         <title>내 프로필 상세</title>
     </head>
@@ -39,13 +39,13 @@
                         <!-- 닉네임 -->
                         <div>
                             <th:block
-                                    th:replace="~{fragments/common/inputField::input (type='text', label='닉네임', name='nickname', placeholder='')}"/>
+                                    th:replace="~{/fragments/common/inputField::input (type='text', label='닉네임', name='nickname', placeholder='')}"/>
                         </div>
                         
                         <!-- 수정하기 버튼 -->
                         <div>
                             <th:block
-                                    th:replace="~{fragments/common/button::button(type='submit', icon='check', color='blue', text='저장하기')}"/>
+                                    th:replace="~{/fragments/common/button::button(type='submit', icon='check', color='blue', text='저장하기')}"/>
                         </div>
                     </form>
                 </div>

@@ -25,10 +25,10 @@ import store.csolved.csolved.domain.search.sort.Sorting;
 @Controller
 public class CommunityController
 {
-    public final static String VIEWS_COMMUNITY_CREATE_FORM = "views/domain/community/create";
-    public final static String VIEWS_COMMUNITY_UPDATE_FORM = "views/domain/community/update";
-    public final static String VIEWS_COMMUNITY_LIST = "views/domain/community/list";
-    public final static String VIEWS_COMMUNITY_DETAIL = "views/domain/community/detail";
+    public final static String VIEWS_COMMUNITY_CREATE_FORM = "/views/domain/community/create";
+    public final static String VIEWS_COMMUNITY_UPDATE_FORM = "/views/domain/community/update";
+    public final static String VIEWS_COMMUNITY_LIST = "/views/domain/community/list";
+    public final static String VIEWS_COMMUNITY_DETAIL = "/views/domain/community/detail";
 
     private final CommunityFacade communityFacade;
 

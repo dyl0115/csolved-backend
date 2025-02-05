@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/post-detail-layout::post-template(postType='code-review', postDetails=${codeReviewDetails}, postContentLayout=~{::post-content-layout})}">
+<html th:replace="~{/layout/post-detail-layout::post-template(postType='code-review', postDetails=${codeReviewDetails}, postContentLayout=~{::post-content-layout})}">
     <post-content-layout>
         
         <div class="mb-12">
             <th:block
-                    th:replace="~{fragments/common/editor::detail-template(content=${codeReviewDetails.post.content})}"/>
+                    th:replace="~{/fragments/common/editor::detail-template(content=${codeReviewDetails.post.content})}"/>
         </div>
         
         <div>
             <th:block
-                    th:replace="~{fragments/common/button::link(icon='github', color='blue', text='포트폴리오 링크', href=${codeReviewDetails.post.githubUrl})}"/>
+                    th:replace="~{/fragments/common/button::link(icon='github', color='blue', text='포트폴리오 링크', href=${codeReviewDetails.post.githubUrl})}"/>
         </div>
         
     </post-content-layout>

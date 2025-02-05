@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/post-create-layout::post-create-template(postType='questions', postContentLayout=~{::post-content-layout})}">
+<html th:replace="~{/layout/post-create-layout::post-create-template(postType='questions', postContentLayout=~{::post-content-layout})}">
     <head>
         <meta charset="UTF-8">
         <title>게시글 작성</title>
@@ -8,13 +8,13 @@
         <post-content-layout>
             <!-- 카테고리 선택창 -->
             <div class="mb-12">
-                <th:block th:replace="~{fragments/common/selectField::selectOptions(type='selectBox',
+                <th:block th:replace="~{/fragments/common/selectField::selectOptions(type='selectBox',
             label='카테고리 *', name='categoryId', options=${createVM.categories}, selected=${createVM.categories[0]})}"/>
             </div>
             
             <!-- 게시글 입력창 -->
             <th:block
-                    th:replace="~{fragments/common/editor::create-template(name='content', uploadImageUrl='/api/upload-image')}">
+                    th:replace="~{/fragments/common/editor::create-template(name='content', uploadImageUrl='/api/upload-image')}">
             </th:block>
         </post-content-layout>
     </body>

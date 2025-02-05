@@ -25,10 +25,10 @@ import store.csolved.csolved.domain.post.facade.question.QuestionFacade;
 @Controller
 public class QuestionController
 {
-    public final static String VIEWS_QUESTION_CREATE_FORM = "views/domain/question/create";
-    public final static String VIEWS_QUESTION_UPDATE_FORM = "views/domain/question/update";
-    public final static String VIEWS_QUESTION_LIST = "views/domain/question/list";
-    public final static String VIEWS_QUESTION_DETAIL = "views/domain/question/detail";
+    public final static String VIEWS_QUESTION_CREATE_FORM = "/views/domain/question/create";
+    public final static String VIEWS_QUESTION_UPDATE_FORM = "/views/domain/question/update";
+    public final static String VIEWS_QUESTION_LIST = "/views/domain/question/list";
+    public final static String VIEWS_QUESTION_DETAIL = "/views/domain/question/detail";
 
     private final QuestionFacade questionFacade;
 

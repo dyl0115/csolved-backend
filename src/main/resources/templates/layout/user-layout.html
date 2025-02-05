@@ -23,10 +23,10 @@
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between items-center h-16">
                         <!-- 로고 -->
-                        <div th:replace="~{fragments/common/logo::logo}" class="flex-shrink-0"></div>
+                        <div th:replace="~{/fragments/common/logo::logo}" class="flex-shrink-0"></div>
                         
                         <!-- 프로필 -->
-                        <div th:replace="~{fragments/common/profile::user-profile(${user})}"
+                        <div th:replace="~{/fragments/common/profile::user-profile(${user})}"
                              class="flex items-center"></div>
                     </div>
                 </div>
@@ -36,7 +36,7 @@
             <nav class="bg-white border-b border-gray-200">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-12">
-                        <div th:replace="~{fragments/common/nav::nav-bar}"
+                        <div th:replace="~{/fragments/common/nav::nav-bar}"
                              class="flex space-x-8"></div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
             </main>
             
             <!-- 푸터 -->
-            <footer th:replace="~{fragments/common/footer}"
+            <footer th:replace="~{/fragments/common/footer}"
                     class="bg-white border-t border-gray-200"></footer>
         </div>
         

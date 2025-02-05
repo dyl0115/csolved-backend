@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/user-layout :: user-template(${user},~{::title},~{::section})}"
+<html th:replace="~{/layout/user-layout :: user-template(${user},~{::title},~{::section})}"
       th:fragment="post-list-template(title, banner, postType, postListViewModel)">
     <head>
         <meta charset="UTF-8">
@@ -12,20 +12,20 @@
                 <th:block th:replace="${banner}" class="mb-10"/>
                 
                 <!-- 검색 바 -->
-                <th:block th:replace="~{fragments/common/search/searching-bar :: searching-bar}"/>
+                <th:block th:replace="~{/fragments/common/search/searching-bar :: searching-bar}"/>
                 
                 <div class="flex items-center mb-8 gap-4">
                     
                     <!-- 필터 바 -->
-                    <th:block th:replace="~{fragments/common/search/filtering-bar::filtering-bar(*{categories})}"/>
+                    <th:block th:replace="~{/fragments/common/search/filtering-bar::filtering-bar(*{categories})}"/>
                     
                     <!-- 정렬 바 -->
-                    <th:block th:replace="~{fragments/common/search/sorting-bar::sorting-bar}"/>
+                    <th:block th:replace="~{/fragments/common/search/sorting-bar::sorting-bar}"/>
                     
                     <!-- 글 작성 버튼 -->
                     <div class="ml-auto">
                         <th:block
-                                th:replace="~{fragments/common/button::link(icon='plus-circle', color='blue', text='작성 하기', href=@{'/'+__${postType}__+'/create'})}"/>
+                                th:replace="~{/fragments/common/button::link(icon='plus-circle', color='blue', text='작성 하기', href=@{'/'+__${postType}__+'/create'})}"/>
                     </div>
                 </div>
                 
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                 </div>
-                <th:block th:replace="~{fragments/common/search/paging-bar::paging-bar(*{page})}"/>
+                <th:block th:replace="~{/fragments/common/search/paging-bar::paging-bar(*{page})}"/>
             </div>
         </section>
     </body>
