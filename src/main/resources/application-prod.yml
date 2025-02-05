@@ -5,6 +5,14 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
+  flyway:
+    enabled: true
+    #    baseline-on-migrate: true # 기존 DB가 있을 때 필수
+    locations: classpath:db/migration
+    url: ${DB_URL}
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
   messages:
     basename: messages/messages-ko
     encoding: UTF-8
