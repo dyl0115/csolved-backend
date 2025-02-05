@@ -14,19 +14,18 @@ import java.util.UUID;
 @Service
 public class FileService
 {
-//    private final AmazonS3Client amazonS3Client;
+    private final AmazonS3Client amazonS3Client;
 
-    //    @Value("${aws.s3.bucket-name}")
-//    private String bucket;
+    @Value("${aws.s3.bucket-name}")
+    private String bucket;
 
     public String upload(MultipartFile file, String folderName) throws IOException
     {
-//        String fileName = folderName + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
-//        ObjectMetadata metadata = new ObjectMetadata();
-//        metadata.setContentType(file.getContentType());
-//
-//        amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
-//        return amazonS3Client.getUrl(bucket, fileName).toString();
-        return "hello";
+        String fileName = folderName + "/" + UUID.randomUUID() + "_" + file.getOriginalFilename();
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType(file.getContentType());
+
+        amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
+        return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 }

@@ -29,13 +29,8 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          DB_URL: ${{ secrets.DB_URL }}
-        run: |
-          echo "AWS_ACCESS_KEY_ID exists: ${{ env.AWS_ACCESS_KEY_ID }}"
-          echo "AWS_SECRET_ACCESS_KEY exists: ${{ env.AWS_SECRET_ACCESS_KEY }}"
-          echo "AWS_REGION exists: ${{ env.AWS_REGION}}"
-          echo "DB_URL exists: ${{ env.DB_URL }}"
-          ./gradlew clean build
+          BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+        run: ./gradlew clean build
 
       # Docker Hub 로그인
       - name: Docker Hub Login
@@ -66,5 +61,9 @@ jobs:
               -e DB_URL='${{ secrets.DB_URL }}' \
               -e DB_USERNAME='${{ secrets.DB_USERNAME }}' \
               -e DB_PASSWORD='${{ secrets.DB_PASSWORD }}' \
+              -e AWS_ACCESS_KEY_ID='${{ secrets.AWS_ACCESS_KEY_ID }}' \
+              -e AWS_SECRET_ACCESS_KEY='${{ secrets.AWS_SECRET_ACCESS_KEY }}' \
+              -e BUCKET_NAME='${{ secrets.BUCKET_NAME }}' \
+              -e AWS_REGION='${{ secrets.AWS_REGION }}' \
               -p 8080:8080 \
               ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest
