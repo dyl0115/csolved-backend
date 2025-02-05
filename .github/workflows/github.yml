@@ -35,7 +35,7 @@ jobs:
           echo "AWS_SECRET_ACCESS_KEY exists: ${{ env.AWS_SECRET_ACCESS_KEY }}"
           echo "AWS_REGION exists: ${{ env.AWS_REGION}}"
           echo "DB_URL exists: ${{ env.DB_URL }}"
-          ./gradlew clean build -Dorg.gradle.debug=true --stacktrace --info
+          ./gradlew clean build -Dorg.gradle.debug=true --stacktrace || (echo "Build failed. Last 50 lines:" && tail -n 50 build/reports/tests/test/index.html)
 
       # Docker Hub 로그인
       - name: Docker Hub Login
