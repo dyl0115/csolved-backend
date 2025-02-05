@@ -7,8 +7,9 @@ spring:
 
   flyway:
     enabled: true
-    #    baseline-on-migrate: true # 기존 DB가 있을 때 필수
+    baseline-on-migrate: true
     locations: classpath:db/migration
+
     url: ${DB_URL}
     user: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -23,6 +24,13 @@ mybatis:
     - classpath*:store/csolved/csolved/**/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
+
+aws:
+  s3:
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+    bucket-name: ${BUCKET_NAME}
+    region: ${AWS_REGION}
 
 logging:
   level:
