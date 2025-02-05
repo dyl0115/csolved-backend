@@ -33,7 +33,6 @@ aws:
 
 logging:
   level:
-    #    web: DEBUG
     root: INFO
-    store.csolved.csolved.domain.user.mapper: TRACE
+#    store.csolved.csolved.domain.user.mapper: TRACE
 
