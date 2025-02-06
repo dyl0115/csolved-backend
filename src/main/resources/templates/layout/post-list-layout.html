@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{/layout/user-layout :: user-template(${user},~{::title},~{::section})}"
+<html th:replace="~{/layout/default-layout::default-layout(${user},~{::title},~{::section})}"
       th:fragment="post-list-template(title, banner, postType, postListViewModel)">
     <head>
         <meta charset="UTF-8">
