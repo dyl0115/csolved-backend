@@ -16,7 +16,7 @@ import java.util.Map;
 public class SortRequestArgumentResolver implements HandlerMethodArgumentResolver
 {
     private final static Map<String, Sorting> SORT_TYPE_MAP = new HashMap<>();
-    private final static String SORT_PARAMETER_NAME = "sort";
+    private final static String SORT_PARAMETER_NAME = "sortType";
 
     @PostConstruct
     public void init()

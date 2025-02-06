@@ -29,6 +29,19 @@
                 <!-- Blog entries-->
                 <div class="col-lg-8">
                     <!-- Posts -->
+                    <div th:if="${#lists.isEmpty(postContents.posts)}">
+                        
+                        <!-- 게시글이 없을 때 -->
+                        <div class="card text-center my-5">
+                            <div class="card-body">
+                                <h5 class="card-title">게시글이 없습니다</h5>
+                                <p class="card-text">첫 번째 글을 작성해보세요!</p>
+                                <a th:href="@{'/'+__${postType}__+'/create'}" class="btn btn-primary">글 작성하기</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 게시글이 존재할 때 -->
                     <div class="card mb-4 card-hover" th:each="post:*{posts}">
                         <a class="card-body text-decoration-none" th:href="@{'/'+__${postType}__+'/' + ${post.id}}">
                             <div class="row">
@@ -137,11 +150,13 @@
                         <div class="card-header">정렬</div>
                         <div class="card-body">
                             <div class="d-flex flex-column">
-                                <select class="form-select" id="sortSelect" aria-label="Sort options">
-                                    <option value="recent" selected>최신순</option>
-                                    <option value="popular">인기순</option>
-                                    <option value="comments">댓글 많은 순</option>
-                                    <option value="likes">좋아요 많은 순</option>
+                                <select class="form-select" id="sort-select" aria-label="Sort options"
+                                        th:with="currentType=${param.sortType != null ? param.sortType[0] : 'recent'}"
+                                        onchange="sortPosts()">
+                                    <option value="recent" th:selected="${currentType == 'recent'}">최신순</option>
+                                    <option value="views" th:selected="${currentType == 'views'}">조회수 많은 순</option>
+                                    <option value="answers" th:selected="${currentType == 'answers'}">댓글 많은 순</option>
+                                    <option value="likes" th:selected="${currentType == 'likes'}">좋아요 많은 순</option>
                                 </select>
                             </div>
                         </div>
@@ -153,9 +168,15 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li th:each="category:*{categories}"><a href="#!" th:text="${category.name}">Web
-                                                                                                                     Design</a>
+                                    <ul class="list-unstyled mb-0" th:each="category:*{categories}">
+                                        <li>
+                                            <button id="filter-select" class="btn btn-link p-0 text-decoration-none"
+                                                    type="button"
+                                                    th:value="${category.id}"
+                                                    th:text="${category.name}"
+                                                    onclick="filterPosts(this.value)">
+                                                카테고리 이름
+                                            </button>
                                         </li>
                                     </ul>
                                 </div>
