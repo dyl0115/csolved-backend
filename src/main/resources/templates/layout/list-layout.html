@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en"
+      th:replace="~{/layout/default-layout::default-layout(user=${user}, title=~{::title}, content=~{::body})}"
+      th:fragment="post-list-layout(title, banner, postType, postContents)">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        
+        <title>Blog Home - Start Bootstrap Template</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="/css/styles.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <script src="/js/list-layout.js"></script>
+        <!-- Page header with logo and tagline-->
+        <header class="py-5 bg-light border-bottom mb-4">
+            <div class="container">
+                <div class="text-center my-5">
+                    <h1 class="fw-bolder">Welcome to Blog Home!</h1>
+                    <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
+                </div>
+            </div>
+        </header>
+        <!-- Page content-->
+        <div class="container" th:object="${postContents}">
+            <div class="row">
+                <!-- Blog entries-->
+                <div class="col-lg-8">
+                    <!-- Posts -->
+                    <div class="card mb-4 card-hover" th:each="post:*{posts}">
+                        <a class="card-body text-decoration-none" th:href="@{'/'+__${postType}__+'/' + ${post.id}}">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <img class="img-fluid rounded-end h-100 object-fit-cover"
+                                         src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg"
+                                         alt="..."/>
+                                </div>
+                                <div class="col-md-8">
+                                    <!-- 게시글 제목 -->
+                                    <h2 class="card-title fs-6 fw-bolder pb-5 text-truncate" style="max-width: 100%;"
+                                        th:text="${post.title}">게시글 제목</h2>
+                                    
+                                    <div class="d-flex align-items-center">
+                                        <!-- 카테고리 이름-->
+                                        <div class="d-flex align-items-center me-2">
+                                            <i class="bi bi-journal-text text-muted me-1"></i>
+                                            <div class="col-auto small text-muted" th:text="${post.categoryName}">
+                                                자유
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 댓글 수-->
+                                        <div class="d-flex align-items-center me-2">
+                                            <i class="bi bi-chat-dots text-muted me-1"></i>
+                                            <div class="col-auto small text-muted " th:text="${post.answerCount}">
+                                                0
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 좋아요 -->
+                                        <div class="d-flex align-items-center me-2">
+                                            <i class="bi bi-heart-fill text-muted me-1"></i>
+                                            <div class="col-auto small text-muted" th:text="${post.likes}">
+                                                0
+                                            </div>
+                                        </div>
+                                        <!-- 조회수-->
+                                        <div class="d-flex align-items-center me-2">
+                                            <i class="bi bi-eye text-muted me-1"></i>
+                                            <div class="col-auto small text-muted" th:text="${post.views}">
+                                                0
+                                            </div>
+                                        </div>
+                                        <!-- 작성자 -->
+                                        <div class="d-flex align-items-center me-2">
+                                            <i class="bi bi-person text-muted me-1"></i>
+                                            <div class="col-auto small text-muted"
+                                                 th:text="${post.anonymous ? '익명' : post.authorNickname}">
+                                                글쓴이
+                                            </div>
+                                        </div>
+                                        <!-- 작성 시간 -->
+                                        <div class="d-flex align-items-center me-2">
+                                            <i class="bi bi-clock text-muted me-1"></i>
+                                            <div class="timeago col-auto small text-muted"
+                                                 th:data-date="${post.createdAt}"
+                                                 th:text="${#temporals.format(post.createdAt, 'yyyy/MM/dd hh:mm')}">
+                                                January 1, 2023
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!-- Pagination-->
+                    <nav aria-label="Pagination">
+                        <hr class="my-0"/>
+                        <ul class="pagination justify-content-center my-4">
+                            <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
+                                                              aria-disabled="true">Newer</a></li>
+                            <li class="page-item active" aria-current="page"><a class="page-link" href="#!">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#!">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#!">3</a></li>
+                            <li class="page-item disabled"><a class="page-link" href="#!">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#!">15</a></li>
+                            <li class="page-item"><a class="page-link" href="#!">Older</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <!-- Side widgets-->
+                <div class="col-lg-4">
+                    <!-- 검색 위젯 -->
+                    <div class="card mb-4">
+                        <div class="card-header">검색</div>
+                        <div class="card-body">
+                            <div class="input-group">
+                                <select id="search-select" class="form-select" aria-label="Search type"
+                                        style="max-width: 80px;">
+                                    <option value="title">제목</option>
+                                    <option value="author">글쓴이</option>
+                                </select>
+                                <input id="search-input" class="form-control" type="text" placeholder="검색어를 입력하세요."
+                                       aria-label="Enter search term..." aria-describedby="button-search"/>
+                                <button class="btn btn-primary" id="button-search" type="button"
+                                        onclick="searchPosts()">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 정렬 위젯-->
+                    <div class="card mb-4">
+                        <div class="card-header">정렬</div>
+                        <div class="card-body">
+                            <div class="d-flex flex-column">
+                                <select class="form-select" id="sortSelect" aria-label="Sort options">
+                                    <option value="recent" selected>최신순</option>
+                                    <option value="popular">인기순</option>
+                                    <option value="comments">댓글 많은 순</option>
+                                    <option value="likes">좋아요 많은 순</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 카테고리 위젯 -->
+                    <div class="card mb-4">
+                        <div class="card-header">카테고리</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li th:each="category:*{categories}"><a href="#!" th:text="${category.name}">Web
+                                                                                                                     Design</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 사이드 위젯-->
+                    <div class="card mb-4">
+                        <div class="card-header">사이드 위젯</div>
+                        <div class="card-body">You can put anything you want inside of these side widgets. They are easy
+                                               to use, and feature the Bootstrap 5 card component!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

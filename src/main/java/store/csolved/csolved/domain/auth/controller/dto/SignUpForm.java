@@ -25,7 +25,7 @@ public class SignUpForm
     private String passwordConfirm;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Size(min = 2, max = 10, message = "길이가 2에서 10 사이여야 합니다.")
+    @Size(min = 2, max = 8, message = "길이가 2에서 8 사이여야 합니다.")
     private String nickname;
 
     public static SignUpForm empty()
