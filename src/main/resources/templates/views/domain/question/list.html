@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html th:replace="~{/layout/post-list-layout::post-list-template(
+<html th:replace="~{/layout/list-layout::post-list-layout(
                   title=~{::title},
                   banner=~{::banner},
                   postType='questions',
-                  postListViewModel=${questionListViewModel})}">
+                  postContents=${questionListViewModel})}">
     <head>
         <title>질문글 리스트</title>
     </head>

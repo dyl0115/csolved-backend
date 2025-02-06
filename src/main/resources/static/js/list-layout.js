@@ -52,6 +52,7 @@ function sortPosts() {
     const sortTypeValue = document.getElementById('sort-select').value;
 
     // Change its value as needed
+    urlParams.set('page', 1);
     urlParams.set(sortType, sortTypeValue); // update with the select box value
 
     // Reflect the changes in the browser's URL
@@ -109,4 +110,10 @@ function filterPosts(filterTypeValue) {
         .catch(error => {
             console.error('There was a problem with the fetch operation:', error);
         });
+}
+
+function updatePage(page) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('page', page);
+    window.location.href = url.toString();
 }

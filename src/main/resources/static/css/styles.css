@@ -5064,6 +5064,7 @@ textarea.form-control-lg {
     --bs-pagination-disabled-bg: #fff;
     --bs-pagination-disabled-border-color: #dee2e6;
     display: flex;
+    gap: 10px;
     padding-left: 0;
     list-style: none;
 }
