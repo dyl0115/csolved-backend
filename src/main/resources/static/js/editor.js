@@ -2,9 +2,10 @@ const scriptEl = document.currentScript;
 const uploadUrl = scriptEl.dataset.uploadImageUrl;
 
 tinymce.init({
-    selector: '#editor',
+    selector: '#large-editor',
     height: 500,
     plugins: 'code codesample link image table lists advlist autolink',
+    menubar: false,
     toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | codesample | link image',
     codesample_languages: [
         {text: 'HTML/XML', value: 'markup'},
@@ -117,15 +118,144 @@ tinymce.init({
     images_upload_credentials: true, // 쿠키 전송 허용
 });
 
-// 폼 제출 처리
-document.getElementById('createForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const content = tinymce.get('editor').getContent();
-    document.getElementById('editor').value = content;
-    this.submit();
+tinymce.init({
+    selector: '#medium-editor',
+    height: 300,
+    width: "100%",
+    plugins: 'code codesample table lists advlist autolink',
+    menubar: false,
+    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | codesample',
+    codesample_languages: [
+        {text: 'HTML/XML', value: 'markup'},
+        {text: 'JavaScript', value: 'javascript'},
+        {text: 'CSS', value: 'css'},
+        {text: 'PHP', value: 'php'},
+        {text: 'Python', value: 'python'},
+        {text: 'Java', value: 'java'},
+        {text: 'SQL', value: 'sql'}
+    ],
+    codesample_global_prismjs: true,
+    forced_root_block: 'p',
+    remove_trailing_brs: false,
+    br_in_pre: false,
+
+    keep_styles: true,
+    entity_encoding: 'raw',
+    paste_enable_default_filters: false,
+    paste_word_valid_elements: '*[*]',
+    paste_webkit_styles: 'all',
+    paste_merge_formats: true,
+    browser_spellcheck: true,
+
+    // 코드블록 하이라이팅 이후, 한글 입력이 안되는 문제 해결
+    input_ime: true,
+    toolbar_sticky: false,
+    invalid_elements: '',
+    extended_valid_elements: '*[*]',
+
+    content_style: `
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                    padding: 10px;
+                }
+                .mce-content-body pre[class*="language-"] {
+                    margin: 15px 0;
+                }
+                .mce-content-body code[class*="language-"] {
+                    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+                }
+                p {
+                    margin: 0;
+                    padding: 8px 0;
+                    min-height: 20px;
+                }
+                img {
+                    max-width: 100%;
+                    height: auto;
+                }
+            `,
+    setup: function (editor) {
+        editor.on('change keyup', function () {
+            Prism.highlightAll();
+        });
+    },
 });
 
-// 페이지 로드 시 코드 하이라이팅 적용
-document.addEventListener('DOMContentLoaded', (event) => {
-    Prism.highlightAll();
+tinymce.init({
+    selector: '#small-editor',
+    height: 250,
+    width: "100%",
+    plugins: 'code codesample table lists advlist autolink',
+    menubar: false,
+    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | codesample',
+    codesample_languages: [
+        {text: 'HTML/XML', value: 'markup'},
+        {text: 'JavaScript', value: 'javascript'},
+        {text: 'CSS', value: 'css'},
+        {text: 'PHP', value: 'php'},
+        {text: 'Python', value: 'python'},
+        {text: 'Java', value: 'java'},
+        {text: 'SQL', value: 'sql'}
+    ],
+    codesample_global_prismjs: true,
+    forced_root_block: 'p',
+    remove_trailing_brs: false,
+    br_in_pre: false,
+    keep_styles: true,
+    entity_encoding: 'raw',
+    paste_enable_default_filters: false,
+    paste_word_valid_elements: '*[*]',
+    paste_webkit_styles: 'all',
+    paste_merge_formats: true,
+    browser_spellcheck: true,
+
+    // 코드블록 하이라이팅 이후, 한글 입력이 안되는 문제 해결
+    input_ime: true,
+    toolbar_sticky: false,
+    invalid_elements: '',
+    extended_valid_elements: '*[*]',
+
+    content_style: `
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                    padding: 10px;
+                }
+                .mce-content-body pre[class*="language-"] {
+                    margin: 15px 0;
+                }
+                .mce-content-body code[class*="language-"] {
+                    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+                }
+                p {
+                    margin: 0;
+                    padding: 8px 0;
+                    min-height: 20px;
+                }
+                img {
+                    max-width: 100%;
+                    height: auto;
+                }
+            `,
+    setup: function (editor) {
+        editor.on('change keyup', function () {
+            Prism.highlightAll();
+        });
+    },
+});
+
+// 폼 제출 처리
+// document.getElementById('createForm').addEventListener('submit', function (e) {
+//     e.preventDefault();
+//     const content = tinymce.get('editor').getContent();
+//     document.getElementById('editor').value = content;
+//     this.submit();
+// });
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const textarea = this.querySelector('textarea');
+        const content = tinymce.get(textarea.id).getContent();
+        textarea.value = content;
+        this.submit();
+    });
 });
