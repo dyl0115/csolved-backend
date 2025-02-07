@@ -4,102 +4,197 @@
         <title>상세 게시글</title>
     </head>
     <body>
-        <!-- Page content-->
-        <div class="container mt-5">
+        <!-- Prism CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>
+        <!-- Prism JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+        <!-- Prism 지원 언어 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+        
+        <!-- 페이지 내용 -->
+        <div class="container mt-5"
+             th:with="post=${communityPostDetails.post}, answers=${communityPostDetails.answers}">
             <div class="row">
-                <div class="col-lg-8">
-                    <!-- Post content-->
-                    <article>
-                        <!-- Post header-->
-                        <header class="mb-4">
-                            <!-- Post title-->
-                            <h1 class="fw-bolder mb-1">Welcome to Blog Post!</h1>
-                            <!-- Post meta content-->
-                            <div class="text-muted fst-italic mb-2">Posted on January 1, 2023 by Start Bootstrap</div>
-                            <!-- Post categories-->
-                            <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
-                            <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
-                        </header>
-                        <!-- Preview image figure-->
-                        <figure class="mb-4"><img class="img-fluid rounded"
-                                                  src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..."/>
-                        </figure>
-                        <!-- Post content-->
-                        <section class="mb-5">
-                            <p class="fs-5 mb-4">Science is an enterprise that should be cherished as an activity of the
-                                                 free human mind. Because it transforms who we are, how we live, and it
-                                                 gives us an understanding of our place in the universe.</p>
-                            <p class="fs-5 mb-4">The universe is large and old, and the ingredients for life as we know
-                                                 it are everywhere, so there's no reason to think that Earth would be
-                                                 unique in that regard. Whether of not the life became intelligent is a
-                                                 different question, and we'll see if we find that.</p>
-                            <p class="fs-5 mb-4">If you get asteroids about a kilometer in size, those are large enough
-                                                 and carry enough energy into our system to disrupt transportation,
-                                                 communication, the food chains, and that can be a really bad day on
-                                                 Earth.</p>
-                            <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
-                            <p class="fs-5 mb-4">For me, the most fascinating interface is Twitter. I have odd cosmic
-                                                 thoughts every day and I realized I could hold them to myself or share
-                                                 them with people who might be interested.</p>
-                            <p class="fs-5 mb-4">Venus has a runaway greenhouse effect. I kind of want to know what
-                                                 happened there because we're twirling knobs here on Earth without
-                                                 knowing the consequences of it. Mars once had running water. It's bone
-                                                 dry today. Something bad happened there as well.</p>
-                        </section>
-                    </article>
-                    <!-- Comments section-->
+                <div class="col-lg-8"><!-- 전체 포스트-->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <article>
+                                <!-- 포스트 헤더 -->
+                                <header class="mb-4">
+                                    <!-- 제목-->
+                                    <h3 class="fw-bolder mb-2" th:text="${post.title}">게시글 제목</h3>
+                                    
+                                    <!-- 태그 리스트-->
+                                    <span class="badge bg-secondary text-decoration-none link-light me-1 mb-2"
+                                          th:each="tag:${post.tags}"
+                                          th:text="${tag.name}">태그 명</span>
+                                    
+                                    <!-- 게시글 메타 정보 -->
+                                    <div class="mb-2">
+                                        <div class="me-2 d-inline-flex">
+                                            <i class="bi bi-journal-text text-muted"></i>
+                                            <span class="text-muted fst-italic"
+                                                  th:text=" ${post.categoryName}">
+                                            카테고리 이름
+                                        </span>
+                                        </div>
+                                        
+                                        <div class="me-2 d-inline-flex">
+                                            <i class="bi bi-person text-muted"></i>
+                                            <span class="text-muted fst-italic me-2"
+                                                  th:text="${post.anonymous ? '익명' : post.authorNickname}">
+                                            글쓴이
+                                        </span>
+                                        </div>
+                                        
+                                        <div class="me-2 d-inline-flex">
+                                            <i class="bi bi-eye text-muted"></i>
+                                            <span class="text-muted fst-italic me-2"
+                                                  th:text="${post.views}">
+                                            조회수
+                                        </span>
+                                        </div>
+                                        
+                                        <div class="me-2 d-inline-flex">
+                                            <i class="bi bi-clock text-muted"></i>
+                                            <span class="timeago text-muted fst-italic me-2"
+                                                  th:data-date="${post.createdAt}">
+                                            2025-02-07
+                                        </span>
+                                        </div>
+                                    </div>
+                                </header>
+                                
+                                <!-- 포스트 내용-->
+                                <section class="mb-5">
+                                    <p class="fs-5 mb-4" th:utext="${post.content}">게시글 내용</p>
+                                </section>
+                            </article>
+                        </div>
+                    </div>
+                                      <!-- 좋아요 버튼 -->
+                    <button class="btn btn-danger mb-4" id="like-button">
+                        <i class="bi bi-heart"></i> 좋아요
+                        <span id="like-count" class="ms-1" th:text="${post.likes}">0</span>
+                    </button>
+                    
+                    <script th:inline="javascript">
+                        let likeCount = /*[[${post.likes}]]*/ 0;
+                        const likeButton = document.getElementById('like-button');
+                        likeButton.addEventListener('click', function () {
+                            if (!likeButton.disabled) {
+                                likeCount++;
+                                document.getElementById('like-count').textContent = likeCount;
+                                likeButton.disabled = true;
+                            }
+                        });
+                    </script>
+                                      
+                                      <!-- 답변 폼 -->
+                    <button class="btn btn-primary mb-4" id="toggle-comment-form">
+                        <i class="bi bi-chat-left-text-fill"></i>
+                        답변 달기
+                    </button>
+                    <div class="card mb-4 d-none" id="comment-card">
+                        <div class="card-body">
+                            <form id="comment-form" class="d-flex flex-column align-items-end">
+            <textarea class="form-control mb-3" rows="3"
+                      placeholder="댓글을 달아 생각을 공유해 주세요!"></textarea>
+                                <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="anonymous-checkbox"
+                                               name="anonymous">
+                                        <label class="form-check-label" for="anonymous-checkbox">익명으로 댓글 달기</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">등록</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <script>
+                        document.getElementById('toggle-comment-form').addEventListener('click', function () {
+                            const card = document.getElementById('comment-card');
+                            card.classList.toggle('d-none');
+                        });
+                    </script>
+                                      
+                                      <!-- 답변 섹션-->
                     <section class="mb-5">
                         <div class="card bg-light">
                             <div class="card-body">
-                                <!-- Comment form-->
-                                <form class="mb-4"><textarea class="form-control" rows="3"
-                                                             placeholder="Join the discussion and leave a comment!"></textarea>
-                                </form>
-                                <!-- Comment with nested comments-->
-                                <div class="d-flex mb-4">
-                                    <!-- Parent comment-->
-                                    <div class="flex-shrink-0"><img class="rounded-circle"
-                                                                    src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                
+                                <div th:if="${#lists.isEmpty(answers)}">
+                                    <p class="text-muted">댓글이 비어있습니다. 첫 번째 댓글을 작성해보세요!</p>
+                                </div>
+                                <!-- 답변과 댓글 -->
+                                <div class="d-flex mb-4" th:each="answer:${answers}">
+                                    <!-- 답변 -->
+                                    <div class="flex-shrink-0"><img class="rounded-circle img-fluid"
+                                                                    style="max-width: 40px; max-height: 40px;"
+                                                                    th:src="${answer.authorProfileImage}"
                                                                     alt="..."/></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        If you're going to lead a space frontier, it has to be government; it'll never
-                                        be private enterprise. Because the space frontier is dangerous, and it's
-                                        expensive, and it has unquantified risks.
-                                        <!-- Child comment 1-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle"
-                                                                            src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
+                                    <div class="ms-3" style="width: 90%;">
+                                        <div class="fw-bold" th:text="${answer.authorNickname}">답쓴이 닉네임</div>
+                                        
+                                        <span class="mb-3" style="display: block" th:text="${answer.content}">
+                                            댓글 내용
+                                        </span>
+                                        
+                                        <!-- 댓글 추가 텍스트 -->
+                                        <span class="text-primary mt-2 toggle-comment-form"
+                                              style="cursor: pointer; display: inline;">
+                                            댓글 쓰기
+                                        </span>
+                                        <div class="card mt-2 d-none comment-form" style="width: 100%;">
+                                            <div class="card-body">
+                                                <form class="d-flex flex-column align-items-end">
+                                                    <textarea class="form-control mb-3" rows="3" style="width: 100%;"
+                                                              placeholder="답변에 대한 댓글을 작성하세요!"></textarea>
+                                                    <div class="d-flex justify-content-between align-items-center w-100 mb-3">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                   id="anonymous-checkbox-${answer.id}"
+                                                                   name="anonymous">
+                                                            <label class="form-check-label"
+                                                                   for="anonymous-checkbox-${answer.id}">익명으로 댓글
+                                                                                                         달기</label>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">등록</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- 답변에 대한 댓글 -->
+                                        <div class="d-flex mt-4" th:each="comment:${answer.comments}">
+                                            <div class="flex-shrink-0"><img class="rounded-circle img-fluid"
+                                                                            style="max-width: 40px; max-height: 40px;"
+                                                                            th:src="${comment.authorProfileImage}"
                                                                             alt="..."/></div>
                                             <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
+                                                <div class="fw-bold" th:text="${comment.authorNickname}">댓쓴이 닉네임</div>
+                                                <span th:text="${comment.content}">
                                                 And under those conditions, you cannot establish a capital-market
                                                 evaluation of that enterprise. You can't get investors.
-                                            </div>
-                                        </div>
-                                        <!-- Child comment 2-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle"
-                                                                            src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
-                                                                            alt="..."/></div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                When you put money directly to a problem, it makes a good headline.
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Single comment-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0"><img class="rounded-circle"
-                                                                    src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"
-                                                                    alt="..."/></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        When I look at the universe and all the ways the universe wants to kill us, I
-                                        find it hard to reconcile that with statements of beneficence.
-                                    </div>
-                                </div>
+                                
+                                <script>
+                                    document.querySelectorAll('.toggle-comment-form').forEach(element => {
+                                        element.addEventListener('click', function () {
+                                            const commentForm = this.nextElementSibling;
+                                            commentForm.classList.toggle('d-none');
+                                        });
+                                    });
+                                </script>
                             </div>
                         </div>
                     </section>
