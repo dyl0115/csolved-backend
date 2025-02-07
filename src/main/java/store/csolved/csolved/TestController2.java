@@ -19,7 +19,6 @@ import java.util.Map;
 @Controller
 public class TestController2
 {
-
     private final FileService fileService;
 
     @GetMapping("/test2")

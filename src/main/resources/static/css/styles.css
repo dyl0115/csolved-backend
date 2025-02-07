@@ -7595,6 +7595,7 @@ textarea.form-control-lg {
     z-index: 1020;
 }
 
+
 @media (min-width: 576px) {
     .sticky-sm-top {
         position: sticky;

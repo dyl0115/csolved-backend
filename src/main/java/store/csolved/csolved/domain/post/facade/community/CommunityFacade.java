@@ -14,7 +14,6 @@ import store.csolved.csolved.domain.post.controller.community.dto.view_model.Com
 import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityDetailVM;
 import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityListVM;
 import store.csolved.csolved.domain.post.entity.Post;
-import store.csolved.csolved.domain.post.entity.PostType;
 import store.csolved.csolved.domain.post.service.PostService;
 import store.csolved.csolved.domain.search.filter.Filtering;
 import store.csolved.csolved.domain.search.page.Pagination;
