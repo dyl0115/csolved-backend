@@ -99,6 +99,8 @@ tinymce.init({
                 .mce-content-body code[class*="language-"] {
                     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
                 }
+                .mce-content-body.is-invalid { border: 1px solid red; 
+                }
                 p {
                     margin: 0;
                     padding: 8px 0;
@@ -112,6 +114,12 @@ tinymce.init({
     setup: function (editor) {
         editor.on('change keyup', function () {
             Prism.highlightAll();
+        });
+
+        editor.on('init', function () {
+            if (document.getElementById('large-editor').classList.contains('is-invalid')) {
+                editor.getContainer().style.border = '1px solid #dc3545';
+            }
         });
     },
     images_reuse_filename: true, // 원본 파일명 재사용
@@ -164,6 +172,8 @@ tinymce.init({
                 .mce-content-body code[class*="language-"] {
                     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
                 }
+                .mce-content-body.is-invalid { border: 1px solid red; 
+                }
                 p {
                     margin: 0;
                     padding: 8px 0;
@@ -177,6 +187,12 @@ tinymce.init({
     setup: function (editor) {
         editor.on('change keyup', function () {
             Prism.highlightAll();
+        });
+
+        editor.on('init', function () {
+            if (document.getElementById('medium-editor').classList.contains('is-invalid')) {
+                editor.getContainer().style.border = '1px solid #dc3545';
+            }
         });
     },
 });
@@ -215,6 +231,7 @@ tinymce.init({
     invalid_elements: '',
     extended_valid_elements: '*[*]',
 
+    // TinyMCE 커스텀 CSS
     content_style: `
                 body {
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -225,6 +242,8 @@ tinymce.init({
                 }
                 .mce-content-body code[class*="language-"] {
                     font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+                }
+                .mce-content-body.is-invalid { border: 1px solid red; 
                 }
                 p {
                     margin: 0;
@@ -240,22 +259,26 @@ tinymce.init({
         editor.on('change keyup', function () {
             Prism.highlightAll();
         });
+
+        editor.on('init', function () {
+            if (document.getElementById('small-editor').classList.contains('is-invalid')) {
+                editor.getContainer().style.border = '1px solid #dc3545';
+            }
+        });
     },
 });
 
-// 폼 제출 처리
-// document.getElementById('createForm').addEventListener('submit', function (e) {
-//     e.preventDefault();
-//     const content = tinymce.get('editor').getContent();
-//     document.getElementById('editor').value = content;
-//     this.submit();
-// });
 document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', function (e) {
         e.preventDefault();
         const textarea = this.querySelector('textarea');
-        const content = tinymce.get(textarea.id).getContent();
-        textarea.value = content;
+        const editorInstance = tinymce.get(textarea.id);
+        if (!editorInstance.getContent()) {
+            alert('내용을 입력해주세요.');
+            editorInstance.getContainer().style.border = '1px solid #dc3545';
+            return;
+        }
+        textarea.value = editorInstance.getContent();
         this.submit();
     });
 });
