@@ -2,7 +2,7 @@ const scriptEl = document.currentScript;
 const uploadUrl = scriptEl.dataset.uploadImageUrl;
 
 tinymce.init({
-    selector: '#large-editor',
+    selector: '.large-editor',
     height: 500,
     plugins: 'code codesample link image table lists advlist autolink',
     menubar: false,
@@ -127,7 +127,7 @@ tinymce.init({
 });
 
 tinymce.init({
-    selector: '#medium-editor',
+    selector: '.medium-editor',
     height: 300,
     width: "100%",
     plugins: 'code codesample table lists advlist autolink',
@@ -198,7 +198,7 @@ tinymce.init({
 });
 
 tinymce.init({
-    selector: '#small-editor',
+    selector: '.small-editor',
     height: 250,
     width: "100%",
     plugins: 'code codesample table lists advlist autolink',
@@ -261,7 +261,11 @@ tinymce.init({
         });
 
         editor.on('init', function () {
-            if (document.getElementById('small-editor').classList.contains('is-invalid')) {
+            // 현재 에디터의 ID를 가져옴
+            const editorId = editor.id;
+            const editorElement = document.getElementById(editorId);
+
+            if (editorElement && editorElement.classList.contains('is-invalid')) {
                 editor.getContainer().style.border = '1px solid #dc3545';
             }
         });

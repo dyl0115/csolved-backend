@@ -29,3 +29,65 @@ async function addLike(postType, postId) {
             alert('작업 중 오류가 발생했습니다.');
     }
 }
+
+// 게시글 삭제
+async function deletePost(postType, postId) {
+    try {
+        const response = await fetch(`/api/${postType}/${postId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('삭제에 실패했습니다.');
+        }
+
+        window.location.replace(`/${postType}?page=1`);
+    } catch (error) {
+        console.error('Error:', error);
+        alert('삭제 중 오류가 발생했습니다.');
+    }
+}
+
+// 답글 삭제
+async function deleteAnswer(answerId) {
+    try {
+        const response = await fetch(`/api/answers/${answerId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('삭제에 실패했습니다.');
+        }
+
+        window.location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('삭제 중 오류가 발생했습니다.');
+    }
+}
+
+async function deleteComment(commentId) {
+    try {
+        const response = await fetch(`/api/comments/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('삭제에 실패했습니다.');
+        }
+
+        window.location.reload();
+    } catch (error) {
+        console.error('Error:', error);
+        alert('삭제 중 오류가 발생했습니다.');
+    }
+}
