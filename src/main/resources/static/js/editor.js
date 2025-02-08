@@ -117,7 +117,11 @@ tinymce.init({
         });
 
         editor.on('init', function () {
-            if (document.getElementById('large-editor').classList.contains('is-invalid')) {
+            // 현재 에디터의 ID를 가져옴
+            const editorId = editor.id;
+            const editorElement = document.getElementById(editorId);
+
+            if (editorElement && editorElement.classList.contains('is-invalid')) {
                 editor.getContainer().style.border = '1px solid #dc3545';
             }
         });

@@ -104,7 +104,8 @@
                         </div>
                     </div>
                                       <!-- 좋아요 버튼 -->
-                    <button class="btn btn-danger mb-4" id="like-button" th:onclick="|addLike('code-review',${post.id})|">
+                    <button class="btn btn-danger mb-4" id="like-button"
+                            th:onclick="|addLike('code-review',${post.id})|">
                         <i class="bi bi-heart"></i> 좋아요
                         <span id="like-count" class="ms-1" th:text="${post.likes}">0</span>
                     </button>
@@ -176,16 +177,12 @@
                                                 1시간 전
                                             </span>
                                             <span class="ms-2">
-<!--                                                <button class="btn btn-outline-primary btn-xs"-->
-<!--                                                        th:if="${answer.authorId == user.id}"-->
-<!--                                                        onclick="updateAnswer(this)">수정-->
-<!--                                                </button>-->
                                                 <button class="btn btn-outline-danger btn-xs"
                                                         th:if="${answer.authorId == user.id}"
                                                         data-bs-toggle="modal"
                                                         th:data-bs-target="${'#answerDeleteConfirmModal' + answer.id}">삭제
                                                 </button>
-<!-- 답변 삭제 경고 모달 -->
+                                                <!-- 답변 삭제 경고 모달 -->
                                     <div th:replace="~{fragments/common/modal::danger-modal(|answerDeleteConfirmModal${answer.id}|, '답변 삭제', '정말 삭제하시겠습니까?', '취소','삭제', |deleteAnswer(${answer.id})|)}"></div>
                                     
                                             </span>

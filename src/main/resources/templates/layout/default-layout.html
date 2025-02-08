@@ -65,10 +65,10 @@
             </div>
         </nav>
         
-        <!-- Page content-->
+        <!-- 페이지 본문-->
         <th:block th:replace="${content}"/>
         
-        <!-- Modal Fragment-->
+        <!-- 회원탈퇴 경고 모달 -->
         <div th:insert="~{/fragments/common/modal :: danger-modal('withdrawModal', '회원탈퇴', '정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.', '취소', '탈퇴하기','withdraw()')}"></div>
     
     </body>
