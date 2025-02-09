@@ -46,7 +46,7 @@ public class QuestionController
     }
 
     @LoginRequest
-    @GetMapping("/questions/{postId}")
+    @GetMapping("/question/{postId}")
     public String getQuestion(@PathVariable Long postId,
                               Model model)
     {
@@ -57,7 +57,7 @@ public class QuestionController
     }
 
     @LoginRequest
-    @GetMapping("/questions/create")
+    @GetMapping("/question/createForm")
     public String initCreate(Model model)
     {
         QuestionCreateUpdateVM viewModel = questionFacade.initCreateUpdate();
@@ -68,7 +68,7 @@ public class QuestionController
     }
 
     @LoginRequest
-    @PostMapping("/questions/create")
+    @PostMapping("/question")
     public String processCreate(@Valid @ModelAttribute("createForm") QuestionCreateUpdateForm form,
                                 BindingResult result,
                                 Model model)
@@ -87,7 +87,7 @@ public class QuestionController
     }
 
     @LoginRequest
-    @GetMapping("/questions/{postId}/update")
+    @GetMapping("/question/{postId}/updateForm")
     public String initUpdate(@PathVariable Long postId,
                              Model model)
     {
@@ -99,7 +99,7 @@ public class QuestionController
     }
 
     @LoginRequest
-    @PutMapping("/questions/{postId}/update")
+    @PutMapping("/question/{postId}")
     public String processUpdate(@PathVariable("postId") Long postId,
                                 @Valid @ModelAttribute("updateForm") QuestionCreateUpdateForm form,
                                 BindingResult result,

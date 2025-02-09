@@ -24,7 +24,8 @@ import store.csolved.csolved.domain.search.sort.Sorting;
 @Controller
 public class CodeReviewController
 {
-    public final static String VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM = "/views/domain/code_review/create";
+    public final static String VIEWS_CODE_REVIEW_CREATE_FORM = "/views/domain/code_review/create";
+    public final static String VIEWS_CODE_REVIEW_UPDATE_FORM = "/views/domain/code_review/update";
     public final static String VIEWS_CODE_REVIEW_LIST = "/views/domain/code_review/list";
     public final static String VIEWS_CODE_REVIEW_DETAIL = "/views/domain/code_review/detail";
 
@@ -38,7 +39,7 @@ public class CodeReviewController
         CodeReviewCreateUpdateForm form = codeReviewFacade.initCreate();
         model.addAttribute("createVM", viewModel);
         model.addAttribute("createForm", form);
-        return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
+        return VIEWS_CODE_REVIEW_CREATE_FORM;
     }
 
     @LoginRequest
@@ -51,7 +52,7 @@ public class CodeReviewController
         {
             CodeReviewCreateUpdateVM viewModel = codeReviewFacade.initCreateUpdate();
             model.addAttribute("createVM", viewModel);
-            return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
+            return VIEWS_CODE_REVIEW_CREATE_FORM;
         }
 
         codeReviewFacade.save(form);
@@ -92,7 +93,7 @@ public class CodeReviewController
         model.addAttribute("updateVM", viewModel);
         CodeReviewCreateUpdateForm form = codeReviewFacade.initUpdateForm(postId);
         model.addAttribute("updateForm", form);
-        return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
+        return VIEWS_CODE_REVIEW_UPDATE_FORM;
     }
 
     @LoginRequest
@@ -108,10 +109,10 @@ public class CodeReviewController
         {
             CodeReviewCreateUpdateVM viewModel = codeReviewFacade.initCreateUpdate();
             model.addAttribute("updateVM", viewModel);
-            return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
+            return VIEWS_CODE_REVIEW_UPDATE_FORM;
         }
 
         codeReviewFacade.update(postId, form);
-        return "redirect:/code-review?page=1";
+        return "redirect:/code-reviews?page=1";
     }
 }

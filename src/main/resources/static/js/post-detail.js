@@ -43,13 +43,30 @@ async function deletePost(postType, postId) {
         if (!response.ok) {
             throw new Error('삭제에 실패했습니다.');
         }
+        handleRedirect(postType);
 
-        window.location.replace(`/${postType}s?page=1`);
     } catch (error) {
         console.error('Error:', error);
         alert('삭제 중 오류가 발생했습니다.');
     }
 }
+
+function handleRedirect(postType) {
+    switch (postType) {
+        case 'community':
+            window.location.replace('/communities?page=1');
+            break;
+        case 'questions':
+            window.location.replace('/questions?page=1');
+            break;
+        case 'code-review':
+            window.location.replace('/code-reviews?page=1');
+            break;
+        default:
+            window.location.replace('/');
+    }
+}
+
 
 // 답글 삭제
 async function deleteAnswer(answerId) {

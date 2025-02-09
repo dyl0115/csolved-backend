@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html th:replace="~{layout/default-layout::default-layout(${user}, ~{::title}, ~{::body})}"
-      th:fragment="update-layout(postType, categories, updateForm, customContents)">
+      th:fragment="update-layout(postType, postId, categories, updateForm, customContents)">
     <head>
         <title>글 작성하기 - CSolved</title>
     </head>
@@ -26,8 +26,9 @@
                         </div>
                         <div class="card-body">
                             <form id="postForm" method="POST"
-                                  th:action=" @{/__${postType}__}"
+                                  th:action=" @{/__${postType}__/__${postId}__}"
                                   th:object="${updateForm}">
+                                <input type="hidden" name="_method" value="PUT"/>
                                 <!-- 카테고리 선택 -->
                                 <div class="mb-3">
                                     <label for="categoryId" class="form-label">카테고리</label>

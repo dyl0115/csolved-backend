@@ -33,7 +33,7 @@ public class CommunityController
     private final CommunityFacade communityFacade;
 
     @LoginRequest
-    @GetMapping("/community")
+    @GetMapping("/communities")
     public String getCommunityPosts(@PageInfo Long page,
                                     @SortInfo Sorting sort,
                                     @FilterInfo Filtering filter,
@@ -57,7 +57,7 @@ public class CommunityController
     }
 
     @LoginRequest
-    @GetMapping("/community/create")
+    @GetMapping("/community/createForm")
     public String initCreate(Model model)
     {
         CommunityCreateUpdateVM viewModel = communityFacade.initCreate();
@@ -67,7 +67,7 @@ public class CommunityController
     }
 
     @LoginRequest
-    @PostMapping("/community/create")
+    @PostMapping("/community")
     public String processCreate(@Valid @ModelAttribute("createForm") CommunityCreateUpdateForm form,
                                 BindingResult result,
                                 Model model)
@@ -81,12 +81,12 @@ public class CommunityController
         else
         {
             communityFacade.save(form);
-            return "redirect:/community?page=1";
+            return "redirect:/communities?page=1";
         }
     }
 
     @LoginRequest
-    @GetMapping("/community/{postId}/update")
+    @GetMapping("/community/{postId}/updateForm")
     public String initUpdate(@PathVariable Long postId,
                              Model model)
     {
@@ -98,7 +98,7 @@ public class CommunityController
     }
 
     @LoginRequest
-    @PutMapping("/community/{postId}/update")
+    @PutMapping("/community/{postId}")
     public String processUpdate(@PathVariable("postId") Long postId,
                                 @Valid @ModelAttribute("updateForm") CommunityCreateUpdateForm form,
                                 BindingResult result,
@@ -112,6 +112,6 @@ public class CommunityController
         }
 
         communityFacade.update(postId, form);
-        return "redirect:/community?page=1";
+        return "redirect:/communities?page=1";
     }
 }
