@@ -3,10 +3,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const tagInput = document.getElementById('tagInput');
     const tagsHidden = document.getElementById('tagsHidden');
 
-    if (!tagContainer || !tagInput || !tagsHidden) return;
+    if (!tagContainer || !tagInput || !tagsHidden) {
+        return;
+    }
+    // tagsHidden.value 값 확인
+    console.log("tagsHidden.value:", tagsHidden.value);
+    console.log("tagsHidden.value type:", typeof tagsHidden.value);
 
     // 태그 목록을 관리할 Set (중복 방지)
     const tags = new Set();
+
+    // 페이지 로드 시 hidden input의 값을 확인하고 태그로 등록
+    if (tagsHidden.value) {
+        console.log("제대로 여기 옴?")
+        const existingTags = tagsHidden.value.split(',');
+        existingTags.forEach(tag => {
+            if (tag.trim()) {  // 빈 문자열이 아닌 경우에만 추가
+                addTag(tag.trim());
+            }
+        });
+    }
 
     // hidden input 업데이트 함수
     function updateHiddenInput() {

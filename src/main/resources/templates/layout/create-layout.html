@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html th:replace="~{layout/default-layout::default-layout(${user}, ~{::title}, ~{::body})}"
-      th:fragment="post-create-layout(postType, categories, createForm, customContents)">
+      th:fragment="post-create-layout(httpmethod, postType, categories, createForm, customContents)">
     <head>
         <title>글 작성하기 - CSolved</title>
     </head>
@@ -15,19 +15,6 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>
         <!-- Prism JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-        <!-- Prism 지원 언어 -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-        <!--  게시글 작성 관련 JS -->
-        <script src="/js/tag-handler.js"></script>
-        <!-- TinyMCE 에디터 -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
-        <!--  TinyMCE 에디터 JS-->
-        <script src="/js/editor.js" defer data-upload-image-url="/api/upload-image"></script>
         
         <!-- 메인 컨텐츠 -->
         <div class="container py-5">
@@ -73,11 +60,11 @@
                                 <div class="mb-3">
                                     <label for="tags-container" class="form-label">태그</label>
                                     <div class="d-flex flex-wrap align-items-center form-control" id="tags-container">
-                                        <!-- 실제 폼 전송에 사용될 hidden input -->
                                         <input type="hidden" th:field="*{tags}" id="tagsHidden">
                                         <!-- 태그가 추가될 영역 -->
                                         <input type="text" class="tag-input flex-grow-1 border-0 p-0" id="tagInput"
-                                               placeholder="태그를 입력하고 엔터를 누르세요" style="outline: none;">
+                                               placeholder="태그를 입력하고 엔터를 누르세요" th:field="*{tags}"
+                                               style="outline: none;">
                                         <span th:errors="*{tags}">태그 에러 메시지</span>
                                     </div>
                                     <div class="form-text">예: java, spring, jpa</div>
@@ -114,5 +101,104 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 태그 관련 JS -->
+        <script th:inline="javascript">
+            document.addEventListener('DOMContentLoaded', function () {
+                const tagContainer = document.getElementById('tags-container');
+                const tagInput = document.getElementById('tagInput');
+                const tagsHidden = document.getElementById('tagsHidden');
+
+                if (!tagContainer || !tagInput || !tagsHidden) {
+                    return;
+                }
+                // tagsHidden.value 값 확인
+                console.log("tagsHidden.value:", tagsHidden.value);
+                console.log("tagsHidden.value type:", typeof tagsHidden.value);
+
+                // 태그 목록을 관리할 Set (중복 방지)
+                const tags = new Set();
+
+                // 페이지 로드 시 hidden input의 값을 확인하고 태그로 등록
+                if (tagsHidden.value) {
+                    console.log("제대로 여기 옴?")
+                    const existingTags = tagsHidden.value.split(',');
+                    existingTags.forEach(tag => {
+                        if (tag.trim()) {  // 빈 문자열이 아닌 경우에만 추가
+                            addTag(tag.trim());
+                        }
+                    });
+                }
+
+                // hidden input 업데이트 함수
+                function updateHiddenInput() {
+                    // tagsHidden.value = Array.from(tags).join(',');
+                    tagsHidden.value = Array.from(tags);
+                }
+
+                tagInput.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter' && tagInput.value.trim() !== '') {
+                        event.preventDefault();
+                        const tagText = tagInput.value.trim();
+
+                        // 중복 체크
+                        if (tags.has(tagText)) {
+                            alert('이미 존재하는 태그입니다.');
+                            return;
+                        }
+
+                        addTag(tagText);
+                    }
+                });
+
+                tagContainer.addEventListener('click', () => {
+                    tagInput.focus();
+                });
+
+                function addTag(text) {
+                    // Set에 태그 추가
+                    tags.add(text);
+
+                    // 태그 엘리먼트 생성
+                    const tag = document.createElement('span');
+                    tag.classList.add('badge', 'bg-primary', 'me-1', 'mb-1', 'd-flex', 'align-items-center');
+                    tag.textContent = text;
+
+                    // 삭제 버튼 생성
+                    const removeButton = document.createElement('button');
+                    removeButton.type = 'button';
+                    removeButton.classList.add('btn-close', 'btn-close-white', 'ms-2');
+                    removeButton.setAttribute('aria-label', 'Remove');
+                    removeButton.style.fontSize = '0.7em';
+
+                    // 삭제 버튼 클릭 시
+                    removeButton.onclick = () => {
+                        tags.delete(text);  // Set에서 제거
+                        tag.remove();       // DOM에서 제거
+                        updateHiddenInput();// hidden input 업데이트
+                    };
+
+                    tag.appendChild(removeButton);
+                    tagContainer.insertBefore(tag, tagInput);
+                    tagInput.value = '';
+
+                    // hidden input 업데이트
+                    updateHiddenInput();
+                }
+            });
+        </script>
+        
+        <!-- Prism 지원 언어 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+        <!-- TinyMCE 에디터 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
+        <!--  TinyMCE 에디터 JS-->
+        <script src="/js/editor.js" defer data-upload-image-url="/api/upload-image"></script>
+    
     </body>
 </html>

@@ -24,10 +24,9 @@ import store.csolved.csolved.domain.search.sort.Sorting;
 @Controller
 public class CodeReviewController
 {
-    public final static String VIEWS_CODE_REVIEW_CREATE_FORM = "/views/domain/code_review/create";
+    public final static String VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM = "/views/domain/code_review/create-update";
     public final static String VIEWS_CODE_REVIEW_LIST = "/views/domain/code_review/list";
     public final static String VIEWS_CODE_REVIEW_DETAIL = "/views/domain/code_review/detail";
-    public final static String VIEWS_CODE_REVIEW_UPDATE_FORM = "/views/domain/code_review/update";
 
     private final CodeReviewFacade codeReviewFacade;
 
@@ -39,7 +38,7 @@ public class CodeReviewController
         CodeReviewCreateUpdateForm form = codeReviewFacade.initCreate();
         model.addAttribute("createVM", viewModel);
         model.addAttribute("createForm", form);
-        return VIEWS_CODE_REVIEW_CREATE_FORM;
+        return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
     }
 
     @LoginRequest
@@ -52,7 +51,7 @@ public class CodeReviewController
         {
             CodeReviewCreateUpdateVM viewModel = codeReviewFacade.initCreateUpdate();
             model.addAttribute("createVM", viewModel);
-            return VIEWS_CODE_REVIEW_CREATE_FORM;
+            return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
         }
 
         codeReviewFacade.save(form);
@@ -90,10 +89,10 @@ public class CodeReviewController
                              Model model)
     {
         CodeReviewCreateUpdateVM viewModel = codeReviewFacade.initCreateUpdate();
-        model.addAttribute("updateVM", viewModel);
+        model.addAttribute("createVM", viewModel);
         CodeReviewCreateUpdateForm form = codeReviewFacade.initUpdateForm(postId);
-        model.addAttribute("updateForm", form);
-        return VIEWS_CODE_REVIEW_UPDATE_FORM;
+        model.addAttribute("createForm", form);
+        return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
     }
 
     @LoginRequest
@@ -103,11 +102,13 @@ public class CodeReviewController
                                 BindingResult result,
                                 Model model)
     {
+        System.out.println("codeReviewController ");
+        System.out.println("tagList : " + form.getTagList());
         if (result.hasErrors())
         {
             CodeReviewCreateUpdateVM viewModel = codeReviewFacade.initCreateUpdate();
             model.addAttribute("updateVM", viewModel);
-            return VIEWS_CODE_REVIEW_UPDATE_FORM;
+            return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
         }
 
         codeReviewFacade.update(postId, form);
