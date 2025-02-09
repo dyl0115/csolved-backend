@@ -108,3 +108,42 @@ async function deleteComment(commentId) {
         alert('삭제 중 오류가 발생했습니다.');
     }
 }
+
+function searchPosts(postType) {
+    const urlParams = new URLSearchParams('');
+    const page = 'page';
+    const searchType = 'searchType';
+    const searchKeyword = 'searchKeyword';
+
+    const searchTypeValue = document.getElementById('search-select').value;
+    const searchKeywordValue = document.getElementById('search-input').value;
+
+// Change their values as needed
+    urlParams.set(page, 1);
+    urlParams.set(searchType, searchTypeValue); // update with the select box value
+    urlParams.set(searchKeyword, searchKeywordValue); // update with the input box value
+
+// Reflect the changes in the browser's URL
+    const newUrl = `/${postType}` + '?' + urlParams.toString();
+    window.history.replaceState({}, '', newUrl);
+
+// Send a GET request to the updated URL
+    fetch(newUrl, {
+        method: 'GET',
+        headers: {
+            'Accept': 'text/html'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.documentElement.innerHTML = html;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+}

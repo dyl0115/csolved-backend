@@ -37,7 +37,7 @@
                         <li class="nav-item"><a class="nav-link" href="/communities?page=1">커뮤니티</a></li>
                         <li class="nav-item"><a class="nav-link" href="/questions?page=1">면접질문</a></li>
                         <li class="nav-item"><a class="nav-link" href="/code-reviews?page=1">코드리뷰</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/success?page=1">합격수기</a></li>
+                        <!--                        <li class="nav-item"><a class="nav-link" href="/success?page=1">합격수기</a></li>-->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false" th:text="${user.nickname}">유저 프로필</a>
@@ -78,12 +78,12 @@
                     <p style="font-size: 0.9rem;">신입 백엔드 개발자들이 함께 성장하고 경험을 공유할 수 있는 플랫폼입니다.</p>
                 </div>
                 <div class="col-md-4 text-center text-white">
-                    <h5>이용안내</h5>
+                    <h5>게시판</h5>
                     <p style="font-size: 0.9rem;">
-                        <a href="#" style="text-decoration: none; font-size: 0.9rem; color: inherit;">알고리즘</a><br>
-                        <a href="#" style="text-decoration: none; font-size: 0.9rem; color: inherit;">운영체제</a><br>
-                        <a href="#" style="text-decoration: none; font-size: 0.9rem; color: inherit;">네트워크</a><br>
-                        <a href="#" style="text-decoration: none; font-size: 0.9rem; color: inherit;">데이터베이스</a><br>
+                        <a href="/communities?page=1" style="text-decoration: none; font-size: 0.9rem; color: inherit;">커뮤니티</a><br>
+                        <a href="/questions?page=1" style="text-decoration: none; font-size: 0.9rem; color: inherit;">면접질문</a><br>
+                        <a href="/code-reviews?page=1"
+                           style="text-decoration: none; font-size: 0.9rem; color: inherit;">코드리뷰</a><br>
                     </p>
                 </div>
                 <div class="col-md-4 text-center text-white">
@@ -91,9 +91,6 @@
                     <p style="font-size: 0.9rem;">
                         <i class="bi bi-envelope"></i>
                         Email: dyl0115@naver.com<br>
-                        <i class="bi bi-github"></i>
-                        <a href="https://github.com/dyl0115/CSolved"
-                           style="text-decoration: none; font-size: 0.9rem; color: inherit;">GitHub</a>
                     </p>
                 </div>
             </div>

@@ -6,7 +6,7 @@
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
         
-        <title>Blog Home - Start Bootstrap Template</title>
+        <title> 게시판 </title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="/assets/favicon.ico"/>
         <!-- Core theme CSS (includes Bootstrap)-->
@@ -14,23 +14,17 @@
     </head>
     <body>
         <script src="/js/list-layout.js"></script>
-        <!-- Page header with logo and tagline-->
-        <header class="py-5 bg-light border-bottom mb-4">
-            <div class="container">
-                <div class="text-center my-5">
-                    <h1 class="fw-bolder">Welcome to Blog Home!</h1>
-                    <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p>
-                </div>
-            </div>
+        <!-- 게시판 배너 -->
+        <header class="py-3 bg-light border-bottom mb-4">
+            <th:block th:replace="${banner}"/>
         </header>
-        <!-- Page content-->
+        <!-- 페이지 본문 -->
         <div class="container" th:object="${postContents}">
             <div class="row">
                 <!-- Blog entries-->
                 <div class="col-lg-8">
-                    <!-- Posts -->
+                    <!-- 게시글들 -->
                     <div th:if="${#lists.isEmpty(postContents.posts)}">
-                        
                         <!-- 게시글이 없을 때 -->
                         <div class="card text-center my-5">
                             <div class="card-body">
@@ -54,12 +48,6 @@
                     <div class="card mb-4 card-hover" th:each="post:*{posts}">
                         <a class="card-body text-decoration-none" th:href="@{'/'+__${postType}__+'/' + ${post.id}}">
                             <div class="row">
-                                <!--                                <div class="col-md-4">-->
-                                <!--                                    <img class="img-fluid rounded-end h-100 object-fit-cover"-->
-                                <!--                                         src="/assets/no-image.jpeg"-->
-                                <!--                                         alt="..."-->
-                                <!--                                         style="width: 850px; height: 350px;"/>-->
-                                <!--                                </div>-->
                                 <div class="col-md-8">
                                     <!-- 게시글 제목 -->
                                     <p class="card-title fs-4 fw-bolder pt-1 text-truncate" style="max-width: 100%;"
@@ -165,7 +153,7 @@
                         </ul>
                     </nav>
                 </div>
-                <!-- Side widgets-->
+                <!-- 사이드 위젯 -->
                 <div class="col-lg-4">
                     <!-- 검색 위젯 -->
                     <div class="card mb-4">
@@ -178,7 +166,8 @@
                                     <option value="author">글쓴이</option>
                                 </select>
                                 <input id="search-input" class="form-control" type="text" placeholder="검색어를 입력하세요."
-                                       aria-label="Enter search term..." aria-describedby="button-search"/>
+                                       aria-label="Enter search term..." aria-describedby="button-search"
+                                       onkeypress="if(event.key === `Enter`){event.preventDefault(); searchPosts('communities');}"/>
                                 <button class="btn btn-primary" id="button-search" type="button"
                                         onclick="searchPosts()">
                                     <i class="bi bi-search"></i>
@@ -228,8 +217,8 @@
                     <!-- 사이드 위젯-->
                     <div class="card mb-4">
                         <div class="card-header">사이드 위젯</div>
-                        <div class="card-body">You can put anything you want inside of these side widgets. They are easy
-                                               to use, and feature the Bootstrap 5 card component!
+                        <div class="card-body">
+                            이후 기능 추가...
                         </div>
                     </div>
                 </div>
