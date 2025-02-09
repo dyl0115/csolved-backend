@@ -36,7 +36,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">게시글이 없습니다</h5>
                                 <p class="card-text">첫 번째 글을 작성해보세요!</p>
-                                <a th:href="@{'/'+__${postType}__+'/create'}" class="btn btn-primary">글 작성하기</a>
+                                <a th:href="@{'/'+__${postType}__+'/createForm'}" class="btn btn-primary">글 작성하기</a>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                     <div th:if="${!#lists.isEmpty(postContents.posts)}" class="mb-4 d-flex justify-content-end">
                         <!-- 게시글 작성 버튼 -->
                         <a class="btn btn-primary"
-                           th:href="@{'/'+__${postType}__+'/create'}">
+                           th:href="@{'/'+__${postType}__+'/createForm'}">
                             <i class="bi bi-pencil-square"></i>
                             게시글 작성하기
                         </a>

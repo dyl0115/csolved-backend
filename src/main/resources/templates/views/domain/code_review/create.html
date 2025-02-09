@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{/layout/create-layout::post-create-layout(postType='code-review', categories=${createVM.categories}, createForm=${createForm}, customContents=~{::body})}">
+<html th:replace="~{/layout/create-layout::create-layout(postType='code-review', categories=${createVM.categories}, createForm=${createForm}, customContents=~{::body})}">
     <body>
         <!-- 깃허브 주소 입력창 -->
         <label for="github-url" class="form-label">깃허브 주소</label>

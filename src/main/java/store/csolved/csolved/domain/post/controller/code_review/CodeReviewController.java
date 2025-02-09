@@ -24,14 +24,14 @@ import store.csolved.csolved.domain.search.sort.Sorting;
 @Controller
 public class CodeReviewController
 {
-    public final static String VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM = "/views/domain/code_review/create-update";
+    public final static String VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM = "/views/domain/code_review/create";
     public final static String VIEWS_CODE_REVIEW_LIST = "/views/domain/code_review/list";
     public final static String VIEWS_CODE_REVIEW_DETAIL = "/views/domain/code_review/detail";
 
     private final CodeReviewFacade codeReviewFacade;
 
     @LoginRequest
-    @GetMapping("/code-review/create")
+    @GetMapping("/code-review/createForm")
     public String initCreate(Model model)
     {
         CodeReviewCreateUpdateVM viewModel = codeReviewFacade.initCreateUpdate();
@@ -42,7 +42,7 @@ public class CodeReviewController
     }
 
     @LoginRequest
-    @PostMapping("/code-review/create")
+    @PostMapping("/code-review")
     public String processCreate(@Valid @ModelAttribute("createForm") CodeReviewCreateUpdateForm form,
                                 BindingResult result,
                                 Model model)
@@ -55,11 +55,11 @@ public class CodeReviewController
         }
 
         codeReviewFacade.save(form);
-        return "redirect:/code-review?page=1";
+        return "redirect:/code-reviews?page=1";
     }
 
     @LoginRequest
-    @GetMapping("/code-review")
+    @GetMapping("/code-reviews")
     public String getCodeReviews(@PageInfo Long page,
                                  @SortInfo Sorting sort,
                                  @FilterInfo Filtering filter,
@@ -84,19 +84,19 @@ public class CodeReviewController
     }
 
     @LoginRequest
-    @GetMapping("/code-review/{postId}/update")
+    @GetMapping("/code-review/{postId}/updateForm")
     public String initUpdate(@PathVariable Long postId,
                              Model model)
     {
         CodeReviewCreateUpdateVM viewModel = codeReviewFacade.initCreateUpdate();
-        model.addAttribute("createVM", viewModel);
+        model.addAttribute("updateVM", viewModel);
         CodeReviewCreateUpdateForm form = codeReviewFacade.initUpdateForm(postId);
-        model.addAttribute("createForm", form);
+        model.addAttribute("updateForm", form);
         return VIEWS_CODE_REVIEW_CREATE_UPDATE_FORM;
     }
 
     @LoginRequest
-    @PutMapping("/code-review/{postId}/update")
+    @PutMapping("/code-review/{postId}")
     public String processUpdate(@PathVariable("postId") Long postId,
                                 @Valid @ModelAttribute("updateForm") CodeReviewCreateUpdateForm form,
                                 BindingResult result,

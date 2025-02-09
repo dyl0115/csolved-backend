@@ -44,7 +44,7 @@ async function deletePost(postType, postId) {
             throw new Error('삭제에 실패했습니다.');
         }
 
-        window.location.replace(`/${postType}?page=1`);
+        window.location.replace(`/${postType}s?page=1`);
     } catch (error) {
         console.error('Error:', error);
         alert('삭제 중 오류가 발생했습니다.');
