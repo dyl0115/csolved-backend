@@ -64,8 +64,6 @@
                                     <!-- 게시글 제목 -->
                                     <p class="card-title fs-6 fw-bolder pt-2 text-truncate" style="max-width: 100%;"
                                        th:text="${post.title}">게시글 제목</p>
-                                    <!-- 테스트 -->
-                                    <span th:text="${#lists.size(post.tags)}">엥?</span>
                                     
                                     <span class="badge bg-secondary me-1" th:each="tag:${post.tags}"
                                           th:text="${tag.name}">태그명</span>

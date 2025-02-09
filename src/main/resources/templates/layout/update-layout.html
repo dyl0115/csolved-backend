@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html th:replace="~{layout/default-layout::default-layout(${user}, ~{::title}, ~{::body})}"
+<html th:replace="~{/layout/default-layout::default-layout(${user}, ~{::title}, ~{::body})}"
       th:fragment="update-layout(postType, postId, categories, updateForm, customContents)">
     <head>
         <title>글 작성하기 - CSolved</title>
@@ -80,7 +80,8 @@
                                 <!-- 내용 입력 -->
                                 <div class="mb-3">
                                     <label for="content" class="form-label">내용</label>
-                                    <textarea id="content" name="content"
+                                    <textarea id="content"
+                                              th:field="*{content}"
                                               th:classappend="${#fields.hasErrors('content') ? 'is-invalid':''}"
                                               class="large-editor form-control"
                                               placeholder="내용을 입력하세요">

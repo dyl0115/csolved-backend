@@ -90,7 +90,7 @@
                                             </button>
                                             
                                             <!-- 게시글 삭제 경고 모달 -->
-            <div th:insert="~{fragments/common/modal::danger-modal('postDeleteConfirmModal', '게시글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deletePost('code-review',${post.id})|)}"></div>
+            <div th:insert="~{/fragments/common/modal::danger-modal('postDeleteConfirmModal', '게시글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deletePost('code-review',${post.id})|)}"></div>
                                         
                                         </span>
                                     </div>
@@ -183,7 +183,7 @@
                                                         th:data-bs-target="${'#answerDeleteConfirmModal' + answer.id}">삭제
                                                 </button>
                                                 <!-- 답변 삭제 경고 모달 -->
-                                    <div th:replace="~{fragments/common/modal::danger-modal(|answerDeleteConfirmModal${answer.id}|, '답변 삭제', '정말 삭제하시겠습니까?', '취소','삭제', |deleteAnswer(${answer.id})|)}"></div>
+                                    <div th:replace="~{/fragments/common/modal::danger-modal(|answerDeleteConfirmModal${answer.id}|, '답변 삭제', '정말 삭제하시겠습니까?', '취소','삭제', |deleteAnswer(${answer.id})|)}"></div>
                                     
                                             </span>
                                         </div>
@@ -262,7 +262,7 @@
                                                                 th:data-bs-target="${'#commentDeleteConfirmModal' + comment.id}">삭제
                                                         </button>
                                                         <!-- 댓글 삭제 경고 모달-->
-            <div th:insert="~{fragments/common/modal::danger-modal(|commentDeleteConfirmModal${comment.id}|, '댓글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deleteComment(${comment.id})|)}"></div>
+            <div th:insert="~{/fragments/common/modal::danger-modal(|commentDeleteConfirmModal${comment.id}|, '댓글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deleteComment(${comment.id})|)}"></div>
             
                                                     </span>
                                                 </div>

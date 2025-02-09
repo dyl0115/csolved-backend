@@ -42,13 +42,6 @@ public class CommunityController
     {
         CommunityListVM viewModel = communityFacade.getCommunityPosts(page, sort, filter, search);
         model.addAttribute("communityPostListViewModel", viewModel);
-
-//        System.out.println("communityController :: getCommunityPosts");
-//        viewModel.getPosts().forEach(post ->
-//        {
-//            System.out.println(post.getTitle() + ": ");
-//            post.getTags().forEach(tag -> System.out.print(tag.getName() + "////"));
-//        });
         return VIEWS_COMMUNITY_LIST;
     }
 
@@ -79,11 +72,6 @@ public class CommunityController
                                 BindingResult result,
                                 Model model)
     {
-        System.out.println("communityController :: processCreate");
-        System.out.println("tagSize: " + form.getTagList().size());
-        System.out.println("tagList");
-        form.getTagList().forEach(tag -> System.out.println("    " + tag.getName()));
-
         if (result.hasErrors())
         {
             CommunityCreateUpdateVM viewModel = communityFacade.initCreate();
