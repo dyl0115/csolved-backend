@@ -23,7 +23,7 @@ import java.io.IOException;
 @Controller
 public class UserController
 {
-    public final static String VIEWS_USER_PROFILE_UPDATE = "/views/domain/user-profile/update";
+    public final static String VIEWS_USER_PROFILE_UPDATE = "/views/domain/user-profile/profile-update";
 
     private final UserProfileService profileService;
     private final UpdateProfileValidator updateProfileValidator;
