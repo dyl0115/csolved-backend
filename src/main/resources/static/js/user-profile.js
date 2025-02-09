@@ -104,3 +104,25 @@ async function handleImageSelect(input) {
         }
     }
 }
+
+function updateProfile() {
+    // form 데이터 가져오기
+    const form = document.querySelector('form');
+    const formData = new FormData(form);
+
+    // AJAX로 form 제출
+    fetch(form.action, {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => {
+            if (response.ok) {
+                // 성공 시 모달 표시
+                const modal = new bootstrap.Modal(document.getElementById('profileUpdateConfirmModal'));
+                modal.show();
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
