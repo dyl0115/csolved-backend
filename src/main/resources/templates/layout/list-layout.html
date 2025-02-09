@@ -54,15 +54,15 @@
                     <div class="card mb-4 card-hover" th:each="post:*{posts}">
                         <a class="card-body text-decoration-none" th:href="@{'/'+__${postType}__+'/' + ${post.id}}">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <img class="img-fluid rounded-end h-100 object-fit-cover"
-                                         src="/assets/no-image.jpeg"
-                                         alt="..."
-                                         style="width: 850px; height: 350px;"/>
-                                </div>
+                                <!--                                <div class="col-md-4">-->
+                                <!--                                    <img class="img-fluid rounded-end h-100 object-fit-cover"-->
+                                <!--                                         src="/assets/no-image.jpeg"-->
+                                <!--                                         alt="..."-->
+                                <!--                                         style="width: 850px; height: 350px;"/>-->
+                                <!--                                </div>-->
                                 <div class="col-md-8">
                                     <!-- 게시글 제목 -->
-                                    <p class="card-title fs-6 fw-bolder pt-2 text-truncate" style="max-width: 100%;"
+                                    <p class="card-title fs-4 fw-bolder pt-1 text-truncate" style="max-width: 100%;"
                                        th:text="${post.title}">게시글 제목</p>
                                     
                                     <span class="badge bg-secondary me-1" th:each="tag:${post.tags}"
@@ -144,6 +144,7 @@
                                             th:min="1"
                                             th:max="*{totalPage}"
                                             onkeyup="if(event.key === 'Enter') updatePage(this.value)"
+                                            onblur="updatePage(this.value)"
                                             class="form-control" style="max-width: 60px;">
                                     <span class="text-muted ms-2"
                                           th:text="| / *{totalPage}|"></span>

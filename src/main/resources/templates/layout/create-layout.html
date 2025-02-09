@@ -15,7 +15,8 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>
         <!-- Prism JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-        
+        <!-- 이미지 업로드 Compressor -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.2.1/compressor.min.js"></script>
         <!-- 메인 컨텐츠 -->
         <div class="container py-5">
             <div class="row justify-content-center">
@@ -64,7 +65,7 @@
                                         <input type="hidden" th:field="*{tags}" id="tagsHidden">
                                         <!-- 태그가 추가될 영역 -->
                                         <input type="text" class="tag-input flex-grow-1 border-0 p-0" id="tagInput"
-                                               placeholder="태그를 입력하고 엔터를 누르세요" th:field="*{tags}"
+                                               placeholder="태그를 입력하고 스페이스/엔터를 누르세요" th:field="*{tags}"
                                                style="outline: none;">
                                         <span th:errors="*{tags}">태그 에러 메시지</span>
                                     </div>
@@ -132,6 +133,29 @@
                     // tagsHidden.value = Array.from(tags).join(',');
                     tagsHidden.value = Array.from(tags);
                 }
+
+                // 모바일에서의 태그 입력
+                tagInput.addEventListener('input', function (event) {
+                    const value = event.target.value;
+                    if (value.includes(' ')) {
+                        const tagText = value.replace(' ', '').trim();
+
+                        if (tagText === '') {
+                            tagInput.value = '';
+                            return;
+                        }
+
+                        // 중복 체크
+                        if (tags.has(tagText)) {
+                            alert('이미 존재하는 태그입니다.');
+                            tagInput.value = '';
+                            return;
+                        }
+
+                        addTag(tagText);
+                        tagInput.value = '';
+                    }
+                });
 
                 tagInput.addEventListener('keydown', function (event) {
                     if (event.key === 'Enter' && tagInput.value.trim() !== '') {

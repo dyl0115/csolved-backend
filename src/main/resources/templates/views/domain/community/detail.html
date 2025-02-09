@@ -4,6 +4,13 @@
         <title>상세 게시글</title>
     </head>
     <body>
+        <style>
+            section img {
+                max-width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+        </style>
         <!-- Prism CSS -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>
         <!-- Prism JS -->
@@ -271,8 +278,7 @@
                                                 </div>
                                                 
                                                 <span th:utext="${comment.content}">
-                                                And under those conditions, you cannot establish a capital-market
-                                                evaluation of that enterprise. You can't get investors.
+                                                댓글 내용
                                                 </span>
                                             </div>
                                         </div>
