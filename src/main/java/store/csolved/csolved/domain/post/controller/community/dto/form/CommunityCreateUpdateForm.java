@@ -10,7 +10,9 @@ import store.csolved.csolved.domain.post.entity.Post;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static store.csolved.csolved.domain.post.entity.PostType.COMMUNITY;
 
@@ -35,19 +37,19 @@ public class CommunityCreateUpdateForm
     private Long categoryId;
 
     @NotEmpty(message = "태그는 반드시 하나 이상 있어야 합니다.")
-    private List<String> tags;
+    private String tags;
 
-    public static CommunityCreateUpdateForm from(Post question)
+    public static CommunityCreateUpdateForm from(Post post)
     {
         return CommunityCreateUpdateForm.builder()
-                .title(question.getTitle())
-                .content(question.getContent())
-                .authorId(question.getAuthorId())
-                .anonymous(question.isAnonymous())
-                .categoryId(question.getCategoryId())
-                .tags(question.getTags().stream()
+                .title(post.getTitle())
+                .content(post.getContent())
+                .authorId(post.getAuthorId())
+                .anonymous(post.isAnonymous())
+                .categoryId(post.getCategoryId())
+                .tags(post.getTags().stream()
                         .map(Tag::getName)
-                        .toList())
+                        .collect(Collectors.joining(",")))
                 .build();
     }
 
@@ -55,7 +57,7 @@ public class CommunityCreateUpdateForm
     {
         return CommunityCreateUpdateForm.builder()
                 .anonymous(false)
-                .tags(new ArrayList<>()).build();
+                .build();
     }
 
     public Post getCommunity()
@@ -75,10 +77,8 @@ public class CommunityCreateUpdateForm
 
     public List<Tag> getTagList()
     {
-        return tags.stream()
-                .map(name -> Tag.builder()
-                        .name(name)
-                        .build())
+        return Arrays.stream(tags.split(","))
+                .map(name -> Tag.builder().name(name).build())
                 .toList();
     }
 }
