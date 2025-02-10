@@ -41,8 +41,8 @@ management:
     web:
       exposure:
         include: prometheus,health,metrics
-  server:
-    port: 7180
+#  server:
+#    port: 7180
 
 server:
   tomcat:
