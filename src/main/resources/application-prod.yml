@@ -42,7 +42,7 @@ management:
       exposure:
         include: prometheus,health,metrics
   server:
-    port: ${PROMETHEUS_PORT}
+    port: 7180
 
 server:
   tomcat:
