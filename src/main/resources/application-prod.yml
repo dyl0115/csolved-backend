@@ -36,6 +36,19 @@ aws:
     bucket-name: ${BUCKET_NAME}
     region: ${AWS_REGION}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,metrics
+  server:
+    port: ${PROMETHEUS_PORT}
+
+server:
+  tomcat:
+    mbeanregistry:
+      enabled: true
+
 logging:
   level:
     root: INFO

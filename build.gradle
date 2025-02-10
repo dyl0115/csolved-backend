@@ -69,6 +69,7 @@ dependencies {
 
     // 모니터링을 위한 Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {
