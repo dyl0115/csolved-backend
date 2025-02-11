@@ -67,5 +67,4 @@ jobs:
               -e AWS_REGION='${{ secrets.AWS_REGION }}' \
               -e PROMETHEUS_PORT='${{ secrets.PROMETHEUS_PORT }}' \
               -p 8080:8080 \
-              -p 7180:7180 \ 
               ${{ secrets.DOCKERHUB_USERNAME }}/csolved:latest
