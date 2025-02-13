@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html th:replace="~{/layout/create-layout::create-layout(postType='code-review', categories=${createVM.categories}, createForm=${createForm}, customContents=~{::body})}">
     <body>
-        <!-- 깃허브 주소 입력창 -->
-        <label for="github-url" class="form-label">깃허브 주소</label>
-        <input type="text" class="form-control" id="github-url"
-               th:field="${createForm.githubUrl}"
-               placeholder="깃허브 주소를 입력하세요." required>
-        <span th:errors="${createForm.githubUrl}">깃허브 주소 오류 메시지</span>
+        <!--        &lt;!&ndash; 깃허브 주소 입력창 &ndash;&gt;-->
+        <!--        <label for="github-url" class="form-label">깃허브 주소</label>-->
+        <!--        <input type="text" class="form-control" id="github-url"-->
+        <!--               th:field="${createForm.githubUrl}"-->
+        <!--               placeholder="깃허브 주소를 입력하세요." required>-->
+        <!--        <span th:errors="${createForm.githubUrl}">깃허브 주소 오류 메시지</span>-->
     </body>
 </html>
