@@ -32,8 +32,20 @@
         from answers a
                  left join users u on u.id = a.author_id
         where a.id = #{answerId};
-
     </select>
+
+    <update id="increaseAnswerCount">
+        update posts
+        set answer_count = answer_count + 1
+        where id = #{questionId};
+    </update>
+
+    <update id="decreaseAnswerCount">
+        update posts
+        set answer_count = answer_count - 1
+        where id = #{questionId};
+    </update>
+
 
     <select id="getScore">
         select score

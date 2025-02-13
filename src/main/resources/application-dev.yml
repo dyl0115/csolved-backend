@@ -40,5 +40,5 @@ logging:
     #    org.apache.ibatis: TRACE
     #    org.mybatis: TRACE
     root: INFO
-    store.csolved.csolved.domain.post.mapper: TRACE
+    store.csolved.csolved.domain.post.mapper.store.csolved.csolved.domain.community.mapper.CommunityMapper: TRACE
 

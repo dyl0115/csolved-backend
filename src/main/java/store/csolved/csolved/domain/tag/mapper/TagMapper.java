@@ -1,7 +1,7 @@
 package store.csolved.csolved.domain.tag.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import store.csolved.csolved.domain.tag.entity.Tag;
+import store.csolved.csolved.domain.tag.Tag;
 
 import java.util.List;
 

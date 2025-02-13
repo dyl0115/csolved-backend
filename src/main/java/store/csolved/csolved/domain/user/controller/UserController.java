@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
-import store.csolved.csolved.domain.auth.etc.annotation.LoginUser;
+import store.csolved.csolved.utils.login.LoginRequest;
+import store.csolved.csolved.utils.login.LoginUser;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.user.controller.dto.UserProfileForm;
+import store.csolved.csolved.domain.user.controller.form.UserProfileForm;
 import store.csolved.csolved.domain.user.service.UserProfileService;
-import store.csolved.csolved.domain.user.validator.UpdateProfileValidator;
+import store.csolved.csolved.validator.UpdateProfileValidator;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ import java.io.IOException;
 @Controller
 public class UserController
 {
-    public final static String VIEWS_USER_PROFILE_UPDATE = "/views/domain/user-profile/profile-update";
+    public final static String VIEWS_USER_PROFILE_UPDATE = "/views/user-profile/profile-update";
 
     private final UserProfileService profileService;
     private final UpdateProfileValidator updateProfileValidator;

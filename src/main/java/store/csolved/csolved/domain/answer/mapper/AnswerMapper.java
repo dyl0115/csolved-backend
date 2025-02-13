@@ -1,7 +1,7 @@
 package store.csolved.csolved.domain.answer.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import store.csolved.csolved.domain.answer.entity.Answer;
+import store.csolved.csolved.domain.answer.Answer;
 
 import java.util.List;
 
@@ -14,15 +14,19 @@ public interface AnswerMapper
 
     Answer getAnswer(Long answerId);
 
+    void increaseAnswerCount(Long postId);
+
+    void decreaseAnswerCount(Long postId);
+
     Long getScore(Long answerId, Long userId);
 
     void saveScore(Long answerId, Long score);
 
     void updateScore(Long answerId, Long oldScore, Long newScore);
 
-    void updateVoter(Long answerId, Long userId, Long score);
-
     void saveVoter(Long answerId, Long userId, Long score);
+
+    void updateVoter(Long answerId, Long userId, Long score);
 
     boolean existComments(Long answerId);
 

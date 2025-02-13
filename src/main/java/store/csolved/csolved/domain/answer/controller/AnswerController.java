@@ -6,17 +6,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
-import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
+import store.csolved.csolved.utils.login.LoginRequest;
+import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
-import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
-import store.csolved.csolved.domain.post.facade.CodeReviewFacade;
-import store.csolved.csolved.domain.post.facade.CommunityFacade;
-import store.csolved.csolved.domain.post.facade.QuestionFacade;
+import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
+import store.csolved.csolved.domain.code_review.service.CodeReviewFacade;
+import store.csolved.csolved.domain.community.service.CommunityFacade;
+import store.csolved.csolved.domain.question.service.QuestionFacade;
 
-import static store.csolved.csolved.domain.post.controller.code_review.CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
-import static store.csolved.csolved.domain.post.controller.community.CommunityController.VIEWS_COMMUNITY_DETAIL;
-import static store.csolved.csolved.domain.post.controller.question.QuestionController.VIEWS_QUESTION_DETAIL;
+import static store.csolved.csolved.domain.code_review.controller.CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
+import static store.csolved.csolved.domain.community.controller.CommunityController.VIEWS_COMMUNITY_DETAIL;
+import static store.csolved.csolved.domain.question.controller.QuestionController.VIEWS_QUESTION_DETAIL;
 
 @RequiredArgsConstructor
 @Controller

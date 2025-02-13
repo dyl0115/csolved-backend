@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.user.controller.dto.UserProfileForm;
+import store.csolved.csolved.domain.user.controller.form.UserProfileForm;
 import store.csolved.csolved.exception.ImageUploadException;
 import store.csolved.csolved.domain.file.FileService;
 import store.csolved.csolved.utils.SessionManager;

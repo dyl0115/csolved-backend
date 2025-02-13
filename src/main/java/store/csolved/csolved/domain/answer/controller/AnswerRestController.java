@@ -3,10 +3,10 @@ package store.csolved.csolved.domain.answer.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
-import store.csolved.csolved.domain.auth.etc.annotation.LoginUser;
-import store.csolved.csolved.domain.answer.controller.dto.AnswerScoreResponse;
-import store.csolved.csolved.domain.answer.entity.Answer;
+import store.csolved.csolved.utils.login.LoginRequest;
+import store.csolved.csolved.utils.login.LoginUser;
+import store.csolved.csolved.domain.answer.controller.response.AnswerScoreResponse;
+import store.csolved.csolved.domain.answer.Answer;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.user.User;
 

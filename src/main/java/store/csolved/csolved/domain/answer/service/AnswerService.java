@@ -3,9 +3,8 @@ package store.csolved.csolved.domain.answer.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.answer.entity.Answer;
+import store.csolved.csolved.domain.answer.Answer;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
-import store.csolved.csolved.domain.post.mapper.old.PostMapper;
 
 import java.util.List;
 
@@ -14,12 +13,11 @@ import java.util.List;
 public class AnswerService
 {
     private final AnswerMapper answerMapper;
-    private final PostMapper questionMapper;
 
     @Transactional
     public void saveAnswer(Answer answer)
     {
-        questionMapper.increaseAnswerCount(answer.getPostId());
+        answerMapper.increaseAnswerCount(answer.getPostId());
         answerMapper.saveAnswer(answer);
     }
 
@@ -63,7 +61,7 @@ public class AnswerService
         }
         else
         {
-            questionMapper.decreaseAnswerCount(answer.getPostId());
+            answerMapper.decreaseAnswerCount(answer.getPostId());
             answerMapper.hardDeleteScores(answerId);
             answerMapper.hardDelete(answerId);
         }

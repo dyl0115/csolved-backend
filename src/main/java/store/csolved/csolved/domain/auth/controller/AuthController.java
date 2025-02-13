@@ -7,14 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
+import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.auth.service.AuthService;
-import store.csolved.csolved.domain.auth.etc.annotation.LoginUser;
-import store.csolved.csolved.domain.auth.validator.SignInFormValidator;
-import store.csolved.csolved.domain.auth.validator.SignUpFormValidator;
+import store.csolved.csolved.utils.login.LoginUser;
+import store.csolved.csolved.validator.SignInFormValidator;
+import store.csolved.csolved.validator.SignUpFormValidator;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.auth.controller.dto.SignInForm;
-import store.csolved.csolved.domain.auth.controller.dto.SignUpForm;
+import store.csolved.csolved.domain.auth.controller.form.SignInForm;
+import store.csolved.csolved.domain.auth.controller.form.SignUpForm;
 
 @RequiredArgsConstructor
 @Controller

@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.tag.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.tag.entity.Tag;
+import store.csolved.csolved.domain.tag.Tag;
 import store.csolved.csolved.domain.tag.mapper.TagMapper;
 
 import java.util.HashSet;
