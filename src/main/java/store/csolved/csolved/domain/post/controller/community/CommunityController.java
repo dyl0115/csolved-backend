@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
-import store.csolved.csolved.domain.post.controller.community.dto.form.CommunityCreateUpdateForm;
-import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityCreateUpdateVM;
-import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityDetailVM;
-import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityListVM;
-import store.csolved.csolved.domain.post.facade.community.CommunityFacade;
+import store.csolved.csolved.domain.post.controller.community.form.CommunityCreateUpdateForm;
+import store.csolved.csolved.domain.post.controller.community.view_model.CommunityCreateUpdateVM;
+import store.csolved.csolved.domain.post.controller.community.view_model.CommunityDetailVM;
+import store.csolved.csolved.domain.post.controller.community.view_model.CommunityListVM;
+import store.csolved.csolved.domain.post.facade.CommunityFacade;
 import store.csolved.csolved.domain.search.filter.FilterInfo;
 import store.csolved.csolved.domain.search.filter.Filtering;
 import store.csolved.csolved.domain.search.page.PageInfo;
@@ -94,7 +94,7 @@ public class CommunityController
     public String initUpdate(@PathVariable Long postId,
                              Model model)
     {
-        CommunityCreateUpdateVM viewModel = communityFacade.initUpdate(postId);
+        CommunityCreateUpdateVM viewModel = communityFacade.initUpdate();
         model.addAttribute("updateVM", viewModel);
         CommunityCreateUpdateForm form = communityFacade.initUpdateForm(postId);
         model.addAttribute("updateForm", form);
@@ -110,7 +110,7 @@ public class CommunityController
     {
         if (result.hasErrors())
         {
-            CommunityCreateUpdateVM viewModel = communityFacade.initUpdate(postId);
+            CommunityCreateUpdateVM viewModel = communityFacade.initUpdate();
             model.addAttribute("updateVM", viewModel);
             return VIEWS_COMMUNITY_UPDATE_FORM;
         }

@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.auth.etc.annotation.LoginUser;
-import store.csolved.csolved.domain.post.facade.community.CommunityFacade;
+import store.csolved.csolved.domain.post.facade.CommunityFacade;
 import store.csolved.csolved.domain.user.User;
 
 @RequestMapping("/api/community")

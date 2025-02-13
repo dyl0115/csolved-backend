@@ -10,9 +10,9 @@ import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
-import store.csolved.csolved.domain.post.facade.code_review.CodeReviewFacade;
-import store.csolved.csolved.domain.post.facade.community.CommunityFacade;
-import store.csolved.csolved.domain.post.facade.question.QuestionFacade;
+import store.csolved.csolved.domain.post.facade.CodeReviewFacade;
+import store.csolved.csolved.domain.post.facade.CommunityFacade;
+import store.csolved.csolved.domain.post.facade.QuestionFacade;
 
 import static store.csolved.csolved.domain.post.controller.code_review.CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
 import static store.csolved.csolved.domain.post.controller.community.CommunityController.VIEWS_COMMUNITY_DETAIL;

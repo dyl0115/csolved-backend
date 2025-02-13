@@ -16,12 +16,4 @@ public enum PostType
 
     private final int code;
     private final String description;
-
-    public static PostType of(int code)
-    {
-        return Arrays.stream(PostType.values())
-                .filter(type -> type.getCode() == code)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 PostType 코드입니다. code: " + code));
-    }
 }

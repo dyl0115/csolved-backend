@@ -16,10 +16,10 @@ import store.csolved.csolved.domain.search.sort.SortInfo;
 import store.csolved.csolved.domain.answer.controller.dto.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.search.page.PageInfo;
-import store.csolved.csolved.domain.post.controller.question.dto.form.QuestionCreateUpdateForm;
-import store.csolved.csolved.domain.post.controller.question.dto.view_model.QuestionCreateUpdateVM;
-import store.csolved.csolved.domain.post.controller.question.dto.view_model.QuestionListVM;
-import store.csolved.csolved.domain.post.facade.question.QuestionFacade;
+import store.csolved.csolved.domain.post.controller.question.form.QuestionCreateUpdateForm;
+import store.csolved.csolved.domain.post.controller.question.view_model.QuestionCreateUpdateVM;
+import store.csolved.csolved.domain.post.controller.question.view_model.QuestionListVM;
+import store.csolved.csolved.domain.post.facade.QuestionFacade;
 
 @RequiredArgsConstructor
 @Controller

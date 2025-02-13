@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.answer.entity.Answer;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
-import store.csolved.csolved.domain.post.mapper.PostMapper;
+import store.csolved.csolved.domain.post.mapper.old.PostMapper;
 
 import java.util.List;
 

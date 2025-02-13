@@ -13,9 +13,9 @@ import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.post.controller.code_review.CodeReviewController;
 import store.csolved.csolved.domain.post.controller.community.CommunityController;
 import store.csolved.csolved.domain.post.controller.question.QuestionController;
-import store.csolved.csolved.domain.post.facade.code_review.CodeReviewFacade;
-import store.csolved.csolved.domain.post.facade.community.CommunityFacade;
-import store.csolved.csolved.domain.post.facade.question.QuestionFacade;
+import store.csolved.csolved.domain.post.facade.CodeReviewFacade;
+import store.csolved.csolved.domain.post.facade.CommunityFacade;
+import store.csolved.csolved.domain.post.facade.QuestionFacade;
 
 @RequiredArgsConstructor
 @Controller
