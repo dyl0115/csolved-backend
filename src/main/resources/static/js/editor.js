@@ -21,8 +21,8 @@ function initEditor() {
             ],
             mobile: {
                 menubar: false,
-                toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist',
-                height: '300px'
+                toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | codesample | link image',
+                height: '450px'
             },
             codesample_global_prismjs: true,
             forced_root_block: 'p',
@@ -154,6 +154,11 @@ function initEditor() {
                 {text: 'Java', value: 'java'},
                 {text: 'SQL', value: 'sql'}
             ],
+            mobile: {
+                menubar: false,
+                toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | codesample | link image',
+                height: '300px'
+            },
             codesample_global_prismjs: true,
             forced_root_block: 'p',
             remove_trailing_brs: false,
@@ -213,7 +218,7 @@ function initEditor() {
             selector: '.small-editor',
             height: 250,
             width: "100%",
-            plugins: 'code codesample table lists advlist autolink',
+            plugins: 'table lists advlist autolink',
             menubar: false,
             toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | codesample',
             codesample_languages: [

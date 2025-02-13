@@ -239,40 +239,44 @@
                                         </div>
                                         
                                         <!-- 답변에 대한 댓글 -->
-                                        <div class="d-flex mt-4" th:each="comment:${answer.comments}">
-                                            <div class="flex-shrink-0">
-                                                <img class="rounded-circle img-fluid"
-                                                     style="max-width: 40px; max-height: 40px;"
-                                                     th:src="${comment.anonymous ? '/assets/anonymous.jpg' : comment.authorProfileImage}"
-                                                     alt="..."/>
-                                            </div>
-                                            <div class="ms-3">
-                                                <div class="block">
+                                        <div th:each="comment:${answer.comments}">
+                                            <div class="d-flex mt-4">
+                                                <div class="flex-shrink-0">
+                                                    <img class="rounded-circle img-fluid"
+                                                         style="max-width: 40px; max-height: 40px;"
+                                                         th:src="${comment.anonymous ? '/assets/anonymous.jpg' : comment.authorProfileImage}"
+                                                         alt="..."/>
+                                                </div>
+                                                <div class="ms-3">
+                                                    <div class="block">
                                                         <span class="fw-bold"
                                                               th:text="${comment.anonymous} ? '익명' : ${comment.authorNickname}">
                                                             댓쓴이 닉네임
                                                         </span>
-                                                    <span class="timeage text-muted fst-italic ms-1"
-                                                          th:data-date="${comment.createdAt}">16분 전
+                                                        <span class="timeago text-muted fst-italic ms-1"
+                                                              th:data-date="${comment.createdAt}">16분 전
                                                     </span>
-                                                    <span class="ms-2">
+                                                        <span class="ms-2">
                                                         <button class="btn btn-outline-danger btn-xs"
                                                                 th:if="${comment.authorId == user.id}"
                                                                 data-bs-toggle="modal"
                                                                 th:data-bs-target="${'#commentDeleteConfirmModal' + comment.id}">삭제
                                                         </button>
-                                                        <!-- 댓글 삭제 경고 모달-->
+                                                            <!-- 댓글 삭제 경고 모달-->
             <div th:insert="~{/fragments/common/modal::danger-modal(|commentDeleteConfirmModal${comment.id}|, '댓글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deleteComment(${comment.id})|)}"></div>
             
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <span class="mb-3 block"
+                                                          th:utext="${comment.content}">
+                                                        대댓글 내용
                                                     </span>
-                                                </div>
                                                 
-                                                <span th:utext="${comment.content}">
-                                                And under those conditions, you cannot establish a capital-market
-                                                evaluation of that enterprise. You can't get investors.
-                                                </span>
+                                                </div>
                                             </div>
                                         </div>
+                                    
                                     </div>
                                 </div>
                                 
