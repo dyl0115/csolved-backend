@@ -291,11 +291,6 @@ document.querySelectorAll('form').forEach(form => {
         e.preventDefault();
         const textarea = this.querySelector('textarea');
         const editorInstance = tinymce.get(textarea.id);
-        if (!editorInstance.getContent()) {
-            alert('내용을 입력해주세요.');
-            editorInstance.getContainer().style.border = '1px solid #dc3545';
-            return;
-        }
         textarea.value = editorInstance.getContent();
         this.submit();
     });

@@ -43,9 +43,12 @@
                                 <!-- 제목 입력 -->
                                 <div class="mb-3">
                                     <label for="title" class="form-label">제목</label>
-                                    <input type="text" class="form-control" id="title" th:field="*{title}"
-                                           placeholder="제목을 입력하세요" required>
-                                    <span th:errors="*{title}">제목 오류 메시지</span>
+                                    <input type="text"
+                                           class="form-control"
+                                           th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}"
+                                           id="title" th:field="*{title}"
+                                           placeholder="제목을 입력하세요">
+                                    <span th:errors="*{title}" class="text-danger">제목 오류 메시지</span>
                                 </div>
                                 
                                 <!-- 사용자 아이디-->
@@ -61,15 +64,16 @@
                                 <!-- 태그 입력 -->
                                 <div class="mb-3">
                                     <label for="tags-container" class="form-label">태그</label>
-                                    <div class="d-flex flex-wrap align-items-center form-control" id="tags-container">
+                                    <div class="d-flex flex-wrap align-items-center form-control"
+                                         th:classappend="${#fields.hasErrors('tags') ? 'is-invalid':''}"
+                                         id="tags-container">
                                         <input type="hidden" th:field="*{tags}" id="tagsHidden">
                                         <!-- 태그가 추가될 영역 -->
                                         <input type="text" class="tag-input flex-grow-1 border-0 p-0" id="tagInput"
-                                               placeholder="태그를 입력하고 스페이스/엔터를 누르세요" th:field="*{tags}"
+                                               placeholder="태그를 입력하고 스페이스/엔터를 누르세요"
                                                style="outline: none;">
-                                        <span th:errors="*{tags}">태그 에러 메시지</span>
                                     </div>
-                                    <div class="form-text">예: java, spring, jpa</div>
+                                    <span th:errors="*{tags}" class="text-danger">태그 에러 메시지</span>
                                 </div>
                                 
                                 <!-- 커스텀 컨텐츠 -->
@@ -85,7 +89,7 @@
                                               class="large-editor form-control"
                                               placeholder="내용을 입력하세요">
                                     </textarea>
-                                    <span th:errors="*{content}">컨텐츠 에러 메시지</span>
+                                    <span th:errors="*{content}" class="text-danger">컨텐츠 에러 메시지</span>
                                 </div>
                                 
                                 <!-- 버튼 그룹 -->
@@ -131,7 +135,9 @@
                 // hidden input 업데이트 함수
                 function updateHiddenInput() {
                     // tagsHidden.value = Array.from(tags).join(',');
-                    tagsHidden.value = Array.from(tags);
+                    // tagsHidden.value = Array.from(tags);
+                    const tagsArray = Array.from(tags);
+                    tagsHidden.value = tagsArray.length > 0 ? tagsArray.join(',') : '';
                 }
 
                 // 모바일에서의 태그 입력
@@ -220,6 +226,5 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
         <!--  TinyMCE 에디터 JS-->
         <script src="/js/editor.js" defer data-upload-image-url="/api/upload-image"></script>
-    
     </body>
 </html>

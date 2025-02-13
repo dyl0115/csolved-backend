@@ -2,6 +2,7 @@ package store.csolved.csolved.domain.post.controller.community;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +12,7 @@ import store.csolved.csolved.domain.auth.etc.annotation.LoginRequest;
 import store.csolved.csolved.domain.comment.controller.dto.CommentCreateForm;
 import store.csolved.csolved.domain.post.controller.community.dto.form.CommunityCreateUpdateForm;
 import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityCreateUpdateVM;
+import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityDetailVM;
 import store.csolved.csolved.domain.post.controller.community.dto.view_model.CommunityListVM;
 import store.csolved.csolved.domain.post.facade.community.CommunityFacade;
 import store.csolved.csolved.domain.search.filter.FilterInfo;
@@ -21,6 +23,7 @@ import store.csolved.csolved.domain.search.search.Searching;
 import store.csolved.csolved.domain.search.sort.SortInfo;
 import store.csolved.csolved.domain.search.sort.Sorting;
 
+@Slf4j
 @RequiredArgsConstructor
 @Controller
 public class CommunityController
@@ -50,7 +53,8 @@ public class CommunityController
     public String getCommunityPost(@PathVariable Long postId,
                                    Model model)
     {
-        model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(postId));
+        CommunityDetailVM communityPost = communityFacade.getCommunityPost(postId);
+        model.addAttribute("communityPostDetails", communityPost);
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         return VIEWS_COMMUNITY_DETAIL;

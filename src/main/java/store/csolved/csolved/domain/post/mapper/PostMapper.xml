@@ -104,13 +104,20 @@
     </select>
 
     <select id="getPost" resultMap="PostResultMap">
-        select p.*,
-               u.id       author_id,
-               u.nickname author_nickname,
-               c.id       category_id,
-               c.name     category_name,
-               t.id       tag_id,
-               t.name     tag_name
+        select p.id           id,
+               p.title        title,
+               p.anonymous    anonymous,
+               p.content      content,
+               p.views        views,
+               p.likes        likes,
+               p.answer_count answer_count,
+               p.created_at   created_at,
+               u.id           author_id,
+               u.nickname     author_nickname,
+               c.id           category_id,
+               c.name         category_name,
+               t.id           tag_id,
+               t.name         tag_name
         from posts p
                  left join users u on p.user_id = u.id
                  left join category c on p.category_id = c.id

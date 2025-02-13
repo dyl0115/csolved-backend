@@ -6,12 +6,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
+import store.csolved.csolved.domain.post.controller.question.dto.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.post.entity.PostType;
 import store.csolved.csolved.domain.post.entity.code_review.CodeReview;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -37,13 +40,12 @@ public class CodeReviewCreateUpdateForm
     private Long categoryId;
 
     @NotEmpty(message = "태그는 반드시 하나 이상 있어야 합니다.")
-    private List<String> tags;
+    private String tags;
 
     public static CodeReviewCreateUpdateForm empty()
     {
         return CodeReviewCreateUpdateForm.builder()
                 .anonymous(false)
-                .tags(new ArrayList<>())
                 .build();
     }
 
@@ -52,13 +54,12 @@ public class CodeReviewCreateUpdateForm
         return CodeReviewCreateUpdateForm.builder()
                 .title(codeReview.getTitle())
                 .content(codeReview.getContent())
-                .githubUrl(codeReview.getGithubUrl())
                 .authorId(codeReview.getAuthorId())
                 .anonymous(codeReview.isAnonymous())
                 .categoryId(codeReview.getCategoryId())
                 .tags(codeReview.getTags().stream()
                         .map(Tag::getName)
-                        .toList())
+                        .collect(Collectors.joining(",")))
                 .build();
     }
 
@@ -80,10 +81,8 @@ public class CodeReviewCreateUpdateForm
 
     public List<Tag> getTagList()
     {
-        return tags.stream()
-                .map(name -> Tag.builder()
-                        .name(name)
-                        .build())
+        return Arrays.stream(tags.split(","))
+                .map(name -> Tag.builder().name(name).build())
                 .toList();
     }
 }

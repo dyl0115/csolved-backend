@@ -6,12 +6,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
+import store.csolved.csolved.domain.post.controller.community.dto.form.CommunityCreateUpdateForm;
 import store.csolved.csolved.domain.post.entity.Post;
 import store.csolved.csolved.domain.post.entity.PostType;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Builder
@@ -34,13 +37,12 @@ public class QuestionCreateUpdateForm
     private Long categoryId;
 
     @NotEmpty(message = "태그는 반드시 하나 이상 있어야 합니다.")
-    private List<String> tags;
+    private String tags;
 
     public static QuestionCreateUpdateForm empty()
     {
         return QuestionCreateUpdateForm.builder()
                 .anonymous(false)
-                .tags(new ArrayList<>())
                 .build();
     }
 
@@ -54,7 +56,7 @@ public class QuestionCreateUpdateForm
                 .categoryId(question.getCategoryId())
                 .tags(question.getTags().stream()
                         .map(Tag::getName)
-                        .toList())
+                        .collect(Collectors.joining(",")))
                 .build();
     }
 
@@ -75,10 +77,8 @@ public class QuestionCreateUpdateForm
 
     public List<Tag> getTagList()
     {
-        return tags.stream()
-                .map(name -> Tag.builder()
-                        .name(name)
-                        .build())
+        return Arrays.stream(tags.split(","))
+                .map(name -> Tag.builder().name(name).build())
                 .toList();
     }
 }

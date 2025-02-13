@@ -41,7 +41,7 @@ public class AnswerController
             return VIEWS_QUESTION_DETAIL;
         }
         answerService.saveAnswer(form.toAnswer());
-        return "redirect:/questions/" + postId;
+        return "redirect:/question/" + postId;
     }
 
     @LoginRequest

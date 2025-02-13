@@ -9,7 +9,6 @@ import lombok.Getter;
 import store.csolved.csolved.domain.post.entity.Post;
 import store.csolved.csolved.domain.tag.entity.Tag;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

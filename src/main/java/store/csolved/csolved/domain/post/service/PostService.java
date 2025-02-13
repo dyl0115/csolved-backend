@@ -46,7 +46,7 @@ public class PostService
                                Filtering filter,
                                Searching search)
     {
-        return postMapper.getPosts(
+        List<Post> posts = postMapper.getPosts(
                 postTypeCode,
                 page.getOffset(),
                 page.getSize(),
@@ -55,6 +55,7 @@ public class PostService
                 filter.getFilterValue(),
                 search.getSearchType(),
                 search.getKeyword());
+        return posts;
     }
 
     // 질문글의 조회수를 1만큼 올리고, 질문 상세를 보여줌.
@@ -62,7 +63,17 @@ public class PostService
     public Post viewPost(Long postId)
     {
         postMapper.increaseView(postId);
-        return postMapper.getPost(postId);
+
+        Post post = postMapper.getPost(postId);
+
+//        System.out.println("PostService.getPost()");
+//        System.out.println("Post.title: " + post.getTitle());
+//        post.getTags().forEach(tag ->
+//        {
+//            System.out.println("    id:" + tag.getId());
+//            System.out.println("    name:" + tag.getName());
+//        });
+        return post;
     }
 
     @Transactional
