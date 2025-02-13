@@ -54,13 +54,15 @@
 
     <update id="updateProfileImage">
         update users
-        set profile_image = #{profileImage}
+        set profile_image = #{profileImage},
+            modified_at   = current_timestamp
         where id = #{userId}
     </update>
 
     <update id="updateNickname">
         update users
-        set nickname = #{nickname}
+        set nickname    = #{nickname},
+            modified_at = current_timestamp
         where id = #{userId}
     </update>
 

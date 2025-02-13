@@ -13,7 +13,7 @@ public class UserProfileForm
 {
     private Long userId;
     @NotBlank(message = "닉네임을 입력해주세요.")
-    @Size(min = 2, max = 10, message = "길이가 2에서 10 사이여야 합니다.")
+    @Size(min = 2, max = 8, message = "길이가 2에서 8 사이여야 합니다.")
     private String nickname;
     private String currentProfileImage;
     private MultipartFile profileImage;
@@ -28,7 +28,6 @@ public class UserProfileForm
 
     public void bindCurrentProfileImage(String currentProfileImage)
     {
-        this. currentProfileImage = currentProfileImage;
-
+        this.currentProfileImage = currentProfileImage;
     }
 }

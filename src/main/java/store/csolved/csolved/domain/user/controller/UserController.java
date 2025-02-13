@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.utils.login.LoginUser;
 import store.csolved.csolved.domain.user.User;
@@ -46,14 +47,17 @@ public class UserController
     @LoginRequest
     @PostMapping("/users/profile")
     public String getUser(@Valid @ModelAttribute("updateProfileForm") UserProfileForm form,
-                          BindingResult result) throws IOException
+                          BindingResult result,
+                          RedirectAttributes redirectAttributes) throws IOException
     {
         if (result.hasErrors())
         {
             profileService.restoreProfile(form);
             return VIEWS_USER_PROFILE_UPDATE;
         }
+
         profileService.updateProfile(form);
+        redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/users/profile";
     }
 }

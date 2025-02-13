@@ -59,13 +59,14 @@
                                     </div>
                                 </div>
                                 
-                                <!-- 프로필 업데이트 확인 모달 -->
-                                <div th:insert="~{/fragments/common/modal::alert-modal('profileUpdateConfirmModal', '수정완료', '프로필 업데이트가 완료되었습니다.', '확인')}"></div>
+                                <!-- 프로필 업데이트 확인 메시지-->
+                                <div th:if="${success}"
+                                     class="alert alert-success alert-dismissible fade show">
+                                    <p>프로필이 성공적으로 업데이트되었습니다!</p>
+                                </div>
                                 
-                                <!-- 제출 버튼 -->
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary px-4"
-                                            onclick="event.preventDefault(); updateProfile();">
+                                    <button type="submit" class="btn btn-primary px-4">
                                         수정하기
                                     </button>
                                 </div>
