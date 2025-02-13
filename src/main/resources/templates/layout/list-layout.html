@@ -103,6 +103,13 @@
                                                 January 1, 2023
                                             </div>
                                         </div>
+                                        
+                                        <!-- 수정 여부 -->
+                                        <div class="d-flex align-items-center me-2"
+                                             th:if="${post.modifiedAt}">
+                                            <i class="bi bi-pencil text-muted me-1"></i>
+                                            <span class="col-auto small text-muted">수정됨</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -224,5 +231,7 @@
                 </div>
             </div>
         </div>
+        <!-- Time Ago -->
+        <script src="/js/timeago.js"></script>
     </body>
 </html>

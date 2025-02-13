@@ -85,6 +85,11 @@
                                             </span>
                                         </div>
                                         
+                                        <div class="me-2 d-inline-flex" th:if="${post.modifiedAt}">
+                                            <i class="bi bi-pencil text-muted"></i>
+                                            <span class="text-muted fst-italic me-2">수정됨</span>
+                                        </div>
+                                        
                                         <span class="me-2 d-inline-flex">
                                             <a class="btn btn-outline-primary btn-xs me-2"
                                                th:if="${post.authorId == user.id}"

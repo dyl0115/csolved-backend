@@ -1,16 +1,15 @@
 package store.csolved.csolved.domain.answer;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import store.csolved.csolved.common.BaseEntity;
 
-import java.time.LocalDateTime;
-
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-@Builder
-public class Answer
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Answer extends BaseEntity
 {
-    private Long id;
     private Long postId;
     private Long authorId;
     private String authorProfileImage;
@@ -19,5 +18,4 @@ public class Answer
     private String content;
     private Long totalScore;
     private Long voterCount;
-    private LocalDateTime createdAt;
 }

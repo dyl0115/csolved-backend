@@ -78,7 +78,7 @@ public class CodeReviewCreateUpdateForm
     public List<Tag> getTagList()
     {
         return Arrays.stream(tags.split(","))
-                .map(name -> Tag.builder().name(name).build())
+                .map(Tag::from)
                 .toList();
     }
 }

@@ -17,6 +17,7 @@
         <result property="likes" column="likes"/>
         <result property="answerCount" column="answer_count"/>
         <result property="createdAt" column="created_at"/>
+        <result property="modifiedAt" column="modified_at"/>
         <collection property="tags" ofType="store.csolved.csolved.domain.tag.Tag">
             <id property="id" column="tag_id"/>
             <result property="name" column="tag_name"/>
@@ -35,7 +36,8 @@
         set anonymous   = #{question.anonymous},
             title       = #{question.title},
             content     = #{question.content},
-            category_id = #{question.categoryId}
+            category_id = #{question.categoryId},
+            modified_at = current_timestamp
         where id = #{questionId};
     </update>
 
@@ -53,6 +55,7 @@
                p.views        views,
                p.likes        likes,
                p.answer_count answer_count,
+               p.modified_at  modified_at,
                p.created_at   created_at,
                u.id           author_id,
                u.nickname     author_nickname,
@@ -78,6 +81,7 @@
         p.likes likes,
         p.answer_count answer_count,
         p.created_at created_at,
+        p.modified_at modified_at,
         u.id author_id,
         u.nickname author_nickname,
         c.id category_id,

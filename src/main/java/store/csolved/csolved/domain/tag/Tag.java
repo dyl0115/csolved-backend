@@ -1,14 +1,18 @@
 package store.csolved.csolved.domain.tag;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import store.csolved.csolved.common.BaseEntity;
 
 @Getter
-@Builder
-public class Tag
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Tag extends BaseEntity
 {
-    private final Long id;
-    private final String name;
+    private String name;
 
     public static Tag from(String name)
     {

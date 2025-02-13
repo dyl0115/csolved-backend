@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.Comment;
 
 @Builder
 @Data

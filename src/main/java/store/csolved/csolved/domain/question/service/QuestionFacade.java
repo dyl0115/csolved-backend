@@ -13,7 +13,7 @@ import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.category.service.CategoryService;
 import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.Comment;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.question.controller.form.QuestionCreateUpdateForm;
 import store.csolved.csolved.domain.question.controller.view_model.QuestionCreateUpdateVM;

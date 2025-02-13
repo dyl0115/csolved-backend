@@ -19,6 +19,7 @@
         <result property="likes" column="likes"/>
         <result property="answerCount" column="answer_count"/>
         <result property="createdAt" column="created_at"/>
+        <result property="modifiedAt" column="modified_at"/>
         <collection property="tags" ofType="store.csolved.csolved.domain.tag.Tag">
             <id property="id" column="tag_id"/>
             <result property="name" column="tag_name"/>
@@ -38,7 +39,8 @@
         set anonymous   = #{codeReview.anonymous},
             title       = #{codeReview.title},
             content     = #{codeReview.content},
-            category_id = #{codeReview.categoryId}
+            category_id = #{codeReview.categoryId},
+            modified_at = current_timestamp
         where id = #{codeReviewId};
     </update>
 
@@ -58,6 +60,7 @@
                p.likes        likes,
                p.answer_count answer_count,
                p.created_at   created_at,
+               p.modified_at  modified_at,
                u.id           author_id,
                u.nickname     author_nickname,
                c.id           category_id,
@@ -82,6 +85,7 @@
         p.likes likes,
         p.answer_count answer_count,
         p.created_at created_at,
+        p.modified_at modified_at,
         u.id author_id,
         u.nickname author_nickname,
         c.id category_id,
@@ -120,7 +124,6 @@
         select count(p.id)
         from posts p
         left join category c on p.category_id =c.id
-        left join code_reviews cr on p.id = cr.post_id
         left join users u on p.user_id = u.id
         where p.deleted_at is null and p.post_type = #{postType}
         <if test="filterType == 'CATEGORY' and filterValue != null and filterValue != 0">

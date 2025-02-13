@@ -1,7 +1,7 @@
 package store.csolved.csolved.domain.comment.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.Comment;
 
 import java.util.List;
 

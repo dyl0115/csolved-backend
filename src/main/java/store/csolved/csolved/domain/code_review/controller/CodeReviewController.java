@@ -103,8 +103,6 @@ public class CodeReviewController
                                 BindingResult result,
                                 Model model)
     {
-        System.out.println("codeReviewController ");
-        System.out.println("tagList : " + form.getTagList());
         if (result.hasErrors())
         {
             CodeReviewCreateUpdateVM viewModel = codeReviewFacade.initCreateUpdate();

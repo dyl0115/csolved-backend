@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import store.csolved.csolved.domain.answer.Answer;
 import store.csolved.csolved.domain.answer.AnswerWithComments;
-import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.Comment;
 import store.csolved.csolved.domain.question.Question;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.answer;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.Comment;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

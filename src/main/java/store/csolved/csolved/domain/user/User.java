@@ -1,22 +1,26 @@
 package store.csolved.csolved.domain.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import store.csolved.csolved.common.BaseEntity;
 
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
-public class User
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class User extends BaseEntity
 {
-    private Long id;
     private String profileImage;
-    private final String email;
-    private final String password;
-    private final String nickname;
-    private final String company;
-    private final Boolean admin;
-    private final LocalDateTime createdAt;
+    private String email;
+    private String password;
+    private String nickname;
+    private String company;
+    private Boolean admin;
 
     public static User create(String email, String password, String nickname, String company, boolean admin)
     {

@@ -7,7 +7,7 @@ import store.csolved.csolved.domain.answer.Answer;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.category.service.CategoryService;
-import store.csolved.csolved.domain.comment.entity.Comment;
+import store.csolved.csolved.domain.comment.Comment;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.community.controller.form.CommunityCreateUpdateForm;
 import store.csolved.csolved.domain.community.controller.view_model.CommunityCreateUpdateVM;
