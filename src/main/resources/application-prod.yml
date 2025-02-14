@@ -52,3 +52,4 @@ server:
 logging:
   level:
     root: INFO
+    store.csolved.csolved.domain.post.mapper.store.csolved.csolved.domain.community.mapper.CommunityMapper: TRACE

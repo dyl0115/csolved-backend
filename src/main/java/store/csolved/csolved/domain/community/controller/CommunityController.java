@@ -43,6 +43,9 @@ public class CommunityController
                                     @SearchInfo Searching search,
                                     Model model)
     {
+        System.out.println("CommunityController ");
+        System.out.println("    search.searchType = " + search.getSearchType());
+        System.out.println("    search.searchKeyword = " + search.getKeyword());
         CommunityListVM viewModel = communityFacade.getCommunityPosts(page, sort, filter, search);
         model.addAttribute("communityPostListViewModel", viewModel);
         return VIEWS_COMMUNITY_LIST;
