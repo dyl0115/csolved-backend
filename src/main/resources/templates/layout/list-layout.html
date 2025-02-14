@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       th:replace="~{/layout/default-layout::default-layout(user=${user}, title=~{::title}, content=~{::body})}"
-      th:fragment="post-list-layout(title, banner, postType, postContents)">
+      th:fragment="post-list-layout(title, banner, postType, pluraPostType, postContents)">
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -13,6 +13,7 @@
         <link href="/css/styles.css" rel="stylesheet"/>
     </head>
     <body>
+        <!-- 리스트 레이아웃 -->
         <script src="/js/list-layout.js"></script>
         <!-- 게시판 배너 -->
         <header class="py-3 bg-light border-bottom mb-4">
@@ -166,20 +167,33 @@
                     <div class="card mb-4">
                         <div class="card-header">검색</div>
                         <div class="card-body sticky-top">
-                            <div class="input-group ">
-                                <select id="search-select" class="form-select" aria-label="Search type"
-                                        style="max-width: 80px;">
-                                    <option value="title">제목</option>
-                                    <option value="author">글쓴이</option>
-                                </select>
-                                <input id="search-input" class="form-control" type="text" placeholder="검색어를 입력하세요."
-                                       aria-label="Enter search term..." aria-describedby="button-search"
-                                       onkeypress="if(event.key === `Enter`){event.preventDefault(); searchPosts('communities');}"/>
-                                <button class="btn btn-primary" id="button-search" type="button"
-                                        onclick="searchPosts()">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
+                            <form th:action="@{__${pluraPostType}__}" method="GET">
+                                <input type="hidden" name="page" value="1"/>
+                                <div class="input-group ">
+                                    <select id="search-select"
+                                            name="searchType"
+                                            class="form-select"
+                                            style="max-width: 80px;">
+                                        <option value="title"
+                                                th:selected="${param.searchType != null && param.searchType[0].equals('title') }">
+                                            제목
+                                        </option>
+                                        <option value="author"
+                                                th:selected="${param.searchType != null && param.searchType[0].equals('author')}">
+                                            글쓴이
+                                        </option>
+                                    </select>
+                                    <input name="searchKeyword"
+                                           th:value="${param.searchKeyword}"
+                                           class="form-control"
+                                           type="text"
+                                           placeholder="검색어를 입력하세요."/>
+                                    <button class="btn btn-primary"
+                                            type="submit">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     
@@ -208,13 +222,13 @@
                                 <div class="col-sm-6">
                                     <ul class="list-unstyled mb-0" th:each="category:*{categories}">
                                         <li>
-                                            <button id="filter-select" class="btn btn-link p-0 text-decoration-none"
-                                                    type="button"
-                                                    th:value="${category.id}"
-                                                    th:text="${category.name}"
-                                                    onclick="filterPosts(this.value)">
+                                            <a id="filter-select" class="btn btn-link p-0 text-decoration-none"
+                                               type="button"
+                                               th:value="${category.id}"
+                                               th:text="${category.name}"
+                                               th:href="@{/__${pluraPostType}__(page=1,filterType='CATEGORY',filterValue=${category.id})}">
                                                 카테고리 이름
-                                            </button>
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -231,7 +245,5 @@
                 </div>
             </div>
         </div>
-        <!-- Time Ago -->
-        <script src="/js/timeago.js"></script>
     </body>
 </html>
