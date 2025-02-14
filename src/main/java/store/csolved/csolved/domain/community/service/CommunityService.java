@@ -47,6 +47,16 @@ public class CommunityService
                                           Filtering filter,
                                           Searching search)
     {
+        System.out.println("CommunityService ");
+        System.out.println("    [postType] Community.getCode() = " + COMMUNITY.getCode());
+        System.out.println("    [offset] page.getOffset() = " + page.getOffset());
+        System.out.println("    [size] page.getSize() = " + page.getSize());
+        System.out.println("    [sortType] sort.name() = " + sort.name());
+        System.out.println("    [filterType] filter.getFilterType() = " + filter.getFilterType());
+        System.out.println("    [filterValue] filter.getFilterValue() = " + filter.getFilterValue());
+        System.out.println("    [searchType] search.getSearchType() = " + search.getSearchType());
+        System.out.println("    [searchKeyword] search.getKeyword() = " + search.getKeyword());
+
         return communityMapper.getCommunities(
                 COMMUNITY.getCode(),
                 page.getOffset(),

@@ -43,6 +43,7 @@ public class CommunityController
                                     @SearchInfo Searching search,
                                     Model model)
     {
+        System.out.println("----------------------------------------------------------------");
         System.out.println("CommunityController ");
         System.out.println("    search.searchType = " + search.getSearchType());
         System.out.println("    search.searchKeyword = " + search.getKeyword());
