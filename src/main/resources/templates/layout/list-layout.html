@@ -201,16 +201,28 @@
                     <div class="card mb-4">
                         <div class="card-header">정렬</div>
                         <div class="card-body">
-                            <div class="d-flex flex-column">
-                                <select class="form-select" id="sort-select" aria-label="Sort options"
-                                        th:with="currentType=${param.sortType != null ? param.sortType[0] : 'recent'}"
-                                        onchange="sortPosts()">
-                                    <option value="recent" th:selected="${currentType == 'recent'}">최신순</option>
-                                    <option value="views" th:selected="${currentType == 'views'}">조회수 많은 순</option>
-                                    <option value="answers" th:selected="${currentType == 'answers'}">댓글 많은 순</option>
-                                    <option value="likes" th:selected="${currentType == 'likes'}">좋아요 많은 순</option>
-                                </select>
-                            </div>
+                            <form method="GET">
+                                <input type="hidden" name="page" value="1"/>
+                                <div class="d-flex flex-column">
+                                    <select class="form-select"
+                                            name="sortType"
+                                            th:with="currentSortType=${param.sortType != null ? param.sortType[0] : 'recent'}"
+                                            onchange="this.form.submit()">
+                                        <option value="recent"
+                                                th:selected="${currentSortType == 'recent'}">최신순
+                                        </option>
+                                        <option value="views"
+                                                th:selected="${currentSortType == 'views'}">조회수 많은 순
+                                        </option>
+                                        <option value="answers"
+                                                th:selected="${currentSortType == 'answers'}">댓글 많은 순
+                                        </option>
+                                        <option value="likes"
+                                                th:selected="${currentSortType == 'likes'}">좋아요 많은 순
+                                        </option>
+                                    </select>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     

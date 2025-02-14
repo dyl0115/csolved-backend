@@ -20,7 +20,7 @@
         <!-- TinyMCE 에디터 -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
         <!--  TinyMCE 에디터 JS-->
-        <script src="/js/editor.js" defer data-upload-image-url="/api/upload-image"></script>
+        <!--        <script src="/js/editor.js" defer data-upload-image-url="/api/upload-image"></script>-->
         
         <!-- 페이지 내용 -->
         <div class="container mt-5"
@@ -301,20 +301,25 @@
                     <div class="card mb-4">
                         <div class="card-header">검색</div>
                         <div class="card-body sticky-top">
-                            <div class="input-group ">
-                                <select id="search-select" class="form-select" aria-label="Search type"
-                                        style="max-width: 80px;">
-                                    <option value="title">제목</option>
-                                    <option value="author">글쓴이</option>
-                                </select>
-                                <input id="search-input" class="form-control" type="text" placeholder="검색어를 입력하세요."
-                                       aria-label="Enter search term..." aria-describedby="button-search"
-                                       onkeypress="if(event.key === `Enter`){event.preventDefault(); searchPosts('communities');}"/>
-                                <button class="btn btn-primary" id="button-search" type="button"
-                                        onclick="searchPosts('questions')">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
+                            <form method="get" action="/questions">
+                                <input type="hidden" name="page" value="1"/>
+                                <div class="input-group ">
+                                    <select class="form-select"
+                                            name="searchType"
+                                            style="max-width: 80px;">
+                                        <option value="title">제목</option>
+                                        <option value="author">글쓴이</option>
+                                    </select>
+                                    <input class="form-control"
+                                           name="searchKeyword"
+                                           type="text"
+                                           placeholder="검색어를 입력하세요."/>
+                                    <button class="btn btn-primary"
+                                            type="submit">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <!-- 사이드 위젯-->

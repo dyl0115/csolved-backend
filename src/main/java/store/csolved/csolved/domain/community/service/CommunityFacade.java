@@ -92,24 +92,14 @@ public class CommunityFacade
                                              Filtering filter,
                                              Searching search)
     {
-        System.out.println("CommunityFacade ");
         // DB에서 커뮤니티글 개수를 가져옴
         Long total = communityService.countCommunities(filter, search);
-
-        System.out.println("     total = " + total);
 
         // 사용자가 요청한 페이지 번호, 글 개수를 사용하여 페이지 정보를 생성
         Pagination page = paginationUtils.createPagination(pageNumber, total);
 
-        System.out.println("     page.totalPage = " + page.getTotalPage());
-        System.out.println("     page.currentPage = " + page.getCurrentPage());
-        System.out.println("     page.size = " + page.getSize());
-        System.out.println("     page.offset = " + page.getOffset());
-
         // 페이지 정보를 사용하여 DB에 필요한 커뮤니티글만 조회
         List<Community> communities = communityService.getCommunities(page, sort, filter, search);
-
-        System.out.println("     communities.size = " + communities.size());
 
         // 카테고리의 정보를 모두 가져옴.
         List<Category> categories = categoryService.getAll(COMMUNITY.getCode());
