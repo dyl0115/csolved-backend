@@ -125,11 +125,11 @@
         <if test="sortType == 'VIEWS'">p.views DESC</if>
         <if test="sortType == 'LIKES'">p.likes DESC</if>
         <if test="sortType == 'ANSWERS'">p.answer_count DESC</if>
+        LIMIT #{offset}, #{size}
         ) sub
         LEFT JOIN category c ON c.id = sub.category_id
         LEFT JOIN post_tags pt ON pt.post_id = sub.post_id
-        LEFT JOIN tags t ON t.id = pt.tag_id
-        LIMIT #{offset}, #{size}
+        LEFT JOIN tags t ON t.id = pt.tag_id;
     </select>
 
     <select id="countCodeReviews">
