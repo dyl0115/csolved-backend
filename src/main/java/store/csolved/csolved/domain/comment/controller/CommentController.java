@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
@@ -16,6 +17,7 @@ import store.csolved.csolved.domain.question.controller.QuestionController;
 import store.csolved.csolved.domain.code_review.service.CodeReviewFacade;
 import store.csolved.csolved.domain.community.service.CommunityFacade;
 import store.csolved.csolved.domain.question.service.QuestionFacade;
+import store.csolved.csolved.utils.login.LoginUser;
 
 @RequiredArgsConstructor
 @Controller
@@ -29,14 +31,15 @@ public class CommentController
     // TODO: 여기 싹 수정해야함
     @LoginRequest
     @PostMapping("/community/{postId}/answers/{answerId}/comment")
-    public String saveCommunityComment(@PathVariable("postId") Long postId,
+    public String saveCommunityComment(@LoginUser User user,
+                                       @PathVariable("postId") Long postId,
                                        @Valid @ModelAttribute("commentCreateForm") CommentCreateForm form,
                                        BindingResult result,
                                        Model model)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(postId));
+            model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
             model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
             return CommunityController.VIEWS_COMMUNITY_DETAIL;
         }

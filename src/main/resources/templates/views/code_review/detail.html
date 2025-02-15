@@ -95,7 +95,7 @@
                                             </button>
                                             
                                             <!-- 게시글 삭제 경고 모달 -->
-            <div th:insert="~{/fragments/common/modal::danger-modal('postDeleteConfirmModal', '게시글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deletePost('code-review',${post.id})|)}"></div>
+            <div th:insert="~{/fragments/common/modal::danger-modal('postDeleteConfirmModal', '게시글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deletePost('code-review','code-reviews',${post.id})|)}"></div>
                                         
                                         </span>
                                     </div>
@@ -119,6 +119,17 @@
                         <i class="bi bi-chat-left-text-fill"></i>
                         답변 달기
                     </button>
+                                      
+                                      <!-- 북마크 버튼 -->
+                    <button class="btn btn-success mb-4"
+                            id="bookmark-button"
+                            th:onclick="|addBookmark(${post.id})|">
+                        <i id="bookmark-icon"
+                           class="bi bi-bookmark-fill"></i>
+                        <span id="bookmark-text"
+                              class="ms-1">북마크
+                        </span>
+                    </button>
                     
                     <div class="card mb-4 d-none" id="comment-card">
                         <div class="card-body" th:object="${answerCreateForm}">
@@ -126,7 +137,8 @@
                                   th:action="@{/code-review/{postId}/answers(postId=${post.id})}"
                                   method="POST">
                                 <input type="hidden" name="authorId" th:value="${user.id}"/>
-                                <textarea id="medium-editor" class="medium-editor form-control mb-3" rows="3"
+                                <textarea id="medium-editor"
+                                          class="medium-editor form-control mb-3" rows="3"
                                           placeholder="댓글을 달아 생각을 공유해 주세요!"
                                           th:field="*{content}"
                                           th:classappend="${#fields.hasErrors('content')} ? 'is-invalid' : ''">

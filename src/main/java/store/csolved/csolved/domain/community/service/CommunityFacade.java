@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.answer.Answer;
 import store.csolved.csolved.domain.answer.service.AnswerService;
+import store.csolved.csolved.domain.bookmark.service.BookmarkService;
 import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.category.service.CategoryService;
 import store.csolved.csolved.domain.comment.Comment;
@@ -31,6 +32,7 @@ import static store.csolved.csolved.common.PostType.COMMUNITY;
 public class CommunityFacade
 {
     private final CommunityService communityService;
+    private final BookmarkService bookmarkService;
     private final AnswerService answerService;
     private final CommentService commentService;
     private final CategoryService categoryService;
@@ -109,12 +111,13 @@ public class CommunityFacade
     }
 
     // 커뮤니티글 상세 조회
-    public CommunityDetailVM getCommunityPost(Long postId)
+    public CommunityDetailVM getCommunityPost(Long userId, Long postId)
     {
         Community community = communityService.viewCommunity(postId);
+        boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
         List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
-        return CommunityDetailVM.from(community, answers, comments);
+        return CommunityDetailVM.from(community, bookmarked, answers, comments);
     }
 
     // 커뮤니티글 속 답변들의 id를 추출

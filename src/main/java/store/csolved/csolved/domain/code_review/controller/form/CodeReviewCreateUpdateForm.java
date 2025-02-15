@@ -24,9 +24,6 @@ public class CodeReviewCreateUpdateForm
     @NotBlank(message = "내용을 입력해주세요.")
     private String content;
 
-    @NotBlank(message = "깃허브 주소를 입력해주세요.")
-    private String githubUrl;
-
     @NotNull
     private Long authorId;
 
@@ -65,7 +62,6 @@ public class CodeReviewCreateUpdateForm
         return CodeReview.builder()
                 .title(title)
                 .content(content)
-                .githubUrl(githubUrl)
                 .authorId(authorId)
                 .anonymous(anonymous)
                 .categoryId(categoryId)

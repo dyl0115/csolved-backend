@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
@@ -13,6 +14,7 @@ import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
 import store.csolved.csolved.domain.code_review.service.CodeReviewFacade;
 import store.csolved.csolved.domain.community.service.CommunityFacade;
 import store.csolved.csolved.domain.question.service.QuestionFacade;
+import store.csolved.csolved.utils.login.LoginUser;
 
 import static store.csolved.csolved.domain.code_review.controller.CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
 import static store.csolved.csolved.domain.community.controller.CommunityController.VIEWS_COMMUNITY_DETAIL;
@@ -46,14 +48,15 @@ public class AnswerController
 
     @LoginRequest
     @PostMapping("/community/{postId}/answers")
-    public String saveCommunityAnswers(@PathVariable Long postId,
+    public String saveCommunityAnswers(@LoginUser User user,
+                                       @PathVariable Long postId,
                                        @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
                                        BindingResult result,
                                        Model model)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(postId));
+            model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
             return VIEWS_COMMUNITY_DETAIL;
         }

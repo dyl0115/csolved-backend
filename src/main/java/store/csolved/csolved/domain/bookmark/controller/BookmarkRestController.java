@@ -1,21 +1,35 @@
 package store.csolved.csolved.domain.bookmark.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.bookmark.service.BookmarkService;
+import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.utils.login.LoginRequest;
+import store.csolved.csolved.utils.login.LoginUser;
 
+@RequestMapping("/api/bookmark")
 @RequiredArgsConstructor
-@Controller
-public class BookmarkController
+@RestController
+public class BookmarkRestController
 {
     private final BookmarkService bookmarkService;
 
-    @GetMapping("/bookmark/{postId}")
-    public String save(@PathVariable Long postId)
+    @LoginRequest
+    @PostMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void save(@LoginUser User user,
+                     @PathVariable Long postId)
     {
-        return
+        bookmarkService.save(user.getId(), postId);
     }
 
+    @LoginRequest
+    @DeleteMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@LoginUser User user,
+                       @PathVariable Long postId)
+    {
+        bookmarkService.delete(user.getId(), postId);
+    }
 }

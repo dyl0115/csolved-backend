@@ -1,17 +1,20 @@
 // 좋아요 버튼
-async function addLike(postType, postId) {
+async function addLike(postType, postId)
+{
     const likeButton = document.getElementById("like-button");
     const likeCountElement = document.getElementById("like-count");
     let likeCount = parseInt(likeCountElement.textContent, 10) || 0;
 
-    const response = await fetch(`/api/${postType}/${postId}/likes`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+    const response = await fetch(`/api/${postType}/${postId}/likes`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
 
-    switch (response.status) {
+    switch (response.status)
+    {
         case 200:
             likeCount++;
             likeCountElement.textContent = likeCount;
@@ -21,18 +24,52 @@ async function addLike(postType, postId) {
             const modal = new bootstrap.Modal(document.getElementById("addLikeConflictModal"));
             modal.show();
             const closeModalButton = document.getElementById("closeModalButton");
-            closeModalButton.addEventListener("click", () => {
+            closeModalButton.addEventListener("click", () =>
+            {
                 modal.hide();
             });
             break;
         default:
-            alert('작업 중 오류가 발생했습니다.');
+            alert('좋아요 처리 중 오류가 발생했습니다.');
+            break;
+    }
+}
+
+// 북마크 토글 버튼
+async function toggleBookmark(bookmarkButton)
+{
+    const postId = bookmarkButton.getAttribute('postId');
+    const bookmarked = bookmarkButton.getAttribute('bookmarked') === 'true';
+    const bookmarkIcon = document.getElementById('bookmark-icon');
+    const bookmarkText = document.getElementById('bookmark-text');
+    const requestUrl = `/api/bookmark/${postId}`;
+    const requestMethod = bookmarked ? 'DELETE' : 'POST';
+
+    const response = await fetch(requestUrl,
+        {
+            method: requestMethod
+        })
+
+    switch (response.status)
+    {
+        case 200:
+            const newBookmarked = !bookmarked;
+            bookmarkButton.setAttribute('bookmarked', newBookmarked);
+            bookmarkText.textContent = newBookmarked ? '북마크 취소' : '북마크';
+            bookmarkIcon.className = newBookmarked ? 'bi bi-bookmark-x-fill' : 'bi bi-bookmark-fill';
+            break;
+        default:
+            alert('북마크 처리 중 오류가 발생했습니다.');
+            bookmarkText.textContent = bookmarked ? '북마크 취소' : '북마크';
+            break;
     }
 }
 
 // 게시글 삭제
-async function deletePost(postType, postId) {
-    try {
+async function deletePost(postType, pluralPostType, postId)
+{
+    try
+    {
         const response = await fetch(`/api/${postType}/${postId}`, {
             method: 'DELETE',
             headers: {
@@ -40,37 +77,25 @@ async function deletePost(postType, postId) {
             }
         });
 
-        if (!response.ok) {
+        if (!response.ok)
+        {
             throw new Error('삭제에 실패했습니다.');
         }
-        handleRedirect(postType);
+        window.location.replace(`/${pluralPostType}?page=1`);
 
-    } catch (error) {
+    }
+    catch (error)
+    {
         console.error('Error:', error);
         alert('삭제 중 오류가 발생했습니다.');
     }
 }
 
-function handleRedirect(postType) {
-    switch (postType) {
-        case 'community':
-            window.location.replace('/communities?page=1');
-            break;
-        case 'questions':
-            window.location.replace('/questions?page=1');
-            break;
-        case 'code-review':
-            window.location.replace('/code-reviews?page=1');
-            break;
-        default:
-            window.location.replace('/');
-    }
-}
-
-
 // 답글 삭제
-async function deleteAnswer(answerId) {
-    try {
+async function deleteAnswer(answerId)
+{
+    try
+    {
         const response = await fetch(`/api/answers/${answerId}`, {
             method: 'DELETE',
             headers: {
@@ -78,19 +103,24 @@ async function deleteAnswer(answerId) {
             }
         });
 
-        if (!response.ok) {
+        if (!response.ok)
+        {
             throw new Error('삭제에 실패했습니다.');
         }
 
         window.location.reload();
-    } catch (error) {
+    }
+    catch (error)
+    {
         console.error('Error:', error);
         alert('삭제 중 오류가 발생했습니다.');
     }
 }
 
-async function deleteComment(commentId) {
-    try {
+async function deleteComment(commentId)
+{
+    try
+    {
         const response = await fetch(`/api/comments/${commentId}`, {
             method: 'DELETE',
             headers: {
@@ -98,52 +128,16 @@ async function deleteComment(commentId) {
             }
         });
 
-        if (!response.ok) {
+        if (!response.ok)
+        {
             throw new Error('삭제에 실패했습니다.');
         }
 
         window.location.reload();
-    } catch (error) {
+    }
+    catch (error)
+    {
         console.error('Error:', error);
         alert('삭제 중 오류가 발생했습니다.');
     }
 }
-
-// function searchPosts(postType) {
-//     const urlParams = new URLSearchParams('');
-//     const page = 'page';
-//     const searchType = 'searchType';
-//     const searchKeyword = 'searchKeyword';
-//
-//     const searchTypeValue = document.getElementById('search-select').value;
-//     const searchKeywordValue = document.getElementById('search-input').value;
-//
-// // Change their values as needed
-//     urlParams.set(page, 1);
-//     urlParams.set(searchType, searchTypeValue); // update with the select box value
-//     urlParams.set(searchKeyword, searchKeywordValue); // update with the input box value
-//
-// // Reflect the changes in the browser's URL
-//     const newUrl = `/${postType}` + '?' + urlParams.toString();
-//     window.history.replaceState({}, '', newUrl);
-//
-// // Send a GET request to the updated URL
-//     fetch(newUrl, {
-//         method: 'GET',
-//         headers: {
-//             'Accept': 'text/html'
-//         }
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error('Network response was not ok');
-//             }
-//             return response.text();
-//         })
-//         .then(html => {
-//             document.documentElement.innerHTML = html;
-//         })
-//         .catch(error => {
-//             console.error('There was a problem with the fetch operation:', error);
-//         });
-// }

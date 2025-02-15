@@ -6,7 +6,8 @@
 // This file is intentionally blank
 // Use this file to add JavaScript to your project
 
-function signOut() {
+function signOut()
+{
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = '/auth/signOut';
@@ -14,7 +15,8 @@ function signOut() {
     form.submit();
 }
 
-function withdraw() {
+function withdraw()
+{
 
     const form = document.createElement('form');
     form.method = 'POST';
@@ -29,7 +31,3 @@ function withdraw() {
     document.body.appendChild(form);
     form.submit();
 }
-
-// document.addEventListener('DOMContentLoaded', function () {
-//     lucide.createIcons();
-// });

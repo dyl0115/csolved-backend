@@ -39,12 +39,18 @@
                         <li class="nav-item"><a class="nav-link" href="/code-reviews?page=1">코드리뷰</a></li>
                         <!--                        <li class="nav-item"><a class="nav-link" href="/success?page=1">합격수기</a></li>-->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                            <a class="nav-link dropdown-toggle"
+                               id="navbarDropdown"
+                               href="#"
+                               role="button"
                                data-bs-toggle="dropdown" aria-expanded="false" th:text="${user.nickname}">유저 프로필</a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown"
                                 style="z-index: 1050;">
                                 <li>
                                     <a class="dropdown-item" href="/users/profile">프로필</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">내 활동</a>
                                 </li>
                                 <li>
                                     <hr class="dropdown-divider"/>

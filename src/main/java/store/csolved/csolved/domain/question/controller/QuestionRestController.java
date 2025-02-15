@@ -9,7 +9,7 @@ import store.csolved.csolved.utils.login.LoginUser;
 import store.csolved.csolved.domain.question.service.QuestionFacade;
 import store.csolved.csolved.domain.user.User;
 
-@RequestMapping("/api/questions")
+@RequestMapping("/api/question")
 @RequiredArgsConstructor
 @RestController
 public class QuestionRestController

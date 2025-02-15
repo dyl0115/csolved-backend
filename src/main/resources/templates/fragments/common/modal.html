@@ -1,5 +1,5 @@
-<!-- Reusable Modal -->
-<div th:fragment="modal(id, title, content, btn1_label, btn2_label, action)" xmlns:th="http://www.w3.org/1999/html">
+<!-- 일반 모달 -->
+<div th:fragment="modal(id, title, content, btn1_label, btn2_label, action)">
     <div class="modal fade" th:id="${id}" tabindex="-1" aria-labelledby="${id + 'Label'}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

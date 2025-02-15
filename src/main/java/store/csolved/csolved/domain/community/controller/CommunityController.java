@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
+import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
 import store.csolved.csolved.domain.community.controller.form.CommunityCreateUpdateForm;
@@ -17,6 +18,7 @@ import store.csolved.csolved.domain.community.controller.view_model.CommunityLis
 import store.csolved.csolved.domain.community.service.CommunityFacade;
 import store.csolved.csolved.utils.filter.FilterInfo;
 import store.csolved.csolved.utils.filter.Filtering;
+import store.csolved.csolved.utils.login.LoginUser;
 import store.csolved.csolved.utils.page.PageInfo;
 import store.csolved.csolved.utils.search.SearchInfo;
 import store.csolved.csolved.utils.search.Searching;
@@ -50,10 +52,11 @@ public class CommunityController
 
     @LoginRequest
     @GetMapping("/community/{postId}")
-    public String getCommunityPost(@PathVariable Long postId,
+    public String getCommunityPost(@LoginUser User user,
+                                   @PathVariable Long postId,
                                    Model model)
     {
-        CommunityDetailVM communityPost = communityFacade.getCommunityPost(postId);
+        CommunityDetailVM communityPost = communityFacade.getCommunityPost(user.getId(), postId);
         model.addAttribute("communityPostDetails", communityPost);
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());

@@ -15,13 +15,16 @@ import java.util.Map;
 public class CommunityDetailVM
 {
     private Community post;
+    private boolean bookmarked;
     private List<AnswerWithComments> answers;
 
     public static CommunityDetailVM from(Community community,
+                                         boolean bookmarked,
                                          List<Answer> answers,
                                          Map<Long, List<Comment>> comments)
     {
         return CommunityDetailVM.builder()
+                .bookmarked(bookmarked)
                 .answers(AnswerWithComments.from(answers, comments))
                 .post(community)
                 .build();

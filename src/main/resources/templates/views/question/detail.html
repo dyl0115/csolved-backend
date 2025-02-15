@@ -15,8 +15,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
-        <!-- 상세 포스트 관련 JS -->
-        <script src="/js/post-detail.js"></script>
+        
         <!-- TinyMCE 에디터 -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
         <!--  TinyMCE 에디터 JS-->
@@ -95,7 +94,7 @@
                                             </button>
                                             
                                             <!-- 게시글 삭제 경고 모달 -->
-            <div th:insert="~{/fragments/common/modal::danger-modal('postDeleteConfirmModal', '게시글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deletePost('questions',${post.id})|)}"></div>
+            <div th:insert="~{/fragments/common/modal::danger-modal('postDeleteConfirmModal', '게시글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deletePost('question','questions' ,${post.id})|)}"></div>
                                         
                                         </span>
                                     </div>
@@ -109,14 +108,28 @@
                         </div>
                     </div>
                                       <!-- 좋아요 버튼 -->
-                    <button class="btn btn-danger mb-4" id="like-button" th:onclick="|addLike('questions',${post.id})|">
+                    <button class="btn btn-danger mb-4" id="like-button" th:onclick="|addLike('question',${post.id})|">
                         <i class="bi bi-heart"></i> 좋아요
-                        <span id="like-count" class="ms-1" th:text="${post.likes}">0</span>
+                        <span id="like-count"
+                              class="ms-1"
+                              th:text="${post.likes}">0
+                        </span>
                     </button>
                                       <!-- 답변 폼 생성 버튼 -->
                     <button class="btn btn-primary mb-4" id="toggle-comment-form">
                         <i class="bi bi-chat-left-text-fill"></i>
                         답변 달기
+                    </button>
+                                      
+                                      <!-- 북마크 버튼 -->
+                    <button class="btn btn-success mb-4"
+                            id="bookmark-button"
+                            th:onclick="|addBookmark(${post.id})|">
+                        <i id="bookmark-icon"
+                           class="bi bi-bookmark-fill"></i>
+                        <span id="bookmark-text"
+                              class="ms-1">북마크
+                        </span>
                     </button>
                     
                     <div class="card mb-4 d-none" id="comment-card">
@@ -147,7 +160,8 @@
                         </div>
                     </div>
                     <script>
-                        document.getElementById('toggle-comment-form').addEventListener('click', function () {
+                        document.getElementById('toggle-comment-form').addEventListener('click', function ()
+                        {
                             const card = document.getElementById('comment-card');
                             card.classList.toggle('d-none');
                         });
@@ -285,8 +299,10 @@
                                 </div>
                                 
                                 <script>
-                                    document.querySelectorAll('.toggle-comment-form').forEach(element => {
-                                        element.addEventListener('click', function () {
+                                    document.querySelectorAll('.toggle-comment-form').forEach(element =>
+                                    {
+                                        element.addEventListener('click', function ()
+                                        {
                                             const commentForm = this.nextElementSibling;
                                             commentForm.classList.toggle('d-none');
                                         });
@@ -334,5 +350,7 @@
         </div>
         <!-- Timeago.js-->
         <script src="/js/timeago.js"></script>
+        <!-- 상세 포스트 관련 JS -->
+        <script src="/js/post-detail.js"></script>
     </body>
 </html>
