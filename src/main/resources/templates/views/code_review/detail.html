@@ -24,7 +24,9 @@
         
         <!-- 페이지 내용 -->
         <div class="container mt-5"
-             th:with="post=${codeReviewDetails.post}, answers=${codeReviewDetails.answers}">
+             th:with="post=${codeReviewDetails.post},
+                      bookmarked=${codeReviewDetails.bookmarked},
+                      answers=${codeReviewDetails.answers}">
             
             <!-- 좋아요 중복 시 알림 모달 -->
             <div th:insert="~{/fragments/common/modal::alert-modal('addLikeConflictModal', '알림', '좋아요는 게시글당 한번만 누를 수 있습니다.','확인')}"></div>
@@ -120,14 +122,16 @@
                         답변 달기
                     </button>
                                       
-                                      <!-- 북마크 버튼 -->
+                                      <!-- 북마크 토글 버튼 -->
                     <button class="btn btn-success mb-4"
-                            id="bookmark-button"
-                            th:onclick="|addBookmark(${post.id})|">
+                            th:postId="${post.id}"
+                            th:bookmarked="${bookmarked}"
+                            th:onclick="|toggleBookmark(this)|">
                         <i id="bookmark-icon"
-                           class="bi bi-bookmark-fill"></i>
+                           th:class="${bookmarked ? 'bi bi-bookmark-x-fill' : 'bi bi-bookmark-fill'}"></i>
                         <span id="bookmark-text"
-                              class="ms-1">북마크
+                              class="ms-1"
+                              th:text="${bookmarked ? '북마크 취소' : '북마크'}">북마크
                         </span>
                     </button>
                     
@@ -160,7 +164,8 @@
                         </div>
                     </div>
                     <script>
-                        document.getElementById('toggle-comment-form').addEventListener('click', function () {
+                        document.getElementById('toggle-comment-form').addEventListener('click', function ()
+                        {
                             const card = document.getElementById('comment-card');
                             card.classList.toggle('d-none');
                         });
@@ -281,25 +286,23 @@
                                                         </button>
                                                             <!-- 댓글 삭제 경고 모달-->
             <div th:insert="~{/fragments/common/modal::danger-modal(|commentDeleteConfirmModal${comment.id}|, '댓글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deleteComment(${comment.id})|)}"></div>
-            
                                                         </span>
                                                     </div>
-                                                    
                                                     <span class="mb-3 block"
                                                           th:utext="${comment.content}">
                                                         대댓글 내용
                                                     </span>
-                                                
                                                 </div>
                                             </div>
                                         </div>
-                                    
                                     </div>
                                 </div>
                                 
                                 <script>
-                                    document.querySelectorAll('.toggle-comment-form').forEach(element => {
-                                        element.addEventListener('click', function () {
+                                    document.querySelectorAll('.toggle-comment-form').forEach(element =>
+                                    {
+                                        element.addEventListener('click', function ()
+                                        {
                                             const commentForm = this.nextElementSibling;
                                             commentForm.classList.toggle('d-none');
                                         });

@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
+import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.code_review.controller.form.CodeReviewCreateUpdateForm;
 import store.csolved.csolved.domain.code_review.controller.view_model.CodeReviewCreateUpdateVM;
@@ -14,6 +15,7 @@ import store.csolved.csolved.domain.code_review.controller.view_model.CodeReview
 import store.csolved.csolved.domain.code_review.service.CodeReviewFacade;
 import store.csolved.csolved.utils.filter.FilterInfo;
 import store.csolved.csolved.utils.filter.Filtering;
+import store.csolved.csolved.utils.login.LoginUser;
 import store.csolved.csolved.utils.page.PageInfo;
 import store.csolved.csolved.utils.search.SearchInfo;
 import store.csolved.csolved.utils.search.Searching;
@@ -75,10 +77,11 @@ public class CodeReviewController
 
     @LoginRequest
     @GetMapping("/code-review/{postId}")
-    public String getCodeReview(@PathVariable Long postId,
+    public String getCodeReview(@LoginUser User user,
+                                @PathVariable Long postId,
                                 Model model)
     {
-        model.addAttribute("codeReviewDetails", codeReviewFacade.getCodeReview(postId));
+        model.addAttribute("codeReviewDetails", codeReviewFacade.getCodeReview(user.getId(), postId));
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", AnswerCreateForm.empty());
         return VIEWS_CODE_REVIEW_DETAIL;

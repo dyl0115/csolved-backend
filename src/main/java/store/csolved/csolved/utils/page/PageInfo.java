@@ -10,4 +10,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(PARAMETER)
 public @interface PageInfo
 {
+    String type() default "page";
 }

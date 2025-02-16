@@ -18,7 +18,7 @@ import java.util.List;
 public class Bookmark extends BaseEntity
 {
     private Long postId;
-    private PostType postType;
+    private Long postType;
     private String title;
     private boolean anonymous;
     private Long authorId;

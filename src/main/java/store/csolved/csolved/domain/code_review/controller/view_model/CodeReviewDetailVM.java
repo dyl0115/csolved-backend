@@ -15,13 +15,16 @@ import java.util.Map;
 public class CodeReviewDetailVM
 {
     private CodeReview post;
+    private boolean bookmarked;
     private List<AnswerWithComments> answers;
 
     public static CodeReviewDetailVM from(CodeReview question,
+                                          boolean bookmarked,
                                           List<Answer> answers,
                                           Map<Long, List<Comment>> comments)
     {
         return CodeReviewDetailVM.builder()
+                .bookmarked(bookmarked)
                 .answers(AnswerWithComments.from(answers, comments))
                 .post(question)
                 .build();

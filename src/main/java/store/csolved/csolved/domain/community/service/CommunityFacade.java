@@ -17,7 +17,7 @@ import store.csolved.csolved.domain.community.controller.view_model.CommunityLis
 import store.csolved.csolved.domain.community.Community;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.utils.page.PaginationUtils;
+import store.csolved.csolved.utils.page.PaginationManager;
 import store.csolved.csolved.utils.search.Searching;
 import store.csolved.csolved.utils.sort.Sorting;
 import store.csolved.csolved.domain.tag.service.TagService;
@@ -38,7 +38,7 @@ public class CommunityFacade
     private final CategoryService categoryService;
     private final TagService tagService;
 
-    private final PaginationUtils paginationUtils;
+    private final PaginationManager paginationUtils;
 
     // 커뮤니티글, 글의 태그 저장.
     public void save(CommunityCreateUpdateForm form)

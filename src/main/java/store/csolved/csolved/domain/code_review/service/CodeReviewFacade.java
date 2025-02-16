@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.answer.Answer;
 import store.csolved.csolved.domain.answer.service.AnswerService;
+import store.csolved.csolved.domain.bookmark.service.BookmarkService;
 import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.category.service.CategoryService;
 import store.csolved.csolved.domain.comment.Comment;
@@ -16,7 +17,7 @@ import store.csolved.csolved.domain.code_review.controller.view_model.CodeReview
 import store.csolved.csolved.domain.code_review.CodeReview;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.utils.page.PaginationUtils;
+import store.csolved.csolved.utils.page.PaginationManager;
 import store.csolved.csolved.utils.search.Searching;
 import store.csolved.csolved.utils.sort.Sorting;
 import store.csolved.csolved.domain.tag.service.TagService;
@@ -31,10 +32,11 @@ import static store.csolved.csolved.common.PostType.CODE_REVIEW;
 public class CodeReviewFacade
 {
     private final CodeReviewService codeReviewService;
+    private final BookmarkService bookmarkService;
     private final AnswerService answerService;
     private final CategoryService categoryService;
     private final TagService tagService;
-    private final PaginationUtils paginationUtils;
+    private final PaginationManager paginationUtils;
     private final CommentService commentService;
 
     public CodeReviewCreateUpdateForm initCreate()
@@ -80,12 +82,13 @@ public class CodeReviewFacade
     }
 
     // 게시글 상세조회
-    public CodeReviewDetailVM getCodeReview(Long postId)
+    public CodeReviewDetailVM getCodeReview(Long userId, Long postId)
     {
         CodeReview codeReview = codeReviewService.viewCodeReview(postId);
+        boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
         List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
-        return CodeReviewDetailVM.from(codeReview, answers, comments);
+        return CodeReviewDetailVM.from(codeReview, bookmarked, answers, comments);
     }
 
     // 게시글 속 답변들의 id를 추출

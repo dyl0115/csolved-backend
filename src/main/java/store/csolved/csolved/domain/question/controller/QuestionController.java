@@ -6,8 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.utils.filter.Filtering;
+import store.csolved.csolved.utils.login.LoginUser;
 import store.csolved.csolved.utils.search.SearchInfo;
 import store.csolved.csolved.utils.search.Searching;
 import store.csolved.csolved.utils.sort.Sorting;
@@ -47,10 +49,11 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/question/{postId}")
-    public String getQuestion(@PathVariable Long postId,
+    public String getQuestion(@LoginUser User user,
+                              @PathVariable Long postId,
                               Model model)
     {
-        model.addAttribute("questionDetails", questionFacade.getQuestion(postId));
+        model.addAttribute("questionDetails", questionFacade.getQuestion(user.getId(), postId));
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         return VIEWS_QUESTION_DETAIL;

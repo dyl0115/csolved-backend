@@ -50,14 +50,15 @@ public class CommentController
 
     @LoginRequest
     @PostMapping("/questions/{postId}/answers/{answerId}/comment")
-    public String saveQuestionComment(@PathVariable("postId") Long postId,
+    public String saveQuestionComment(@LoginUser User user,
+                                      @PathVariable("postId") Long postId,
                                       @Valid @ModelAttribute("commentCreateForm") CommentCreateForm form,
                                       BindingResult result,
                                       Model model)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("questionDetails", questionFacade.getQuestion(postId));
+            model.addAttribute("questionDetails", questionFacade.getQuestion(user.getId(), postId));
             model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
             model.addAttribute("commentCreateFrom", form);
             return QuestionController.VIEWS_QUESTION_DETAIL;
@@ -68,14 +69,15 @@ public class CommentController
 
     @LoginRequest
     @PostMapping("/code-review/{postId}/answers/{answerId}/comment")
-    public String saveCodeReviewComment(@PathVariable("postId") Long postId,
+    public String saveCodeReviewComment(@LoginUser User user,
+                                        @PathVariable("postId") Long postId,
                                         @Valid @ModelAttribute("commentCreateForm") CommentCreateForm form,
                                         BindingResult result,
                                         Model model)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("questionDetails", codeReviewFacade.getCodeReview(postId));
+            model.addAttribute("questionDetails", codeReviewFacade.getCodeReview(user.getId(), postId));
             model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
             model.addAttribute("commentCreateFrom", form);
             return CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;

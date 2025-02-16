@@ -12,7 +12,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class PageRequestArgumentResolver implements HandlerMethodArgumentResolver
 {
-    private static final String PAGE_PARAMETER_NAME = "page";
+//    private static final String PAGE_PARAMETER_NAME = "page";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter)
@@ -28,7 +28,8 @@ public class PageRequestArgumentResolver implements HandlerMethodArgumentResolve
                                 NativeWebRequest webRequest,
                                 WebDataBinderFactory binderFactory)
     {
-        String pageString = webRequest.getParameter(PAGE_PARAMETER_NAME);
+        PageInfo pageInfo = parameter.getParameterAnnotation(PageInfo.class);
+        String pageString = webRequest.getParameter(pageInfo.type());
         return validateAndCreatePage(pageString);
     }
 

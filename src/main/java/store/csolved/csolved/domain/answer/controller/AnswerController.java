@@ -31,14 +31,15 @@ public class AnswerController
 
     @LoginRequest
     @PostMapping("/questions/{postId}/answers")
-    public String saveQuestionAnswers(@PathVariable Long postId,
+    public String saveQuestionAnswers(@LoginUser User user,
+                                      @PathVariable Long postId,
                                       @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
                                       BindingResult result,
                                       Model model)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("questionDetails", questionFacade.getQuestion(postId));
+            model.addAttribute("questionDetails", questionFacade.getQuestion(user.getId(), postId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
             return VIEWS_QUESTION_DETAIL;
         }
@@ -66,14 +67,15 @@ public class AnswerController
 
     @LoginRequest
     @PostMapping("/code-review/{postId}/answers")
-    public String saveCodeReviewAnswers(@PathVariable Long postId,
+    public String saveCodeReviewAnswers(@LoginUser User user,
+                                        @PathVariable Long postId,
                                         @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
                                         BindingResult result,
                                         Model model)
     {
         if (result.hasErrors())
         {
-            model.addAttribute("codeReviewDetails", codeReviewFacade.getCodeReview(postId));
+            model.addAttribute("codeReviewDetails", codeReviewFacade.getCodeReview(user.getId(), postId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
             return VIEWS_CODE_REVIEW_DETAIL;
         }

@@ -4,29 +4,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import store.csolved.csolved.domain.bookmark.Bookmark;
-import store.csolved.csolved.domain.bookmark.service.BookmarkService;
+import org.springframework.web.bind.annotation.RequestMapping;
 import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.service.UserActivityFacade;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.utils.login.LoginUser;
+import store.csolved.csolved.utils.page.PageInfo;
 
-import java.util.List;
-
+@RequestMapping("/bookmark")
 @RequiredArgsConstructor
 @Controller
 public class BookmarkController
 {
-    public static final String VIEWS_BOOKMARK_LIST = "/views/bookmark/list";
+    private static final String FRAGMENT_BOOKMARK_LIST = "/views/user-profile/activity :: bookmarkList";
 
-    private final BookmarkService bookmarkService;
+    private final UserActivityFacade userActivityFacade;
 
     @LoginRequest
-    @GetMapping("/bookmarks")
-    public String getBookmarks(@LoginUser User user,
-                               Model model)
+    @GetMapping
+    public String getBookmarksAndPage(@LoginUser User user,
+                                      @PageInfo(type = "bookmarkPage") Long pageNumber,
+                                      Model model)
     {
-        List<Bookmark> bookmarks = bookmarkService.getBookmarks(user.getId());
-        model.addAttribute("bookmarks", bookmarks);
-        return VIEWS_BOOKMARK_LIST;
+        System.out.println("bookmarkPage " + pageNumber);
+        model.addAttribute("bookmarksAndPage", userActivityFacade.getBookmarksAndPage(user.getId(), pageNumber));
+        return FRAGMENT_BOOKMARK_LIST;
     }
 }

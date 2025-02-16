@@ -1,9 +1,9 @@
 package store.csolved.csolved.utils.page;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class PaginationUtils
+@Component
+public class PaginationManager
 {
     public Pagination createPagination(Long pageNumber, Long totalRecords)
     {

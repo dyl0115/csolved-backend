@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.bookmark.Bookmark;
 import store.csolved.csolved.domain.bookmark.mapper.BookmarkMapper;
+import store.csolved.csolved.utils.page.Pagination;
 
 import java.util.List;
 
@@ -26,9 +27,9 @@ public class BookmarkService
         bookmarkMapper.deleteBookmark(userId, postId);
     }
 
-    public List<Bookmark> getBookmarks(Long userId)
+    public List<Bookmark> getBookmarks(Long userId, Pagination page)
     {
-        return bookmarkMapper.getBookmarks(userId);
+        return bookmarkMapper.getBookmarks(userId, page);
     }
 
     public boolean hasBookmarked(Long userId, Long postId)

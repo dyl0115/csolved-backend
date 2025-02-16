@@ -15,13 +15,16 @@ import java.util.Map;
 public class QuestionDetailVM
 {
     private Question post;
+    private boolean bookmarked;
     private List<AnswerWithComments> answers;
 
     public static QuestionDetailVM from(Question question,
+                                        boolean bookmarked,
                                         List<Answer> answers,
                                         Map<Long, List<Comment>> comments)
     {
         return QuestionDetailVM.builder()
+                .bookmarked(bookmarked)
                 .answers(AnswerWithComments.from(answers, comments))
                 .post(question)
                 .build();

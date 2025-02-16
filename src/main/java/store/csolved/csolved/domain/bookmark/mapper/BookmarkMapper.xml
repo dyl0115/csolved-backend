@@ -55,7 +55,7 @@
               from bookmarks b
               where b.user_id = #{userId}
               order by b.created_at desc
-              limit #{offset}, #{size}) sub
+              limit #{page.offset}, #{page.size}) sub
                  left join posts p on p.id = sub.post_id
                  left join users u on u.id = sub.author_id
                  left join category c on c.id = p.category_id

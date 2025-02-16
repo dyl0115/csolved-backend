@@ -3,9 +3,10 @@ package store.csolved.csolved.domain.question.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import store.csolved.csolved.domain.bookmark.service.BookmarkService;
 import store.csolved.csolved.domain.question.Question;
 import store.csolved.csolved.utils.filter.Filtering;
-import store.csolved.csolved.utils.page.PaginationUtils;
+import store.csolved.csolved.utils.page.PaginationManager;
 import store.csolved.csolved.utils.search.Searching;
 import store.csolved.csolved.utils.sort.Sorting;
 import store.csolved.csolved.domain.answer.Answer;
@@ -31,12 +32,13 @@ import static store.csolved.csolved.common.PostType.QUESTION;
 public class QuestionFacade
 {
     private final QuestionService questionService;
+    private final BookmarkService bookmarkService;
     private final AnswerService answerService;
     private final CommentService commentService;
     private final CategoryService categoryService;
     private final TagService tagService;
 
-    private final PaginationUtils paginationUtils;
+    private final PaginationManager paginationUtils;
 
     // 질문글, 질문글의 태그 저장.
     public void save(QuestionCreateUpdateForm form)
@@ -102,12 +104,13 @@ public class QuestionFacade
     }
 
     // 질문글 상세 조회
-    public QuestionDetailVM getQuestion(Long postId)
+    public QuestionDetailVM getQuestion(Long userId, Long postId)
     {
         Question question = questionService.viewPost(postId);
+        boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
         List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
-        return QuestionDetailVM.from(question, answers, comments);
+        return QuestionDetailVM.from(question, bookmarked, answers, comments);
     }
 
     // 질문글 속 답변들의 id를 추출
