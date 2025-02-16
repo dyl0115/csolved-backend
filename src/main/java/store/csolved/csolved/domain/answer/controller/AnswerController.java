@@ -11,14 +11,14 @@ import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
 import store.csolved.csolved.domain.answer.service.AnswerService;
 import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
-import store.csolved.csolved.domain.code_review.service.CodeReviewFacade;
-import store.csolved.csolved.domain.community.service.CommunityFacade;
-import store.csolved.csolved.domain.question.service.QuestionFacade;
+import store.csolved.csolved.domain.post.code_review.service.CodeReviewFacade;
+import store.csolved.csolved.domain.post.community.service.CommunityFacade;
+import store.csolved.csolved.domain.post.question.service.QuestionFacade;
 import store.csolved.csolved.utils.login.LoginUser;
 
-import static store.csolved.csolved.domain.code_review.controller.CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
-import static store.csolved.csolved.domain.community.controller.CommunityController.VIEWS_COMMUNITY_DETAIL;
-import static store.csolved.csolved.domain.question.controller.QuestionController.VIEWS_QUESTION_DETAIL;
+import static store.csolved.csolved.domain.post.code_review.controller.CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
+import static store.csolved.csolved.domain.post.community.controller.CommunityController.VIEWS_COMMUNITY_DETAIL;
+import static store.csolved.csolved.domain.post.question.controller.QuestionController.VIEWS_QUESTION_DETAIL;
 
 @RequiredArgsConstructor
 @Controller

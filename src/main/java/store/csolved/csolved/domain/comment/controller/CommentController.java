@@ -11,12 +11,12 @@ import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
 import store.csolved.csolved.domain.comment.service.CommentService;
-import store.csolved.csolved.domain.code_review.controller.CodeReviewController;
-import store.csolved.csolved.domain.community.controller.CommunityController;
-import store.csolved.csolved.domain.question.controller.QuestionController;
-import store.csolved.csolved.domain.code_review.service.CodeReviewFacade;
-import store.csolved.csolved.domain.community.service.CommunityFacade;
-import store.csolved.csolved.domain.question.service.QuestionFacade;
+import store.csolved.csolved.domain.post.code_review.controller.CodeReviewController;
+import store.csolved.csolved.domain.post.community.controller.CommunityController;
+import store.csolved.csolved.domain.post.question.controller.QuestionController;
+import store.csolved.csolved.domain.post.code_review.service.CodeReviewFacade;
+import store.csolved.csolved.domain.post.community.service.CommunityFacade;
+import store.csolved.csolved.domain.post.question.service.QuestionFacade;
 import store.csolved.csolved.utils.login.LoginUser;
 
 @RequiredArgsConstructor
