@@ -18,7 +18,7 @@ public class CodeReviewDetailVM
     private boolean bookmarked;
     private List<AnswerWithComments> answers;
 
-    public static CodeReviewDetailVM from(CodeReview question,
+    public static CodeReviewDetailVM from(CodeReview codeReview,
                                           boolean bookmarked,
                                           List<Answer> answers,
                                           Map<Long, List<Comment>> comments)
@@ -26,7 +26,7 @@ public class CodeReviewDetailVM
         return CodeReviewDetailVM.builder()
                 .bookmarked(bookmarked)
                 .answers(AnswerWithComments.from(answers, comments))
-                .post(question)
+                .post(codeReview)
                 .build();
     }
 }

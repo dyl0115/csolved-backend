@@ -10,6 +10,7 @@ import store.csolved.csolved.domain.comment.Comment;
 @Data
 public class CommentCreateForm
 {
+    private Long postId;
     private Long answerId;
     private Long authorId;
 
@@ -28,6 +29,7 @@ public class CommentCreateForm
     public Comment toComment()
     {
         return Comment.builder()
+                .postId(postId)
                 .answerId(answerId)
                 .authorId(authorId)
                 .anonymous(anonymous)

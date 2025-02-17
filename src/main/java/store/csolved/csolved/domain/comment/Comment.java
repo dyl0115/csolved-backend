@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Comment extends BaseEntity
 {
+    private Long postId;
     private Long answerId;
     private Long authorId;
     private String authorProfileImage;

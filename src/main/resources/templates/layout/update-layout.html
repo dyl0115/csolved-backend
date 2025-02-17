@@ -109,46 +109,56 @@
         
         <!-- 태그 관련 JS -->
         <script th:inline="javascript">
-            document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function ()
+            {
                 const tagContainer = document.getElementById('tags-container');
                 const tagInput = document.getElementById('tagInput');
                 const tagsHidden = document.getElementById('tagsHidden');
 
-                if (!tagContainer || !tagInput || !tagsHidden) {
+                if (!tagContainer || !tagInput || !tagsHidden)
+                {
                     return;
                 }
                 // 태그 목록을 관리할 Set (중복 방지)
                 const tags = new Set();
 
                 // 페이지 로드 시 hidden input의 값을 확인하고 태그로 등록
-                if (tagsHidden.value) {
+                if (tagsHidden.value)
+                {
                     const existingTags = tagsHidden.value.split(',');
-                    existingTags.forEach(tag => {
-                        if (tag.trim()) {  // 빈 문자열이 아닌 경우에만 추가
+                    existingTags.forEach(tag =>
+                    {
+                        if (tag.trim())
+                        {  // 빈 문자열이 아닌 경우에만 추가
                             addTag(tag.trim());
                         }
                     });
                 }
 
                 // hidden input 업데이트 함수
-                function updateHiddenInput() {
+                function updateHiddenInput()
+                {
                     // tagsHidden.value = Array.from(tags).join(',');
                     tagsHidden.value = Array.from(tags);
                 }
 
                 // 모바일에서의 태그 입력
-                tagInput.addEventListener('input', function (event) {
+                tagInput.addEventListener('input', function (event)
+                {
                     const value = event.target.value;
-                    if (value.includes(' ')) {
+                    if (value.includes(' '))
+                    {
                         const tagText = value.replace(' ', '').trim();
 
-                        if (tagText === '') {
+                        if (tagText === '')
+                        {
                             tagInput.value = '';
                             return;
                         }
 
                         // 중복 체크
-                        if (tags.has(tagText)) {
+                        if (tags.has(tagText))
+                        {
                             alert('이미 존재하는 태그입니다.');
                             tagInput.value = '';
                             return;
@@ -159,13 +169,16 @@
                     }
                 });
 
-                tagInput.addEventListener('keydown', function (event) {
-                    if (event.key === 'Enter' && tagInput.value.trim() !== '') {
+                tagInput.addEventListener('keydown', function (event)
+                {
+                    if (event.key === 'Enter' && tagInput.value.trim() !== '')
+                    {
                         event.preventDefault();
                         const tagText = tagInput.value.trim();
 
                         // 중복 체크
-                        if (tags.has(tagText)) {
+                        if (tags.has(tagText))
+                        {
                             alert('이미 존재하는 태그입니다.');
                             return;
                         }
@@ -174,11 +187,13 @@
                     }
                 });
 
-                tagContainer.addEventListener('click', () => {
+                tagContainer.addEventListener('click', () =>
+                {
                     tagInput.focus();
                 });
 
-                function addTag(text) {
+                function addTag(text)
+                {
                     // Set에 태그 추가
                     tags.add(text);
 
@@ -195,7 +210,8 @@
                     removeButton.style.fontSize = '0.7em';
 
                     // 삭제 버튼 클릭 시
-                    removeButton.onclick = () => {
+                    removeButton.onclick = () =>
+                    {
                         tags.delete(text);  // Set에서 제거
                         tag.remove();       // DOM에서 제거
                         updateHiddenInput();// hidden input 업데이트
@@ -222,6 +238,5 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
         <!--  TinyMCE 에디터 JS-->
         <script src="/js/editor.js" defer data-upload-image-url="/api/upload-image"></script>
-    
     </body>
 </html>

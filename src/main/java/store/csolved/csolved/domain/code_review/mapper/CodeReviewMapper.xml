@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!--여기 부터-->
 <mapper namespace="store.csolved.csolved.domain.code_review.mapper.CodeReviewMapper">
 
     <resultMap id="codeReviewResultMap" type="store.csolved.csolved.domain.code_review.CodeReview">

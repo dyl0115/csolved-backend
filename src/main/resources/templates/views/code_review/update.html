@@ -1,11 +1,5 @@
 <!DOCTYPE html>
 <html th:replace="~{/layout/update-layout::update-layout(postType='code-review', postId=${postId}, categories=${updateVM.categories}, updateForm=${updateForm}, customContents=~{::body})}">
     <body>
-        <!-- 깃허브 주소 입력창 -->
-        <label for="github-url" class="form-label">깃허브 주소</label>
-        <input type="text" class="form-control" id="github-url"
-               th:field="${updateForm.githubUrl}"
-               placeholder="깃허브 주소를 입력하세요." required>
-        <span th:errors="${updateForm.githubUrl}">깃허브 주소 오류 메시지</span>
     </body>
 </html>
