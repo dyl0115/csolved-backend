@@ -26,8 +26,8 @@ public class BookmarkController
                                       @PageInfo(type = "bookmarkPage") Long pageNumber,
                                       Model model)
     {
-        System.out.println("bookmarkPage " + pageNumber);
         model.addAttribute("bookmarksAndPage", userActivityFacade.getBookmarksAndPage(user.getId(), pageNumber));
+
         return FRAGMENT_BOOKMARK_LIST;
     }
 }

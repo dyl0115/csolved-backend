@@ -8,6 +8,7 @@ CREATE TABLE `users`
     `company`       varchar(100)          DEFAULT NULL,
     `admin`         tinyint(1)            DEFAULT NULL,
     `created_at`    timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at`   timestamp    NULL     DEFAULT NULL,
     `deleted_at`    timestamp    NULL     DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`),
@@ -19,11 +20,12 @@ CREATE TABLE `users`
 
 CREATE TABLE `category`
 (
-    `id`         bigint    NOT NULL AUTO_INCREMENT,
-    `post_type`  tinyint        DEFAULT NULL,
-    `name`       varchar(100)   DEFAULT NULL,
-    `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL DEFAULT NULL,
+    `id`          bigint    NOT NULL AUTO_INCREMENT,
+    `post_type`   tinyint        DEFAULT NULL,
+    `name`        varchar(100)   DEFAULT NULL,
+    `created_at`  timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at` timestamp NULL DEFAULT NULL,
+    `deleted_at`  timestamp NULL DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `name` (`name`)
 ) ENGINE = InnoDB
@@ -44,6 +46,7 @@ CREATE TABLE `posts`
     `likes`        bigint                DEFAULT '0',
     `answer_count` bigint                DEFAULT '0',
     `created_at`   timestamp    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at`  timestamp    NULL     DEFAULT NULL,
     `deleted_at`   timestamp    NULL     DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `user_id` (`user_id`),
@@ -57,8 +60,11 @@ CREATE TABLE `posts`
 
 CREATE TABLE `tags`
 (
-    `id`   bigint NOT NULL AUTO_INCREMENT,
-    `name` varchar(50) DEFAULT NULL,
+    `id`          bigint    NOT NULL AUTO_INCREMENT,
+    `name`        varchar(50)        DEFAULT NULL,
+    `created_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at` timestamp NULL     DEFAULT NULL,
+    `deleted_at`  timestamp NULL     DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `tag_name` (`name`)
 ) ENGINE = InnoDB
@@ -68,8 +74,9 @@ CREATE TABLE `tags`
 
 CREATE TABLE `post_tags`
 (
-    `post_id` bigint NOT NULL,
-    `tag_id`  bigint NOT NULL,
+    `post_id`    bigint    NOT NULL,
+    `tag_id`     bigint    NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`post_id`, `tag_id`),
     KEY `question_tags_ibfk_2` (`tag_id`),
     CONSTRAINT `post_tags_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`),
@@ -94,20 +101,6 @@ CREATE TABLE `post_likes`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE `code_reviews`
-(
-    `id`         bigint       NOT NULL AUTO_INCREMENT,
-    `post_id`    bigint       NOT NULL,
-    `github_url` varchar(255) NOT NULL,
-    `created_at` timestamp    NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `unique_post_id` (`post_id`),
-    CONSTRAINT `code_reviews_ibfk_1` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`)
-) ENGINE = InnoDB
-  AUTO_INCREMENT = 23
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
 CREATE TABLE `answers`
 (
     `id`          bigint    NOT NULL AUTO_INCREMENT,
@@ -118,6 +111,7 @@ CREATE TABLE `answers`
     `total_score` float              DEFAULT '0',
     `voter_count` bigint             DEFAULT '0',
     `created_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at` timestamp NULL     DEFAULT NULL,
     `deleted_at`  timestamp NULL     DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `question_id` (`post_id`),
@@ -148,13 +142,14 @@ CREATE TABLE `answer_ratings`
 
 CREATE TABLE `comments`
 (
-    `id`         bigint    NOT NULL AUTO_INCREMENT,
-    `answer_id`  bigint    NOT NULL,
-    `author_id`  bigint    NOT NULL,
-    `anonymous`  tinyint(1)         DEFAULT '0',
-    `content`    text      NOT NULL,
-    `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `deleted_at` timestamp NULL     DEFAULT NULL,
+    `id`          bigint    NOT NULL AUTO_INCREMENT,
+    `answer_id`   bigint    NOT NULL,
+    `author_id`   bigint    NOT NULL,
+    `anonymous`   tinyint(1)         DEFAULT '0',
+    `content`     text      NOT NULL,
+    `created_at`  timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at` timestamp NULL     DEFAULT NULL,
+    `deleted_at`  timestamp NULL     DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `answer_id` (`answer_id`),
     KEY `user_id` (`author_id`),
@@ -174,6 +169,8 @@ CREATE TABLE `reports`
     `reason`      text        NOT NULL,
     `status`      varchar(20) NOT NULL DEFAULT 'PENDING',
     `created_at`  timestamp   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modified_at` timestamp   NULL     DEFAULT NULL,
+    `deleted_at`  timestamp   NULL     DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `reporter_id` (`reporter_id`),
     CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`reporter_id`) REFERENCES `users` (`id`)

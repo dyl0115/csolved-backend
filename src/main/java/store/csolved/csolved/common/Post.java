@@ -7,8 +7,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Post extends BaseEntity
+public class Post extends BaseEntity
 {
+    private String postType;
     private String title;
     private boolean anonymous;
     private Long authorId;

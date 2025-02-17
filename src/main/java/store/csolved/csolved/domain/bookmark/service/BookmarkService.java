@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.bookmark.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.bookmark.Bookmark;
+import store.csolved.csolved.domain.bookmark.PostCard;
 import store.csolved.csolved.domain.bookmark.mapper.BookmarkMapper;
 import store.csolved.csolved.utils.page.Pagination;
 
@@ -27,7 +27,7 @@ public class BookmarkService
         bookmarkMapper.deleteBookmark(userId, postId);
     }
 
-    public List<Bookmark> getBookmarks(Long userId, Pagination page)
+    public List<PostCard> getBookmarks(Long userId, Pagination page)
     {
         return bookmarkMapper.getBookmarks(userId, page);
     }

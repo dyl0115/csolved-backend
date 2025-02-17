@@ -8,7 +8,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import store.csolved.csolved.domain.user.controller.view_model.BookmarksAndPage;
+import store.csolved.csolved.domain.user.controller.view_model.BookmarksAndPageVM;
+import store.csolved.csolved.domain.user.controller.view_model.RepliedPostsAndPageVM;
+import store.csolved.csolved.domain.user.controller.view_model.UserPostsAndPageVM;
 import store.csolved.csolved.domain.user.service.UserActivityFacade;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.utils.login.LoginUser;
@@ -28,6 +30,9 @@ public class UserController
     public static final String VIEWS_USER_PROFILE = "/views/user-profile/profile-update";
     public static final String VIEWS_USER_ACTIVITY = "/views/user-profile/activity";
 
+    public static final String FRAGMENT_REPLIED_POST_LIST = "/views/user-profile/activity :: repliedPostList";
+    public static final String FRAGMENT_USER_POST_LIST = "/views/user-profile/activity :: userPostList";
+
     private final UserProfileService profileService;
     private final UserActivityFacade userActivityFacade;
     private final UpdateProfileValidator updateProfileValidator;
@@ -40,13 +45,46 @@ public class UserController
 
     @LoginRequest
     @GetMapping("/activity")
-    public String getBookmarksAndPage(@LoginUser User user,
-                                      @PageInfo(type = "bookmarkPage") Long page,
-                                      Model model)
+    public String getUserActivities(@LoginUser User user,
+                                    @PageInfo(type = "bookmarkPage") Long bookmarkPageNumber,
+                                    @PageInfo(type = "repliedPostPage") Long repliedPostPageNumber,
+                                    @PageInfo(type = "userPostPage") Long userPostPageNumber,
+                                    Model model)
     {
-        BookmarksAndPage bookmarksAndPage = userActivityFacade.getBookmarksAndPage(user.getId(), page);
+        BookmarksAndPageVM bookmarksAndPage = userActivityFacade.getBookmarksAndPage(user.getId(), bookmarkPageNumber);
         model.addAttribute("bookmarksAndPage", bookmarksAndPage);
+
+        RepliedPostsAndPageVM repliedPostsAndPage = userActivityFacade.getRepliedPostsAndPage(user.getId(), repliedPostPageNumber);
+        model.addAttribute("repliedPostsAndPage", repliedPostsAndPage);
+
+        UserPostsAndPageVM userPostsAndPage = userActivityFacade.getUserPostsAndPage(user.getId(), userPostPageNumber);
+        model.addAttribute("userPostsAndPage", userPostsAndPage);
+
         return VIEWS_USER_ACTIVITY;
+    }
+
+    @LoginRequest
+    @GetMapping("/activity/repliedPosts")
+    public String getRepliedPost(@LoginUser User user,
+                                 @PageInfo(type = "repliedPostPage") Long repliedPostPageNumber,
+                                 Model model)
+    {
+        RepliedPostsAndPageVM repliedPostsAndPage = userActivityFacade.getRepliedPostsAndPage(user.getId(), repliedPostPageNumber);
+        model.addAttribute("repliedPostsAndPage", repliedPostsAndPage);
+
+        return FRAGMENT_REPLIED_POST_LIST;
+    }
+
+    @LoginRequest
+    @GetMapping("/activity/userPosts")
+    public String getUserPosts(@LoginUser User user,
+                               @PageInfo(type = "userPostPage") Long userPostPageNumber,
+                               Model model)
+    {
+        UserPostsAndPageVM userPostsAndPage = userActivityFacade.getUserPostsAndPage(user.getId(), userPostPageNumber);
+        model.addAttribute("userPostsAndPage", userPostsAndPage);
+
+        return FRAGMENT_USER_POST_LIST;
     }
 
     @LoginRequest
