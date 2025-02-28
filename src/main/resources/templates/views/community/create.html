@@ -23,7 +23,8 @@
                             </h4>
                         </div>
                         <div class="card-body">
-                            <form id="postForm" method="POST"
+                            <form id="postForm"
+                                  method="POST"
                                   th:action=" @{/community}"
                                   th:object="${createForm}">
                                 <!-- 카테고리 선택 -->
@@ -65,7 +66,7 @@
                                        name="authorId"
                                        th:value="${user.id}"/>
                                 
-                                <!-- 익명 토글 -->
+                                <!-- 익명/실명 -->
                                 <div class="form-check form-switch mb-3">
                                     <input class="form-check-input"
                                            type="checkbox"
@@ -77,7 +78,7 @@
                                     </label>
                                 </div>
                                 
-                                <!-- 태그 입력 -->
+                                <!-- 태그 -->
                                 <div class="mb-3">
                                     <label for="tags-container"
                                            class="form-label">
@@ -92,7 +93,7 @@
                                                id="tag-hidden-input"
                                                th:field="*{tags}">
                                         
-                                        <!-- 태그를 입력하는 인풋 -->
+                                        <!-- 사용자가 태그를 입력하는 인풋 -->
                                         <input type="text"
                                                class="tag-input flex-grow-1 border-0 p-0"
                                                id="tag-input"
@@ -105,31 +106,34 @@
                                     </span>
                                 </div>
                                 
-                                <!-- 내용 입력 -->
+                                <!-- 게시글 내용 -->
                                 <div class="mb-3">
                                     <label for="content"
                                            class="form-label">
                                         내용
                                     </label>
+                                    
                                     <textarea id="content"
                                               name="content"
                                               class="large-editor form-control"
                                               placeholder="내용을 입력하세요"
                                               th:classappend="${#fields.hasErrors('content') ? 'is-invalid':''}">
                                     </textarea>
+                                    
                                     <span th:errors="*{content}"
                                           class="text-danger">
                                         컨텐츠 에러 메시지
                                     </span>
                                 </div>
                                 
-                                <!-- 버튼 그룹 -->
                                 <div class="d-flex align-content-end gap-2">
+                                    <!-- 취소 버튼 -->
                                     <button type="button"
                                             class="btn btn-secondary"
                                             onclick="history.back()">
                                         취소
                                     </button>
+                                    <!-- 작성완료 버튼 -->
                                     <button type="submit"
                                             class="btn btn-primary">
                                         작성완료
@@ -141,118 +145,6 @@
                 </div>
             </div>
         </div>
-        
-        <!-- 태그 관련 JS -->
-        <script th:inline="javascript">
-            document.addEventListener('DOMContentLoaded', function ()
-            {
-                const tagContainer = document.getElementById('tags-container');
-                const tagHiddenInput = document.getElementById('tag-hidden-input');
-                const tagInput = document.getElementById('tag-input');
-                const tags = new Set();
-
-                // 페이지 로드 시, 기존의 태그들을 표시
-                if (tagHiddenInput.value)
-                {
-                    const existingTags = tagHiddenInput.value.split(',');
-                    existingTags.forEach(tag =>
-                    {
-                        addTag(tag.trim());
-                    });
-                }
-
-                // hidden input 업데이트 함수
-                function updateHiddenInput()
-                {
-                    const tagsArray = Array.from(tags);
-                    tagHiddenInput.value = tagsArray.length > 0 ? tagsArray.join(',') : '';
-                }
-
-                // 모바일에서의 태그 입력
-                tagInput.addEventListener('input', function (event)
-                {
-                    const value = event.target.value;
-                    if (value.includes(' '))
-                    {
-                        const tagText = value.replace(' ', '').trim();
-
-                        if (tagText === '')
-                        {
-                            tagInput.value = '';
-                            return;
-                        }
-
-                        // 중복 체크
-                        if (tags.has(tagText))
-                        {
-                            alert('이미 존재하는 태그입니다.');
-                            tagInput.value = '';
-                            return;
-                        }
-
-                        addTag(tagText);
-                        tagInput.value = '';
-                    }
-                });
-
-                // PC에서의 태그입력
-                tagInput.addEventListener('keydown', function (event)
-                {
-                    if (event.key === 'Enter' && tagInput.value.trim() !== '')
-                    {
-                        event.preventDefault();
-                        const tagText = tagInput.value.trim();
-
-                        // 중복 체크
-                        if (tags.has(tagText))
-                        {
-                            alert('이미 존재하는 태그입니다.');
-                            return;
-                        }
-
-                        addTag(tagText);
-                    }
-                });
-
-                tagContainer.addEventListener('click', () =>
-                {
-                    tagInput.focus();
-                });
-
-                function addTag(text)
-                {
-                    // Set에 태그 추가
-                    tags.add(text);
-
-                    // 태그 엘리먼트 생성
-                    const tag = document.createElement('span');
-                    tag.classList.add('badge', 'bg-primary', 'me-1', 'mb-1', 'd-flex', 'align-items-center');
-                    tag.textContent = text;
-
-                    // 삭제 버튼 생성
-                    const removeButton = document.createElement('button');
-                    removeButton.type = 'button';
-                    removeButton.classList.add('btn-close', 'btn-close-white', 'ms-2');
-                    removeButton.setAttribute('aria-label', 'Remove');
-                    removeButton.style.fontSize = '0.7em';
-
-                    // 삭제 버튼 클릭 시
-                    removeButton.onclick = () =>
-                    {
-                        tags.delete(text);  // Set에서 제거
-                        tag.remove();       // DOM에서 제거
-                        updateHiddenInput();// hidden input 업데이트
-                    };
-
-                    tag.appendChild(removeButton);
-                    tagContainer.insertBefore(tag, tagInput);
-                    tagInput.value = '';
-
-                    // hidden input 업데이트
-                    updateHiddenInput();
-                }
-            });
-        </script>
         
         <!-- Prism 지원 언어 -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
@@ -271,5 +163,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <!-- 이미지 업로드 Compressor -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.2.1/compressor.min.js"></script>
+        <!-- 태그 관련 JS-->
+        <script src="/js/tag.js"></script>
     </body>
 </html>
