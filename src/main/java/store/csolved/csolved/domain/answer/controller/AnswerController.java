@@ -82,8 +82,11 @@ public class AnswerController
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
             return VIEWS_COMMUNITY_DETAIL;
         }
+
         answerService.saveAnswer(form.toAnswer());
-        return "redirect:/community/" + postId;
+        model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
+        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+        return VIEWS_COMMUNITY_DETAIL;
     }
 
     @LoginRequest
