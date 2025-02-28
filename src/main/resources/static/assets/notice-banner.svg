@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice">
+    <defs>
+        <!-- 새로운 그라데이션 배경 정의 -->
+        <linearGradient id="banner-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#EC4899"/>
+            <stop offset="35%" stop-color="#D946EF"/>
+            <stop offset="70%" stop-color="#8B5CF6"/>
+            <stop offset="100%" stop-color="#3B82F6"/>
+        </linearGradient>
+
+        <!-- 개선된 패턴 정의 -->
+        <pattern id="dot-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="10" r="1" fill="#ffffff" fill-opacity="0.15"/>
+        </pattern>
+
+        <!-- 우아한 물결 패턴 -->
+        <filter id="wave-blur" x="-5%" y="-5%" width="110%" height="110%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="2"/>
+        </filter>
+
+        <!-- 텍스트 효과 필터 -->
+        <filter id="elegant-text" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#000000" flood-opacity="0.3"/>
+            <feDropShadow dx="0" dy="1" stdDeviation="0.5" flood-color="#ffffff" flood-opacity="0.3"/>
+        </filter>
+
+        <!-- 반짝이는 효과 -->
+        <radialGradient id="shimmer" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.7">
+                <animate attributeName="stop-opacity" values="0.7;0.3;0.7" dur="5s" repeatCount="indefinite"/>
+            </stop>
+            <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+        </radialGradient>
+    </defs>
+
+    <!-- 그라데이션 배경 -->
+    <rect width="1200" height="300" fill="url(#banner-gradient)" opacity="0.9"/>
+
+    <!-- 패턴 오버레이 -->
+    <rect width="1200" height="300" fill="url(#dot-pattern)"/>
+
+    <!-- 반짝이는 효과 -->
+    <ellipse cx="800" cy="80" rx="120" ry="60" fill="url(#shimmer)" opacity="0.4" transform="rotate(-20)">
+        <animate attributeName="rx" values="120;140;120" dur="8s" repeatCount="indefinite"/>
+        <animate attributeName="ry" values="60;70;60" dur="8s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <!-- 수정된 물결 효과 (상단) - 지그재그 패턴 -->
+    <path d="M-100,140 C0,120 100,160 200,140 C300,120 400,160 500,140 C600,120 700,160 800,140 C900,120 1000,160 1250,140 L1250,300 L-100,300 Z"
+          fill="white" opacity="0.5" filter="url(#wave-blur)">
+        <animate attributeName="d" dur="12s" repeatCount="indefinite" begin="0s"
+                 values="M-100,140 C0,120 100,160 200,140 C300,120 400,160 500,140 C600,120 700,160 800,140 C900,120 1000,160 1250,140 L1250,300 L-100,300 Z;
+                 M-100,140 C0,160 100,120 200,140 C300,160 400,120 500,140 C600,160 700,120 800,140 C900,160 1000,120 1250,140 L1250,300 L-100,300 Z;
+                 M-100,140 C0,120 100,160 200,140 C300,120 400,160 500,140 C600,120 700,160 800,140 C900,120 1000,160 1250,140 L1250,300 L-100,300 Z"
+                 calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+    </path>
+
+    <!-- 수정된 물결 효과 (중간) - 사인 곡선 패턴 -->
+    <path d="M-100,180 C50,160 150,200 250,180 C350,160 450,200 550,180 C650,160 750,200 850,180 C950,160 1050,200 1250,180 L1250,300 L-100,300 Z"
+          fill="white" opacity="0.6" filter="url(#wave-blur)">
+        <animate attributeName="d" dur="10s" repeatCount="indefinite" begin="0s"
+                 values="M-100,180 C50,160 150,200 250,180 C350,160 450,200 550,180 C650,160 750,200 850,180 C950,160 1050,200 1250,180 L1250,300 L-100,300 Z;
+                 M-100,180 C50,200 150,160 250,180 C350,200 450,160 550,180 C650,200 750,160 850,180 C950,200 1050,160 1250,180 L1250,300 L-100,300 Z;
+                 M-100,180 C50,160 150,200 250,180 C350,160 450,200 550,180 C650,160 750,200 850,180 C950,160 1050,200 1250,180 L1250,300 L-100,300 Z"
+                 calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+    </path>
+
+    <!-- 수정된 물결 효과 (하단) - 리플 패턴 -->
+    <path d="M-100,220 C100,200 200,240 300,220 C400,200 500,240 600,220 C700,200 800,240 900,220 C1000,200 1100,240 1300,220 L1300,300 L-100,300 Z"
+          fill="white" opacity="0.9">
+        <animate attributeName="d" dur="15s" repeatCount="indefinite" begin="0s"
+                 values="M-100,220 C100,200 200,240 300,220 C400,200 500,240 600,220 C700,200 800,240 900,220 C1000,200 1100,240 1300,220 L1300,300 L-100,300 Z;
+                 M-100,220 C100,240 200,200 300,220 C400,240 500,200 600,220 C700,240 800,200 900,220 C1000,240 1100,200 1300,220 L1300,300 L-100,300 Z;
+                 M-100,220 C100,200 200,240 300,220 C400,200 500,240 600,220 C700,200 800,240 900,220 C1000,200 1100,240 1300,220 L1300,300 L-100,300 Z"
+                 calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+    </path>
+
+    <!-- 세련된 장식 요소 -->
+    <circle cx="400" cy="100" r="5" fill="white" opacity="0.5">
+        <animate attributeName="opacity" values="0.5;0.8;0.5" dur="7s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="420" cy="80" r="3" fill="white" opacity="0.4">
+        <animate attributeName="opacity" values="0.4;0.7;0.4" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="380" cy="90" r="4" fill="white" opacity="0.3">
+        <animate attributeName="opacity" values="0.3;0.6;0.3" dur="6s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- 제목 텍스트 수정 -->
+    <text x="600" y="124" font-family="'Pretendard', sans-serif" font-size="40" font-weight="700"
+          text-anchor="middle" fill="white" filter="url(#elegant-text)">
+        공지사항
+    </text>
+
+    <!-- 미묘한 입자 효과 -->
+    <g>
+        <circle cx="500" cy="60" r="2" fill="white" opacity="0.6">
+            <animate attributeName="cy" values="60;50;60" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="700" cy="70" r="1.5" fill="white" opacity="0.5">
+            <animate attributeName="cy" values="70;60;70" dur="5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="600" cy="50" r="1" fill="white" opacity="0.7">
+            <animate attributeName="cy" values="50;40;50" dur="3s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+</svg>
