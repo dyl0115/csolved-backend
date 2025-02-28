@@ -18,8 +18,4 @@ public class CodeReview extends Post
     private Long categoryId;
     private String categoryName;
     private List<Tag> tags;
-    private String githubUrl;
-    private Long views;
-    private Long likes;
-    private Long answerCount;
 }

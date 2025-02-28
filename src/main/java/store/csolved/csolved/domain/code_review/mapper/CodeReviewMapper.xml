@@ -10,7 +10,6 @@
         <result property="authorId" column="author_id"/>
         <result property="authorNickname" column="author_nickname"/>
         <result property="anonymous" column="anonymous"/>
-        <result property="githubUrl" column="github_url"/>
         <result property="content" column="content"/>
         <result property="categoryId" column="category_id"/>
         <result property="categoryName" column="category_name"/>

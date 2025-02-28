@@ -15,4 +15,7 @@ public class Post extends BaseEntity
     private Long authorId;
     private String authorNickname;
     private String content;
+    private Long views;
+    private Long likes;
+    private Long answerCount;
 }

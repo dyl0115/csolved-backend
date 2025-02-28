@@ -18,7 +18,4 @@ public class Question extends Post
     private Long categoryId;
     private String categoryName;
     private List<Tag> tags;
-    private Long views;
-    private Long likes;
-    private Long answerCount;
 }
