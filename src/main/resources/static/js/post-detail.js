@@ -1,33 +1,18 @@
 // 댓글 등록
-async function submitAnswer()
+
+async function submitAnswer(postId)
 {
-    event.preventDefault();
-
-    const totalPage = document.getElementById('total-page');
-    const form = document.getElementById('answer-form');
-    const content = tinymce.get('medium-editor').getContent();
-    const anonymous = document.getElementById('answer-anonymous').checked;
-    const authorId = document.getElementById('answer-author-id').value;
-
-    const formData = new FormData();
-    formData.append('content', content);
-    formData.append('anonymous', anonymous);
-    formData.append('authorId', authorId);
-
+    tinymce.get('medium-editor').save();
+    const answerForm = document.getElementById('answer-form');
+    const answerFormData = new FormData(answerForm);
     try
     {
-        const response = await fetch(form.action, {
+        const response = await fetch(`/community/${postId}/answers`, {
             method: 'POST',
-            body: formData
+            body: answerFormData
         });
 
-        if (!response.ok)
-        {
-            throw new Error('서버 응답 오류: ' + response.status);
-        }
-
-        totalPage.outerHTML = await response.text();
-
+        document.getElementById('answer-fragment').outerHTML = await response.text();
         tinymce.get('medium-editor').setContent('');
         document.getElementById('answer-anonymous').checked = false;
     }
@@ -36,6 +21,44 @@ async function submitAnswer()
         console.error('Error', error);
     }
 }
+
+// async function submitAnswer()
+// {
+//     event.preventDefault();
+//
+//     const totalPage = document.getElementById('total-page');
+//     const form = document.getElementById('answer-form');
+//     const content = tinymce.get('medium-editor').getContent();
+//     const anonymous = document.getElementById('answer-anonymous').checked;
+//     const authorId = document.getElementById('answer-author-id').value;
+//
+//     const formData = new FormData();
+//     formData.append('content', content);
+//     formData.append('anonymous', anonymous);
+//     formData.append('authorId', authorId);
+//
+//     try
+//     {
+//         const response = await fetch(form.action, {
+//             method: 'POST',
+//             body: formData
+//         });
+//
+//         if (!response.ok)
+//         {
+//             throw new Error('서버 응답 오류: ' + response.status);
+//         }
+//
+//         totalPage.outerHTML = await response.text();
+//
+//         tinymce.get('medium-editor').setContent('');
+//         document.getElementById('answer-anonymous').checked = false;
+//     }
+//     catch (error)
+//     {
+//         console.error('Error', error);
+//     }
+// }
 
 // 좋아요 버튼
 async function addLike(postType, postId)

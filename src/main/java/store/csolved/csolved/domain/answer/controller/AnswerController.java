@@ -27,6 +27,8 @@ import static store.csolved.csolved.domain.question.controller.QuestionControlle
 @Controller
 public class AnswerController
 {
+    private static final String FRAGMENT_COMMUNITY_ANSWER = "/views/community/detail::answer-fragment";
+
     private final NoticeFacade noticeFacade;
     private final QuestionFacade questionFacade;
     private final AnswerService answerService;
@@ -76,17 +78,20 @@ public class AnswerController
                                        BindingResult result,
                                        Model model)
     {
+        System.out.println("hello");
         if (result.hasErrors())
         {
+            System.out.println("   bad");
             model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
             return VIEWS_COMMUNITY_DETAIL;
         }
 
+        System.out.println("   good");
         answerService.saveAnswer(form.toAnswer());
         model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-        return VIEWS_COMMUNITY_DETAIL;
+        return FRAGMENT_COMMUNITY_ANSWER;
     }
 
     @LoginRequest
