@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function ()
 
     if (!tagContainer || !tagInput || !tagHiddenInput) return;
 
-    // 페이지로딩시 서버에서 전송된 tagHiddenInput 태그 정보를 tagInput에 등록
+    // 게시글 수정시 서버에서 전송된 tagHiddenInput 태그 정보를 tagInput에 등록
     if (tagHiddenInput.value)
     {
         tagHiddenInput.value
