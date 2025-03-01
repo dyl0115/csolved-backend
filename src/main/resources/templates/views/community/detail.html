@@ -6,13 +6,6 @@
         </title>
         <!-- Prism CSS -->
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet"/>
-        <style>
-            section img {
-                max-width: 100%;
-                height: auto;
-                object-fit: contain;
-            }
-        </style>
     </head>
     <body>
         <div class="container mt-5"
@@ -26,10 +19,10 @@
             <div th:insert="~{/fragments/common/modal::danger-modal('postDeleteConfirmModal', '게시글 삭제', '정말 삭제하시겠습니까?', '취소', '삭제', |deletePost('community', 'communities',${post.id})|)}"></div>
             
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-8 ">
                     <div class="card mb-4">
                         <!-- 게시글 -->
-                        <div class="card-body">
+                        <div class="card-body post-content-container">
                             
                             <!-- 게시글 정보 -->
                             <div class="mb-4">
@@ -394,7 +387,6 @@
                             </div>
                         </div>
                     </div>
-                
                 </div>
                 
                 <!-- 사이드 위젯 -->
@@ -447,7 +439,9 @@
                 </div>
             </div>
         </div>
+        <script>
         
+        </script>
         <!-- Prism JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
         <!-- Prism 지원 언어 -->

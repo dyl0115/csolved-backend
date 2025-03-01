@@ -158,3 +158,36 @@ document.querySelectorAll('.toggle-comment-form').forEach(element =>
         commentForm.classList.toggle('d-none');
     });
 });
+
+// 이미지 크기 조절
+document.addEventListener('DOMContentLoaded', function ()
+{
+    const postContent = document.querySelector('.post-content-container');
+    const images = postContent.querySelectorAll('img');
+
+    images.forEach(img =>
+    {
+        // 원본 크기 정보 확인 및 저장
+        const originalWidth = img.getAttribute('width');
+        const originalHeight = img.getAttribute('height');
+
+        // width와 height 속성 제거
+        img.removeAttribute('width');
+        img.removeAttribute('height');
+
+        // 인라인 스타일로 최대 너비 설정
+        img.style.maxWidth = '100%';
+
+        // 작은 이미지의 경우 원래 크기 유지
+        if (originalWidth && parseInt(originalWidth) < postContent.offsetWidth)
+        {
+            img.style.width = originalWidth + 'px';
+        } else
+        {
+            img.style.width = 'auto';
+        }
+
+        img.style.height = 'auto';
+        img.style.objectFit = 'contain';
+    });
+});

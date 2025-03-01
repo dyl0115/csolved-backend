@@ -70,7 +70,6 @@ public class CodeReviewController
                                  Model model)
 
     {
-        System.out.println("hello?");
         CodeReviewListVM viewModel = codeReviewFacade.getCodeReviews(page, sort, filter, search);
         model.addAttribute("codeReviewListViewModel", viewModel);
         return VIEWS_CODE_REVIEW_LIST;
@@ -82,7 +81,6 @@ public class CodeReviewController
                                  @PathVariable Long postId,
                                  Model model)
     {
-        System.out.println("hello");
         model.addAttribute("codeReviewDetails", codeReviewFacade.viewCodeReview(user.getId(), postId));
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", AnswerCreateForm.empty());

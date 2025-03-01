@@ -45,6 +45,9 @@ management:
     port: ${PROMETHEUS_PORT}
 
 server:
+  servlet:
+    session:
+      timeout: 720m
   tomcat:
     mbeanregistry:
       enabled: true
