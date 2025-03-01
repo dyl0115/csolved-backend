@@ -82,9 +82,19 @@ public class CodeReviewFacade
     }
 
     // 게시글 상세조회
-    public CodeReviewDetailVM getCodeReview(Long userId, Long postId)
+    public CodeReviewDetailVM viewCodeReview(Long userId, Long postId)
     {
         CodeReview codeReview = codeReviewService.viewCodeReview(postId);
+        boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
+        List<Answer> answers = answerService.getAnswers(postId);
+        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
+        return CodeReviewDetailVM.from(codeReview, bookmarked, answers, comments);
+    }
+
+    //
+    public CodeReviewDetailVM getCodeReview(Long userId, Long postId)
+    {
+        CodeReview codeReview = codeReviewService.getCodeReview(postId);
         boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
         List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));

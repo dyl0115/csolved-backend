@@ -37,7 +37,7 @@ public class QuestionService
                 search.getKeyword());
     }
 
-    public Question getQuestion(Long questionId)
+    public Question getPost(Long questionId)
     {
         return questionMapper.getQuestion(questionId);
     }

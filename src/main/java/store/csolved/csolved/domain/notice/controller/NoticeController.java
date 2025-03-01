@@ -62,6 +62,17 @@ public class NoticeController
 
     @LoginRequest
     @GetMapping("/notice/{postId}")
+    public String viewNotice(@PathVariable Long postId,
+                             Model model)
+    {
+        model.addAttribute("noticeDetails", noticeFacade.viewNotice(postId));
+        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+        return VIEWS_NOTICE_DETAIL;
+    }
+
+    @LoginRequest
+    @GetMapping("/notice/{postId}/read")
     public String getNotice(@PathVariable Long postId,
                             Model model)
     {
@@ -70,6 +81,7 @@ public class NoticeController
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         return VIEWS_NOTICE_DETAIL;
     }
+
 
     @LoginRequest
     @GetMapping("/notice/{postId}/updateForm")

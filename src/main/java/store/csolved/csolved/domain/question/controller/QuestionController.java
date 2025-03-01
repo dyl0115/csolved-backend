@@ -49,6 +49,18 @@ public class QuestionController
 
     @LoginRequest
     @GetMapping("/question/{postId}")
+    public String viewQuestion(@LoginUser User user,
+                               @PathVariable Long postId,
+                               Model model)
+    {
+        model.addAttribute("questionDetails", questionFacade.viewQuestion(user.getId(), postId));
+        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+        return VIEWS_QUESTION_DETAIL;
+    }
+
+    @LoginRequest
+    @GetMapping("/question/{postId}/read")
     public String getQuestion(@LoginUser User user,
                               @PathVariable Long postId,
                               Model model)

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.notice.controller.NoticeController;
 import store.csolved.csolved.domain.notice.service.NoticeFacade;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
@@ -43,13 +42,13 @@ public class CommentController
     {
         if (result.hasErrors())
         {
-            model.addAttribute("noticeDetails", noticeFacade.getNotice(postId));
+            model.addAttribute("noticeDetails", noticeFacade.viewNotice(postId));
             model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
             model.addAttribute("commentCreateFrom", form);
             return VIEWS_NOTICE_DETAIL;
         }
         commentService.saveComment(form.toComment());
-        return "redirect:/notice/" + postId;
+        return "redirect:/notice/" + postId + "/read";
     }
 
     @LoginRequest
@@ -62,17 +61,17 @@ public class CommentController
     {
         if (result.hasErrors())
         {
-            model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
+            model.addAttribute("communityPostDetails", communityFacade.viewPost(user.getId(), postId));
             model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
             return CommunityController.VIEWS_COMMUNITY_DETAIL;
         }
         commentService.saveComment(form.toComment());
-        return "redirect:/community/" + postId;
+        return "redirect:/community/" + postId + "/read";
     }
 
 
     @LoginRequest
-    @PostMapping("/questions/{postId}/answers/{answerId}/comment")
+    @PostMapping("/question/{postId}/answers/{answerId}/comment")
     public String saveQuestionComment(@LoginUser User user,
                                       @PathVariable("postId") Long postId,
                                       @Valid @ModelAttribute("commentCreateForm") CommentCreateForm form,
@@ -81,13 +80,13 @@ public class CommentController
     {
         if (result.hasErrors())
         {
-            model.addAttribute("questionDetails", questionFacade.getQuestion(user.getId(), postId));
+            model.addAttribute("questionDetails", questionFacade.viewQuestion(user.getId(), postId));
             model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
             model.addAttribute("commentCreateFrom", form);
             return QuestionController.VIEWS_QUESTION_DETAIL;
         }
         commentService.saveComment(form.toComment());
-        return "redirect:/question/" + postId;
+        return "redirect:/question/" + postId + "/read";
     }
 
     @LoginRequest
@@ -100,12 +99,12 @@ public class CommentController
     {
         if (result.hasErrors())
         {
-            model.addAttribute("questionDetails", codeReviewFacade.getCodeReview(user.getId(), postId));
+            model.addAttribute("codeReviewDetails", codeReviewFacade.viewCodeReview(user.getId(), postId));
             model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
             model.addAttribute("commentCreateFrom", form);
             return CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
         }
         commentService.saveComment(form.toComment());
-        return "redirect:/code-review/" + postId;
+        return "redirect:/code-review/" + postId + "/read";
     }
 }

@@ -57,7 +57,7 @@ public class QuestionFacade
     // 질문글 업데이트 시 기존 게시글 제공
     public QuestionCreateUpdateForm initUpdateForm(Long questionId)
     {
-        Question question = questionService.getQuestion(questionId);
+        Question question = questionService.getPost(questionId);
         return QuestionCreateUpdateForm.from(question);
     }
 
@@ -103,10 +103,18 @@ public class QuestionFacade
         return QuestionListVM.from(page, categories, questions);
     }
 
-    // 질문글 상세 조회
-    public QuestionDetailVM getQuestion(Long userId, Long postId)
+    public QuestionDetailVM viewQuestion(Long userId, Long postId)
     {
         Question question = questionService.viewPost(postId);
+        boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
+        List<Answer> answers = answerService.getAnswers(postId);
+        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
+        return QuestionDetailVM.from(question, bookmarked, answers, comments);
+    }
+
+    public QuestionDetailVM getQuestion(Long userId, Long postId)
+    {
+        Question question = questionService.getPost(postId);
         boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
         List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));

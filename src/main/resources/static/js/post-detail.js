@@ -1,26 +1,3 @@
-// 댓글 등록
-async function submitAnswer()
-{
-    tinymce.get('medium-editor').save();
-    const answerForm = document.getElementById('answer-form');
-    const answerFormData = new FormData(answerForm);
-    try
-    {
-        const response = await fetch(answerForm.action, {
-            method: 'POST',
-            body: answerFormData
-        });
-
-        document.getElementById('answer-fragment').outerHTML = await response.text();
-        tinymce.get('medium-editor').setContent('');
-        document.getElementById('answer-anonymous').checked = false;
-    }
-    catch (error)
-    {
-        console.error('Error', error);
-    }
-}
-
 // 좋아요 버튼
 async function addLike(postType, postId)
 {

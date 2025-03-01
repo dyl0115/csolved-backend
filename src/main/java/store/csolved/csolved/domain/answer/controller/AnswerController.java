@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.notice.controller.NoticeController;
 import store.csolved.csolved.domain.notice.service.NoticeFacade;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
@@ -27,8 +26,6 @@ import static store.csolved.csolved.domain.question.controller.QuestionControlle
 @Controller
 public class AnswerController
 {
-    private static final String FRAGMENT_COMMUNITY_ANSWER = "/views/community/detail::answer-fragment";
-
     private final NoticeFacade noticeFacade;
     private final QuestionFacade questionFacade;
     private final AnswerService answerService;
@@ -37,10 +34,10 @@ public class AnswerController
 
     @LoginRequest
     @PostMapping("/notice/{postId}/answers")
-    public String saveNoticeAnswers(@PathVariable Long postId,
-                                    @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
-                                    BindingResult result,
-                                    Model model)
+    public String saveNoticeAnswer(@PathVariable Long postId,
+                                   @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
+                                   BindingResult result,
+                                   Model model)
     {
         if (result.hasErrors())
         {
@@ -49,12 +46,30 @@ public class AnswerController
             return VIEWS_NOTICE_DETAIL;
         }
         answerService.saveAnswer(form.toAnswer());
-        return "redirect:/notice/" + postId;
+        return "redirect:/notice/" + postId + "/read";
     }
 
     @LoginRequest
-    @PostMapping("/questions/{postId}/answers")
-    public String saveQuestionAnswers(@LoginUser User user,
+    @PostMapping("/question/{postId}/answers")
+    public String saveQuestionAnswer(@LoginUser User user,
+                                     @PathVariable Long postId,
+                                     @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
+                                     BindingResult result,
+                                     Model model)
+    {
+        if (result.hasErrors())
+        {
+            model.addAttribute("questionDetails", questionFacade.viewQuestion(user.getId(), postId));
+            model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+            return VIEWS_QUESTION_DETAIL;
+        }
+        answerService.saveAnswer(form.toAnswer());
+        return "redirect:/question/" + postId + "/read";
+    }
+
+    @LoginRequest
+    @PostMapping("/community/{postId}/answers")
+    public String saveCommunityAnswer(@LoginUser User user,
                                       @PathVariable Long postId,
                                       @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
                                       BindingResult result,
@@ -62,53 +77,32 @@ public class AnswerController
     {
         if (result.hasErrors())
         {
-            model.addAttribute("questionDetails", questionFacade.getQuestion(user.getId(), postId));
+            model.addAttribute("communityPostDetails", communityFacade.getPost(user.getId(), postId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-            return VIEWS_QUESTION_DETAIL;
+            return VIEWS_COMMUNITY_DETAIL;
         }
+
         answerService.saveAnswer(form.toAnswer());
-        return "redirect:/question/" + postId;
+        model.addAttribute("communityPostDetails", communityFacade.getPost(user.getId(), postId));
+        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+        return "redirect:/community/" + postId + "/read";
     }
 
     @LoginRequest
-    @PostMapping("/community/{postId}/answers")
-    public String saveCommunityAnswers(@LoginUser User user,
+    @PostMapping("/code-review/{postId}/answers")
+    public String saveCodeReviewAnswer(@LoginUser User user,
                                        @PathVariable Long postId,
                                        @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
                                        BindingResult result,
                                        Model model)
     {
-        System.out.println("hello");
         if (result.hasErrors())
         {
-            System.out.println("   bad");
-            model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
-            model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-            return VIEWS_COMMUNITY_DETAIL;
-        }
-
-        System.out.println("   good");
-        answerService.saveAnswer(form.toAnswer());
-        model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
-        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-        return FRAGMENT_COMMUNITY_ANSWER;
-    }
-
-    @LoginRequest
-    @PostMapping("/code-review/{postId}/answers")
-    public String saveCodeReviewAnswers(@LoginUser User user,
-                                        @PathVariable Long postId,
-                                        @Valid @ModelAttribute("answerCreateForm") AnswerCreateForm form,
-                                        BindingResult result,
-                                        Model model)
-    {
-        if (result.hasErrors())
-        {
-            model.addAttribute("codeReviewDetails", codeReviewFacade.getCodeReview(user.getId(), postId));
+            model.addAttribute("codeReviewDetails", codeReviewFacade.viewCodeReview(user.getId(), postId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
             return VIEWS_CODE_REVIEW_DETAIL;
         }
         answerService.saveAnswer(form.toAnswer());
-        return "redirect:/code-review/" + postId;
+        return "redirect:/code-review/" + postId + "/read";
     }
 }

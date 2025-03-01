@@ -41,9 +41,17 @@ public class NoticeFacade
         return NoticeListVM.from(page, notices);
     }
 
-    public NoticeDetailVM getNotice(Long postId)
+    public NoticeDetailVM viewNotice(Long postId)
     {
         Notice notice = noticeService.viewNotice(postId);
+        List<Answer> answers = answerService.getAnswers(postId);
+        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
+        return NoticeDetailVM.from(notice, answers, comments);
+    }
+
+    public NoticeDetailVM getNotice(Long postId)
+    {
+        Notice notice = noticeService.getNotice(postId);
         List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
         return NoticeDetailVM.from(notice, answers, comments);

@@ -110,8 +110,17 @@ public class CommunityFacade
         return CommunityListVM.from(page, categories, communities);
     }
 
+    public CommunityDetailVM getPost(Long userId, Long postId)
+    {
+        Community community = communityService.getCommunity(postId);
+        boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
+        List<Answer> answers = answerService.getAnswers(postId);
+        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
+        return CommunityDetailVM.from(community, bookmarked, answers, comments);
+    }
+
     // 커뮤니티글 상세 조회
-    public CommunityDetailVM getCommunityPost(Long userId, Long postId)
+    public CommunityDetailVM viewPost(Long userId, Long postId)
     {
         Community community = communityService.viewCommunity(postId);
         boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);

@@ -70,6 +70,7 @@ public class CodeReviewController
                                  Model model)
 
     {
+        System.out.println("hello?");
         CodeReviewListVM viewModel = codeReviewFacade.getCodeReviews(page, sort, filter, search);
         model.addAttribute("codeReviewListViewModel", viewModel);
         return VIEWS_CODE_REVIEW_LIST;
@@ -77,6 +78,19 @@ public class CodeReviewController
 
     @LoginRequest
     @GetMapping("/code-review/{postId}")
+    public String viewCodeReview(@LoginUser User user,
+                                 @PathVariable Long postId,
+                                 Model model)
+    {
+        System.out.println("hello");
+        model.addAttribute("codeReviewDetails", codeReviewFacade.viewCodeReview(user.getId(), postId));
+        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("commentCreateForm", AnswerCreateForm.empty());
+        return VIEWS_CODE_REVIEW_DETAIL;
+    }
+
+    @LoginRequest
+    @GetMapping("/code-review/{postId}/read")
     public String getCodeReview(@LoginUser User user,
                                 @PathVariable Long postId,
                                 Model model)

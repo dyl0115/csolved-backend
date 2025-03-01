@@ -52,12 +52,25 @@ public class CommunityController
 
     @LoginRequest
     @GetMapping("/community/{postId}")
-    public String getCommunityPost(@LoginUser User user,
-                                   @PathVariable Long postId,
-                                   Model model)
+    public String viewPost(@LoginUser User user,
+                           @PathVariable Long postId,
+                           Model model)
     {
-        CommunityDetailVM communityPost = communityFacade.getCommunityPost(user.getId(), postId);
+        CommunityDetailVM communityPost = communityFacade.viewPost(user.getId(), postId);
         model.addAttribute("communityPostDetails", communityPost);
+        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+        return VIEWS_COMMUNITY_DETAIL;
+    }
+
+    @LoginRequest
+    @GetMapping("/community/{postId}/read")
+    public String getPost(@LoginUser User user,
+                          @PathVariable Long postId,
+                          Model model)
+    {
+        CommunityDetailVM post = communityFacade.getPost(user.getId(), postId);
+        model.addAttribute("communityPostDetails", post);
         model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         return VIEWS_COMMUNITY_DETAIL;
