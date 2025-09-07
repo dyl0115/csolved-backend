@@ -37,7 +37,7 @@ aws:
 
 logging:
   level:
-#    org.apache.ibatis: TRACE
+    #    org.apache.ibatis: TRACE
     #    org.mybatis: TRACE
     root: INFO
     store.csolved.csolved.domain.bookmark.mapper.BookmarkMapper: TRACE
