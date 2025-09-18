@@ -9,7 +9,7 @@ import store.csolved.csolved.domain.user.User;
 @Component
 public class AuthSessionManager
 {
-    private final static String LOGIN_USER_SESSION_KEY = "loginUser";
+    private final static String LOGIN_USER_SESSION_KEY = "LOGIN_USER";
     private final HttpSession httpSession;
 
     public void setLoginUser(User user)

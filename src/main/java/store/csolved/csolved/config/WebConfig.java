@@ -56,7 +56,10 @@ public class WebConfig implements WebMvcConfigurer
     public void addCorsMappings(CorsRegistry registry)
     {
         registry.addMapping("/api/**")
-                .allowedOrigins("https://localhost:5173")
-                .allowedMethods("PUT", "DELETE");
+                .allowedOrigins("http://localhost:5173") // 프론트엔드 주소
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600); // preflight 결과 캐시 시간 (초)
     }
 }

@@ -1,31 +1,21 @@
 package store.csolved.csolved.domain.auth.service;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import store.csolved.csolved.domain.auth.controller.dto.response.SignupResponse;
 import store.csolved.csolved.domain.auth.exception.DuplicateEmailException;
 import store.csolved.csolved.domain.auth.exception.DuplicateNicknameException;
+import store.csolved.csolved.domain.auth.exception.InvalidPasswordException;
+import store.csolved.csolved.domain.auth.exception.UserNotFoundException;
+import store.csolved.csolved.domain.auth.service.dto.SigninCommand;
 import store.csolved.csolved.domain.auth.service.dto.SignupCommand;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
-import store.csolved.csolved.domain.user.service.UserService;
-import store.csolved.csolved.utils.AuthSessionManager;
-import store.csolved.csolved.utils.PasswordManager;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class AuthServiceTest
@@ -37,9 +27,9 @@ class AuthServiceTest
     UserMapper usermapper;
 
     @BeforeEach
-    void setUp()
+    void beforeEach()
     {
-
+        usermapper.deleteAll();
     }
 
     SignupCommand createSignupCommand(String email,
@@ -49,6 +39,14 @@ class AuthServiceTest
         return SignupCommand.builder()
                 .email(email)
                 .nickname(nickname)
+                .password(password)
+                .build();
+    }
+
+    SigninCommand createSigninCommand(String email, String password)
+    {
+        return SigninCommand.builder()
+                .email(email)
                 .password(password)
                 .build();
     }
@@ -115,6 +113,40 @@ class AuthServiceTest
         assertThat(usermapper.existsByEmail("david@example.com")).isTrue();
 
         assertThat(usermapper.existsByNickname("marry@example.com")).isFalse();
+    }
+
+    @Test
+    @DisplayName("없는 이메일로 로그인하면 UserNotFoundException이 발생한다.")
+    void signin_Email_Not_Found()
+    {
+        //given
+        SignupCommand command1 = createSignupCommand("david@naver.com",
+                "david",
+                "david123!");
+        authService.signup(command1);
+
+        //when then
+        SigninCommand command2 = createSigninCommand("nono@naver.com", "marry123!");
+
+        assertThatThrownBy(() -> authService.signin(command2))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("틀린 비밀번호로 로그인하면 InvalidPasswordException이 발생한다.")
+    void signin_with_wrong_password()
+    {
+        //given
+        SignupCommand command1 = createSignupCommand("david@naver.com",
+                "david",
+                "david123!");
+        authService.signup(command1);
+
+        //when then
+        SigninCommand command2 = createSigninCommand("david@naver.com", "wrongpassword");
+
+        assertThatThrownBy(() -> authService.signin(command2))
+                .isInstanceOf(InvalidPasswordException.class);
     }
 
     @Test

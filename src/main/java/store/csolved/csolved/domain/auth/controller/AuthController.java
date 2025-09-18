@@ -2,16 +2,16 @@ package store.csolved.csolved.domain.auth.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import store.csolved.csolved.domain.auth.controller.dto.request.SigninRequest;
 import store.csolved.csolved.domain.auth.controller.dto.request.SignupRequest;
+import store.csolved.csolved.domain.auth.controller.dto.response.SigninResponse;
 import store.csolved.csolved.domain.auth.controller.dto.response.SignupResponse;
 import store.csolved.csolved.domain.auth.controller.dto.response.WithdrawResponse;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.auth.service.AuthService;
 import store.csolved.csolved.utils.login.LoginUser;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.auth.controller.form.SignInForm;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,6 +25,13 @@ public class AuthController
     {
         authService.signup(request.toCommand());
         return SignupResponse.success();
+    }
+
+    @PostMapping("/signIn")
+    public SigninResponse processSignIn(@Valid @RequestBody SigninRequest request)
+    {
+        authService.signin(request.toCommand());
+        return SigninResponse.success();
     }
 
     @LoginRequest
@@ -43,16 +50,5 @@ public class AuthController
 //        return null;
 //    }
 //
-//    @PostMapping("/signIn")
-//    public String processSignIn(@Valid @ModelAttribute("signInForm") SignInForm signInForm,
-//                                BindingResult result)
-//    {
-//        if (result.hasErrors())
-//        {
-//            return null;
-//        }
-//
-//        authService.signIn(signInForm);
-//        return null;
-//    }
+
 }

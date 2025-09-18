@@ -18,4 +18,16 @@ public class AuthExceptionHandler
     {
         return new AuthExceptionResponse(AuthExceptionType.DUPLICATE_NICKNAME);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public AuthExceptionResponse handleUserNotFound()
+    {
+        return new AuthExceptionResponse(AuthExceptionType.USER_NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public AuthExceptionResponse handleInvalidPassword()
+    {
+        return new AuthExceptionResponse(AuthExceptionType.INVALID_PASSWORD);
+    }
 }

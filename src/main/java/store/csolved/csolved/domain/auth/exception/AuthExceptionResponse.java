@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 public class AuthExceptionResponse
 {
-    int code;
+    String code;
     String message;
     LocalDateTime timestamp;
 

@@ -23,4 +23,6 @@ public interface UserMapper
     void updateNickname(Long userId, String nickname);
 
     void delete(Long id);
+
+    void deleteAll();
 }

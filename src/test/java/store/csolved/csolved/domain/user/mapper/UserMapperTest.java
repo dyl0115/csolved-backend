@@ -2,6 +2,7 @@ package store.csolved.csolved.domain.user.mapper;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -19,6 +20,12 @@ class UserMapperTest
 {
     @Autowired
     private UserMapper userMapper;
+
+    @BeforeEach
+    void beforeEach()
+    {
+        userMapper.deleteAll();
+    }
 
     User createTestUser(String email, String nickname, String password)
     {
@@ -115,18 +122,24 @@ class UserMapperTest
     }
 
     @Test
+    @DisplayName("이메일로 비밀번호 찾기 테스트")
     void findPasswordByEmail()
     {
-    }
+        //given
+        String email1 = "david@example.com";
+        String nickname1 = "david";
+        String password1 = "david123!";
 
-    @Test
-    void existsByEmail()
-    {
-    }
+        String email2 = "marry@example.com";
+        String nickname2 = "marry";
+        String password2 = "marry123!";
 
-    @Test
-    void existsByNickname()
-    {
+        userMapper.insertUser(createTestUser(email1, nickname1, password1));
+        userMapper.insertUser(createTestUser(email2, nickname2, password2));
+
+        //when then
+        assertThat(userMapper.findPasswordByEmail(email1)).isEqualTo(password1);
+        assertThat(userMapper.findPasswordByEmail(email2)).isNotEqualTo(password1);
     }
 
     @Test
@@ -140,7 +153,25 @@ class UserMapperTest
     }
 
     @Test
-    void delete()
+    void deleteAll()
     {
+        //given
+        String email1 = "david@example.com";
+        String nickname1 = "david";
+        String password1 = "david123!";
+
+        String email2 = "marry@example.com";
+        String nickname2 = "marry";
+        String password2 = "marry123!";
+
+        userMapper.insertUser(createTestUser(email1, nickname1, password1));
+        userMapper.insertUser(createTestUser(email2, nickname2, password2));
+
+        //when
+        userMapper.deleteAll();
+
+        //then
+        assertThat(userMapper.findUserByEmail(email1)).isNull();
+        assertThat(userMapper.findUserByEmail(email2)).isNull();
     }
 }

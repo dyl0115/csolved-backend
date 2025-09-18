@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.auth.exception.DuplicateEmailException;
 import store.csolved.csolved.domain.auth.exception.DuplicateNicknameException;
+import store.csolved.csolved.domain.auth.exception.InvalidPasswordException;
+import store.csolved.csolved.domain.auth.exception.UserNotFoundException;
+import store.csolved.csolved.domain.auth.service.dto.SigninCommand;
 import store.csolved.csolved.domain.auth.service.dto.SignupCommand;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
@@ -37,16 +40,29 @@ public class AuthService
         userMapper.insertUser(command.toEntity(hashedPassword));
     }
 
-//    public void signIn(SignInForm form)
-//    {
-//        User loginUser = userMapper.findUserByEmail(form.getEmail());
-//        authSession.setLoginUser(loginUser);
-//    }
-//
-//    public void signOut()
-//    {
-//        authSession.invalidateSession();
-//    }
+    public void signin(SigninCommand command)
+    {
+        User user = userMapper.findUserByEmail(command.getEmail());
+
+        if (user == null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        String storedPassword = userMapper.findPasswordByEmail(command.getEmail());
+
+        if (storedPassword == null || !passwordManager.verifyPassword(command.getPassword(), storedPassword))
+        {
+            throw new InvalidPasswordException();
+        }
+
+        authSession.setLoginUser(user);
+    }
+
+    public void signOut()
+    {
+        authSession.invalidateSession();
+    }
 
     @Transactional
     public void withdraw(User user)
