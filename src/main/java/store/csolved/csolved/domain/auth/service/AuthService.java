@@ -7,17 +7,16 @@ import store.csolved.csolved.domain.auth.exception.DuplicateEmailException;
 import store.csolved.csolved.domain.auth.exception.DuplicateNicknameException;
 import store.csolved.csolved.domain.auth.service.dto.SignupCommand;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.auth.controller.form.SignInForm;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
 import store.csolved.csolved.utils.PasswordManager;
-import store.csolved.csolved.utils.SessionManager;
+import store.csolved.csolved.utils.AuthSessionManager;
 
 
 @RequiredArgsConstructor
 @Component
 public class AuthService
 {
-    private final SessionManager sessionManager;
+    private final AuthSessionManager authSession;
     private final PasswordManager passwordManager;
     private final UserMapper userMapper;
 
@@ -38,21 +37,21 @@ public class AuthService
         userMapper.insertUser(command.toEntity(hashedPassword));
     }
 
-    public void signIn(SignInForm form)
-    {
-        User loginUser = userMapper.findUserByEmail(form.getEmail());
-        sessionManager.setLoginUser(loginUser);
-    }
-
-    public void signOut()
-    {
-        sessionManager.invalidateSession();
-    }
+//    public void signIn(SignInForm form)
+//    {
+//        User loginUser = userMapper.findUserByEmail(form.getEmail());
+//        authSession.setLoginUser(loginUser);
+//    }
+//
+//    public void signOut()
+//    {
+//        authSession.invalidateSession();
+//    }
 
     @Transactional
     public void withdraw(User user)
     {
-        sessionManager.invalidateSession();
+        authSession.invalidateSession();
         userMapper.delete(user.getId());
     }
 }

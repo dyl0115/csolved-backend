@@ -4,8 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.auth.controller.dto.SignupRequest;
-import store.csolved.csolved.domain.auth.controller.dto.SignupResponse;
+import store.csolved.csolved.domain.auth.controller.dto.request.SignupRequest;
+import store.csolved.csolved.domain.auth.controller.dto.response.SignupResponse;
+import store.csolved.csolved.domain.auth.controller.dto.response.WithdrawResponse;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.auth.service.AuthService;
 import store.csolved.csolved.utils.login.LoginUser;
@@ -26,33 +27,32 @@ public class AuthController
         return SignupResponse.success();
     }
 
-    @PostMapping("/signIn")
-    public String processSignIn(@Valid @ModelAttribute("signInForm") SignInForm signInForm,
-                                BindingResult result)
-    {
-        if (result.hasErrors())
-        {
-            return null;
-        }
-
-        authService.signIn(signInForm);
-        return null;
-    }
-
-
-    @LoginRequest
-    @PostMapping("/signOut")
-    public String processSignOut()
-    {
-        authService.signOut();
-        return null;
-    }
-
     @LoginRequest
     @DeleteMapping("/withdraw")
-    public String processWithdraw(@LoginUser User user)
+    public WithdrawResponse processWithdraw(@LoginUser User user)
     {
         authService.withdraw(user);
-        return null;
+        return WithdrawResponse.success();
     }
+
+//    @LoginRequest
+//    @PostMapping("/signOut")
+//    public String processSignOut()
+//    {
+//        authService.signOut();
+//        return null;
+//    }
+//
+//    @PostMapping("/signIn")
+//    public String processSignIn(@Valid @ModelAttribute("signInForm") SignInForm signInForm,
+//                                BindingResult result)
+//    {
+//        if (result.hasErrors())
+//        {
+//            return null;
+//        }
+//
+//        authService.signIn(signInForm);
+//        return null;
+//    }
 }
