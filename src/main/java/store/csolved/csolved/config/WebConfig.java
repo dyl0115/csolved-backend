@@ -3,6 +3,7 @@ package store.csolved.csolved.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import store.csolved.csolved.utils.login.LoginRequestInterceptor;
@@ -49,5 +50,13 @@ public class WebConfig implements WebMvcConfigurer
 
         // @SearchInfo가 있는 SearchRequest 변수에 search정보를 바인딩합니다.
         resolvers.add(searchRequestArgumentResolver);
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry)
+    {
+        registry.addMapping("/api/**")
+                .allowedOrigins("https://localhost:5173")
+                .allowedMethods("PUT", "DELETE");
     }
 }
