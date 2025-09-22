@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.community.controller.form;
+package store.csolved.csolved.domain.community.controller.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

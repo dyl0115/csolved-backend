@@ -3,14 +3,12 @@ package store.csolved.csolved.domain.community.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import store.csolved.csolved.domain.community.controller.dto.request.CommunityUpdateRequest;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityLikeResponse;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
-import store.csolved.csolved.domain.community.controller.form.CommunityCreateRequest;
-import store.csolved.csolved.domain.community.controller.view_model.CommunityCreateUpdateVM;
+import store.csolved.csolved.domain.community.controller.dto.request.CommunityCreateRequest;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityDetailResponse;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityListResponse;
 import store.csolved.csolved.domain.community.service.CommunityFacade;
@@ -47,7 +45,7 @@ public class CommunityController
         return communityFacade.getCommunityPost(user.getId(), postId);
     }
 
-    @LoginRequest
+    //    @LoginRequest
     @PostMapping("/api/community/like/{postId}")
     public CommunityLikeResponse addLike(@LoginUser User user,
                                          @PathVariable Long postId)
@@ -56,27 +54,14 @@ public class CommunityController
         return CommunityLikeResponse.success();
     }
 
-    @LoginRequest
-    @DeleteMapping("/{postId}")
-    @ResponseStatus(HttpStatus.OK)
+    //    @LoginRequest
+    @DeleteMapping("/api/community/{postId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void delete(@PathVariable Long postId)
     {
         communityFacade.delete(postId);
     }
-
-//    @LoginRequest
-//    @GetMapping("/community/{postId}/read")
-//    public String getPost(@LoginUser User user,
-//                          @PathVariable Long postId,
-//                          Model model)
-//    {
-//        CommunityDetailResponse post = communityFacade.getPost(user.getId(), postId);
-//        model.addAttribute("communityPostDetails", post);
-//        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
-//        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-//        return null;
-//    }
-
+    
     //    @LoginRequest
     @PostMapping("/api/community")
     public void processCreate(@Valid @RequestBody CommunityCreateRequest request)
@@ -84,21 +69,11 @@ public class CommunityController
         communityFacade.save(request);
     }
 
-    @LoginRequest
-    @PutMapping("/community/{postId}")
-    public String processUpdate(@PathVariable("postId") Long postId,
-                                @Valid @ModelAttribute("updateForm") CommunityCreateRequest form,
-                                BindingResult result,
-                                Model model)
+    //    @LoginRequest
+    @PutMapping("/api/community/{postId}")
+    public void processUpdate(@PathVariable("postId") Long postId,
+                              @Valid @RequestBody CommunityUpdateRequest request)
     {
-        if (result.hasErrors())
-        {
-            CommunityCreateUpdateVM viewModel = communityFacade.initUpdate();
-            model.addAttribute("updateVM", viewModel);
-            return null;
-        }
-
-        communityFacade.update(postId, form);
-        return "redirect:/communities?page=1";
+        communityFacade.update(postId, request);
     }
 }

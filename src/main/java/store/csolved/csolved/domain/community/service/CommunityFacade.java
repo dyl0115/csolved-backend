@@ -10,8 +10,8 @@ import store.csolved.csolved.domain.category.Category;
 import store.csolved.csolved.domain.category.service.CategoryService;
 import store.csolved.csolved.domain.comment.Comment;
 import store.csolved.csolved.domain.comment.service.CommentService;
-import store.csolved.csolved.domain.community.controller.form.CommunityCreateRequest;
-import store.csolved.csolved.domain.community.controller.view_model.CommunityCreateUpdateVM;
+import store.csolved.csolved.domain.community.controller.dto.request.CommunityCreateRequest;
+import store.csolved.csolved.domain.community.controller.dto.request.CommunityUpdateRequest;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityDetailResponse;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityListResponse;
 import store.csolved.csolved.domain.community.Community;
@@ -48,30 +48,10 @@ public class CommunityFacade
         tagService.saveTags(saveId, request.getTagList());
     }
 
-    // 커뮤니티글 작성 시 viewModel 제공
-    public CommunityCreateUpdateVM initCreate()
-    {
-        List<Category> categories = categoryService.getAllCategories(COMMUNITY.getCode());
-        return CommunityCreateUpdateVM.from(categories);
-    }
-
-    // 커뮤니티글 업데이트 시 viewModel 제공
-    public CommunityCreateUpdateVM initUpdate()
-    {
-        List<Category> categories = categoryService.getAllCategories(COMMUNITY.getCode());
-        return CommunityCreateUpdateVM.from(categories);
-    }
-
-    // 커뮤니티글 업데이트 시 기존 게시글 제공
-    public CommunityCreateRequest initUpdateForm(Long communityId)
-    {
-        Community community = communityService.getCommunity(communityId);
-        return CommunityCreateRequest.from(community);
-    }
 
     // 커뮤니티글 업데이트
     @Transactional
-    public void update(Long postId, CommunityCreateRequest form)
+    public void update(Long postId, CommunityUpdateRequest form)
     {
         communityService.update(postId, form.getCommunity());
         tagService.updateTags(postId, form.getTagList());
