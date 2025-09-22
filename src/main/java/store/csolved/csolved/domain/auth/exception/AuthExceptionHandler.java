@@ -30,4 +30,10 @@ public class AuthExceptionHandler
     {
         return new AuthExceptionResponse(AuthExceptionType.INVALID_PASSWORD);
     }
+
+    @ExceptionHandler(InvalidSessionException.class)
+    public AuthExceptionResponse handleInvalidSession()
+    {
+        return new AuthExceptionResponse(AuthExceptionType.INVALID_SESSION);
+    }
 }

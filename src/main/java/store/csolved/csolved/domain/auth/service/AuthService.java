@@ -3,10 +3,7 @@ package store.csolved.csolved.domain.auth.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.auth.exception.DuplicateEmailException;
-import store.csolved.csolved.domain.auth.exception.DuplicateNicknameException;
-import store.csolved.csolved.domain.auth.exception.InvalidPasswordException;
-import store.csolved.csolved.domain.auth.exception.UserNotFoundException;
+import store.csolved.csolved.domain.auth.exception.*;
 import store.csolved.csolved.domain.auth.service.dto.SigninCommand;
 import store.csolved.csolved.domain.auth.service.dto.SignupCommand;
 import store.csolved.csolved.domain.user.User;
@@ -40,7 +37,7 @@ public class AuthService
         userMapper.insertUser(command.toEntity(hashedPassword));
     }
 
-    public void signin(SigninCommand command)
+    public User signin(SigninCommand command)
     {
         User user = userMapper.findUserByEmail(command.getEmail());
 
@@ -57,10 +54,31 @@ public class AuthService
         }
 
         authSession.setLoginUser(user);
+
+        return user;
+    }
+
+    public User checkSession()
+    {
+        User principal = authSession.getLoginUser();
+
+        if (principal == null)
+        {
+            throw new InvalidSessionException();
+        }
+
+        return principal;
     }
 
     public void signOut()
     {
+        User principal = authSession.getLoginUser();
+
+        if (principal == null)
+        {
+            throw new InvalidSessionException();
+        }
+
         authSession.invalidateSession();
     }
 

@@ -7,16 +7,16 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class SignupResponse
+public class SignUpResponse
 {
-    int code;
+    int status;
     String message;
     LocalDateTime timestamp;
 
-    public static SignupResponse success()
+    public static SignUpResponse success()
     {
-        return SignupResponse.builder()
-                .code(201)
+        return SignUpResponse.builder()
+                .status(201)
                 .message("회원가입이 완료되었습니다.")
                 .timestamp(LocalDateTime.now())
                 .build();

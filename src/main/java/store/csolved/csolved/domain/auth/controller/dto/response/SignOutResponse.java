@@ -7,17 +7,15 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class SigninResponse
+public class SignOutResponse
 {
-    int code;
-    String message;
+    int status;
     LocalDateTime timestamp;
 
-    public static SigninResponse success()
+    public static SignOutResponse success()
     {
-        return SigninResponse.builder()
-                .code(200)
-                .message("로그인이 완료되었습니다.")
+        return SignOutResponse.builder()
+                .status(204)
                 .timestamp(LocalDateTime.now())
                 .build();
     }
