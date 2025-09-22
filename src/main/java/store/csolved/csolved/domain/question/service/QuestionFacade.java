@@ -50,7 +50,7 @@ public class QuestionFacade
     // 질문글 생성 및 업데이트 시 기존 viewModel 제공
     public QuestionCreateUpdateVM initCreateUpdate()
     {
-        List<Category> categories = categoryService.getAll(QUESTION.getCode());
+        List<Category> categories = categoryService.getAllCategories(QUESTION.getCode());
         return QuestionCreateUpdateVM.from(categories);
     }
 
@@ -97,7 +97,7 @@ public class QuestionFacade
         List<Question> questions = questionService.getPosts(page, sort, filter, search);
 
         // 카테고리 정보를 모두 가져옴.
-        List<Category> categories = categoryService.getAll(QUESTION.getCode());
+        List<Category> categories = categoryService.getAllCategories(QUESTION.getCode());
 
         // 모든 데이터를 사용하여 viewModel 생성 후 반환
         return QuestionListVM.from(page, categories, questions);

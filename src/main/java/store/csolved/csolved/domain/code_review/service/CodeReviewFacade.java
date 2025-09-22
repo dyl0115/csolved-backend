@@ -56,7 +56,7 @@ public class CodeReviewFacade
 
     public CodeReviewCreateUpdateVM initCreateUpdate()
     {
-        List<Category> categories = categoryService.getAll(CODE_REVIEW.getCode());
+        List<Category> categories = categoryService.getAllCategories(CODE_REVIEW.getCode());
         return CodeReviewCreateUpdateVM.from(categories);
     }
 
@@ -75,7 +75,7 @@ public class CodeReviewFacade
         List<CodeReview> codeReviews = codeReviewService.getCodeReviews(page, sort, filter, search);
 
         // 카테고리 정보를 모두 가져옴
-        List<Category> categories = categoryService.getAll(CODE_REVIEW.getCode());
+        List<Category> categories = categoryService.getAllCategories(CODE_REVIEW.getCode());
 
         // 모든 데이터를 사용하여 viewModel 생성 후 반환
         return CodeReviewListVM.from(page, categories, codeReviews);

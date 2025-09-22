@@ -11,13 +11,13 @@ import store.csolved.csolved.domain.answer.service.AnswerService;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/community/answer")
 public class AnswerController
 {
     private final AnswerService answerService;
 
     @LoginRequest
-    @PostMapping("/community/answer")
+    @PostMapping()
     public AnswerCreateResponse saveAnswer(@Valid @RequestBody AnswerCreateRequest request)
     {
         answerService.saveAnswer(request.toCommand());
@@ -25,7 +25,7 @@ public class AnswerController
     }
 
     @LoginRequest
-    @DeleteMapping("/community/answer/{answerId}")
+    @DeleteMapping("/{answerId}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteAnswer(@PathVariable Long answerId)
     {

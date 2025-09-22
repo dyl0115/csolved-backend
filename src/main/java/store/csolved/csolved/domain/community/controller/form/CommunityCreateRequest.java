@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Builder
-public class CommunityCreateUpdateForm
+public class CommunityCreateRequest
 {
     @NotBlank(message = "제목을 입력해주세요.")
     @Size(min = 2, max = 50, message = "제목은 최소 2글자에서 50자까지 가능합니다.")
@@ -36,9 +36,9 @@ public class CommunityCreateUpdateForm
     @NotEmpty(message = "태그는 반드시 하나 이상 있어야 합니다.")
     private String tags;
 
-    public static CommunityCreateUpdateForm from(Community community)
+    public static CommunityCreateRequest from(Community community)
     {
-        return CommunityCreateUpdateForm.builder()
+        return CommunityCreateRequest.builder()
                 .title(community.getTitle())
                 .content(community.getContent())
                 .authorId(community.getAuthorId())
@@ -50,9 +50,9 @@ public class CommunityCreateUpdateForm
                 .build();
     }
 
-    public static CommunityCreateUpdateForm empty()
+    public static CommunityCreateRequest empty()
     {
-        return CommunityCreateUpdateForm.builder()
+        return CommunityCreateRequest.builder()
                 .anonymous(false)
                 .build();
     }

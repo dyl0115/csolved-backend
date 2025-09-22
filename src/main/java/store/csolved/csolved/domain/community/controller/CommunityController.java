@@ -8,9 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityLikeResponse;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.utils.AuthSessionManager;
 import store.csolved.csolved.utils.login.LoginRequest;
-import store.csolved.csolved.domain.community.controller.form.CommunityCreateUpdateForm;
+import store.csolved.csolved.domain.community.controller.form.CommunityCreateRequest;
 import store.csolved.csolved.domain.community.controller.view_model.CommunityCreateUpdateVM;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityDetailResponse;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityListResponse;
@@ -78,51 +77,17 @@ public class CommunityController
 //        return null;
 //    }
 
-    @LoginRequest
-    @GetMapping("/community/createForm")
-    public String initCreate(Model model)
+    //    @LoginRequest
+    @PostMapping("/api/community")
+    public void processCreate(@Valid @RequestBody CommunityCreateRequest request)
     {
-        CommunityCreateUpdateVM viewModel = communityFacade.initCreate();
-        model.addAttribute("createVM", viewModel);
-        model.addAttribute("createForm", CommunityCreateUpdateForm.empty());
-        return null;
-    }
-
-    @LoginRequest
-    @PostMapping("/community")
-    public String processCreate(@Valid @ModelAttribute("createForm") CommunityCreateUpdateForm form,
-                                BindingResult result,
-                                Model model)
-    {
-        if (result.hasErrors())
-        {
-            CommunityCreateUpdateVM viewModel = communityFacade.initCreate();
-            model.addAttribute("createVM", viewModel);
-            return null;
-        }
-        else
-        {
-            communityFacade.save(form);
-            return "redirect:/communities?page=1";
-        }
-    }
-
-    @LoginRequest
-    @GetMapping("/community/{postId}/updateForm")
-    public String initUpdate(@PathVariable Long postId,
-                             Model model)
-    {
-        CommunityCreateUpdateVM viewModel = communityFacade.initUpdate();
-        model.addAttribute("updateVM", viewModel);
-        CommunityCreateUpdateForm form = communityFacade.initUpdateForm(postId);
-        model.addAttribute("updateForm", form);
-        return null;
+        communityFacade.save(request);
     }
 
     @LoginRequest
     @PutMapping("/community/{postId}")
     public String processUpdate(@PathVariable("postId") Long postId,
-                                @Valid @ModelAttribute("updateForm") CommunityCreateUpdateForm form,
+                                @Valid @ModelAttribute("updateForm") CommunityCreateRequest form,
                                 BindingResult result,
                                 Model model)
     {
