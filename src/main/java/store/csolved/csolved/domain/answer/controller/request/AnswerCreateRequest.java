@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.answer.controller.form;
+package store.csolved.csolved.domain.answer.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class AnswerCreateForm
+public class AnswerCreateRequest
 {
     private Long postId;
     private Long authorId;
@@ -18,12 +18,12 @@ public class AnswerCreateForm
     @NotBlank(message = "내용을 입력해 주세요.")
     private String content;
 
-    public static AnswerCreateForm empty()
+    public static AnswerCreateRequest empty()
     {
-        return AnswerCreateForm.builder().build();
+        return AnswerCreateRequest.builder().build();
     }
 
-    public Answer toAnswer()
+    public Answer toCommand()
     {
         return Answer.builder()
                 .postId(postId)

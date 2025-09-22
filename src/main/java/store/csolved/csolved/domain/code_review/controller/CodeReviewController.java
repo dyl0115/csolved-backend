@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
+import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.code_review.controller.form.CodeReviewCreateUpdateForm;
@@ -82,8 +82,8 @@ public class CodeReviewController
                                  Model model)
     {
         model.addAttribute("codeReviewDetails", codeReviewFacade.viewCodeReview(user.getId(), postId));
-        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
-        model.addAttribute("commentCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
+        model.addAttribute("commentCreateForm", AnswerCreateRequest.empty());
         return VIEWS_CODE_REVIEW_DETAIL;
     }
 
@@ -94,8 +94,8 @@ public class CodeReviewController
                                 Model model)
     {
         model.addAttribute("codeReviewDetails", codeReviewFacade.getCodeReview(user.getId(), postId));
-        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
-        model.addAttribute("commentCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
+        model.addAttribute("commentCreateForm", AnswerCreateRequest.empty());
         return VIEWS_CODE_REVIEW_DETAIL;
     }
 

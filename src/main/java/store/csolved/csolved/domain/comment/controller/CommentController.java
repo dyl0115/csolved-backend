@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.notice.service.NoticeFacade;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
-import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
+import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
 import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.code_review.controller.CodeReviewController;
@@ -42,7 +42,7 @@ public class CommentController
         if (result.hasErrors())
         {
             model.addAttribute("noticeDetails", noticeFacade.viewNotice(postId));
-            model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+            model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
             model.addAttribute("commentCreateFrom", form);
             return VIEWS_NOTICE_DETAIL;
         }
@@ -61,7 +61,7 @@ public class CommentController
         if (result.hasErrors())
         {
             model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
-            model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+            model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
             return null;
         }
         commentService.saveComment(form.toComment());
@@ -80,7 +80,7 @@ public class CommentController
         if (result.hasErrors())
         {
             model.addAttribute("questionDetails", questionFacade.viewQuestion(user.getId(), postId));
-            model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+            model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
             model.addAttribute("commentCreateFrom", form);
             return QuestionController.VIEWS_QUESTION_DETAIL;
         }
@@ -99,7 +99,7 @@ public class CommentController
         if (result.hasErrors())
         {
             model.addAttribute("codeReviewDetails", codeReviewFacade.viewCodeReview(user.getId(), postId));
-            model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+            model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
             model.addAttribute("commentCreateFrom", form);
             return CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
         }

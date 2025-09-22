@@ -15,7 +15,7 @@ import store.csolved.csolved.utils.search.Searching;
 import store.csolved.csolved.utils.sort.Sorting;
 import store.csolved.csolved.utils.filter.FilterInfo;
 import store.csolved.csolved.utils.sort.SortInfo;
-import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
+import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
 import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
 import store.csolved.csolved.utils.page.PageInfo;
 import store.csolved.csolved.domain.question.controller.form.QuestionCreateUpdateForm;
@@ -54,7 +54,7 @@ public class QuestionController
                                Model model)
     {
         model.addAttribute("questionDetails", questionFacade.viewQuestion(user.getId(), postId));
-        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         return VIEWS_QUESTION_DETAIL;
     }
@@ -66,7 +66,7 @@ public class QuestionController
                               Model model)
     {
         model.addAttribute("questionDetails", questionFacade.getQuestion(user.getId(), postId));
-        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
         model.addAttribute("commentCreateForm", CommentCreateForm.empty());
         return VIEWS_QUESTION_DETAIL;
     }
