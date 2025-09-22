@@ -16,13 +16,13 @@ public class BookmarkService
     private final BookmarkMapper bookmarkMapper;
 
     @Transactional
-    public void save(Long userId, Long postId)
+    public void add(Long userId, Long postId)
     {
         bookmarkMapper.saveBookmark(userId, postId);
     }
 
     @Transactional
-    public void delete(Long userId, Long postId)
+    public void remove(Long userId, Long postId)
     {
         bookmarkMapper.deleteBookmark(userId, postId);
     }

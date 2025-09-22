@@ -78,16 +78,16 @@ public class CommunityService
         communityMapper.deleteCommunity(communityId);
     }
 
-    @Transactional
-    public boolean addLike(Long communityId, Long userId)
-    {
-        if (communityMapper.hasUserLiked(communityId, userId))
-        {
-            return false;
-        }
 
+    public boolean checkAlreadyLike(Long communityId, Long userId)
+    {
+        return communityMapper.hasUserLiked(communityId, userId);
+    }
+
+    @Transactional
+    public void addLike(Long communityId, Long userId)
+    {
         communityMapper.addUserLike(communityId, userId);
         communityMapper.increaseLikes(communityId);
-        return true;
     }
 }

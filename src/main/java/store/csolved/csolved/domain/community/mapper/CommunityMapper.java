@@ -35,15 +35,18 @@ public interface CommunityMapper
                           String searchType,
                           String searchKeyword);
 
-    // 질문-좋아요 테이블에 저장된 유저인지 체크
+    // 좋아요 테이블에 저장된 유저인지 체크
     boolean hasUserLiked(Long communityId, Long authorId);
 
-    // 질문 테이블의 Likes 1증가
+    // 좋아요 가능한지 체크
+    boolean checkUserLikeValid(Long communityId, Long authorId);
+
+    // 테이블의 Likes 1증가
     void increaseLikes(Long communityId);
 
-    // 질문-좋아요 테이블에 questionId, userId 저장 (중복 좋아요 방지)
+    // 좋아요 테이블에 questionId, userId 저장 (중복 좋아요 방지)
     void addUserLike(Long communityId, Long authorId);
 
-    // 질문 테이블의 Views 1증가
+    // 테이블의 Views 1증가
     void increaseView(Long communityId);
 }

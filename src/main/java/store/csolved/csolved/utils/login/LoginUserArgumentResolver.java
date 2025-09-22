@@ -30,11 +30,11 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver
                                 NativeWebRequest webRequest,
                                 WebDataBinderFactory binderFactory)
     {
-        User loginUser = sessionManager.getLoginUser();
+        User principal = sessionManager.getLoginUser();
 
         // mavContainer 자체에 넣어버리고 해당 참조 값을 반환하면,
         // 컨트롤러 내에서 업데이트 된 user객체가 view로 전달된다.
-        if (mavContainer != null) mavContainer.addAttribute("user", loginUser);
-        return loginUser;
+        if (mavContainer != null) mavContainer.addAttribute("user", principal);
+        return principal;
     }
 }

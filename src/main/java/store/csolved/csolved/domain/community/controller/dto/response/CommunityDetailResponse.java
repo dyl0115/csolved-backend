@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.community.controller.view_model;
+package store.csolved.csolved.domain.community.controller.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,18 +12,18 @@ import java.util.Map;
 
 @Getter
 @Builder
-public class CommunityDetailVM
+public class CommunityDetailResponse
 {
     private Community post;
     private boolean bookmarked;
     private List<AnswerWithComments> answers;
 
-    public static CommunityDetailVM from(Community community,
-                                         boolean bookmarked,
-                                         List<Answer> answers,
-                                         Map<Long, List<Comment>> comments)
+    public static CommunityDetailResponse from(Community community,
+                                               boolean bookmarked,
+                                               List<Answer> answers,
+                                               Map<Long, List<Comment>> comments)
     {
-        return CommunityDetailVM.builder()
+        return CommunityDetailResponse.builder()
                 .bookmarked(bookmarked)
                 .answers(AnswerWithComments.from(answers, comments))
                 .post(community)

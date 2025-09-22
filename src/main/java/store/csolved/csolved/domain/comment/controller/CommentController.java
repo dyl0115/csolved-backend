@@ -13,7 +13,6 @@ import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
 import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.code_review.controller.CodeReviewController;
-import store.csolved.csolved.domain.community.controller.CommunityController;
 import store.csolved.csolved.domain.question.controller.QuestionController;
 import store.csolved.csolved.domain.code_review.service.CodeReviewFacade;
 import store.csolved.csolved.domain.community.service.CommunityFacade;
@@ -61,9 +60,9 @@ public class CommentController
     {
         if (result.hasErrors())
         {
-            model.addAttribute("communityPostDetails", communityFacade.viewPost(user.getId(), postId));
+            model.addAttribute("communityPostDetails", communityFacade.getCommunityPost(user.getId(), postId));
             model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
-            return CommunityController.VIEWS_COMMUNITY_DETAIL;
+            return null;
         }
         commentService.saveComment(form.toComment());
         return "redirect:/community/" + postId + "/read";

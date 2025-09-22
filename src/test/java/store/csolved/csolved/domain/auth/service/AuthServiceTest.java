@@ -61,7 +61,7 @@ class AuthServiceTest
                 "testPassword");
 
         //when
-        authService.signup(command);
+        authService.signUp(command);
 
         //then
         User foundUser = usermapper.findUserByEmail("testEmail@example.com");
@@ -83,8 +83,8 @@ class AuthServiceTest
                 "marry123!");
 
         //when then
-        authService.signup(command1);
-        assertThatThrownBy(() -> authService.signup(command2))
+        authService.signUp(command1);
+        assertThatThrownBy(() -> authService.signUp(command2))
                 .isInstanceOf(DuplicateEmailException.class);
 
         assertThat(usermapper.existsByNickname("david")).isTrue();
@@ -106,8 +106,8 @@ class AuthServiceTest
                 "marry123!");
 
         //when then
-        authService.signup(command1);
-        assertThatThrownBy(() -> authService.signup(command2))
+        authService.signUp(command1);
+        assertThatThrownBy(() -> authService.signUp(command2))
                 .isInstanceOf(DuplicateNicknameException.class);
 
         assertThat(usermapper.existsByEmail("david@example.com")).isTrue();
@@ -123,12 +123,12 @@ class AuthServiceTest
         SignupCommand command1 = createSignupCommand("david@naver.com",
                 "david",
                 "david123!");
-        authService.signup(command1);
+        authService.signUp(command1);
 
         //when then
         SigninCommand command2 = createSigninCommand("nono@naver.com", "marry123!");
 
-        assertThatThrownBy(() -> authService.signin(command2))
+        assertThatThrownBy(() -> authService.signIn(command2))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
@@ -140,12 +140,12 @@ class AuthServiceTest
         SignupCommand command1 = createSignupCommand("david@naver.com",
                 "david",
                 "david123!");
-        authService.signup(command1);
+        authService.signUp(command1);
 
         //when then
         SigninCommand command2 = createSigninCommand("david@naver.com", "wrongpassword");
 
-        assertThatThrownBy(() -> authService.signin(command2))
+        assertThatThrownBy(() -> authService.signIn(command2))
                 .isInstanceOf(InvalidPasswordException.class);
     }
 

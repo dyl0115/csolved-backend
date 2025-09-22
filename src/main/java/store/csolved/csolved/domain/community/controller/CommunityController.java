@@ -2,19 +2,18 @@ package store.csolved.csolved.domain.community.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.answer.controller.form.AnswerCreateForm;
+import store.csolved.csolved.domain.community.controller.dto.response.CommunityLikeResponse;
 import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.utils.AuthSessionManager;
 import store.csolved.csolved.utils.login.LoginRequest;
-import store.csolved.csolved.domain.comment.controller.form.CommentCreateForm;
 import store.csolved.csolved.domain.community.controller.form.CommunityCreateUpdateForm;
 import store.csolved.csolved.domain.community.controller.view_model.CommunityCreateUpdateVM;
-import store.csolved.csolved.domain.community.controller.view_model.CommunityDetailVM;
-import store.csolved.csolved.domain.community.controller.view_model.CommunityListVM;
+import store.csolved.csolved.domain.community.controller.dto.response.CommunityDetailResponse;
+import store.csolved.csolved.domain.community.controller.dto.response.CommunityListResponse;
 import store.csolved.csolved.domain.community.service.CommunityFacade;
 import store.csolved.csolved.utils.filter.FilterInfo;
 import store.csolved.csolved.utils.filter.Filtering;
@@ -25,56 +24,59 @@ import store.csolved.csolved.utils.search.Searching;
 import store.csolved.csolved.utils.sort.SortInfo;
 import store.csolved.csolved.utils.sort.Sorting;
 
-@Slf4j
 @RequiredArgsConstructor
-@Controller
+@RestController
 public class CommunityController
 {
-    public final static String VIEWS_COMMUNITY_CREATE_FORM = "/views/community/create";
-    public final static String VIEWS_COMMUNITY_UPDATE_FORM = "/views/community/update";
-    public final static String VIEWS_COMMUNITY_LIST = "/views/community/list";
-    public final static String VIEWS_COMMUNITY_DETAIL = "/views/community/detail";
-
     private final CommunityFacade communityFacade;
 
-    @LoginRequest
-    @GetMapping("/communities")
-    public String getCommunityPosts(@PageInfo Long page,
-                                    @SortInfo Sorting sort,
-                                    @FilterInfo Filtering filter,
-                                    @SearchInfo Searching search,
-                                    Model model)
+    //    @LoginRequest
+    @GetMapping("/api/communities")
+    public CommunityListResponse getCommunityPosts(@PageInfo Long page,
+                                                   @SortInfo Sorting sort,
+                                                   @FilterInfo Filtering filter,
+                                                   @SearchInfo Searching search)
     {
-        CommunityListVM viewModel = communityFacade.getCommunityPosts(page, sort, filter, search);
-        model.addAttribute("communityPostListViewModel", viewModel);
-        return VIEWS_COMMUNITY_LIST;
+        return communityFacade.getCommunityPosts(page, sort, filter, search);
+    }
+
+    //    @LoginRequest
+    @GetMapping("/api/community/{postId}")
+    public CommunityDetailResponse getPost(@LoginUser User user,
+                                           @PathVariable Long postId)
+    {
+        return communityFacade.getCommunityPost(user.getId(), postId);
     }
 
     @LoginRequest
-    @GetMapping("/community/{postId}")
-    public String viewPost(@LoginUser User user,
-                           @PathVariable Long postId,
-                           Model model)
+    @PostMapping("/api/community/like/{postId}")
+    public CommunityLikeResponse addLike(@LoginUser User user,
+                                         @PathVariable Long postId)
     {
-        CommunityDetailVM communityPost = communityFacade.viewPost(user.getId(), postId);
-        model.addAttribute("communityPostDetails", communityPost);
-        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
-        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-        return VIEWS_COMMUNITY_DETAIL;
+        communityFacade.addLike(postId, user.getId());
+        return CommunityLikeResponse.success();
     }
 
     @LoginRequest
-    @GetMapping("/community/{postId}/read")
-    public String getPost(@LoginUser User user,
-                          @PathVariable Long postId,
-                          Model model)
+    @DeleteMapping("/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long postId)
     {
-        CommunityDetailVM post = communityFacade.getPost(user.getId(), postId);
-        model.addAttribute("communityPostDetails", post);
-        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
-        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-        return VIEWS_COMMUNITY_DETAIL;
+        communityFacade.delete(postId);
     }
+
+//    @LoginRequest
+//    @GetMapping("/community/{postId}/read")
+//    public String getPost(@LoginUser User user,
+//                          @PathVariable Long postId,
+//                          Model model)
+//    {
+//        CommunityDetailResponse post = communityFacade.getPost(user.getId(), postId);
+//        model.addAttribute("communityPostDetails", post);
+//        model.addAttribute("answerCreateForm", AnswerCreateForm.empty());
+//        model.addAttribute("commentCreateForm", CommentCreateForm.empty());
+//        return null;
+//    }
 
     @LoginRequest
     @GetMapping("/community/createForm")
@@ -83,7 +85,7 @@ public class CommunityController
         CommunityCreateUpdateVM viewModel = communityFacade.initCreate();
         model.addAttribute("createVM", viewModel);
         model.addAttribute("createForm", CommunityCreateUpdateForm.empty());
-        return VIEWS_COMMUNITY_CREATE_FORM;
+        return null;
     }
 
     @LoginRequest
@@ -96,7 +98,7 @@ public class CommunityController
         {
             CommunityCreateUpdateVM viewModel = communityFacade.initCreate();
             model.addAttribute("createVM", viewModel);
-            return VIEWS_COMMUNITY_CREATE_FORM;
+            return null;
         }
         else
         {
@@ -114,7 +116,7 @@ public class CommunityController
         model.addAttribute("updateVM", viewModel);
         CommunityCreateUpdateForm form = communityFacade.initUpdateForm(postId);
         model.addAttribute("updateForm", form);
-        return VIEWS_COMMUNITY_UPDATE_FORM;
+        return null;
     }
 
     @LoginRequest
@@ -128,7 +130,7 @@ public class CommunityController
         {
             CommunityCreateUpdateVM viewModel = communityFacade.initUpdate();
             model.addAttribute("updateVM", viewModel);
-            return VIEWS_COMMUNITY_UPDATE_FORM;
+            return null;
         }
 
         communityFacade.update(postId, form);

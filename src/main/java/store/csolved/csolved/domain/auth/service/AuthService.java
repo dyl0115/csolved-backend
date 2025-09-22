@@ -21,7 +21,7 @@ public class AuthService
     private final UserMapper userMapper;
 
     @Transactional
-    public void signup(SignupCommand command)
+    public void signUp(SignupCommand command)
     {
         if (userMapper.existsByEmail(command.getEmail()))
         {
@@ -37,7 +37,7 @@ public class AuthService
         userMapper.insertUser(command.toEntity(hashedPassword));
     }
 
-    public User signin(SigninCommand command)
+    public User signIn(SigninCommand command)
     {
         User user = userMapper.findUserByEmail(command.getEmail());
 
@@ -85,6 +85,13 @@ public class AuthService
     @Transactional
     public void withdraw(User user)
     {
+        User principal = authSession.getLoginUser();
+
+        if (principal == null)
+        {
+            throw new InvalidSessionException();
+        }
+
         authSession.invalidateSession();
         userMapper.delete(user.getId());
     }

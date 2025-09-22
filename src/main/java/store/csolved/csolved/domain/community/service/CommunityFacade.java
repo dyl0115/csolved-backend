@@ -12,9 +12,10 @@ import store.csolved.csolved.domain.comment.Comment;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.community.controller.form.CommunityCreateUpdateForm;
 import store.csolved.csolved.domain.community.controller.view_model.CommunityCreateUpdateVM;
-import store.csolved.csolved.domain.community.controller.view_model.CommunityDetailVM;
-import store.csolved.csolved.domain.community.controller.view_model.CommunityListVM;
+import store.csolved.csolved.domain.community.controller.dto.response.CommunityDetailResponse;
+import store.csolved.csolved.domain.community.controller.dto.response.CommunityListResponse;
 import store.csolved.csolved.domain.community.Community;
+import store.csolved.csolved.domain.community.exception.AlreadyLikedException;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.page.Pagination;
 import store.csolved.csolved.utils.page.PaginationManager;
@@ -76,10 +77,18 @@ public class CommunityFacade
         tagService.updateTags(postId, form.getTagList());
     }
 
+
     // 커뮤니티글 좋아요
-    public boolean addLike(Long postId, Long userId)
+    public void addLike(Long postId, Long userId)
     {
-        return communityService.addLike(postId, userId);
+        boolean alreadyLike = communityService.checkAlreadyLike(postId, userId);
+
+        if (alreadyLike)
+        {
+            throw new AlreadyLikedException();
+        }
+        
+        communityService.addLike(postId, userId);
     }
 
     // 커뮤니티글 삭제
@@ -89,10 +98,10 @@ public class CommunityFacade
     }
 
     // 커뮤니티글 리스트 조회
-    public CommunityListVM getCommunityPosts(Long pageNumber,
-                                             Sorting sort,
-                                             Filtering filter,
-                                             Searching search)
+    public CommunityListResponse getCommunityPosts(Long pageNumber,
+                                                   Sorting sort,
+                                                   Filtering filter,
+                                                   Searching search)
     {
         // DB에서 커뮤니티글 개수를 가져옴
         Long total = communityService.countCommunities(filter, search);
@@ -107,26 +116,26 @@ public class CommunityFacade
         List<Category> categories = categoryService.getAll(COMMUNITY.getCode());
 
         // 모든 데이터를 사용하여 viewModel 생성 후 반환
-        return CommunityListVM.from(page, categories, communities);
+        return CommunityListResponse.from(page, categories, communities);
     }
 
-    public CommunityDetailVM getPost(Long userId, Long postId)
+    public CommunityDetailResponse getPost(Long userId, Long postId)
     {
         Community community = communityService.getCommunity(postId);
         boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
         List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
-        return CommunityDetailVM.from(community, bookmarked, answers, comments);
+        return CommunityDetailResponse.from(community, bookmarked, answers, comments);
     }
 
     // 커뮤니티글 상세 조회
-    public CommunityDetailVM viewPost(Long userId, Long postId)
+    public CommunityDetailResponse getCommunityPost(Long userId, Long postId)
     {
         Community community = communityService.viewCommunity(postId);
         boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
         List<Answer> answers = answerService.getAnswers(postId);
         Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
-        return CommunityDetailVM.from(community, bookmarked, answers, comments);
+        return CommunityDetailResponse.from(community, bookmarked, answers, comments);
     }
 
     // 커뮤니티글 속 답변들의 id를 추출

@@ -20,14 +20,14 @@ public class AuthController
     @PostMapping("/signUp")
     public SignUpResponse processSignup(@Valid @RequestBody SignupRequest request)
     {
-        authService.signup(request.toCommand());
+        authService.signUp(request.toCommand());
         return SignUpResponse.success();
     }
 
     @PostMapping("/signIn")
     public SignInResponse processSignIn(@Valid @RequestBody SigninRequest request)
     {
-        User principal = authService.signin(request.toCommand());
+        User principal = authService.signIn(request.toCommand());
         return SignInResponse.success(principal);
     }
 

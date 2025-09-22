@@ -18,18 +18,18 @@ public class BookmarkRestController
     @LoginRequest
     @PostMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public void save(@LoginUser User user,
-                     @PathVariable Long postId)
+    public void add(@LoginUser User user,
+                    @PathVariable Long postId)
     {
-        bookmarkService.save(user.getId(), postId);
+        bookmarkService.add(user.getId(), postId);
     }
 
     @LoginRequest
     @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@LoginUser User user,
+    public void remove(@LoginUser User user,
                        @PathVariable Long postId)
     {
-        bookmarkService.delete(user.getId(), postId);
+        bookmarkService.remove(user.getId(), postId);
     }
 }

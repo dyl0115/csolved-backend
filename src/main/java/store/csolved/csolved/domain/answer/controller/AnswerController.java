@@ -18,7 +18,6 @@ import store.csolved.csolved.domain.question.service.QuestionFacade;
 import store.csolved.csolved.utils.login.LoginUser;
 
 import static store.csolved.csolved.domain.code_review.controller.CodeReviewController.VIEWS_CODE_REVIEW_DETAIL;
-import static store.csolved.csolved.domain.community.controller.CommunityController.VIEWS_COMMUNITY_DETAIL;
 import static store.csolved.csolved.domain.notice.controller.NoticeController.VIEWS_NOTICE_DETAIL;
 import static store.csolved.csolved.domain.question.controller.QuestionController.VIEWS_QUESTION_DETAIL;
 
@@ -79,7 +78,7 @@ public class AnswerController
         {
             model.addAttribute("communityPostDetails", communityFacade.getPost(user.getId(), postId));
             model.addAttribute("commentCreateForm", CommentCreateForm.empty());
-            return VIEWS_COMMUNITY_DETAIL;
+            return null;
         }
 
         answerService.saveAnswer(form.toAnswer());
