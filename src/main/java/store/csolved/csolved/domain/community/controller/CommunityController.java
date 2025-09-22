@@ -61,7 +61,7 @@ public class CommunityController
     {
         communityFacade.delete(postId);
     }
-    
+
     //    @LoginRequest
     @PostMapping("/api/community")
     public void processCreate(@Valid @RequestBody CommunityCreateRequest request)
