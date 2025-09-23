@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.answer.controller.response.AnswerCreateResponse;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
 import store.csolved.csolved.domain.answer.service.AnswerService;
@@ -17,16 +16,16 @@ public class AnswerController
     private final AnswerService answerService;
 
     @LoginRequest
-    @PostMapping()
-    public AnswerCreateResponse saveAnswer(@Valid @RequestBody AnswerCreateRequest request)
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void saveAnswer(@Valid @RequestBody AnswerCreateRequest request)
     {
-        answerService.saveAnswer(request.toCommand());
-        return AnswerCreateResponse.success();
+        answerService.save(request.toCommand());
     }
 
     @LoginRequest
     @DeleteMapping("/{answerId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAnswer(@PathVariable Long answerId)
     {
         answerService.delete(answerId);

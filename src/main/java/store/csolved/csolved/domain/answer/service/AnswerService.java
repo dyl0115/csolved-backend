@@ -15,7 +15,7 @@ public class AnswerService
     private final AnswerMapper answerMapper;
 
     @Transactional
-    public void saveAnswer(Answer answer)
+    public void save(Answer answer)
     {
         answerMapper.increaseAnswerCount(answer.getPostId());
         answerMapper.saveAnswer(answer);

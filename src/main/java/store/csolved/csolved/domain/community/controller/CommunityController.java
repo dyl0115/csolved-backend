@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.community.controller.dto.request.CommunityUpdateRequest;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityLikeResponse;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.domain.community.controller.dto.request.CommunityCreateRequest;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityDetailResponse;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityListResponse;
