@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.bookmark.service.BookmarkService;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.utils.login.LoginRequest;
+import store.csolved.csolved.domain.user.service.dto.result.BookmarksAndPageResult;
+import store.csolved.csolved.domain.user.service.UserActivityService;
 import store.csolved.csolved.utils.login.LoginUser;
+import store.csolved.csolved.utils.page.PageInfo;
 
 @RequestMapping("/api/bookmark")
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class BookmarkRestController
 {
     private final BookmarkService bookmarkService;
 
-    @LoginRequest
+    //    @LoginRequest
     @PostMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public void add(@LoginUser User user,
@@ -24,7 +26,7 @@ public class BookmarkRestController
         bookmarkService.add(user.getId(), postId);
     }
 
-    @LoginRequest
+    //    @LoginRequest
     @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public void remove(@LoginUser User user,
