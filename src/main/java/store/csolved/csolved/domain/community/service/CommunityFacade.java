@@ -99,15 +99,6 @@ public class CommunityFacade
         return CommunityListResponse.from(page, categories, communities);
     }
 
-    public CommunityDetailResponse getPost(Long userId, Long postId)
-    {
-        Community community = communityService.getCommunity(postId);
-        boolean bookmarked = bookmarkService.hasBookmarked(userId, postId);
-        List<Answer> answers = answerService.getAnswers(postId);
-        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
-        return CommunityDetailResponse.from(community, bookmarked, answers, comments);
-    }
-
     // 커뮤니티글 상세 조회
     public CommunityDetailResponse getCommunityPost(Long userId, Long postId)
     {
