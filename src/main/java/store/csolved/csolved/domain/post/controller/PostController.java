@@ -4,17 +4,17 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.post.controller.dto.request.CommunityUpdateRequest;
-import store.csolved.csolved.domain.post.controller.dto.response.CommunityLikeResponse;
+import store.csolved.csolved.domain.post.controller.dto.request.PostUpdateRequest;
+import store.csolved.csolved.domain.post.controller.dto.response.PostLikeResponse;
 import store.csolved.csolved.domain.post.service.PostCommandService;
 import store.csolved.csolved.domain.post.service.PostLikeService;
 import store.csolved.csolved.domain.post.service.PostQueryService;
-import store.csolved.csolved.domain.post.service.command.CommunityCreateCommand;
-import store.csolved.csolved.domain.post.service.command.CommunityUpdateCommand;
+import store.csolved.csolved.domain.post.service.command.PostCreateCommand;
+import store.csolved.csolved.domain.post.service.command.PostUpdateCommand;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.post.controller.dto.request.CommunityCreateRequest;
-import store.csolved.csolved.domain.post.controller.dto.response.CommunityDetailResponse;
-import store.csolved.csolved.domain.post.controller.dto.response.CommunityListResponse;
+import store.csolved.csolved.domain.post.controller.dto.request.PostCreateRequest;
+import store.csolved.csolved.domain.post.controller.dto.response.PostDetailResponse;
+import store.csolved.csolved.domain.post.controller.dto.response.PostListResponse;
 import store.csolved.csolved.utils.filter.FilterInfo;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.login.LoginUser;
@@ -26,60 +26,60 @@ import store.csolved.csolved.utils.sort.Sorting;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api")
 public class PostController
 {
     private final PostQueryService postQueryService;
     private final PostCommandService postCommandService;
     private final PostLikeService postLikeService;
 
-
     //    @LoginRequest
-    @GetMapping("/api/communities")
-    public CommunityListResponse getPosts(@PageInfo Long page,
-                                          @SortInfo Sorting sort,
-                                          @FilterInfo Filtering filter,
-                                          @SearchInfo Searching search)
+    @GetMapping("/posts")
+    public PostListResponse getPosts(@PageInfo Long page,
+                                     @SortInfo Sorting sort,
+                                     @FilterInfo Filtering filter,
+                                     @SearchInfo Searching search)
     {
         return postQueryService.getCommunityPosts(page, sort, filter, search);
     }
 
     //    @LoginRequest
-    @GetMapping("/api/community/{postId}")
-    public CommunityDetailResponse getPostQueryService(@PathVariable Long postId)
+    @GetMapping("/post/{postId}")
+    public PostDetailResponse getPostQueryService(@PathVariable Long postId)
     {
         return postQueryService.getCommunityPost(postId);
     }
 
     //    @LoginRequest
-    @PostMapping("/api/community/like/{postId}")
-    public CommunityLikeResponse addLike(@LoginUser User user,
-                                         @PathVariable Long postId)
+    @PostMapping("/post/like/{postId}")
+    public PostLikeResponse addLike(@LoginUser User user,
+                                    @PathVariable Long postId)
     {
         postLikeService.addLike(postId, user.getId());
-        return CommunityLikeResponse.success();
+        return PostLikeResponse.success();
     }
 
     //    @LoginRequest
-    @PostMapping("/api/community")
-    public void save(@Valid @RequestBody CommunityCreateRequest request)
+    @PostMapping("/post")
+    public void save(@Valid @RequestBody PostCreateRequest request)
     {
-        postCommandService.save(CommunityCreateCommand.from(request));
+        postCommandService.save(PostCreateCommand.from(request));
     }
 
     //    @LoginRequest
-    @PutMapping("/api/community/{postId}")
+    @PutMapping("/post/{postId}")
     public void update(@LoginUser User user,
                        @PathVariable("postId") Long postId,
-                       @Valid @RequestBody CommunityUpdateRequest request)
+                       @Valid @RequestBody PostUpdateRequest request)
     {
         postCommandService.update(
                 user.getId(),
                 postId,
-                CommunityUpdateCommand.from(request));
+                PostUpdateCommand.from(request));
     }
 
     //    @LoginRequest
-    @DeleteMapping("/api/community/{postId}")
+    @DeleteMapping("/post/{postId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void delete(@LoginUser User user,
                        @PathVariable Long postId)

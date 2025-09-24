@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import store.csolved.csolved.domain.post.Post;
 import store.csolved.csolved.domain.post.PostCard;
-import store.csolved.csolved.domain.post.controller.dto.response.CommunityDetailResponse;
-import store.csolved.csolved.domain.post.controller.dto.response.CommunityListResponse;
+import store.csolved.csolved.domain.post.controller.dto.response.PostDetailResponse;
+import store.csolved.csolved.domain.post.controller.dto.response.PostListResponse;
 import store.csolved.csolved.domain.post.exception.PostNotFoundException;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.utils.filter.Filtering;
@@ -26,10 +26,10 @@ public class PostQueryService
     private final PostMapper postMapper;
 
     // 커뮤니티글 리스트 조회
-    public CommunityListResponse getCommunityPosts(Long pageNumber,
-                                                   Sorting sort,
-                                                   Filtering filter,
-                                                   Searching search)
+    public PostListResponse getCommunityPosts(Long pageNumber,
+                                              Sorting sort,
+                                              Filtering filter,
+                                              Searching search)
     {
         // DB에서 커뮤니티글 개수를 가져옴
         Long totalPosts = postMapper.countCommunities(
@@ -52,11 +52,11 @@ public class PostQueryService
                 search.getSearchType(),
                 search.getKeyword());
 
-        return CommunityListResponse.from(pagination, posts);
+        return PostListResponse.from(pagination, posts);
     }
 
     // 커뮤니티글 상세 조회
-    public CommunityDetailResponse getCommunityPost(Long postId)
+    public PostDetailResponse getCommunityPost(Long postId)
     {
         Post post = postMapper.getCommunity(postId);
 
@@ -67,7 +67,7 @@ public class PostQueryService
 
         postMapper.increaseView(postId);
 
-        return CommunityDetailResponse.from(post);
+        return PostDetailResponse.from(post);
     }
 
     // 내가 댓글 단 게시글 리스트 조회

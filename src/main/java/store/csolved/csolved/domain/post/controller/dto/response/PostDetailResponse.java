@@ -6,13 +6,13 @@ import store.csolved.csolved.domain.post.Post;
 
 @Getter
 @Builder
-public class CommunityDetailResponse
+public class PostDetailResponse
 {
     private Post post;
 
-    public static CommunityDetailResponse from(Post post)
+    public static PostDetailResponse from(Post post)
     {
-        return CommunityDetailResponse.builder()
+        return PostDetailResponse.builder()
                 .post(post)
                 .build();
     }

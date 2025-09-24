@@ -8,8 +8,8 @@ import store.csolved.csolved.domain.post.exception.DeleteDeniedException;
 import store.csolved.csolved.domain.post.exception.PostNotFoundException;
 import store.csolved.csolved.domain.post.exception.UpdateDeniedException;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
-import store.csolved.csolved.domain.post.service.command.CommunityCreateCommand;
-import store.csolved.csolved.domain.post.service.command.CommunityUpdateCommand;
+import store.csolved.csolved.domain.post.service.command.PostCreateCommand;
+import store.csolved.csolved.domain.post.service.command.PostUpdateCommand;
 import store.csolved.csolved.domain.tag.service.TagService;
 
 import java.util.Objects;
@@ -25,7 +25,7 @@ public class PostCommandService
 
     // 커뮤니티 글, 태그 저장
     @Transactional
-    public void save(CommunityCreateCommand command)
+    public void save(PostCreateCommand command)
     {
         Post post = Post.from(command);
         postMapper.saveCommunity(COMMUNITY.getCode(), post);
@@ -34,7 +34,7 @@ public class PostCommandService
 
     // 커뮤니티글 업데이트
     @Transactional
-    public void update(Long userId, Long postId, CommunityUpdateCommand command)
+    public void update(Long userId, Long postId, PostUpdateCommand command)
     {
         Post post = Post.from(command);
 

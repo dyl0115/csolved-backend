@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class CommunityLikeResponse
+public class PostLikeResponse
 {
     int status;
     String message;
     LocalDateTime timestamp;
 
-    public static CommunityLikeResponse success()
+    public static PostLikeResponse success()
     {
-        return CommunityLikeResponse.builder()
+        return PostLikeResponse.builder()
                 .status(200)
                 .message("좋아요 증가 완료")
                 .timestamp(LocalDateTime.now())

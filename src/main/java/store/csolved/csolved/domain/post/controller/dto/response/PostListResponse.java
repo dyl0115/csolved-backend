@@ -9,15 +9,15 @@ import java.util.List;
 
 @Getter
 @Builder
-public class CommunityListResponse
+public class PostListResponse
 {
     private Pagination pagination;
     private List<Post> posts;
 
-    public static CommunityListResponse from(Pagination page,
-                                             List<Post> communities)
+    public static PostListResponse from(Pagination page,
+                                        List<Post> communities)
     {
-        return CommunityListResponse.builder()
+        return PostListResponse.builder()
                 .pagination(page)
                 .posts(communities)
                 .build();

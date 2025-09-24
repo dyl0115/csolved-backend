@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import store.csolved.csolved.common.BaseEntity;
-import store.csolved.csolved.domain.post.service.command.CommunityCreateCommand;
-import store.csolved.csolved.domain.post.service.command.CommunityUpdateCommand;
+import store.csolved.csolved.domain.post.service.command.PostCreateCommand;
+import store.csolved.csolved.domain.post.service.command.PostUpdateCommand;
 import store.csolved.csolved.domain.tag.Tag;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class Post extends BaseEntity
     private String categoryName;
     private List<Tag> tags;
 
-    public static Post from(CommunityCreateCommand command)
+    public static Post from(PostCreateCommand command)
     {
         return Post.builder()
                 .title(command.getTitle())
@@ -45,7 +45,7 @@ public class Post extends BaseEntity
                 .build();
     }
 
-    public static Post from(CommunityUpdateCommand command)
+    public static Post from(PostUpdateCommand command)
     {
         return Post.builder()
                 .title(command.getTitle())

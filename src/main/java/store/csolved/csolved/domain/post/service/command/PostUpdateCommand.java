@@ -2,14 +2,14 @@ package store.csolved.csolved.domain.post.service.command;
 
 import lombok.Builder;
 import lombok.Data;
-import store.csolved.csolved.domain.post.controller.dto.request.CommunityCreateRequest;
+import store.csolved.csolved.domain.post.controller.dto.request.PostUpdateRequest;
 import store.csolved.csolved.domain.tag.Tag;
 
 import java.util.List;
 
 @Data
 @Builder
-public class CommunityCreateCommand
+public class PostUpdateCommand
 {
     private String title;
     private String content;
@@ -21,9 +21,9 @@ public class CommunityCreateCommand
     private Long categoryId;
     private List<Tag> tags;
 
-    public static CommunityCreateCommand from(CommunityCreateRequest request)
+    public static PostUpdateCommand from(PostUpdateRequest request)
     {
-        return CommunityCreateCommand.builder()
+        return PostUpdateCommand.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .authorId(request.getAuthorId())
@@ -35,4 +35,5 @@ public class CommunityCreateCommand
                 .tags(request.getTagList())
                 .build();
     }
+
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class CommunityUpdateRequest
+public class PostCreateRequest
 {
     @NotBlank(message = "제목을 입력해주세요.")
     @Size(min = 2, max = 50, message = "제목은 최소 2글자에서 50자까지 가능합니다.")
