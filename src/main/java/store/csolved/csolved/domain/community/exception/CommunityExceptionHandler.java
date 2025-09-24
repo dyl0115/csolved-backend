@@ -11,4 +11,12 @@ public class CommunityExceptionHandler
     {
         return new CommunityExceptionResponse(CommunityExceptionType.ALREADY_LIKED);
     }
+
+    @ExceptionHandler(PostNotFoundException.class)
+    public CommunityExceptionResponse handlePostNotFound()
+    {
+        return new CommunityExceptionResponse(CommunityExceptionType.POST_NOT_FOUND);
+    }
+
+
 }

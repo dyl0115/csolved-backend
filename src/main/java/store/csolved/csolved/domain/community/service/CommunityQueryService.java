@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import store.csolved.csolved.domain.community.Community;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityDetailResponse;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityListResponse;
+import store.csolved.csolved.domain.community.exception.PostNotFoundException;
 import store.csolved.csolved.domain.community.mapper.CommunityMapper;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.page.Pagination;
@@ -56,7 +57,15 @@ public class CommunityQueryService
     // 커뮤니티글 상세 조회
     public CommunityDetailResponse getCommunityPost(Long postId)
     {
-        Community community = communityMapper.getCommunity(postId);
-        return CommunityDetailResponse.from(community);
+        Community post = communityMapper.getCommunity(postId);
+
+        if (post == null)
+        {
+            throw new PostNotFoundException();
+        }
+
+        communityMapper.increaseView(postId);
+
+        return CommunityDetailResponse.from(post);
     }
 }

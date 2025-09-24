@@ -9,8 +9,8 @@ import store.csolved.csolved.domain.auth.exception.DuplicateEmailException;
 import store.csolved.csolved.domain.auth.exception.DuplicateNicknameException;
 import store.csolved.csolved.domain.auth.exception.InvalidPasswordException;
 import store.csolved.csolved.domain.auth.exception.UserNotFoundException;
-import store.csolved.csolved.domain.auth.service.dto.SigninCommand;
-import store.csolved.csolved.domain.auth.service.dto.SignupCommand;
+import store.csolved.csolved.domain.auth.service.command.SigninCommand;
+import store.csolved.csolved.domain.auth.service.command.SignupCommand;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
 

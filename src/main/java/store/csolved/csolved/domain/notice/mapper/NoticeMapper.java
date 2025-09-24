@@ -2,7 +2,6 @@ package store.csolved.csolved.domain.notice.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import store.csolved.csolved.domain.code_review.CodeReview;
 import store.csolved.csolved.domain.notice.Notice;
 import store.csolved.csolved.utils.page.Pagination;
 import store.csolved.csolved.utils.search.Searching;

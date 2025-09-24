@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.auth.controller.dto.response;
+package store.csolved.csolved.domain.auth.controller.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

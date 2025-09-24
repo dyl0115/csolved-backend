@@ -6,10 +6,15 @@ import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.community.Community;
 import store.csolved.csolved.domain.community.controller.dto.request.CommunityCreateRequest;
 import store.csolved.csolved.domain.community.controller.dto.request.CommunityUpdateRequest;
+import store.csolved.csolved.domain.community.exception.DeleteDeniedException;
+import store.csolved.csolved.domain.community.exception.PostNotFoundException;
+import store.csolved.csolved.domain.community.exception.UpdateDeniedException;
 import store.csolved.csolved.domain.community.mapper.CommunityMapper;
 import store.csolved.csolved.domain.community.service.command.CommunityCreateCommand;
 import store.csolved.csolved.domain.community.service.command.CommunityUpdateCommand;
 import store.csolved.csolved.domain.tag.service.TagService;
+
+import java.util.Objects;
 
 import static store.csolved.csolved.common.PostType.COMMUNITY;
 
@@ -31,17 +36,42 @@ public class CommunityCommandService
 
     // 커뮤니티글 업데이트
     @Transactional
-    public void update(Long postId, CommunityUpdateCommand command)
+    public void update(Long userId, Long postId, CommunityUpdateCommand command)
     {
         Community post = Community.from(command);
+
+        Community prePost = communityMapper.getCommunity(postId);
+
+        if (prePost == null)
+        {
+            throw new PostNotFoundException();
+        }
+
+        if (!Objects.equals(prePost.getAuthorId(), userId))
+        {
+            throw new UpdateDeniedException();
+        }
+
         communityMapper.updateCommunity(postId, post);
         tagService.updateTags(postId, post.getTags());
     }
 
     // 커뮤니티글 삭제
     @Transactional
-    public void delete(Long postId)
+    public void delete(Long userId, Long postId)
     {
+        Community prePost = communityMapper.getCommunity(postId);
+
+        if (prePost == null)
+        {
+            throw new PostNotFoundException();
+        }
+
+        if (!Objects.equals(prePost.getAuthorId(), userId))
+        {
+            throw new DeleteDeniedException();
+        }
+
         communityMapper.deleteCommunity(postId);
     }
 }

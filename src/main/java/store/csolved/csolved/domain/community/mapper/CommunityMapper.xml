@@ -149,6 +149,12 @@
         </choose>
     </select>
 
+    <select id="getAuthorId">
+        select user_id
+        from posts
+        where id = #{communityId};
+    </select>
+
     <select id="hasUserLiked">
         select exists(select 1
                       from post_likes

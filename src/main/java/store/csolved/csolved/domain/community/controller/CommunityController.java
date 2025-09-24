@@ -60,25 +60,30 @@ public class CommunityController
     }
 
     //    @LoginRequest
-    @DeleteMapping("/api/community/{postId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void delete(@PathVariable Long postId)
-    {
-        communityCommandService.delete(postId);
-    }
-
-    //    @LoginRequest
     @PostMapping("/api/community")
-    public void processCreate(@Valid @RequestBody CommunityCreateRequest request)
+    public void save(@Valid @RequestBody CommunityCreateRequest request)
     {
         communityCommandService.save(CommunityCreateCommand.from(request));
     }
 
     //    @LoginRequest
     @PutMapping("/api/community/{postId}")
-    public void processUpdate(@PathVariable("postId") Long postId,
-                              @Valid @RequestBody CommunityUpdateRequest request)
+    public void update(@LoginUser User user,
+                       @PathVariable("postId") Long postId,
+                       @Valid @RequestBody CommunityUpdateRequest request)
     {
-        communityCommandService.update(postId, CommunityUpdateCommand.from(request));
+        communityCommandService.update(
+                user.getId(),
+                postId,
+                CommunityUpdateCommand.from(request));
+    }
+
+    //    @LoginRequest
+    @DeleteMapping("/api/community/{postId}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public void delete(@LoginUser User user,
+                       @PathVariable Long postId)
+    {
+        communityCommandService.delete(user.getId(), postId);
     }
 }

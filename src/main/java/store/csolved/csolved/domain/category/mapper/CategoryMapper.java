@@ -8,5 +8,11 @@ import java.util.List;
 @Mapper
 public interface CategoryMapper
 {
+    void save(Category category);
+
+    boolean isExistByName(String name);
+
     List<Category> getAll(int postTypeCode);
+
+    void deleteAll();
 }

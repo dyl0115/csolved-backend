@@ -1,10 +1,9 @@
-package store.csolved.csolved.domain.auth.controller.dto.request;
+package store.csolved.csolved.domain.auth.controller.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import store.csolved.csolved.domain.auth.service.dto.SigninCommand;
-import store.csolved.csolved.domain.auth.service.dto.SignupCommand;
+import store.csolved.csolved.domain.auth.service.command.SigninCommand;
 
 @Data
 public class SigninRequest

@@ -24,7 +24,10 @@ public interface CommunityMapper
 
     // 질문글 조회
     Community getCommunity(Long communityId);
-
+    
+    // 게시글 작성자 조회
+    Long getAuthorId(Long communityId);
+    
     // 논리적으로 게시글을 삭제
     void deleteCommunity(Long communityId);
 
@@ -37,9 +40,6 @@ public interface CommunityMapper
 
     // 좋아요 테이블에 저장된 유저인지 체크
     boolean hasUserLiked(Long communityId, Long authorId);
-
-    // 좋아요 가능한지 체크
-    boolean checkUserLikeValid(Long communityId, Long authorId);
 
     // 테이블의 Likes 1증가
     void increaseLikes(Long communityId);

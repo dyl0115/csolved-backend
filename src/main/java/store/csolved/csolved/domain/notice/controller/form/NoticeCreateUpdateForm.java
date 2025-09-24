@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.code_review.CodeReview;
 import store.csolved.csolved.domain.notice.Notice;
 
 @Getter
