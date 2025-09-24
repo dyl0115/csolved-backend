@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.community.Community;
-import store.csolved.csolved.domain.community.controller.dto.request.CommunityCreateRequest;
-import store.csolved.csolved.domain.community.controller.dto.request.CommunityUpdateRequest;
 import store.csolved.csolved.domain.community.exception.DeleteDeniedException;
 import store.csolved.csolved.domain.community.exception.PostNotFoundException;
 import store.csolved.csolved.domain.community.exception.UpdateDeniedException;
@@ -40,14 +38,14 @@ public class CommunityCommandService
     {
         Community post = Community.from(command);
 
-        Community prePost = communityMapper.getCommunity(postId);
+        Long authorId = communityMapper.getAuthorId(postId);
 
-        if (prePost == null)
+        if (authorId == null)
         {
             throw new PostNotFoundException();
         }
 
-        if (!Objects.equals(prePost.getAuthorId(), userId))
+        if (!authorId.equals(userId))
         {
             throw new UpdateDeniedException();
         }
@@ -60,14 +58,14 @@ public class CommunityCommandService
     @Transactional
     public void delete(Long userId, Long postId)
     {
-        Community prePost = communityMapper.getCommunity(postId);
+        Long authorId = communityMapper.getAuthorId(postId);
 
-        if (prePost == null)
+        if (authorId == null)
         {
             throw new PostNotFoundException();
         }
 
-        if (!Objects.equals(prePost.getAuthorId(), userId))
+        if (!Objects.equals(userId, authorId))
         {
             throw new DeleteDeniedException();
         }
