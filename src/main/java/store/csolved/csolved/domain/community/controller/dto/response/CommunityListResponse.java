@@ -12,19 +12,14 @@ import java.util.List;
 @Builder
 public class CommunityListResponse
 {
-    private int status;
     private Pagination pagination;
-    private List<Category> categories;
     private List<Community> posts;
 
     public static CommunityListResponse from(Pagination page,
-                                             List<Category> categories,
                                              List<Community> communities)
     {
         return CommunityListResponse.builder()
-                .status(200)
                 .pagination(page)
-                .categories(categories)
                 .posts(communities)
                 .build();
     }

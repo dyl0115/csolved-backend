@@ -18,7 +18,7 @@ public class AnswerController
     @LoginRequest
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveAnswer(@Valid @RequestBody AnswerCreateRequest request)
+    public void save(@Valid @RequestBody AnswerCreateRequest request)
     {
         answerService.save(request.toCommand());
     }
@@ -26,7 +26,7 @@ public class AnswerController
     @LoginRequest
     @DeleteMapping("/{answerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteAnswer(@PathVariable Long answerId)
+    public void delete(@PathVariable Long answerId)
     {
         answerService.delete(answerId);
     }

@@ -15,17 +15,10 @@ import java.util.Map;
 public class CommunityDetailResponse
 {
     private Community post;
-    private boolean bookmarked;
-    private List<AnswerWithComments> answers;
 
-    public static CommunityDetailResponse from(Community community,
-                                               boolean bookmarked,
-                                               List<Answer> answers,
-                                               Map<Long, List<Comment>> comments)
+    public static CommunityDetailResponse from(Community community)
     {
         return CommunityDetailResponse.builder()
-                .bookmarked(bookmarked)
-                .answers(AnswerWithComments.from(answers, comments))
                 .post(community)
                 .build();
     }

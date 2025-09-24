@@ -6,11 +6,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.community.controller.dto.request.CommunityUpdateRequest;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityLikeResponse;
+import store.csolved.csolved.domain.community.service.CommunityCommandService;
+import store.csolved.csolved.domain.community.service.CommunityLikeService;
+import store.csolved.csolved.domain.community.service.CommunityQueryService;
+import store.csolved.csolved.domain.community.service.command.CommunityCreateCommand;
+import store.csolved.csolved.domain.community.service.command.CommunityUpdateCommand;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.community.controller.dto.request.CommunityCreateRequest;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityDetailResponse;
 import store.csolved.csolved.domain.community.controller.dto.response.CommunityListResponse;
-import store.csolved.csolved.domain.community.service.CommunityFacade;
 import store.csolved.csolved.utils.filter.FilterInfo;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.login.LoginUser;
@@ -24,24 +28,26 @@ import store.csolved.csolved.utils.sort.Sorting;
 @RestController
 public class CommunityController
 {
-    private final CommunityFacade communityFacade;
+    private final CommunityQueryService communityQueryService;
+    private final CommunityCommandService communityCommandService;
+    private final CommunityLikeService communityLikeService;
+
 
     //    @LoginRequest
     @GetMapping("/api/communities")
-    public CommunityListResponse getCommunityPosts(@PageInfo Long page,
-                                                   @SortInfo Sorting sort,
-                                                   @FilterInfo Filtering filter,
-                                                   @SearchInfo Searching search)
+    public CommunityListResponse getPosts(@PageInfo Long page,
+                                          @SortInfo Sorting sort,
+                                          @FilterInfo Filtering filter,
+                                          @SearchInfo Searching search)
     {
-        return communityFacade.getCommunityPosts(page, sort, filter, search);
+        return communityQueryService.getCommunityPosts(page, sort, filter, search);
     }
 
     //    @LoginRequest
     @GetMapping("/api/community/{postId}")
-    public CommunityDetailResponse getPost(@LoginUser User user,
-                                           @PathVariable Long postId)
+    public CommunityDetailResponse getPost(@PathVariable Long postId)
     {
-        return communityFacade.getCommunityPost(user.getId(), postId);
+        return communityQueryService.getCommunityPost(postId);
     }
 
     //    @LoginRequest
@@ -49,7 +55,7 @@ public class CommunityController
     public CommunityLikeResponse addLike(@LoginUser User user,
                                          @PathVariable Long postId)
     {
-        communityFacade.addLike(postId, user.getId());
+        communityLikeService.addLike(postId, user.getId());
         return CommunityLikeResponse.success();
     }
 
@@ -58,14 +64,14 @@ public class CommunityController
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void delete(@PathVariable Long postId)
     {
-        communityFacade.delete(postId);
+        communityCommandService.delete(postId);
     }
 
     //    @LoginRequest
     @PostMapping("/api/community")
     public void processCreate(@Valid @RequestBody CommunityCreateRequest request)
     {
-        communityFacade.save(request);
+        communityCommandService.save(CommunityCreateCommand.from(request));
     }
 
     //    @LoginRequest
@@ -73,6 +79,6 @@ public class CommunityController
     public void processUpdate(@PathVariable("postId") Long postId,
                               @Valid @RequestBody CommunityUpdateRequest request)
     {
-        communityFacade.update(postId, request);
+        communityCommandService.update(postId, CommunityUpdateCommand.from(request));
     }
 }

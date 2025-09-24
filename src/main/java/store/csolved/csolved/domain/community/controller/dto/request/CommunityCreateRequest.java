@@ -36,41 +36,6 @@ public class CommunityCreateRequest
     @NotEmpty(message = "태그는 반드시 하나 이상 있어야 합니다.")
     private String tags;
 
-    public static CommunityCreateRequest from(Community community)
-    {
-        return CommunityCreateRequest.builder()
-                .title(community.getTitle())
-                .content(community.getContent())
-                .authorId(community.getAuthorId())
-                .anonymous(community.isAnonymous())
-                .categoryId(community.getCategoryId())
-                .tags(community.getTags().stream()
-                        .map(Tag::getName)
-                        .collect(Collectors.joining(",")))
-                .build();
-    }
-
-    public static CommunityCreateRequest empty()
-    {
-        return CommunityCreateRequest.builder()
-                .anonymous(false)
-                .build();
-    }
-
-    public Community getCommunity()
-    {
-        return Community.builder()
-                .title(title)
-                .content(content)
-                .authorId(authorId)
-                .anonymous(anonymous)
-                .views(0L)
-                .likes(0L)
-                .answerCount(0L)
-                .categoryId(categoryId)
-                .build();
-    }
-
     public List<Tag> getTagList()
     {
         return Arrays.stream(tags.split(","))

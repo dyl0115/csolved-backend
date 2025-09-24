@@ -11,7 +11,6 @@ import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
 import store.csolved.csolved.domain.comment.controller.form.CommentCreateRequest;
 import store.csolved.csolved.domain.comment.service.CommentService;
-import store.csolved.csolved.domain.community.service.CommunityFacade;
 import store.csolved.csolved.utils.login.LoginUser;
 
 import static store.csolved.csolved.domain.notice.controller.NoticeController.*;
@@ -22,8 +21,6 @@ import static store.csolved.csolved.domain.notice.controller.NoticeController.*;
 public class CommentController
 {
     private final CommentService commentService;
-    private final NoticeFacade noticeFacade;
-    private final CommunityFacade communityFacade;
 
     // TODO: 여기 싹 수정해야함
 //    @LoginRequest
