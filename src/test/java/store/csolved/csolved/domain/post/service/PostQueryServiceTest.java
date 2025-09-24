@@ -133,79 +133,7 @@ class PostQueryServiceTest
         verify(postMapper, never()).increaseView(any());
     }
 
-    @Test
-    @DisplayName("댓글을 단 게시글 목록을 성공적으로 조회한다")
-    void getRepliedPosts()
-    {
-        //given
-        Long userId = 1L;
-        Pagination page = Pagination.create(1L, 10L);
-        List<PostCard> repliedPosts = createPostCards();
 
-        when(postMapper.getRepliedPosts(userId, page)).thenReturn(repliedPosts);
-
-        //when
-        List<PostCard> result = postQueryService.getRepliedPosts(userId, page);
-
-        //then
-        assertEquals(repliedPosts, result);
-        verify(postMapper).getRepliedPosts(userId, page);
-    }
-
-    @Test
-    @DisplayName("댓글을 단 게시글 개수를 성공적으로 조회한다")
-    void countRepliedPosts()
-    {
-        //given
-        Long userId = 1L;
-        Long expectedCount = 5L;
-
-        when(postMapper.countRepliedPosts(userId)).thenReturn(expectedCount);
-
-        //when
-        Long result = postQueryService.countRepliedPosts(userId);
-
-        //then
-        assertEquals(expectedCount, result);
-        verify(postMapper).countRepliedPosts(userId);
-    }
-
-    @Test
-    @DisplayName("사용자가 작성한 게시글 목록을 성공적으로 조회한다")
-    void getUserPosts()
-    {
-        //given
-        Long userId = 1L;
-        Pagination page = Pagination.create(1L, 10L);
-        List<PostCard> userPosts = createPostCards();
-
-        when(postMapper.getUserPosts(userId, page)).thenReturn(userPosts);
-
-        //when
-        List<PostCard> result = postQueryService.getUserPosts(userId, page);
-
-        //then
-        assertEquals(userPosts, result);
-        verify(postMapper).getUserPosts(userId, page);
-    }
-
-    @Test
-    @DisplayName("사용자가 작성한 게시글 개수를 성공적으로 조회한다")
-    void countUserPosts()
-    {
-        //given
-        Long userId = 1L;
-        Long expectedCount = 3L;
-
-        when(postMapper.countUserPosts(userId)).thenReturn(expectedCount);
-
-        //when
-        Long result = postQueryService.countUserPosts(userId);
-
-        //then
-        assertEquals(expectedCount, result);
-        verify(postMapper).countUserPosts(userId);
-    }
 
     private List<PostCard> createPostCards()
     {

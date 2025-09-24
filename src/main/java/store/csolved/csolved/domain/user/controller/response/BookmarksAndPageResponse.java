@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.user.controller.response;
 import lombok.Builder;
 import lombok.Data;
 import store.csolved.csolved.domain.post.mapper.record.PostCard;
-import store.csolved.csolved.domain.user.service.dto.result.BookmarksAndPageResult;
+import store.csolved.csolved.domain.bookmark.service.result.BookmarksAndPageResult;
 import store.csolved.csolved.utils.page.Pagination;
 
 import java.util.List;

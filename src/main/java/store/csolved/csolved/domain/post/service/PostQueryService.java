@@ -8,6 +8,8 @@ import store.csolved.csolved.domain.post.controller.response.PostListResponse;
 import store.csolved.csolved.domain.post.exception.PostNotFoundException;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.domain.post.mapper.record.PostDetail;
+import store.csolved.csolved.domain.post.service.result.RepliedPostsAndPageResult;
+import store.csolved.csolved.domain.post.service.result.UserPostsAndPageResult;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.page.Pagination;
 import store.csolved.csolved.utils.page.PaginationManager;
@@ -71,27 +73,35 @@ public class PostQueryService
         return PostDetailResponse.from(post);
     }
 
-    // 내가 댓글 단 게시글 리스트 조회
-    public List<PostCard> getRepliedPosts(Long userId, Pagination page)
+    // 댓글을 작성한 글 조회
+    public RepliedPostsAndPageResult getRepliedPostsAndPage(Long userId,
+                                                            Long pageNumber)
     {
-        return postMapper.getRepliedPosts(userId, page);
+        // DB에서 회원의 댓글과 대댓글과 관련된 게시글들의 수를 가져옴.
+        Long totalPosts = postMapper.countRepliedPosts(userId);
+
+        // 가져온 게시글들의 개수를 사용하여 페이지 정보를 생성
+        Pagination page = paginationManager.createPagination(pageNumber, totalPosts);
+
+        // 페이지 정보를 사용하여 회원의 댓글과 대댓글과 관련된 게시글들을 조회
+        List<PostCard> posts = postMapper.getRepliedPosts(userId, page);
+
+        return RepliedPostsAndPageResult.from(totalPosts, posts, page);
     }
 
-    // 내가 댓글 단 게시글 개수 조회
-    public Long countRepliedPosts(Long userId)
+    // 내가 작성한 글 조회
+    public UserPostsAndPageResult getUserPostsAndPage(Long userId,
+                                                      Long pageNumber)
     {
-        return postMapper.countRepliedPosts(userId);
-    }
+        // DB에서 회원이 작성한 게시글의 수를 가져옴.
+        Long totalPosts = postMapper.countUserPosts(userId);
 
-    // 내가 작성한 게시글 조회
-    public List<PostCard> getUserPosts(Long userId, Pagination page)
-    {
-        return postMapper.getUserPosts(userId, page);
-    }
+        // 가져온 게시글들의 개수를 사용하여 페이지 정보를 생성
+        Pagination page = paginationManager.createPagination(pageNumber, totalPosts);
 
-    // 내가 작성한 게시글 개수 조회
-    public Long countUserPosts(Long userId)
-    {
-        return postMapper.countUserPosts(userId);
+        // 페이지 정보를 사용하여 회원의 게시글들을 조회
+        List<PostCard> posts = postMapper.getUserPosts(userId, page);
+
+        return UserPostsAndPageResult.from(totalPosts, posts, page);
     }
 }

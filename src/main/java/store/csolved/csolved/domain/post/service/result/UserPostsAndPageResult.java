@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.user.service.dto.result;
+package store.csolved.csolved.domain.post.service.result;
 
 import lombok.Builder;
 import lombok.Getter;

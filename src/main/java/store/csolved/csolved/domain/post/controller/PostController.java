@@ -14,6 +14,10 @@ import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.post.controller.request.PostCreateRequest;
 import store.csolved.csolved.domain.post.controller.response.PostDetailResponse;
 import store.csolved.csolved.domain.post.controller.response.PostListResponse;
+import store.csolved.csolved.domain.user.controller.response.RepliedPostsAndPageResponse;
+import store.csolved.csolved.domain.user.controller.response.UserPostsAndPageResponse;
+import store.csolved.csolved.domain.post.service.result.RepliedPostsAndPageResult;
+import store.csolved.csolved.domain.post.service.result.UserPostsAndPageResult;
 import store.csolved.csolved.utils.filter.FilterInfo;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.login.LoginUser;
@@ -87,5 +91,21 @@ public class PostController
                        @PathVariable Long postId)
     {
         postCommandService.delete(user.getId(), postId);
+    }
+
+    @GetMapping("/post/replied")
+    public RepliedPostsAndPageResponse getRepliedPost(@LoginUser User user,
+                                                      @PageInfo(type = "repliedPostPage") Long repliedPostPageNumber)
+    {
+        RepliedPostsAndPageResult result = postQueryService.getRepliedPostsAndPage(user.getId(), repliedPostPageNumber);
+        return RepliedPostsAndPageResponse.from(result);
+    }
+
+    @GetMapping("/posts/wrote")
+    public UserPostsAndPageResponse getUserPosts(@LoginUser User user,
+                                                 @PageInfo(type = "userPostPage") Long userPostPageNumber)
+    {
+        UserPostsAndPageResult result = postQueryService.getUserPostsAndPage(user.getId(), userPostPageNumber);
+        return UserPostsAndPageResponse.from(result);
     }
 }
