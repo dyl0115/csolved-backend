@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Field;
+
 import store.csolved.csolved.domain.community.Community;
 import store.csolved.csolved.domain.community.exception.DeleteDeniedException;
 import store.csolved.csolved.domain.community.exception.PostNotFoundException;

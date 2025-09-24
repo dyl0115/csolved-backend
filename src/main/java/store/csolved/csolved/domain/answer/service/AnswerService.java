@@ -40,7 +40,6 @@ public class AnswerService
         else
         {
             answerMapper.decreaseAnswerCount(answer.getPostId());
-            answerMapper.hardDeleteScores(answerId);
             answerMapper.hardDelete(answerId);
         }
     }
