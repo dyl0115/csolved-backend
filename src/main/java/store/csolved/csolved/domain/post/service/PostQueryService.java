@@ -2,12 +2,13 @@ package store.csolved.csolved.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import store.csolved.csolved.domain.post.Post;
-import store.csolved.csolved.domain.post.PostCard;
+import store.csolved.csolved.domain.post.mapper.entity.Post;
+import store.csolved.csolved.domain.post.mapper.record.PostCard;
 import store.csolved.csolved.domain.post.controller.dto.response.PostDetailResponse;
 import store.csolved.csolved.domain.post.controller.dto.response.PostListResponse;
 import store.csolved.csolved.domain.post.exception.PostNotFoundException;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
+import store.csolved.csolved.domain.post.mapper.record.PostDetail;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.page.Pagination;
 import store.csolved.csolved.utils.page.PaginationManager;
@@ -26,13 +27,13 @@ public class PostQueryService
     private final PostMapper postMapper;
 
     // 커뮤니티글 리스트 조회
-    public PostListResponse getCommunityPosts(Long pageNumber,
-                                              Sorting sort,
-                                              Filtering filter,
-                                              Searching search)
+    public PostListResponse getPosts(Long pageNumber,
+                                     Sorting sort,
+                                     Filtering filter,
+                                     Searching search)
     {
         // DB에서 커뮤니티글 개수를 가져옴
-        Long totalPosts = postMapper.countCommunities(
+        Long totalPosts = postMapper.countPosts(
                 COMMUNITY.getCode(),
                 filter.getFilterType(),
                 filter.getFilterValue(),
@@ -43,7 +44,7 @@ public class PostQueryService
         Pagination pagination = paginationManager.createPagination(pageNumber, totalPosts);
 
         // 페이지 정보를 사용하여 DB에 필요한 커뮤니티글만 조회
-        List<Post> posts = postMapper.getCommunities(COMMUNITY.getCode(),
+        List<PostCard> posts = postMapper.getPosts(COMMUNITY.getCode(),
                 pagination.getOffset(),
                 pagination.getSize(),
                 sort.name(),
@@ -55,10 +56,11 @@ public class PostQueryService
         return PostListResponse.from(pagination, posts);
     }
 
+
     // 커뮤니티글 상세 조회
     public PostDetailResponse getCommunityPost(Long postId)
     {
-        Post post = postMapper.getCommunity(postId);
+        PostDetail post = postMapper.getPost(postId);
 
         if (post == null)
         {

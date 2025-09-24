@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.bookmark.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.post.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostCard;
 import store.csolved.csolved.domain.bookmark.mapper.BookmarkMapper;
 import store.csolved.csolved.utils.page.Pagination;
 

@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.post.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.post.Post;
+import store.csolved.csolved.domain.post.mapper.entity.Post;
 import store.csolved.csolved.domain.post.exception.DeleteDeniedException;
 import store.csolved.csolved.domain.post.exception.PostNotFoundException;
 import store.csolved.csolved.domain.post.exception.UpdateDeniedException;
@@ -28,8 +28,8 @@ public class PostCommandService
     public void save(PostCreateCommand command)
     {
         Post post = Post.from(command);
-        postMapper.saveCommunity(COMMUNITY.getCode(), post);
-        tagService.saveTags(post.getId(), post.getTags());
+        postMapper.savePost(COMMUNITY.getCode(), post);
+        tagService.saveTags(post.getId(), command.getTags());
     }
 
     // 커뮤니티글 업데이트
@@ -50,8 +50,8 @@ public class PostCommandService
             throw new UpdateDeniedException();
         }
 
-        postMapper.updateCommunity(postId, post);
-        tagService.updateTags(postId, post.getTags());
+        postMapper.updatePost(postId, post);
+        tagService.updateTags(postId, command.getTags());
     }
 
     // 커뮤니티글 삭제
@@ -70,6 +70,6 @@ public class PostCommandService
             throw new DeleteDeniedException();
         }
 
-        postMapper.deleteCommunity(postId);
+        postMapper.deletePost(postId);
     }
 }

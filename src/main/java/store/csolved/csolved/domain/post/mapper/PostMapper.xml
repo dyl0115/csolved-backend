@@ -5,7 +5,7 @@
 <mapper namespace="store.csolved.csolved.domain.post.mapper.PostMapper">
 
     <!-- 게시글 -->
-    <resultMap id="communityResultMap" type="store.csolved.csolved.domain.post.Post">
+    <resultMap id="postDetailResultMap" type="store.csolved.csolved.domain.post.mapper.record.PostDetail">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="authorId" column="author_id"/>
@@ -26,7 +26,7 @@
     </resultMap>
 
     <!-- 게시글 카드 -->
-    <resultMap id="postCardResultMap" type="store.csolved.csolved.domain.post.PostCard">
+    <resultMap id="postCardResultMap" type="store.csolved.csolved.domain.post.mapper.record.PostCard">
         <id property="id" column="id"/>
         <result property="postId" column="post_id"/>
         <result property="postType" column="post_type"/>
@@ -45,7 +45,7 @@
         </collection>
     </resultMap>
 
-    <insert id="saveCommunity" useGeneratedKeys="true" keyProperty="post.id">
+    <insert id="savePost" useGeneratedKeys="true" keyProperty="post.id">
         insert into posts(post_type, user_id, anonymous, title,
                           content, category_id)
         values (#{postType}, #{post.authorId}, #{post.anonymous},
@@ -53,7 +53,7 @@
                 #{post.categoryId});
     </insert>
 
-    <update id="updateCommunity">
+    <update id="updatePost">
         update posts
         set anonymous   = #{post.anonymous},
             title       = #{post.title},
@@ -63,13 +63,13 @@
         where id = #{communityId};
     </update>
 
-    <update id="deleteCommunity">
+    <update id="deletePost">
         update posts
         set deleted_at = current_timestamp
         where id = #{communityId};
     </update>
 
-    <select id="getCommunity" resultMap="communityResultMap">
+    <select id="getPost" resultMap="postDetailResultMap">
         select p.id           id,
                p.title        title,
                p.anonymous    anonymous,
@@ -90,10 +90,11 @@
                  left join category c on p.category_id = c.id
                  left join post_tags pt on p.id = pt.post_id
                  left join tags t on t.id = pt.tag_id
-        where p.id = #{communityId};
+        where p.id = #{postId}
+          and p.deleted_at is null;
     </select>
 
-    <select id="getCommunities" resultMap="communityResultMap">
+    <select id="getPosts" resultMap="postDetailResultMap">
         SELECT
         sub.post_id id,
         sub.title title,
@@ -150,7 +151,7 @@
         LEFT JOIN tags t ON t.id = pt.tag_id;
     </select>
 
-    <select id="countCommunities">
+    <select id="countPosts">
         select count(p.id)
         from posts p
         left join category c on p.category_id = c.id

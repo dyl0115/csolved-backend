@@ -1,166 +1,343 @@
 package store.csolved.csolved.domain.post.mapper;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.test.annotation.DirtiesContext;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import store.csolved.csolved.domain.post.Post;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import store.csolved.csolved.domain.post.mapper.entity.Post;
 import store.csolved.csolved.domain.post.PostType;
-import store.csolved.csolved.domain.tag.Tag;
+import store.csolved.csolved.domain.post.mapper.record.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostDetail;
+import store.csolved.csolved.utils.page.Pagination;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 @MybatisTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Transactional
 class PostMapperTest
 {
     @Autowired
     PostMapper postMapper;
 
-    @Test
-    @DisplayName("커뮤니티 게시글 저장 테스트")
-    void saveCommunity()
-    {
-        Post post = createTestCommunity();
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
-        assertDoesNotThrow(() -> postMapper.saveCommunity(PostType.COMMUNITY.getCode(), post));
+    @BeforeEach
+    void setUp()
+    {
+        // FK 제약조건을 지키기 위해 미리 필요한 데이터를 저장.
+        // PostMapper 테스트에 다른 Mapper에 의존하지 않도록 한다.
+
+        // 사용자 데이터
+        jdbcTemplate.execute(
+                "INSERT INTO users (id, email, password, nickname, company, admin, created_at)\n" +
+                        "VALUES (1, 'test1@example.com', 'password123', 'testUser1', 'testCompany', false, CURRENT_TIMESTAMP),\n" +
+                        "       (2, 'test2@example.com', 'password123', 'testUser2', 'testCompany', false, CURRENT_TIMESTAMP),\n" +
+                        "       (3, 'admin@example.com', 'password123', 'adminUser', 'testCompany', true, CURRENT_TIMESTAMP);");
+
+        // 카테고리 데이터
+        jdbcTemplate.execute(
+                "INSERT INTO category (id, post_type, name, created_at)\n" +
+                        "VALUES (1, 1, '일반질문', CURRENT_TIMESTAMP),\n" +
+                        "       (2, 1, '기술토론', CURRENT_TIMESTAMP),\n" +
+                        "       (3, 2, '커뮤니티', CURRENT_TIMESTAMP);");
+
+        // 태그 데이터
+        jdbcTemplate.execute(
+                "INSERT INTO tags (id, name, created_at)\n" +
+                        "VALUES (1, 'Java', CURRENT_TIMESTAMP),\n" +
+                        "       (2, 'Spring', CURRENT_TIMESTAMP),\n" +
+                        "       (3, 'MySQL', CURRENT_TIMESTAMP),\n" +
+                        "       (4, 'Test', CURRENT_TIMESTAMP);");
     }
 
     @Test
-    @DisplayName("커뮤니티 게시글 수정 테스트")
-    void updateCommunity()
+    @DisplayName("게시글을 저장하고 조회할 수 있다")
+    void saveAndGetPost()
     {
-        Post originalPost = createTestCommunity();
-        postMapper.saveCommunity(1, originalPost);
+        //given
+        Post post = createPost(1L, "title1");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post);
+
+        //when & then
+        PostDetail foundPost = postMapper.getPost(post.getId());
+
+        assertThat(Objects.equals(foundPost.getTitle(), post.getTitle())).isTrue();
+    }
+
+    @Test
+    @DisplayName("여러 게시글을 저장하고 목록으로 조회할 수 있다")
+    void saveAndGetPosts()
+    {
+        //given
+        Post post1 = createPost(1L, "title1");
+        Post post2 = createPost(1L, "title2");
+        Post post3 = createPost(1L, "title3");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post1);
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post2);
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post3);
+
+        //when
+        PostDetail foundPost1 = postMapper.getPost(post1.getId());
+        PostDetail foundPost2 = postMapper.getPost(post2.getId());
+        PostDetail foundPost3 = postMapper.getPost(post3.getId());
+
+        //then
+        assertThat(Objects.equals(foundPost1.getTitle(), post1.getTitle())).isTrue();
+        assertThat(Objects.equals(foundPost2.getTitle(), post2.getTitle())).isTrue();
+        assertThat(Objects.equals(foundPost3.getTitle(), post3.getTitle())).isTrue();
+
+        List<PostCard> posts = postMapper.getPosts(PostType.COMMUNITY.getCode(),
+                0L, 100L,
+                "RECENT",
+                "CATEGORY", null,
+                "AUTHOR", null);
+
+        assertThat(posts.size()).isEqualTo(3L);
+    }
+
+    @Test
+    @DisplayName("게시글 개수를 조회할 수 있다")
+    void countPosts()
+    {
+        //given
+        postMapper.savePost(PostType.COMMUNITY.getCode(), createPost(1L, "title1"));
+        postMapper.savePost(PostType.COMMUNITY.getCode(), createPost(2L, "title2"));
+
+        //when & then
+        assertThat(postMapper.countPosts(PostType.COMMUNITY.getCode(),
+                "CATEGORY", null,
+                "AUTHOR", null)).isEqualTo(2L);
+
+    }
+
+    @Test
+    @DisplayName("게시글을 수정할 수 있다")
+    void updatePost()
+    {
+        //given
+        Post post = createPost(1L, "original title");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post);
 
         Post updatedPost = Post.builder()
-                .title("수정된 제목")
-                .content("수정된 내용")
-                .authorId(1L)
-                .anonymous(false)
-                .categoryId(1L)
+                .anonymous(true)
+                .title("updated title")
+                .content("updated content")
+                .categoryId(2L)
                 .build();
 
-        assertDoesNotThrow(() -> postMapper.updateCommunity(1L, updatedPost));
+        //when
+        postMapper.updatePost(post.getId(), updatedPost);
+
+        //then
+        PostDetail foundPost = postMapper.getPost(post.getId());
+        assertThat(foundPost.getTitle()).isEqualTo("updated title");
+        assertThat(foundPost.getContent()).isEqualTo("updated content");
+        assertThat(foundPost.getCategoryId()).isEqualTo(2L);
+        assertThat(foundPost.isAnonymous()).isTrue();
     }
 
     @Test
-    @DisplayName("커뮤니티 게시글 목록 조회 테스트")
-    void getCommunities()
+    @DisplayName("게시글을 논리적으로 삭제할 수 있다")
+    void deletePost()
     {
-        List<Post> communities = postMapper.getCommunities(
-                1, 0L, 10L, "RECENT", "CATEGORY", null, "AUTHOR", null);
+        //given
+        Post post = createPost(1L, "title to delete");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post);
 
-        assertNotNull(communities);
+        //when
+        postMapper.deletePost(post.getId());
+
+        //then
+        PostDetail deletedPost = postMapper.getPost(post.getId());
+        assertThat(deletedPost).isNull();
     }
 
     @Test
-    @DisplayName("특정 커뮤니티 게시글 조회 테스트")
-    void getCommunity()
-    {
-        Post testPost = createTestCommunity();
-        postMapper.saveCommunity(1, testPost);
-
-        Post retrievedPost = postMapper.getCommunity(1L);
-
-        if (retrievedPost != null)
-        {
-            assertNotNull(retrievedPost.getTitle());
-            assertNotNull(retrievedPost.getContent());
-        }
-    }
-
-    @Test
-    @DisplayName("게시글 작성자 ID 조회 테스트")
+    @DisplayName("게시글 작성자 ID를 조회할 수 있다")
     void getAuthorId()
     {
-        Post testPost = createTestCommunity();
-        postMapper.saveCommunity(1, testPost);
+        //given
+        Post post = createPost(1L, "test title");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post);
 
-        Long authorId = postMapper.getAuthorId(1L);
+        //when
+        Long authorId = postMapper.getAuthorId(post.getId());
 
-        if (authorId != null)
-        {
-            assertTrue(authorId > 0);
-        }
+        //then
+        assertThat(authorId).isEqualTo(1L);
     }
 
     @Test
-    @DisplayName("게시글 논리적 삭제 테스트")
-    void deleteCommunity()
-    {
-        Post testPost = createTestCommunity();
-        postMapper.saveCommunity(1, testPost);
-
-        assertDoesNotThrow(() -> postMapper.deleteCommunity(1L));
-    }
-
-    @Test
-    @DisplayName("게시글 개수 조회 테스트")
-    void countCommunities()
-    {
-        Long count = postMapper.countCommunities(1, null, null, null, null);
-
-        assertNotNull(count);
-        assertTrue(count >= 0);
-    }
-
-    @Test
-    @DisplayName("사용자 좋아요 여부 확인 테스트")
+    @DisplayName("사용자의 좋아요 여부를 확인할 수 있다")
     void hasUserLiked()
     {
-        boolean hasLiked = postMapper.hasUserLiked(1L, 1L);
+        //given
+        Post post = createPost(1L, "test title");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post);
 
-        assertNotNull(hasLiked);
+        //when & then
+        assertThat(postMapper.hasUserLiked(post.getId(), 1L)).isFalse();
+
+        postMapper.addUserLike(post.getId(), 1L);
+        assertThat(postMapper.hasUserLiked(post.getId(), 1L)).isTrue();
     }
 
     @Test
-    @DisplayName("좋아요 수 증가 테스트")
+    @DisplayName("게시글의 좋아요 수를 증가시킬 수 있다")
     void increaseLikes()
     {
-        Post testPost = createTestCommunity();
-        postMapper.saveCommunity(1, testPost);
+        //given
+        Post post = createPost(1L, "test title");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post);
+        Long initialLikes = postMapper.getPost(post.getId()).getLikes();
 
-        assertDoesNotThrow(() -> postMapper.increaseLikes(1L));
+        //when
+        postMapper.increaseLikes(post.getId());
+
+        //then
+        PostDetail updatedPost = postMapper.getPost(post.getId());
+        assertThat(updatedPost.getLikes()).isEqualTo(initialLikes + 1);
     }
 
     @Test
-    @DisplayName("사용자 좋아요 추가 테스트")
+    @DisplayName("사용자의 좋아요를 추가할 수 있다")
     void addUserLike()
     {
-        Post testPost = createTestCommunity();
-        postMapper.saveCommunity(1, testPost);
+        //given
+        Post post = createPost(1L, "test title");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post);
 
-        assertDoesNotThrow(() -> postMapper.addUserLike(testPost.getId(), 1L));
+        //when
+        postMapper.addUserLike(post.getId(), 2L);
+
+        //then
+        assertThat(postMapper.hasUserLiked(post.getId(), 2L)).isTrue();
     }
 
     @Test
-    @DisplayName("조회수 증가 테스트")
+    @DisplayName("게시글의 조회수를 증가시킬 수 있다")
     void increaseView()
     {
-        Post testPost = createTestCommunity();
-        postMapper.saveCommunity(1, testPost);
+        //given
+        Post post = createPost(1L, "test title");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post);
+        Long initialViews = postMapper.getPost(post.getId()).getViews();
 
-        assertDoesNotThrow(() -> postMapper.increaseView(1L));
+        //when
+        postMapper.increaseView(post.getId());
+
+        //then
+        PostDetail updatedPost = postMapper.getPost(post.getId());
+        assertThat(updatedPost.getViews()).isEqualTo(initialViews + 1);
     }
 
-    private Post createTestCommunity()
+    @Test
+    @DisplayName("사용자가 댓글을 단 게시글들을 조회할 수 있다")
+    void getRepliedPosts()
+    {
+        //given
+        Post post1 = createPost(1L, "post1");
+        Post post2 = createPost(1L, "post2");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post1);
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post2);
+
+        jdbcTemplate.execute(
+                "INSERT INTO answers (post_id, author_id, content, created_at) " +
+                        "VALUES (" + post1.getId() + ", 2, 'test answer', CURRENT_TIMESTAMP)");
+
+        Pagination page = Pagination.create(1L, 10L);
+
+        //when
+        List<PostCard> repliedPosts = postMapper.getRepliedPosts(2L, page);
+
+        //then
+        assertThat(repliedPosts).hasSize(1);
+        assertThat(repliedPosts.get(0).getTitle()).isEqualTo("post1");
+    }
+
+    @Test
+    @DisplayName("사용자가 댓글을 단 게시글 개수를 조회할 수 있다")
+    void countRepliedPosts()
+    {
+        //given
+        Post post1 = createPost(1L, "post1");
+        Post post2 = createPost(1L, "post2");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post1);
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post2);
+
+        jdbcTemplate.execute(
+                "INSERT INTO answers (post_id, author_id, content, created_at) " +
+                        "VALUES (" + post1.getId() + ", 2, 'test answer1', CURRENT_TIMESTAMP), " +
+                        "(" + post2.getId() + ", 2, 'test answer2', CURRENT_TIMESTAMP)");
+
+        //when
+        Long count = postMapper.countRepliedPosts(2L);
+
+        //then
+        assertThat(count).isEqualTo(2L);
+    }
+
+    @Test
+    @DisplayName("사용자가 작성한 게시글들을 조회할 수 있다")
+    void getUserPosts()
+    {
+        //given
+        Post post1 = createPost(1L, "user1 post1");
+        Post post2 = createPost(1L, "user1 post2");
+        Post post3 = createPost(2L, "user2 post1");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post1);
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post2);
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post3);
+
+        Pagination page = Pagination.create(1L, 10L);
+
+        //when
+        List<PostCard> userPosts = postMapper.getUserPosts(1L, page);
+
+        //then
+        assertThat(userPosts).hasSize(2);
+        assertThat(userPosts.stream().allMatch(post -> post.getAuthorId().equals(1L))).isTrue();
+    }
+
+    @Test
+    @DisplayName("사용자가 작성한 게시글 개수를 조회할 수 있다")
+    void countUserPosts()
+    {
+        //given
+        Post post1 = createPost(1L, "user1 post1");
+        Post post2 = createPost(1L, "user1 post2");
+        Post post3 = createPost(2L, "user2 post1");
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post1);
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post2);
+        postMapper.savePost(PostType.COMMUNITY.getCode(), post3);
+
+        //when
+        Long count = postMapper.countUserPosts(1L);
+
+        //then
+        assertThat(count).isEqualTo(2L);
+    }
+
+    Post createPost(Long authorId, String title)
     {
         return Post.builder()
-                .title("테스트 제목")
-                .content("테스트 내용")
-                .authorId(1L)
+                .postType(PostType.COMMUNITY.getCode())
+                .authorId(authorId)
                 .anonymous(false)
-                .views(0L)
-                .likes(0L)
-                .answerCount(0L)
+                .title(title)
+                .content("TestContent")
                 .categoryId(1L)
-                .tags(Arrays.asList(
-                        Tag.builder().name("Java").build(),
-                        Tag.builder().name("Spring").build()
-                ))
                 .build();
+
     }
 }

@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.user.service.dto.result;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.post.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostCard;
 import store.csolved.csolved.utils.page.Pagination;
 
 import java.util.List;

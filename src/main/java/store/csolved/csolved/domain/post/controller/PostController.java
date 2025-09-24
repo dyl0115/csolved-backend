@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.post.controller.dto.request.PostUpdateRequest;
-import store.csolved.csolved.domain.post.controller.dto.response.PostLikeResponse;
 import store.csolved.csolved.domain.post.service.PostCommandService;
 import store.csolved.csolved.domain.post.service.PostLikeService;
 import store.csolved.csolved.domain.post.service.PostQueryService;
@@ -34,14 +33,22 @@ public class PostController
     private final PostLikeService postLikeService;
 
     //    @LoginRequest
+    @PostMapping("/post")
+    public void save(@Valid @RequestBody PostCreateRequest request)
+    {
+        postCommandService.save(PostCreateCommand.from(request));
+    }
+
+    //    @LoginRequest
     @GetMapping("/posts")
     public PostListResponse getPosts(@PageInfo Long page,
                                      @SortInfo Sorting sort,
                                      @FilterInfo Filtering filter,
                                      @SearchInfo Searching search)
     {
-        return postQueryService.getCommunityPosts(page, sort, filter, search);
+        return postQueryService.getPosts(page, sort, filter, search);
     }
+
 
     //    @LoginRequest
     @GetMapping("/post/{postId}")
@@ -50,20 +57,14 @@ public class PostController
         return postQueryService.getCommunityPost(postId);
     }
 
-    //    @LoginRequest
-    @PostMapping("/post/like/{postId}")
-    public PostLikeResponse addLike(@LoginUser User user,
-                                    @PathVariable Long postId)
-    {
-        postLikeService.addLike(postId, user.getId());
-        return PostLikeResponse.success();
-    }
 
     //    @LoginRequest
-    @PostMapping("/post")
-    public void save(@Valid @RequestBody PostCreateRequest request)
+    @PostMapping("/post/like/{postId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addLike(@LoginUser User user,
+                        @PathVariable Long postId)
     {
-        postCommandService.save(PostCreateCommand.from(request));
+        postLikeService.addLike(postId, user.getId());
     }
 
     //    @LoginRequest

@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import store.csolved.csolved.domain.post.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostCard;
 import store.csolved.csolved.domain.bookmark.mapper.BookmarkMapper;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.domain.user.service.dto.result.BookmarksAndPageResult;

@@ -2,18 +2,19 @@ package store.csolved.csolved.domain.post.controller.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.post.Post;
+import store.csolved.csolved.domain.post.mapper.entity.Post;
+import store.csolved.csolved.domain.post.mapper.record.PostDetail;
 
 @Getter
 @Builder
 public class PostDetailResponse
 {
-    private Post post;
+    private PostDetail post;
 
-    public static PostDetailResponse from(Post post)
+    public static PostDetailResponse from(PostDetail postDetail)
     {
         return PostDetailResponse.builder()
-                .post(post)
+                .post(postDetail)
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post;
+package store.csolved.csolved.domain.post.mapper.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,18 +17,12 @@ import java.util.List;
 @AllArgsConstructor
 public class Post extends BaseEntity
 {
-    private String postType;
-    private String title;
-    private boolean anonymous;
+    private int postType;
     private Long authorId;
-    private String authorNickname;
+    private boolean anonymous;
+    private String title;
     private String content;
-    private Long views;
-    private Long likes;
-    private Long answerCount;
     private Long categoryId;
-    private String categoryName;
-    private List<Tag> tags;
 
     public static Post from(PostCreateCommand command)
     {
@@ -37,11 +31,7 @@ public class Post extends BaseEntity
                 .content(command.getContent())
                 .authorId(command.getAuthorId())
                 .anonymous(command.isAnonymous())
-                .views(0L)
-                .likes(0L)
-                .answerCount(0L)
                 .categoryId(command.getCategoryId())
-                .tags(command.getTags())
                 .build();
     }
 
@@ -52,11 +42,7 @@ public class Post extends BaseEntity
                 .content(command.getContent())
                 .authorId(command.getAuthorId())
                 .anonymous(command.isAnonymous())
-                .views(0L)
-                .likes(0L)
-                .answerCount(0L)
                 .categoryId(command.getCategoryId())
-                .tags(command.getTags())
                 .build();
     }
 }
