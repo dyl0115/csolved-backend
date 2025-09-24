@@ -2,7 +2,6 @@ package store.csolved.csolved.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import store.csolved.csolved.domain.post.mapper.entity.Post;
 import store.csolved.csolved.domain.post.mapper.record.PostCard;
 import store.csolved.csolved.domain.post.controller.dto.response.PostDetailResponse;
 import store.csolved.csolved.domain.post.controller.dto.response.PostListResponse;
@@ -58,7 +57,7 @@ public class PostQueryService
 
 
     // 커뮤니티글 상세 조회
-    public PostDetailResponse getCommunityPost(Long postId)
+    public PostDetailResponse getPost(Long postId)
     {
         PostDetail post = postMapper.getPost(postId);
 

@@ -1,0 +1,279 @@
+package store.csolved.csolved.domain.post.service;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import store.csolved.csolved.domain.post.controller.dto.response.PostDetailResponse;
+import store.csolved.csolved.domain.post.controller.dto.response.PostListResponse;
+import store.csolved.csolved.domain.post.exception.PostNotFoundException;
+import store.csolved.csolved.domain.post.mapper.PostMapper;
+import store.csolved.csolved.domain.post.mapper.record.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostDetail;
+import store.csolved.csolved.domain.tag.Tag;
+import store.csolved.csolved.utils.filter.Filtering;
+import store.csolved.csolved.utils.page.Pagination;
+import store.csolved.csolved.utils.page.PaginationManager;
+import store.csolved.csolved.utils.search.Searching;
+import store.csolved.csolved.utils.sort.Sorting;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static store.csolved.csolved.domain.post.PostType.COMMUNITY;
+
+@ExtendWith(MockitoExtension.class)
+class PostQueryServiceTest
+{
+    @Mock
+    private PaginationManager paginationManager;
+
+    @Mock
+    private PostMapper postMapper;
+
+    @InjectMocks
+    private PostQueryService postQueryService;
+
+    @Test
+    @DisplayName("게시글 목록을 성공적으로 조회한다")
+    void getPosts()
+    {
+        //given
+        Long pageNumber = 1L;
+        Sorting sort = Sorting.RECENT;
+        Filtering filter = Filtering.create("CATEGORY", null);
+        Searching search = Searching.create("AUTHOR", null);
+
+        Long totalPosts = 10L;
+        Pagination pagination = Pagination.create(pageNumber, totalPosts);
+        List<PostCard> posts = createPostCards();
+
+        when(postMapper.countPosts(
+                COMMUNITY.getCode(),
+                filter.getFilterType(),
+                filter.getFilterValue(),
+                search.getSearchType(),
+                search.getKeyword())).thenReturn(totalPosts);
+
+        when(paginationManager.createPagination(pageNumber, totalPosts)).thenReturn(pagination);
+
+        when(postMapper.getPosts(
+                COMMUNITY.getCode(),
+                pagination.getOffset(),
+                pagination.getSize(),
+                sort.name(),
+                filter.getFilterType(),
+                filter.getFilterValue(),
+                search.getSearchType(),
+                search.getKeyword())).thenReturn(posts);
+
+        //when
+        PostListResponse response = postQueryService.getPosts(pageNumber, sort, filter, search);
+
+        //then
+        assertNotNull(response);
+        verify(postMapper).countPosts(
+                COMMUNITY.getCode(),
+                filter.getFilterType(),
+                filter.getFilterValue(),
+                search.getSearchType(),
+                search.getKeyword());
+        verify(paginationManager).createPagination(pageNumber, totalPosts);
+        verify(postMapper).getPosts(
+                COMMUNITY.getCode(),
+                pagination.getOffset(),
+                pagination.getSize(),
+                sort.name(),
+                filter.getFilterType(),
+                filter.getFilterValue(),
+                search.getSearchType(),
+                search.getKeyword());
+    }
+
+    @Test
+    @DisplayName("게시글 상세 정보를 성공적으로 조회한다")
+    void getPost()
+    {
+        //given
+        Long postId = 1L;
+        PostDetail postDetail = createPostDetail();
+
+        when(postMapper.getPost(postId)).thenReturn(postDetail);
+
+        //when
+        PostDetailResponse response = postQueryService.getPost(postId);
+
+        //then
+        assertNotNull(response);
+        verify(postMapper).getPost(postId);
+        verify(postMapper).increaseView(postId);
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글을 조회하면 PostNotFoundException이 발생한다")
+    void getPost_PostNotFound()
+    {
+        //given
+        Long postId = 1L;
+
+        when(postMapper.getPost(postId)).thenReturn(null);
+
+        //when & then
+        assertThrows(PostNotFoundException.class, () ->
+        {
+            postQueryService.getPost(postId);
+        });
+
+        verify(postMapper).getPost(postId);
+        verify(postMapper, never()).increaseView(any());
+    }
+
+    @Test
+    @DisplayName("댓글을 단 게시글 목록을 성공적으로 조회한다")
+    void getRepliedPosts()
+    {
+        //given
+        Long userId = 1L;
+        Pagination page = Pagination.create(1L, 10L);
+        List<PostCard> repliedPosts = createPostCards();
+
+        when(postMapper.getRepliedPosts(userId, page)).thenReturn(repliedPosts);
+
+        //when
+        List<PostCard> result = postQueryService.getRepliedPosts(userId, page);
+
+        //then
+        assertEquals(repliedPosts, result);
+        verify(postMapper).getRepliedPosts(userId, page);
+    }
+
+    @Test
+    @DisplayName("댓글을 단 게시글 개수를 성공적으로 조회한다")
+    void countRepliedPosts()
+    {
+        //given
+        Long userId = 1L;
+        Long expectedCount = 5L;
+
+        when(postMapper.countRepliedPosts(userId)).thenReturn(expectedCount);
+
+        //when
+        Long result = postQueryService.countRepliedPosts(userId);
+
+        //then
+        assertEquals(expectedCount, result);
+        verify(postMapper).countRepliedPosts(userId);
+    }
+
+    @Test
+    @DisplayName("사용자가 작성한 게시글 목록을 성공적으로 조회한다")
+    void getUserPosts()
+    {
+        //given
+        Long userId = 1L;
+        Pagination page = Pagination.create(1L, 10L);
+        List<PostCard> userPosts = createPostCards();
+
+        when(postMapper.getUserPosts(userId, page)).thenReturn(userPosts);
+
+        //when
+        List<PostCard> result = postQueryService.getUserPosts(userId, page);
+
+        //then
+        assertEquals(userPosts, result);
+        verify(postMapper).getUserPosts(userId, page);
+    }
+
+    @Test
+    @DisplayName("사용자가 작성한 게시글 개수를 성공적으로 조회한다")
+    void countUserPosts()
+    {
+        //given
+        Long userId = 1L;
+        Long expectedCount = 3L;
+
+        when(postMapper.countUserPosts(userId)).thenReturn(expectedCount);
+
+        //when
+        Long result = postQueryService.countUserPosts(userId);
+
+        //then
+        assertEquals(expectedCount, result);
+        verify(postMapper).countUserPosts(userId);
+    }
+
+    private List<PostCard> createPostCards()
+    {
+        Tag tag1 = createTag(1L, "Java");
+        Tag tag2 = createTag(2L, "Spring");
+
+        return List.of(
+                PostCard.builder()
+                        .postId(1L)
+                        .postType(1L)
+                        .title("Test Title 1")
+                        .anonymous(false)
+                        .authorId(1L)
+                        .authorNickname("author1")
+                        .categoryId(1L)
+                        .categoryName("General")
+                        .tags(List.of(tag1))
+                        .views(10L)
+                        .likes(5L)
+                        .answerCount(0L)
+                        .createdAt(LocalDateTime.now())
+                        .build(),
+                PostCard.builder()
+                        .postId(2L)
+                        .postType(1L)
+                        .title("Test Title 2")
+                        .anonymous(true)
+                        .authorId(2L)
+                        .authorNickname("author2")
+                        .categoryId(2L)
+                        .categoryName("Discussion")
+                        .tags(List.of(tag2))
+                        .views(15L)
+                        .likes(8L)
+                        .answerCount(1L)
+                        .createdAt(LocalDateTime.now())
+                        .build()
+        );
+    }
+
+    private PostDetail createPostDetail()
+    {
+        Tag tag1 = createTag(1L, "Java");
+        Tag tag2 = createTag(2L, "Spring");
+
+        return PostDetail.builder()
+                .postType("COMMUNITY")
+                .title("Test Title")
+                .anonymous(false)
+                .authorId(1L)
+                .authorNickname("testauthor")
+                .content("Test Content")
+                .views(10L)
+                .likes(5L)
+                .answerCount(0L)
+                .categoryId(1L)
+                .categoryName("General")
+                .tags(List.of(tag1, tag2))
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    private Tag createTag(Long id, String name)
+    {
+        return Tag.builder()
+                .id(id)
+                .name(name)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+}

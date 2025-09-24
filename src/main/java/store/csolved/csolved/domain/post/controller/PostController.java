@@ -34,6 +34,7 @@ public class PostController
 
     //    @LoginRequest
     @PostMapping("/post")
+    @ResponseStatus(HttpStatus.CREATED)
     public void save(@Valid @RequestBody PostCreateRequest request)
     {
         postCommandService.save(PostCreateCommand.from(request));
@@ -52,15 +53,15 @@ public class PostController
 
     //    @LoginRequest
     @GetMapping("/post/{postId}")
-    public PostDetailResponse getPostQueryService(@PathVariable Long postId)
+    public PostDetailResponse getPost(@PathVariable Long postId)
     {
-        return postQueryService.getCommunityPost(postId);
+        return postQueryService.getPost(postId);
     }
 
 
     //    @LoginRequest
-    @PostMapping("/post/like/{postId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/post/{postId}/like")
+    @ResponseStatus(HttpStatus.OK)
     public void addLike(@LoginUser User user,
                         @PathVariable Long postId)
     {
@@ -69,19 +70,19 @@ public class PostController
 
     //    @LoginRequest
     @PutMapping("/post/{postId}")
+    @ResponseStatus(HttpStatus.OK)
     public void update(@LoginUser User user,
                        @PathVariable("postId") Long postId,
                        @Valid @RequestBody PostUpdateRequest request)
     {
-        postCommandService.update(
-                user.getId(),
+        postCommandService.update(user.getId(),
                 postId,
                 PostUpdateCommand.from(request));
     }
 
     //    @LoginRequest
     @DeleteMapping("/post/{postId}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public void delete(@LoginUser User user,
                        @PathVariable Long postId)
     {
