@@ -15,7 +15,7 @@ public class AnswerController
 {
     private final AnswerService answerService;
 
-    @LoginRequest
+//    @LoginRequest
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void save(@Valid @RequestBody AnswerCreateRequest request)
@@ -23,12 +23,13 @@ public class AnswerController
         answerService.save(request.toCommand());
     }
 
-    @LoginRequest
+//    @LoginRequest
     @DeleteMapping("/{answerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long answerId)
     {
         answerService.delete(answerId);
     }
+
 
 }

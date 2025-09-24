@@ -1,12 +1,11 @@
 package store.csolved.csolved.domain.category;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import store.csolved.csolved.common.BaseEntity;
-import store.csolved.csolved.common.PostType;
+import store.csolved.csolved.domain.post.PostType;
 
 import java.time.LocalDateTime;
 

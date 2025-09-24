@@ -10,7 +10,7 @@ import store.csolved.csolved.utils.search.Searching;
 
 import java.util.List;
 
-import static store.csolved.csolved.common.PostType.NOTICE;
+import static store.csolved.csolved.domain.post.PostType.NOTICE;
 
 @RequiredArgsConstructor
 @Service

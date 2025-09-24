@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface AnswerMapper
 {
-    Long saveAnswer(Answer answer);
+    void saveAnswer(Answer answer);
 
     List<Answer> getAnswers(Long postId);
 

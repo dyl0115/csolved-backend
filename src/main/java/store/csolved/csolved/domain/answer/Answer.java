@@ -16,6 +16,4 @@ public class Answer extends BaseEntity
     private String authorNickname;
     private boolean anonymous;
     private String content;
-    private Long totalScore;
-    private Long voterCount;
 }
