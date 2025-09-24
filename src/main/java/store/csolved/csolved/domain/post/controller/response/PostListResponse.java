@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post.controller.dto.response;
+package store.csolved.csolved.domain.post.controller.response;
 
 import lombok.Builder;
 import lombok.Getter;

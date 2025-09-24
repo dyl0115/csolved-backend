@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.post.service.command;
 
 import lombok.Builder;
 import lombok.Data;
-import store.csolved.csolved.domain.post.controller.dto.request.PostCreateRequest;
+import store.csolved.csolved.domain.post.controller.request.PostCreateRequest;
 import store.csolved.csolved.domain.tag.Tag;
 
 import java.util.List;

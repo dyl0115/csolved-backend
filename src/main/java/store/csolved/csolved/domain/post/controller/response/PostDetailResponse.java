@@ -1,8 +1,7 @@
-package store.csolved.csolved.domain.post.controller.dto.response;
+package store.csolved.csolved.domain.post.controller.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.post.mapper.entity.Post;
 import store.csolved.csolved.domain.post.mapper.record.PostDetail;
 
 @Getter

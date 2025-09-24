@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.post.controller.dto.request;
+package store.csolved.csolved.domain.post.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

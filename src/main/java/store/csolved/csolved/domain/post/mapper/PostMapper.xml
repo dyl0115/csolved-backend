@@ -94,14 +94,13 @@
           and p.deleted_at is null;
     </select>
 
-    <select id="getPosts" resultMap="postDetailResultMap">
+    <select id="getPosts" resultMap="postCardResultMap">
         SELECT
         sub.post_id id,
         sub.title title,
         sub.anonymous anonymous,
         sub.author_id author_id,
         sub.author_nickname author_nickname,
-        sub.content content,
         sub.views views,
         sub.likes likes,
         sub.answer_count answer_count,
@@ -118,7 +117,6 @@
         p.anonymous anonymous,
         p.user_id author_id,
         u.nickname author_nickname,
-        p.content content,
         p.category_id category_id,
         p.views views,
         p.likes likes,
