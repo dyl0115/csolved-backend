@@ -36,6 +36,7 @@
         <result property="authorNickname" column="author_nickname"/>
         <result property="categoryId" column="categoryId"/>
         <result property="categoryName" column="category_name"/>
+        <result property="createdAt" column="created_at"/>
         <result property="views" column="views"/>
         <result property="likes" column="likes"/>
         <result property="answerCount" column="answer_count"/>

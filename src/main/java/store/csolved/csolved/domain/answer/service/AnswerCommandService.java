@@ -5,13 +5,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.answer.mapper.entity.Answer;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
+import store.csolved.csolved.domain.answer.mapper.record.AnswerWithCommentsRecord;
 import store.csolved.csolved.domain.answer.service.command.AnswerCreateCommand;
+import store.csolved.csolved.domain.answer.service.result.AnswerWithCommentsResult;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class AnswerService
+public class AnswerCommandService
 {
     private final AnswerMapper answerMapper;
 
@@ -21,13 +23,6 @@ public class AnswerService
         Answer answer = Answer.from(command);
         answerMapper.increaseAnswerCount(answer.getPostId());
         answerMapper.saveAnswer(answer);
-    }
-
-    // 게시글에 대한 답변글들, 각각의 답변글에 대한 댓글들을 모두 반환.
-    public List<Answer> getAnswers(Long questionId)
-    {
-//        return answerMapper.getAnswersWithComments(questionId);
-        return null;
     }
 
     @Transactional

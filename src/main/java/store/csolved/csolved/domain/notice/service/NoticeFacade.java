@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.answer.mapper.entity.Answer;
-import store.csolved.csolved.domain.answer.service.AnswerService;
+import store.csolved.csolved.domain.answer.service.AnswerCommandService;
 import store.csolved.csolved.domain.comment.Comment;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.domain.notice.Notice;
@@ -23,7 +23,7 @@ import java.util.Map;
 public class NoticeFacade
 {
     private final NoticeService noticeService;
-    private final AnswerService answerService;
+    private final AnswerCommandService answerService;
     private final PaginationManager paginationUtils;
     private final CommentService commentService;
 
@@ -44,17 +44,19 @@ public class NoticeFacade
     public NoticeDetailResponse viewNotice(Long postId)
     {
         Notice notice = noticeService.viewNotice(postId);
-        List<Answer> answers = answerService.getAnswers(postId);
-        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
-        return NoticeDetailResponse.from(notice, answers, comments);
+//        List<Answer> answers = answerService.getAnswersWithComments(postId);
+//        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
+//        return NoticeDetailResponse.from(notice, answers, comments);
+        return null;
     }
 
     public NoticeDetailResponse getNotice(Long postId)
     {
         Notice notice = noticeService.getNotice(postId);
-        List<Answer> answers = answerService.getAnswers(postId);
-        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
-        return NoticeDetailResponse.from(notice, answers, comments);
+//        List<Answer> answers = answerService.getAnswersWithComments(postId);
+//        Map<Long, List<Comment>> comments = commentService.getComments(extractIds(answers));
+//        return NoticeDetailResponse.from(notice, answers, comments);
+        return null;
     }
 
     private List<Long> extractIds(List<Answer> answers)

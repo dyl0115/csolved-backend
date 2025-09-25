@@ -13,7 +13,8 @@
         <result property="anonymous" column="answer_anonymous"/>
         <result property="content" column="answer_content"/>
         <result property="createdAt" column="answer_created_at"/>
-        <collection property="comments" ofType="store.csolved.csolved.domain.comment.mapper.record.CommentDetailRecord" notNullColumn="comment_id">
+        <collection property="comments" ofType="store.csolved.csolved.domain.comment.mapper.record.CommentDetailRecord"
+                    notNullColumn="comment_id">
             <id property="id" column="comment_id"/>
             <result property="answerId" column="comment_answer_id"/>
             <result property="authorId" column="comment_author_id"/>
