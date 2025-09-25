@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.user.controller.response;
 
 import lombok.Builder;
 import lombok.Data;
-import store.csolved.csolved.domain.post.mapper.record.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.bookmark.service.result.BookmarksAndPageResult;
 import store.csolved.csolved.utils.page.Pagination;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class BookmarksAndPageResponse
 {
     private Long totalPosts;
-    private List<PostCard> posts;
+    private List<PostCardRecord> posts;
     private Pagination pagination;
 
     public static BookmarksAndPageResponse from(BookmarksAndPageResult result)

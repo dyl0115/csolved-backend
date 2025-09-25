@@ -1,18 +1,14 @@
 package store.csolved.csolved.domain.post.mapper;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.springframework.test.annotation.DirtiesContext;
+import org.junit.jupiter.api.*;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.post.mapper.entity.Post;
 import store.csolved.csolved.domain.post.PostType;
-import store.csolved.csolved.domain.post.mapper.record.PostCard;
-import store.csolved.csolved.domain.post.mapper.record.PostDetail;
+import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
+import store.csolved.csolved.domain.post.mapper.record.PostDetailRecord;
 import store.csolved.csolved.utils.page.Pagination;
 
 import java.util.List;
@@ -31,7 +27,7 @@ class PostMapperTest
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @BeforeEach
+    @BeforeAll
     void setUp()
     {
         // FK 제약조건을 지키기 위해 미리 필요한 데이터를 저장.
@@ -69,7 +65,7 @@ class PostMapperTest
         postMapper.savePost(PostType.COMMUNITY.getCode(), post);
 
         //when & then
-        PostDetail foundPost = postMapper.getPost(post.getId());
+        PostDetailRecord foundPost = postMapper.getPost(post.getId());
 
         assertThat(Objects.equals(foundPost.getTitle(), post.getTitle())).isTrue();
     }
@@ -87,16 +83,16 @@ class PostMapperTest
         postMapper.savePost(PostType.COMMUNITY.getCode(), post3);
 
         //when
-        PostDetail foundPost1 = postMapper.getPost(post1.getId());
-        PostDetail foundPost2 = postMapper.getPost(post2.getId());
-        PostDetail foundPost3 = postMapper.getPost(post3.getId());
+        PostDetailRecord foundPost1 = postMapper.getPost(post1.getId());
+        PostDetailRecord foundPost2 = postMapper.getPost(post2.getId());
+        PostDetailRecord foundPost3 = postMapper.getPost(post3.getId());
 
         //then
         assertThat(Objects.equals(foundPost1.getTitle(), post1.getTitle())).isTrue();
         assertThat(Objects.equals(foundPost2.getTitle(), post2.getTitle())).isTrue();
         assertThat(Objects.equals(foundPost3.getTitle(), post3.getTitle())).isTrue();
 
-        List<PostCard> posts = postMapper.getPosts(PostType.COMMUNITY.getCode(),
+        List<PostCardRecord> posts = postMapper.getPosts(PostType.COMMUNITY.getCode(),
                 0L, 100L,
                 "RECENT",
                 "CATEGORY", null,
@@ -139,7 +135,7 @@ class PostMapperTest
         postMapper.updatePost(post.getId(), updatedPost);
 
         //then
-        PostDetail foundPost = postMapper.getPost(post.getId());
+        PostDetailRecord foundPost = postMapper.getPost(post.getId());
         assertThat(foundPost.getTitle()).isEqualTo("updated title");
         assertThat(foundPost.getContent()).isEqualTo("updated content");
         assertThat(foundPost.getCategoryId()).isEqualTo(2L);
@@ -158,7 +154,7 @@ class PostMapperTest
         postMapper.deletePost(post.getId());
 
         //then
-        PostDetail deletedPost = postMapper.getPost(post.getId());
+        PostDetailRecord deletedPost = postMapper.getPost(post.getId());
         assertThat(deletedPost).isNull();
     }
 
@@ -205,7 +201,7 @@ class PostMapperTest
         postMapper.increaseLikes(post.getId());
 
         //then
-        PostDetail updatedPost = postMapper.getPost(post.getId());
+        PostDetailRecord updatedPost = postMapper.getPost(post.getId());
         assertThat(updatedPost.getLikes()).isEqualTo(initialLikes + 1);
     }
 
@@ -237,7 +233,7 @@ class PostMapperTest
         postMapper.increaseView(post.getId());
 
         //then
-        PostDetail updatedPost = postMapper.getPost(post.getId());
+        PostDetailRecord updatedPost = postMapper.getPost(post.getId());
         assertThat(updatedPost.getViews()).isEqualTo(initialViews + 1);
     }
 
@@ -258,7 +254,7 @@ class PostMapperTest
         Pagination page = Pagination.create(1L, 10L);
 
         //when
-        List<PostCard> repliedPosts = postMapper.getRepliedPosts(2L, page);
+        List<PostCardRecord> repliedPosts = postMapper.getRepliedPosts(2L, page);
 
         //then
         assertThat(repliedPosts).hasSize(1);
@@ -302,7 +298,7 @@ class PostMapperTest
         Pagination page = Pagination.create(1L, 10L);
 
         //when
-        List<PostCard> userPosts = postMapper.getUserPosts(1L, page);
+        List<PostCardRecord> userPosts = postMapper.getUserPosts(1L, page);
 
         //then
         assertThat(userPosts).hasSize(2);

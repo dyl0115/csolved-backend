@@ -10,8 +10,8 @@ import store.csolved.csolved.domain.post.controller.response.PostDetailResponse;
 import store.csolved.csolved.domain.post.controller.response.PostListResponse;
 import store.csolved.csolved.domain.post.exception.PostNotFoundException;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
-import store.csolved.csolved.domain.post.mapper.record.PostCard;
-import store.csolved.csolved.domain.post.mapper.record.PostDetail;
+import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
+import store.csolved.csolved.domain.post.mapper.record.PostDetailRecord;
 import store.csolved.csolved.domain.tag.Tag;
 import store.csolved.csolved.utils.filter.Filtering;
 import store.csolved.csolved.utils.page.Pagination;
@@ -51,7 +51,7 @@ class PostQueryServiceTest
 
         Long totalPosts = 10L;
         Pagination pagination = Pagination.create(pageNumber, totalPosts);
-        List<PostCard> posts = createPostCards();
+        List<PostCardRecord> posts = createPostCards();
 
         when(postMapper.countPosts(
                 COMMUNITY.getCode(),
@@ -101,7 +101,7 @@ class PostQueryServiceTest
     {
         //given
         Long postId = 1L;
-        PostDetail postDetail = createPostDetail();
+        PostDetailRecord postDetail = createPostDetail();
 
         when(postMapper.getPost(postId)).thenReturn(postDetail);
 
@@ -135,13 +135,13 @@ class PostQueryServiceTest
 
 
 
-    private List<PostCard> createPostCards()
+    private List<PostCardRecord> createPostCards()
     {
         Tag tag1 = createTag(1L, "Java");
         Tag tag2 = createTag(2L, "Spring");
 
         return List.of(
-                PostCard.builder()
+                PostCardRecord.builder()
                         .postId(1L)
                         .postType(1L)
                         .title("Test Title 1")
@@ -156,7 +156,7 @@ class PostQueryServiceTest
                         .answerCount(0L)
                         .createdAt(LocalDateTime.now())
                         .build(),
-                PostCard.builder()
+                PostCardRecord.builder()
                         .postId(2L)
                         .postType(1L)
                         .title("Test Title 2")
@@ -174,12 +174,12 @@ class PostQueryServiceTest
         );
     }
 
-    private PostDetail createPostDetail()
+    private PostDetailRecord createPostDetail()
     {
         Tag tag1 = createTag(1L, "Java");
         Tag tag2 = createTag(2L, "Spring");
 
-        return PostDetail.builder()
+        return PostDetailRecord.builder()
                 .postType("COMMUNITY")
                 .title("Test Title")
                 .anonymous(false)

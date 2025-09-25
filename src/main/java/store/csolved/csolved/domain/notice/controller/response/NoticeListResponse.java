@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.notice.controller.view_model;
+package store.csolved.csolved.domain.notice.controller.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -9,15 +9,15 @@ import java.util.List;
 
 @Getter
 @Builder
-public class NoticeListVM
+public class NoticeListResponse
 {
     private Pagination page;
     private List<Notice> posts;
 
-    public static NoticeListVM from(Pagination page,
+    public static NoticeListResponse from(Pagination page,
                                     List<Notice> posts)
     {
-        return NoticeListVM.builder()
+        return NoticeListResponse.builder()
                 .page(page)
                 .posts(posts)
                 .build();

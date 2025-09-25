@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.user.controller.form;
+package store.csolved.csolved.domain.user.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,7 +9,7 @@ import store.csolved.csolved.domain.user.User;
 
 @Getter
 @Builder
-public class UserProfileForm
+public class UserProfileRequest
 {
     private Long userId;
     @NotBlank(message = "닉네임을 입력해주세요.")
@@ -18,9 +18,9 @@ public class UserProfileForm
     private String currentProfileImage;
     private MultipartFile profileImage;
 
-    public static UserProfileForm from(User user)
+    public static UserProfileRequest from(User user)
     {
-        return UserProfileForm.builder()
+        return UserProfileRequest.builder()
                 .nickname(user.getNickname())
                 .currentProfileImage(user.getProfileImage())
                 .build();

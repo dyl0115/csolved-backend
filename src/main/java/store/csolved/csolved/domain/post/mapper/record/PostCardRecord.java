@@ -13,7 +13,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostCard extends BaseEntity
+public class PostCardRecord extends BaseEntity
 {
     private Long postId;
     private Long postType;

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.user.controller.form.UserProfileForm;
+import store.csolved.csolved.domain.user.controller.request.UserProfileRequest;
 import store.csolved.csolved.exception.ImageUploadException;
 import store.csolved.csolved.domain.file.FileService;
 import store.csolved.csolved.utils.AuthSessionManager;
@@ -21,7 +21,7 @@ public class UserProfileService
     private final FileService s3Service;
     private final UserService userService;
 
-    public void updateProfile(UserProfileForm form) throws IOException
+    public void updateProfile(UserProfileRequest form) throws IOException
     {
         MultipartFile profileImage = form.getProfileImage();
 
@@ -40,7 +40,7 @@ public class UserProfileService
         sessionManager.setLoginUser(user);
     }
 
-    public void restoreProfile(UserProfileForm form)
+    public void restoreProfile(UserProfileRequest form)
     {
         User user = userService.getUser(form.getUserId());
         form.bindCurrentProfileImage(user.getProfileImage());

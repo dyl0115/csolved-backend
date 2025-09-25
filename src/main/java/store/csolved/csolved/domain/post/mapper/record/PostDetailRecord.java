@@ -5,9 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import store.csolved.csolved.common.BaseEntity;
-import store.csolved.csolved.domain.post.mapper.entity.Post;
-import store.csolved.csolved.domain.post.service.command.PostCreateCommand;
-import store.csolved.csolved.domain.post.service.command.PostUpdateCommand;
 import store.csolved.csolved.domain.tag.Tag;
 
 import java.util.List;
@@ -16,7 +13,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDetail extends BaseEntity
+public class PostDetailRecord extends BaseEntity
 {
     private String postType;
     private String title;
@@ -30,5 +27,5 @@ public class PostDetail extends BaseEntity
     private Long categoryId;
     private String categoryName;
     private List<Tag> tags;
-    
+
 }

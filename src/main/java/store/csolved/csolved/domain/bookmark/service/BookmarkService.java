@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.bookmark.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.post.mapper.record.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.bookmark.mapper.BookmarkMapper;
 import store.csolved.csolved.domain.bookmark.service.result.BookmarksAndPageResult;
 import store.csolved.csolved.utils.page.Pagination;
@@ -30,7 +30,7 @@ public class BookmarkService
         bookmarkMapper.deleteBookmark(userId, postId);
     }
 
-    public List<PostCard> getBookmarks(Long userId, Pagination page)
+    public List<PostCardRecord> getBookmarks(Long userId, Pagination page)
     {
         return bookmarkMapper.getBookmarks(userId, page);
     }
@@ -51,7 +51,7 @@ public class BookmarkService
         Pagination bookmarksPage = paginationManager.createPagination(pageNumber, totalPosts);
 
         // 페이지 정보를 사용하여 DB에서 필요한 북마크만 조회.
-        List<PostCard> posts = bookmarkMapper.getBookmarks(userId, bookmarksPage);
+        List<PostCardRecord> posts = bookmarkMapper.getBookmarks(userId, bookmarksPage);
 
         return BookmarksAndPageResult.from(totalPosts, posts, bookmarksPage);
     }

@@ -3,27 +3,58 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="store.csolved.csolved.domain.answer.mapper.AnswerMapper">
+
+    <resultMap id="answerWithCommentsMap"
+               type="store.csolved.csolved.domain.answer.mapper.record.AnswerWithCommentsRecord">
+        <id property="id" column="answer_id"/>
+        <result property="authorId" column="answer_author_id"/>
+        <result property="authorProfileImage" column="answer_author_profile_image"/>
+        <result property="authorNickname" column="answer_author_nickname"/>
+        <result property="anonymous" column="answer_anonymous"/>
+        <result property="content" column="answer_content"/>
+        <result property="createdAt" column="answer_created_at"/>
+        <collection property="comments" ofType="store.csolved.csolved.domain.comment.mapper.record.CommentDetailRecord" notNullColumn="comment_id">
+            <id property="id" column="comment_id"/>
+            <result property="answerId" column="comment_answer_id"/>
+            <result property="authorId" column="comment_author_id"/>
+            <result property="authorProfileImage" column="comment_author_profile_image"/>
+            <result property="authorNickname" column="comment_author_nickname"/>
+            <result property="anonymous" column="comment_anonymous"/>
+            <result property="content" column="comment_content"/>
+            <result property="createdAt" column="comment_created_at"/>
+        </collection>
+    </resultMap>
+
+    <select id="getAnswersWithComments" resultMap="answerWithCommentsMap">
+        select a.id             answer_id,
+               au.id            answer_author_id,
+               au.profile_image answer_author_profile_image,
+               au.nickname      answer_author_nickname,
+               a.anonymous      answer_anonymous,
+               a.content        answer_content,
+               a.created_at     answer_created_at,
+               c.id             comment_id,
+               c.answer_id      comment_answer_id,
+               cu.id            comment_author_id,
+               cu.profile_image comment_author_profile_image,
+               cu.nickname      comment_author_nickname,
+               c.anonymous      comment_anonymous,
+               c.content        comment_content,
+               c.created_at     comment_created_at
+        from answers a
+                 left join users au on au.id = a.author_id
+                 left outer join comments c on a.id = c.answer_id
+                 left join users cu on cu.id = c.author_id
+        where a.post_id = #{postId}
+        order by a.created_at desc;
+    </select>
+
     <insert id="saveAnswer" useGeneratedKeys="true" keyProperty="id">
         insert into answers(post_id, author_id, anonymous,
                             content, created_at)
         values (#{postId}, #{authorId}, #{anonymous},
                 #{content}, #{createdAt});
     </insert>
-
-    <select id="getAnswers">
-        select a.id,
-               u.id            author_id,
-               u.profile_image author_profile_image,
-               u.nickname      author_nickname,
-               a.anonymous,
-               a.content,
-               a.total_score,
-               a.voter_count,
-               a.created_at
-        from answers a
-                 left join users u on u.id = a.author_id
-        where post_id = #{postId};
-    </select>
 
     <select id="getAnswer">
         select a.*,

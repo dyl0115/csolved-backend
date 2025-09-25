@@ -1,7 +1,7 @@
 package store.csolved.csolved.domain.bookmark.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import store.csolved.csolved.domain.post.mapper.record.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.utils.page.Pagination;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public interface BookmarkMapper
 
     void deleteBookmark(Long userId, Long postId);
 
-    List<PostCard> getBookmarks(Long userId, Pagination page);
+    List<PostCardRecord> getBookmarks(Long userId, Pagination page);
 
     Long countBookmarks(Long userId);
 

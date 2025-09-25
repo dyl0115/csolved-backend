@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.comment.controller.form;
+package store.csolved.csolved.domain.comment.controller.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

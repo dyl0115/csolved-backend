@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.notice.service.NoticeFacade;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
-import store.csolved.csolved.domain.comment.controller.form.CommentCreateRequest;
+import store.csolved.csolved.domain.comment.controller.request.CommentCreateRequest;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.utils.login.LoginUser;
 

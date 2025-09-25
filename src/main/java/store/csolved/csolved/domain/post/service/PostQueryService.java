@@ -2,12 +2,12 @@ package store.csolved.csolved.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import store.csolved.csolved.domain.post.mapper.record.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.post.controller.response.PostDetailResponse;
 import store.csolved.csolved.domain.post.controller.response.PostListResponse;
 import store.csolved.csolved.domain.post.exception.PostNotFoundException;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
-import store.csolved.csolved.domain.post.mapper.record.PostDetail;
+import store.csolved.csolved.domain.post.mapper.record.PostDetailRecord;
 import store.csolved.csolved.domain.post.service.result.RepliedPostsAndPageResult;
 import store.csolved.csolved.domain.post.service.result.UserPostsAndPageResult;
 import store.csolved.csolved.utils.filter.Filtering;
@@ -45,7 +45,7 @@ public class PostQueryService
         Pagination pagination = paginationManager.createPagination(pageNumber, totalPosts);
 
         // 페이지 정보를 사용하여 DB에 필요한 커뮤니티글만 조회
-        List<PostCard> posts = postMapper.getPosts(COMMUNITY.getCode(),
+        List<PostCardRecord> posts = postMapper.getPosts(COMMUNITY.getCode(),
                 pagination.getOffset(),
                 pagination.getSize(),
                 sort.name(),
@@ -61,7 +61,7 @@ public class PostQueryService
     // 커뮤니티글 상세 조회
     public PostDetailResponse getPost(Long postId)
     {
-        PostDetail post = postMapper.getPost(postId);
+        PostDetailRecord post = postMapper.getPost(postId);
 
         if (post == null)
         {
@@ -84,7 +84,7 @@ public class PostQueryService
         Pagination page = paginationManager.createPagination(pageNumber, totalPosts);
 
         // 페이지 정보를 사용하여 회원의 댓글과 대댓글과 관련된 게시글들을 조회
-        List<PostCard> posts = postMapper.getRepliedPosts(userId, page);
+        List<PostCardRecord> posts = postMapper.getRepliedPosts(userId, page);
 
         return RepliedPostsAndPageResult.from(totalPosts, posts, page);
     }
@@ -100,7 +100,7 @@ public class PostQueryService
         Pagination page = paginationManager.createPagination(pageNumber, totalPosts);
 
         // 페이지 정보를 사용하여 회원의 게시글들을 조회
-        List<PostCard> posts = postMapper.getUserPosts(userId, page);
+        List<PostCardRecord> posts = postMapper.getUserPosts(userId, page);
 
         return UserPostsAndPageResult.from(totalPosts, posts, page);
     }

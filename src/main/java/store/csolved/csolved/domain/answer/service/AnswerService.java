@@ -3,8 +3,9 @@ package store.csolved.csolved.domain.answer.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.answer.Answer;
+import store.csolved.csolved.domain.answer.mapper.entity.Answer;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
+import store.csolved.csolved.domain.answer.service.command.AnswerCreateCommand;
 
 import java.util.List;
 
@@ -15,16 +16,18 @@ public class AnswerService
     private final AnswerMapper answerMapper;
 
     @Transactional
-    public void save(Answer answer)
+    public void save(AnswerCreateCommand command)
     {
+        Answer answer = Answer.from(command);
         answerMapper.increaseAnswerCount(answer.getPostId());
         answerMapper.saveAnswer(answer);
     }
 
-    // 질문글에 대한 답변글들, 각각의 답변글에 대한 댓글들을 모두 반환.
+    // 게시글에 대한 답변글들, 각각의 답변글에 대한 댓글들을 모두 반환.
     public List<Answer> getAnswers(Long questionId)
     {
-        return answerMapper.getAnswers(questionId);
+//        return answerMapper.getAnswersWithComments(questionId);
+        return null;
     }
 
     @Transactional

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.user.controller.form.UserProfileForm;
+import store.csolved.csolved.domain.user.controller.request.UserProfileRequest;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
 
 import java.util.Objects;
@@ -19,18 +19,18 @@ public class UpdateProfileValidator implements Validator
     @Override
     public boolean supports(Class<?> clazz)
     {
-        return UserProfileForm.class.isAssignableFrom(clazz);
+        return UserProfileRequest.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors)
     {
-        UserProfileForm form = (UserProfileForm) target;
+        UserProfileRequest form = (UserProfileRequest) target;
         checkNicknameDuplicate(form, errors);
     }
 
     // 닉네임 중복 체크
-    private void checkNicknameDuplicate(UserProfileForm form, Errors errors)
+    private void checkNicknameDuplicate(UserProfileRequest form, Errors errors)
     {
         User user = userMapper.findUserById(form.getUserId());
 

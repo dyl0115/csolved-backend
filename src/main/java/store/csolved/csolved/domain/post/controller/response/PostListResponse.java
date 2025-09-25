@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.post.controller.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.post.mapper.record.PostCard;
+import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.utils.page.Pagination;
 
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.List;
 public class PostListResponse
 {
     private Pagination pagination;
-    private List<PostCard> posts;
+    private List<PostCardRecord> posts;
 
     public static PostListResponse from(Pagination pagination,
-                                        List<PostCard> posts)
+                                        List<PostCardRecord> posts)
     {
         return PostListResponse.builder()
                 .pagination(pagination)

@@ -7,9 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
-import store.csolved.csolved.domain.comment.controller.form.CommentCreateRequest;
-import store.csolved.csolved.domain.notice.controller.form.NoticeCreateUpdateForm;
-import store.csolved.csolved.domain.notice.controller.view_model.NoticeListVM;
+import store.csolved.csolved.domain.comment.controller.request.CommentCreateRequest;
+import store.csolved.csolved.domain.notice.controller.request.NoticeCreateUpdateRequest;
+import store.csolved.csolved.domain.notice.controller.response.NoticeListResponse;
 import store.csolved.csolved.domain.notice.service.NoticeFacade;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.utils.page.PageInfo;
@@ -31,13 +31,13 @@ public class NoticeController
     @GetMapping("/notice/createForm")
     public String initCreate(Model model)
     {
-        model.addAttribute("createForm", NoticeCreateUpdateForm.empty());
+        model.addAttribute("createForm", NoticeCreateUpdateRequest.empty());
         return VIEWS_NOTICE_CREATE_FORM;
     }
 
     @LoginRequest
     @PostMapping("/notice")
-    public String processCreate(@Valid @ModelAttribute("createForm") NoticeCreateUpdateForm form,
+    public String processCreate(@Valid @ModelAttribute("createForm") NoticeCreateUpdateRequest form,
                                 BindingResult result)
     {
         if (result.hasErrors())
@@ -55,7 +55,7 @@ public class NoticeController
                              @SearchInfo Searching search,
                              Model model)
     {
-        NoticeListVM viewModel = noticeFacade.getNotices(page, search);
+        NoticeListResponse viewModel = noticeFacade.getNotices(page, search);
         model.addAttribute("noticeListViewModel", viewModel);
         return VIEWS_NOTICE_LIST;
     }
@@ -66,7 +66,7 @@ public class NoticeController
                              Model model)
     {
         model.addAttribute("noticeDetails", noticeFacade.viewNotice(postId));
-        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
+//        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
         model.addAttribute("commentCreateForm", CommentCreateRequest.empty());
         return VIEWS_NOTICE_DETAIL;
     }
@@ -77,7 +77,7 @@ public class NoticeController
                             Model model)
     {
         model.addAttribute("noticeDetails", noticeFacade.getNotice(postId));
-        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
+//        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
         model.addAttribute("commentCreateForm", CommentCreateRequest.empty());
         return VIEWS_NOTICE_DETAIL;
     }
@@ -88,7 +88,7 @@ public class NoticeController
     public String initUpdate(@PathVariable Long postId,
                              Model model)
     {
-        NoticeCreateUpdateForm form = noticeFacade.initUpdateForm(postId);
+        NoticeCreateUpdateRequest form = noticeFacade.initUpdateForm(postId);
         model.addAttribute("updateForm", form);
         return VIEWS_NOTICE_UPDATE_FORM;
     }
@@ -96,7 +96,7 @@ public class NoticeController
     @LoginRequest
     @PutMapping("/notice/{postId}")
     public String processUpdate(@PathVariable("postId") Long postId,
-                                @Valid @ModelAttribute("updateForm") NoticeCreateUpdateForm form,
+                                @Valid @ModelAttribute("updateForm") NoticeCreateUpdateRequest form,
                                 BindingResult result)
     {
         if (result.hasErrors())

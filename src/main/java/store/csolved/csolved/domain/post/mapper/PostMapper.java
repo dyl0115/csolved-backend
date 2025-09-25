@@ -3,8 +3,8 @@ package store.csolved.csolved.domain.post.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import store.csolved.csolved.domain.post.mapper.entity.Post;
-import store.csolved.csolved.domain.post.mapper.record.PostCard;
-import store.csolved.csolved.domain.post.mapper.record.PostDetail;
+import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
+import store.csolved.csolved.domain.post.mapper.record.PostDetailRecord;
 import store.csolved.csolved.utils.page.Pagination;
 
 import java.util.List;
@@ -17,17 +17,17 @@ public interface PostMapper
     void updatePost(Long communityId, Post post);
 
     // 질문글들 조회
-    List<PostCard> getPosts(int postType,
-                            Long offset,
-                            Long size,
-                            String sortType,
-                            String filterType,
-                            Long filterValue,
-                            String searchType,
-                            String searchKeyword);
+    List<PostCardRecord> getPosts(int postType,
+                                  Long offset,
+                                  Long size,
+                                  String sortType,
+                                  String filterType,
+                                  Long filterValue,
+                                  String searchType,
+                                  String searchKeyword);
 
     // 질문글 조회
-    PostDetail getPost(Long postId);
+    PostDetailRecord getPost(Long postId);
 
     // 게시글 작성자 조회
     Long getAuthorId(Long communityId);
@@ -55,14 +55,14 @@ public interface PostMapper
     void increaseView(Long communityId);
 
     // 댓글 단 게시글 카드 조회
-    List<PostCard> getRepliedPosts(@Param("userId") Long userId,
-                                   @Param("page") Pagination page);
+    List<PostCardRecord> getRepliedPosts(@Param("userId") Long userId,
+                                         @Param("page") Pagination page);
 
     // 댓글 단 게시글 개수 조회
     Long countRepliedPosts(Long userId);
 
     // 내가 쓴 게시글 카드 조회
-    List<PostCard> getUserPosts(Long userId, Pagination page);
+    List<PostCardRecord> getUserPosts(Long userId, Pagination page);
 
     // 내가 쓴 게시글 개수 조회
     Long countUserPosts(Long userId);

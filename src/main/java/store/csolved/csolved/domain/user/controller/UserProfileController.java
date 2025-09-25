@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.user.controller.form.UserProfileForm;
+import store.csolved.csolved.domain.user.controller.request.UserProfileRequest;
 import store.csolved.csolved.domain.user.service.UserProfileService;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.utils.login.LoginUser;
@@ -32,13 +32,13 @@ public class UserProfileController
     public String initUpdateProfile(@LoginUser User user,
                                     Model model)
     {
-        model.addAttribute("updateProfileForm", UserProfileForm.from(user));
+        model.addAttribute("updateProfileForm", UserProfileRequest.from(user));
         return null;
     }
 
     //    @LoginRequest
     @PostMapping("/profile")
-    public String getUser(@Valid @ModelAttribute("updateProfileForm") UserProfileForm form,
+    public String getUser(@Valid @ModelAttribute("updateProfileForm") UserProfileRequest form,
                           BindingResult result,
                           RedirectAttributes redirectAttributes) throws IOException
     {
