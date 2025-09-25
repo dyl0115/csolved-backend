@@ -3,6 +3,7 @@ package store.csolved.csolved.domain.notice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import store.csolved.csolved.domain.notice.exception.NoticeNotFoundException;
 import store.csolved.csolved.domain.notice.mapper.NoticeMapper;
 import store.csolved.csolved.domain.notice.mapper.record.NoticeCardRecord;
 import store.csolved.csolved.domain.notice.mapper.record.NoticeDetailRecord;
@@ -28,8 +29,14 @@ public class NoticeQueryService
     @Transactional
     public NoticeDetailResult getNoticeWithIncreaseView(Long noticeId)
     {
-        noticeMapper.increaseView(noticeId);
         NoticeDetailRecord notice = noticeMapper.getNotice(noticeId);
+
+        if (notice == null)
+        {
+            throw new NoticeNotFoundException();
+        }
+
+        noticeMapper.increaseView(noticeId);
         return NoticeDetailResult.from(notice);
     }
 

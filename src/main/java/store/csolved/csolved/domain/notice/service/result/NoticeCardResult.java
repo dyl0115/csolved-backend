@@ -24,6 +24,7 @@ public class NoticeCardResult
     {
         return NoticeCardResult.builder()
                 .id(record.getId())
+                .title(record.getTitle())
                 .authorId(record.getAuthorId())
                 .authorNickname(record.getAuthorNickname())
                 .views(record.getViews())
