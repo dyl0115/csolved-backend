@@ -4,120 +4,102 @@
 
 <mapper namespace="store.csolved.csolved.domain.notice.mapper.NoticeMapper">
 
-    <resultMap id="noticeResultMap" type="store.csolved.csolved.domain.notice.Notice">
+    <!-- 공지사항 상세 -->
+    <resultMap id="noticeDetailResultMap" type="store.csolved.csolved.domain.notice.mapper.record.NoticeDetailRecord">
         <id property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="authorId" column="author_id"/>
         <result property="authorNickname" column="author_nickname"/>
-        <result property="anonymous" column="anonymous"/>
         <result property="content" column="content"/>
         <result property="views" column="views"/>
-        <result property="likes" column="likes"/>
-        <result property="answerCount" column="answer_count"/>
         <result property="createdAt" column="created_at"/>
         <result property="modifiedAt" column="modified_at"/>
     </resultMap>
 
-    <insert id="saveNotice">
-        insert into posts(post_type, user_id, anonymous,
-                          title, content)
-        values (#{postType}, #{notice.authorId},
-                #{notice.anonymous}, #{notice.title},
-                #{notice.content});
+    <!-- 공지사항 카드 -->
+    <resultMap id="noticeCardResultMap" type="store.csolved.csolved.domain.notice.mapper.record.NoticeCardRecord">
+        <id property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="authorId" column="author_id"/>
+        <result property="authorNickname" column="author_nickname"/>
+        <result property="views" column="views"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="modifiedAt" column="modified_at"/>
+    </resultMap>
+
+    <insert id="saveNotice" useGeneratedKeys="true" keyProperty="id">
+        insert into notice(title, content, author_id, is_pinned)
+        values (#{title},
+                #{content},
+                #{authorId},
+                #{isPinned});
     </insert>
 
     <update id="updateNotice">
-        update posts
-        set anonymous   = #{notice.anonymous},
-            title       = #{notice.title},
+        update notice
+        set title       = #{notice.title},
             content     = #{notice.content},
+            is_pinned   = #{notice.isPinned},
             modified_at = current_timestamp
         where id = #{noticeId};
     </update>
 
     <update id="deleteNotice">
-        update posts
+        update notice
         set deleted_at = current_timestamp
         where id = #{noticeId};
     </update>
 
-    <select id="getNotice" resultMap="noticeResultMap">
-        select p.id           id,
-               p.post_type    post_type,
-               p.title        title,
-               p.anonymous    anonymous,
-               p.content      content,
-               p.views        views,
-               p.likes        likes,
-               p.answer_count answer_count,
-               p.created_at   created_at,
-               p.modified_at  modified_at,
-               u.id           author_id,
-               u.nickname     author_nickname
-        from posts p
-                 left join users u on p.user_id = u.id
-        where p.id = #{noticeId};
+    <select id="getNotice" resultMap="noticeDetailResultMap">
+        select n.id          id,
+               n.title       title,
+               u.id          author_id,
+               u.nickname    author_nickname,
+               n.content     content,
+               n.views       views,
+               n.created_at  created_at,
+               n.modified_at modified_at
+        from notice n
+                 left join users u on n.author_id = u.id
+        where n.id = #{noticeId}
+          and n.deleted_at is null;
     </select>
 
-    <select id="getNotices" resultMap="noticeResultMap">
+    <select id="getNotices" resultMap="noticeCardResultMap">
         SELECT
-        p.id id,
-        p.title title,
-        p.anonymous anonymous,
-        p.user_id author_id,
+        n.id id,
+        n.title title,
+        n.author_id author_id,
         u.nickname author_nickname,
-        p.content content,
-        p.views views,
-        p.likes likes,
-        p.answer_count answer_count,
-        p.created_at created_at,
-        p.modified_at modified_at
-        FROM posts p
-        LEFT JOIN users u on u.id = p.user_id
-        WHERE p.deleted_at IS NULL
-        AND p.post_type = #{postType}
+        n.views views,
+        n.created_at created_at,
+        n.modified_at modified_at
+        FROM notice n
+        LEFT JOIN users u on u.id = n.author_id
+        WHERE n.deleted_at IS NULL
         <if test="search.searchType == 'TITLE' and
                   search.searchKeyword != null and
                   search.searchKeyword != ''">
-            AND p.title LIKE concat('%', #{search.searchKeyword}, '%')
+            AND n.title LIKE concat('%', #{search.searchKeyword}, '%')
         </if>
         ORDER BY
-        p.created_at desc
+        n.created_at desc
         LIMIT #{page.offset}, #{page.size}
     </select>
 
     <select id="countNotices">
-        select count(p.id)
-        from posts p
-        where p.deleted_at is null
-        and p.post_type = #{postType}
+        select count(n.id)
+        from notice n
+        where n.deleted_at is null
         <if test="search.searchType == 'TITLE' and
                   search.searchKeyword != null and
                   search.searchKeyword != ''">
-            and p.title like concat('%', #{search.searchKeyword}, '%')
+            and n.title like concat('%', #{search.searchKeyword}, '%')
         </if>
     </select>
 
-    <select id="hasUserLiked">
-        select exists(select 1
-                      from post_likes
-                      where user_id = #{authorId}
-                        and post_id = #{noticeId});
-    </select>
-
-    <update id="increaseLikes">
-        update posts
-        set likes = likes + 1
-        where id = #{noticeId};
-    </update>
-
-    <insert id="addUserLike">
-        insert into post_likes(post_id, user_id)
-        values (#{noticeId}, #{authorId});
-    </insert>
-
     <update id="increaseView">
-        update posts
+        update notice
         set views = views + 1
         where id = #{noticeId};
     </update>

@@ -58,7 +58,7 @@ class PostQueryServiceTest
                 filter.getFilterType(),
                 filter.getFilterValue(),
                 search.getSearchType(),
-                search.getKeyword())).thenReturn(totalPosts);
+                search.getSearchKeyword())).thenReturn(totalPosts);
 
         when(paginationManager.createPagination(pageNumber, totalPosts)).thenReturn(pagination);
 
@@ -70,7 +70,7 @@ class PostQueryServiceTest
                 filter.getFilterType(),
                 filter.getFilterValue(),
                 search.getSearchType(),
-                search.getKeyword())).thenReturn(posts);
+                search.getSearchKeyword())).thenReturn(posts);
 
         //when
         PostListResponse response = postQueryService.getPosts(pageNumber, sort, filter, search);
@@ -82,7 +82,7 @@ class PostQueryServiceTest
                 filter.getFilterType(),
                 filter.getFilterValue(),
                 search.getSearchType(),
-                search.getKeyword());
+                search.getSearchKeyword());
         verify(paginationManager).createPagination(pageNumber, totalPosts);
         verify(postMapper).getPosts(
                 COMMUNITY.getCode(),
@@ -92,7 +92,7 @@ class PostQueryServiceTest
                 filter.getFilterType(),
                 filter.getFilterValue(),
                 search.getSearchType(),
-                search.getKeyword());
+                search.getSearchKeyword());
     }
 
     @Test

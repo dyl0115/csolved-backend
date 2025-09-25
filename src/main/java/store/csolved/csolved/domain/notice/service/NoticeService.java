@@ -3,14 +3,14 @@ package store.csolved.csolved.domain.notice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.notice.Notice;
+import store.csolved.csolved.domain.notice.mapper.entity.Notice;
 import store.csolved.csolved.domain.notice.mapper.NoticeMapper;
+import store.csolved.csolved.domain.notice.mapper.record.NoticeCardRecord;
+import store.csolved.csolved.domain.notice.mapper.record.NoticeDetailRecord;
 import store.csolved.csolved.utils.page.Pagination;
 import store.csolved.csolved.utils.search.Searching;
 
 import java.util.List;
-
-import static store.csolved.csolved.domain.post.PostType.NOTICE;
 
 @RequiredArgsConstructor
 @Service
@@ -21,27 +21,22 @@ public class NoticeService
     @Transactional
     public void save(Notice notice)
     {
-        noticeMapper.saveNotice(NOTICE.getCode(), notice);
+        noticeMapper.saveNotice(notice);
     }
 
     public Long countNotice(Searching search)
     {
-        return noticeMapper.countNotices(NOTICE.getCode(), search);
+        return noticeMapper.countNotices(search);
 
     }
 
-    public List<Notice> getNotices(Pagination page, Searching search)
+    public List<NoticeCardRecord> getNotices(Pagination page, Searching search)
     {
-        return noticeMapper.getNotices(NOTICE.getCode(), page, search);
-    }
-
-    public Notice getNotice(Long noticeId)
-    {
-        return noticeMapper.getNotice(noticeId);
+        return noticeMapper.getNotices(page, search);
     }
 
     @Transactional
-    public Notice viewNotice(Long noticeId)
+    public NoticeDetailRecord getNotice(Long noticeId)
     {
         noticeMapper.increaseView(noticeId);
         return noticeMapper.getNotice(noticeId);
@@ -57,18 +52,5 @@ public class NoticeService
     public void delete(Long noticeId)
     {
         noticeMapper.deleteNotice(noticeId);
-    }
-
-    @Transactional
-    public boolean addLike(Long noticeId, Long userId)
-    {
-        if (noticeMapper.hasUserLiked(noticeId, userId))
-        {
-            return false;
-        }
-
-        noticeMapper.addUserLike(noticeId, userId);
-        noticeMapper.increaseLikes(noticeId);
-        return true;
     }
 }

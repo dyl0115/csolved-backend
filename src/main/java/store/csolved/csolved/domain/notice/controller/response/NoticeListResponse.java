@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.notice.controller.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.notice.Notice;
+import store.csolved.csolved.domain.notice.mapper.entity.Notice;
 import store.csolved.csolved.utils.page.Pagination;
 
 import java.util.List;

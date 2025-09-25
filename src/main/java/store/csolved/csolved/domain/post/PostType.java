@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PostType
 {
-    NOTICE(0, "공지사항"),
     COMMUNITY(1, "커뮤니티");
 
     private final int code;

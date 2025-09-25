@@ -1,4 +1,4 @@
-package store.csolved.csolved.domain.notice;
+package store.csolved.csolved.domain.notice.mapper.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,13 +12,9 @@ import store.csolved.csolved.common.BaseEntity;
 @AllArgsConstructor
 public class Notice extends BaseEntity
 {
-//    private String postType;
     private String title;
-    private boolean anonymous;
-    private Long authorId;
-    private String authorNickname;
     private String content;
+    private Long authorId;
+    private boolean isPinned;
     private Long views;
-    private Long likes;
-    private Long answerCount;
 }

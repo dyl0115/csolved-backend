@@ -6,9 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
 import store.csolved.csolved.domain.comment.controller.request.CommentCreateRequest;
-import store.csolved.csolved.domain.notice.controller.request.NoticeCreateUpdateRequest;
+import store.csolved.csolved.domain.notice.controller.request.NoticeCreateRequest;
 import store.csolved.csolved.domain.notice.controller.response.NoticeListResponse;
 import store.csolved.csolved.domain.notice.service.NoticeFacade;
 import store.csolved.csolved.utils.login.LoginRequest;
@@ -27,17 +26,10 @@ public class NoticeController
 
     private final NoticeFacade noticeFacade;
 
-    @LoginRequest
-    @GetMapping("/notice/createForm")
-    public String initCreate(Model model)
-    {
-        model.addAttribute("createForm", NoticeCreateUpdateRequest.empty());
-        return VIEWS_NOTICE_CREATE_FORM;
-    }
 
     @LoginRequest
     @PostMapping("/notice")
-    public String processCreate(@Valid @ModelAttribute("createForm") NoticeCreateUpdateRequest form,
+    public String processCreate(@Valid @ModelAttribute("createForm") NoticeCreateRequest form,
                                 BindingResult result)
     {
         if (result.hasErrors())
@@ -83,20 +75,11 @@ public class NoticeController
     }
 
 
-    @LoginRequest
-    @GetMapping("/notice/{postId}/updateForm")
-    public String initUpdate(@PathVariable Long postId,
-                             Model model)
-    {
-        NoticeCreateUpdateRequest form = noticeFacade.initUpdateForm(postId);
-        model.addAttribute("updateForm", form);
-        return VIEWS_NOTICE_UPDATE_FORM;
-    }
 
     @LoginRequest
     @PutMapping("/notice/{postId}")
     public String processUpdate(@PathVariable("postId") Long postId,
-                                @Valid @ModelAttribute("updateForm") NoticeCreateUpdateRequest form,
+                                @Valid @ModelAttribute("updateForm") NoticeCreateRequest form,
                                 BindingResult result)
     {
         if (result.hasErrors())

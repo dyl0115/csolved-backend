@@ -63,6 +63,22 @@ class AnswerMapperTest
 
     }
 
+    @AfterAll
+    void cleanUp()
+    {
+        // FK 제약조건을 고려하여 역순으로 삭제
+        jdbcTemplate.execute("DELETE FROM post_tags");
+        jdbcTemplate.execute("DELETE FROM post_likes");
+        jdbcTemplate.execute("DELETE FROM bookmarks");
+        jdbcTemplate.execute("DELETE FROM comments");
+        jdbcTemplate.execute("DELETE FROM answer_ratings");
+        jdbcTemplate.execute("DELETE FROM answers");
+        jdbcTemplate.execute("DELETE FROM posts");
+        jdbcTemplate.execute("DELETE FROM tags");
+        jdbcTemplate.execute("DELETE FROM category");
+        jdbcTemplate.execute("DELETE FROM users");
+    }
+
     @Test
     @DisplayName("대댓글이 달린 댓글 조회 테스트 ")
     void getAnswersWithComments()

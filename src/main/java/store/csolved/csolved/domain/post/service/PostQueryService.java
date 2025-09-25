@@ -39,7 +39,7 @@ public class PostQueryService
                 filter.getFilterType(),
                 filter.getFilterValue(),
                 search.getSearchType(),
-                search.getKeyword());
+                search.getSearchKeyword());
 
         // 사용자가 요청한 페이지 번호, 글 개수를 사용하여 페이지 정보를 생성
         Pagination pagination = paginationManager.createPagination(pageNumber, totalPosts);
@@ -52,7 +52,7 @@ public class PostQueryService
                 filter.getFilterType(),
                 filter.getFilterValue(),
                 search.getSearchType(),
-                search.getKeyword());
+                search.getSearchKeyword());
 
         return PostListResponse.from(pagination, posts);
     }

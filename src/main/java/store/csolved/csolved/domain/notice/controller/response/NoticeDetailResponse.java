@@ -5,7 +5,7 @@ import lombok.Getter;
 import store.csolved.csolved.domain.answer.mapper.entity.Answer;
 import store.csolved.csolved.domain.answer.mapper.record.AnswerWithCommentsRecord;
 import store.csolved.csolved.domain.comment.Comment;
-import store.csolved.csolved.domain.notice.Notice;
+import store.csolved.csolved.domain.notice.mapper.entity.Notice;
 
 import java.util.List;
 import java.util.Map;

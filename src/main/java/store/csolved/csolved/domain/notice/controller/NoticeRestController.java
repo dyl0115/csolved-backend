@@ -17,19 +17,6 @@ public class NoticeRestController
     private final NoticeFacade noticeFacade;
 
     @LoginRequest
-    @PostMapping("/{postId}/likes")
-    public ResponseEntity<Void> addLike(@LoginUser User user,
-                                        @PathVariable Long postId)
-    {
-        boolean valid = noticeFacade.addLike(postId, user.getId());
-        if (!valid)
-        {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @LoginRequest
     @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long postId)
