@@ -24,6 +24,8 @@ public interface NoticeMapper
 
     NoticeDetailRecord getNotice(Long noticeId);
 
+    Long getAuthorId(Long noticeId);
+
     Long countNotices(@Param("search") Searching search);
 
     void increaseView(Long noticeId);

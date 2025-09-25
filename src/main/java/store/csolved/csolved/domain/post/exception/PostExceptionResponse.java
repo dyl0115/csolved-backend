@@ -16,7 +16,7 @@ public class PostExceptionResponse
     String message;
     LocalDateTime timestamp;
 
-    public PostExceptionResponse(CommunityExceptionType exceptionType)
+    public PostExceptionResponse(PostExceptionType exceptionType)
     {
         this.status = 405;
         this.code = exceptionType.getCode();

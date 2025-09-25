@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.comment.controller.request.CommentCreateRequest;
 import store.csolved.csolved.domain.notice.controller.request.NoticeCreateRequest;
 import store.csolved.csolved.domain.notice.controller.response.NoticeListResponse;
-import store.csolved.csolved.domain.notice.service.NoticeFacade;
 import store.csolved.csolved.utils.login.LoginRequest;
 import store.csolved.csolved.utils.page.PageInfo;
 import store.csolved.csolved.utils.search.SearchInfo;
@@ -24,7 +23,7 @@ public class NoticeController
     public final static String VIEWS_NOTICE_LIST = "/views/notice/list";
     public final static String VIEWS_NOTICE_DETAIL = "/views/notice/detail";
 
-    private final NoticeFacade noticeFacade;
+//    private final NoticeFacade noticeFacade;
 
 
     @LoginRequest
@@ -37,7 +36,7 @@ public class NoticeController
             return VIEWS_NOTICE_CREATE_FORM;
         }
 
-        noticeFacade.save(form);
+//        noticeFacade.save(form);
         return "redirect:/notices?page=1";
     }
 
@@ -47,8 +46,8 @@ public class NoticeController
                              @SearchInfo Searching search,
                              Model model)
     {
-        NoticeListResponse viewModel = noticeFacade.getNotices(page, search);
-        model.addAttribute("noticeListViewModel", viewModel);
+//        NoticeListResponse viewModel = noticeFacade.getNotices(page, search);
+//        model.addAttribute("noticeListViewModel", viewModel);
         return VIEWS_NOTICE_LIST;
     }
 
@@ -57,7 +56,7 @@ public class NoticeController
     public String viewNotice(@PathVariable Long postId,
                              Model model)
     {
-        model.addAttribute("noticeDetails", noticeFacade.viewNotice(postId));
+//        model.addAttribute("noticeDetails", noticeFacade.viewNotice(postId));
 //        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
         model.addAttribute("commentCreateForm", CommentCreateRequest.empty());
         return VIEWS_NOTICE_DETAIL;
@@ -68,9 +67,9 @@ public class NoticeController
     public String getNotice(@PathVariable Long postId,
                             Model model)
     {
-        model.addAttribute("noticeDetails", noticeFacade.getNotice(postId));
+//        model.addAttribute("noticeDetails", noticeFacade.getNotice(postId));
 //        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
-        model.addAttribute("commentCreateForm", CommentCreateRequest.empty());
+//        model.addAttribute("commentCreateForm", CommentCreateRequest.empty());
         return VIEWS_NOTICE_DETAIL;
     }
 
@@ -87,7 +86,7 @@ public class NoticeController
             return VIEWS_NOTICE_UPDATE_FORM;
         }
 
-        noticeFacade.update(postId, form);
+//        noticeFacade.update(postId, form);
         return "redirect:/notices?page=1";
     }
 }

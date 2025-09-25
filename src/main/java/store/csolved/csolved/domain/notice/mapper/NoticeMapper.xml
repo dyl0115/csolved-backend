@@ -87,6 +87,13 @@
         LIMIT #{page.offset}, #{page.size}
     </select>
 
+    <select id="getAuthorId">
+        select author_id
+        from notice
+        where id = #{noticeId}
+          and deleted_at is null;
+    </select>
+
     <select id="countNotices">
         select count(n.id)
         from notice n

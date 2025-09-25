@@ -76,4 +76,10 @@
         delete from users;
     </update>
 
+    <select id="checkAdmin">
+        select admin
+        from users
+        where id=#{userId}
+    </select>
+
 </mapper>

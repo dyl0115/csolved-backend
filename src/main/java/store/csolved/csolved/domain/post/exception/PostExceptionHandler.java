@@ -9,13 +9,13 @@ public class PostExceptionHandler
     @ExceptionHandler(AlreadyLikedException.class)
     public PostExceptionResponse handleAlreadyLiked()
     {
-        return new PostExceptionResponse(CommunityExceptionType.ALREADY_LIKED);
+        return new PostExceptionResponse(PostExceptionType.ALREADY_LIKED);
     }
 
     @ExceptionHandler(PostNotFoundException.class)
     public PostExceptionResponse handlePostNotFound()
     {
-        return new PostExceptionResponse(CommunityExceptionType.POST_NOT_FOUND);
+        return new PostExceptionResponse(PostExceptionType.POST_NOT_FOUND);
     }
 
 

@@ -4,6 +4,6 @@ public class PostNotFoundException extends RuntimeException
 {
     public PostNotFoundException()
     {
-        super(CommunityExceptionType.POST_NOT_FOUND.getCode());
+        super(PostExceptionType.POST_NOT_FOUND.getCode());
     }
 }

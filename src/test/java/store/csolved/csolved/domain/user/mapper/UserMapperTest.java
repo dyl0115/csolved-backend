@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import store.csolved.csolved.domain.user.User;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -170,5 +172,40 @@ class UserMapperTest
         //then
         assertThat(userMapper.findUserByEmail(email1)).isNull();
         assertThat(userMapper.findUserByEmail(email2)).isNull();
+    }
+
+    @Test
+    @DisplayName("유저의 아이디를 입력하면 유저의 관리자 여부를 알 수 있다.")
+    void checkUserAdmin()
+    {
+        //given
+        User david = User.builder()
+                .admin(true)
+                .email("david@naver.com")
+                .password("david123!!")
+                .nickname("david")
+                .company("davidCompany")
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        User marry = User.builder()
+                .admin(false)
+                .email("marry@naver.com")
+                .password("marry123!!")
+                .nickname("marry")
+                .company("marryCompany")
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        //when
+        userMapper.insertUser(david);
+        userMapper.insertUser(marry);
+
+        //then
+        boolean isDavidAdmin = userMapper.checkAdmin(david.getId());
+        boolean isMarryAdmin = userMapper.checkAdmin(marry.getId());
+
+        assertThat(isDavidAdmin).isTrue();
+        assertThat(isMarryAdmin).isFalse();
     }
 }

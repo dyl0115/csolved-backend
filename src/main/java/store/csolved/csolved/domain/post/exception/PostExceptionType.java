@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum CommunityExceptionType
+public enum PostExceptionType
 {
     ALREADY_LIKED("ALREADY_LIKED", "좋아요는 한번만 누를 수 있습니다."),
     POST_NOT_FOUND("POST_NOT_FOUND", "존재하지 않는 게시글입니다."),

@@ -206,6 +206,20 @@ class NoticeMapperTest
         assertThat(noticeMapper.countNotices(search)).isEqualTo(15L);
     }
 
+    @Test
+    @DisplayName("공지사항 아이디로 글쓴이를 조회할 수 있다.")
+    void testGetAuthorId()
+    {
+        Notice notice1 = createNotice("공지사항1", "다들 점심 먹고와요.", 1L, false);
+        Notice notice2 = createNotice("공지사항2", "콜 베이비.", 2L, false);
+
+        noticeMapper.saveNotice(notice1);
+        noticeMapper.saveNotice(notice2);
+
+        assertThat(noticeMapper.getAuthorId(notice1.getId())).isEqualTo(1L);
+        assertThat(noticeMapper.getAuthorId(notice2.getId())).isEqualTo(2L);
+    }
+
     private Notice createNotice(String title, String content, Long authorId, boolean isPinned)
     {
         return Notice.builder()

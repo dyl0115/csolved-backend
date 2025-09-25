@@ -3,17 +3,11 @@ package store.csolved.csolved.domain.comment.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.notice.service.NoticeFacade;
 import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
 import store.csolved.csolved.domain.comment.controller.request.CommentCreateRequest;
 import store.csolved.csolved.domain.comment.service.CommentService;
 import store.csolved.csolved.utils.login.LoginUser;
-
-import static store.csolved.csolved.domain.notice.controller.NoticeController.*;
 
 @RequiredArgsConstructor
 @RestController

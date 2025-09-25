@@ -4,6 +4,6 @@ public class AlreadyLikedException extends RuntimeException
 {
     public AlreadyLikedException()
     {
-        super(CommunityExceptionType.ALREADY_LIKED.getMessage());
+        super(PostExceptionType.ALREADY_LIKED.getMessage());
     }
 }

@@ -4,6 +4,6 @@ public class DeleteDeniedException extends RuntimeException
 {
     public DeleteDeniedException()
     {
-        super(CommunityExceptionType.DELETE_DENIED.getMessage());
+        super(PostExceptionType.DELETE_DENIED.getMessage());
     }
 }
