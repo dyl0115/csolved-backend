@@ -13,7 +13,7 @@ public interface BookmarkMapper
 
     void deleteBookmark(Long userId, Long postId);
 
-    List<PostCardRecord> getBookmarks(Long userId, Pagination page);
+    List<PostCardRecord> getBookmarkedPosts(Long userId, Pagination page);
 
     Long countBookmarks(Long userId);
 

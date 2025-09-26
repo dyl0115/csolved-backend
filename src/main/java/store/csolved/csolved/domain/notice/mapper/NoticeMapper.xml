@@ -83,6 +83,7 @@
             AND n.title LIKE concat('%', #{search.searchKeyword}, '%')
         </if>
         ORDER BY
+        n.is_pinned desc,
         n.created_at desc
         LIMIT #{page.offset}, #{page.size}
     </select>

@@ -11,11 +11,11 @@ public class Searching
     private String searchKeyword;
 
     public static Searching create(String searchType,
-                                   String keyword)
+                                   String searchKeyword)
     {
         return Searching.builder()
                 .searchType(searchType)
-                .searchKeyword(keyword)
+                .searchKeyword(searchKeyword)
                 .build();
     }
 }

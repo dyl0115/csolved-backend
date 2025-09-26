@@ -31,7 +31,8 @@ import store.csolved.csolved.utils.search.Searching;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Controller
+@RequestMapping("/api")
+@RestController
 public class NoticeController
 {
     private final NoticeCommandService noticeCommandService;
@@ -50,12 +51,12 @@ public class NoticeController
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable("noticeId") Long noticeId,
                        @LoginUser User user,
-                       @Valid @ModelAttribute("updateForm") NoticeUpdateRequest request)
+                       @Valid @RequestBody NoticeUpdateRequest request)
     {
         noticeCommandService.update(user.getId(), user.getAdmin(), noticeId, NoticeUpdateCommand.from(request));
     }
 
-    @DeleteMapping("/{noticeId}")
+    @DeleteMapping("/notice/{noticeId}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long noticeId,
                        @LoginUser User user)

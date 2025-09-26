@@ -34,7 +34,7 @@
           and post_id = #{postId};
     </delete>
 
-    <select id="getBookmarks" resultMap="bookmarkResultMap">
+    <select id="getBookmarkedPosts" resultMap="bookmarkResultMap">
         select sub.id         id,
                sub.post_id    post_id,
                p.post_type    post_type,

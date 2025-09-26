@@ -32,7 +32,7 @@ public class BookmarkService
 
     public List<PostCardRecord> getBookmarks(Long userId, Pagination page)
     {
-        return bookmarkMapper.getBookmarks(userId, page);
+        return bookmarkMapper.getBookmarkedPosts(userId, page);
     }
 
     public boolean hasBookmarked(Long userId, Long postId)
@@ -51,7 +51,7 @@ public class BookmarkService
         Pagination bookmarksPage = paginationManager.createPagination(pageNumber, totalPosts);
 
         // 페이지 정보를 사용하여 DB에서 필요한 북마크만 조회.
-        List<PostCardRecord> posts = bookmarkMapper.getBookmarks(userId, bookmarksPage);
+        List<PostCardRecord> posts = bookmarkMapper.getBookmarkedPosts(userId, bookmarksPage);
 
         return BookmarksAndPageResult.from(totalPosts, posts, bookmarksPage);
     }
