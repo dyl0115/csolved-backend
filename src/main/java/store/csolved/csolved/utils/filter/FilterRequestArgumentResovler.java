@@ -30,7 +30,8 @@ public class FilterRequestArgumentResovler implements HandlerMethodArgumentResol
         String filterType = webRequest.getParameter(FILTER_TYPE_PARAMETER_NAME);
         String filterValue = webRequest.getParameter(FILTER_VALUE_PARAMETER_NAME);
 
+        if (filterType == null) return Filtering.create(null, 0L);
         if (filterValue == null) return Filtering.create(filterType, 0L);
-        return Filtering.create(filterType, Long.parseLong(filterValue));
+        return Filtering.create(filterType.toUpperCase(), Long.parseLong(filterValue));
     }
 }
