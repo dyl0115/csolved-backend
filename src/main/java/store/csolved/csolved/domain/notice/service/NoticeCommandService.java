@@ -8,6 +8,8 @@ import store.csolved.csolved.domain.notice.exception.NoticeNotFoundException;
 import store.csolved.csolved.domain.notice.exception.NoticeSaveDeniedException;
 import store.csolved.csolved.domain.notice.mapper.entity.Notice;
 import store.csolved.csolved.domain.notice.mapper.NoticeMapper;
+import store.csolved.csolved.domain.notice.service.command.NoticeCreateCommand;
+import store.csolved.csolved.domain.notice.service.command.NoticeUpdateCommand;
 
 import java.util.Objects;
 
@@ -18,18 +20,19 @@ public class NoticeCommandService
     private final NoticeMapper noticeMapper;
 
     @Transactional
-    public void save(boolean userIsAdmin, Notice notice)
+    public void save(boolean userIsAdmin, NoticeCreateCommand command)
     {
         if (!userIsAdmin)
         {
             throw new NoticeAdminOnlyException();
         }
 
-        noticeMapper.saveNotice(notice);
+        noticeMapper.saveNotice(Notice.from(command));
     }
 
     @Transactional
-    public void update(Long userId, boolean userIsAdmin, Long noticeId, Notice notice)
+    public void update(Long userId, boolean userIsAdmin,
+                       Long noticeId, NoticeUpdateCommand command)
     {
         Long authorId = noticeMapper.getAuthorId(noticeId);
 
@@ -48,7 +51,7 @@ public class NoticeCommandService
             throw new NoticeAdminOnlyException();
         }
 
-        noticeMapper.updateNotice(noticeId, notice);
+        noticeMapper.updateNotice(noticeId, Notice.from(command));
     }
 
     @Transactional

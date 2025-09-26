@@ -1,42 +1,42 @@
 package store.csolved.csolved.domain.notice.controller.response;
 
 import lombok.Builder;
-import lombok.Getter;
-import store.csolved.csolved.domain.answer.mapper.entity.Answer;
-import store.csolved.csolved.domain.answer.mapper.record.AnswerWithCommentsRecord;
-import store.csolved.csolved.domain.comment.Comment;
-import store.csolved.csolved.domain.notice.mapper.entity.Notice;
-import store.csolved.csolved.domain.notice.mapper.record.NoticeDetailRecord;
-import store.csolved.csolved.domain.notice.service.result.NoticeDetailResult;
+import lombok.Data;
+import store.csolved.csolved.domain.notice.service.result.NoticeCardResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
-@Getter
+@Data
 @Builder
-public class NoticeDetailResponse
+public class NoticeCardResponse
 {
     private Long id;
     private String title;
     private Long authorId;
     private String authorNickname;
-    private String content;
     private Long views;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public static NoticeDetailResponse from(NoticeDetailResult result)
+    public static NoticeCardResponse from(NoticeCardResult result)
     {
-        return NoticeDetailResponse.builder()
+        return NoticeCardResponse.builder()
                 .id(result.getId())
                 .title(result.getTitle())
                 .authorId(result.getAuthorId())
                 .authorNickname(result.getAuthorNickname())
-                .content(result.getContent())
                 .views(result.getViews())
                 .createdAt(result.getCreatedAt())
                 .modifiedAt(result.getModifiedAt())
                 .build();
+    }
+
+    public static List<NoticeCardResponse> from(List<NoticeCardResult> results)
+    {
+        return results.stream()
+                .map(NoticeCardResponse::from)
+                .collect(Collectors.toList());
     }
 }

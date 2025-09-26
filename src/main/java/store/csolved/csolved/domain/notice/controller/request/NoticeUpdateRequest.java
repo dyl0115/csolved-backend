@@ -21,13 +21,6 @@ public class NoticeUpdateRequest
     @NotNull
     private Long authorId;
 
-
-    public static NoticeUpdateRequest from(Notice notice)
-    {
-        return NoticeUpdateRequest.builder()
-                .title(notice.getTitle())
-                .content(notice.getContent())
-                .authorId(notice.getAuthorId())
-                .build();
-    }
+    @NotNull
+    private boolean isPinned;
 }

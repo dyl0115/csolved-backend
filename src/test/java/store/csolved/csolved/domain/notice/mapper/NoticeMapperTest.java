@@ -227,7 +227,6 @@ class NoticeMapperTest
                 .content(content)
                 .authorId(authorId)
                 .isPinned(isPinned)
-                .views(0L)
                 .build();
     }
 }

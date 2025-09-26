@@ -2,91 +2,82 @@ package store.csolved.csolved.domain.notice.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.comment.controller.request.CommentCreateRequest;
 import store.csolved.csolved.domain.notice.controller.request.NoticeCreateRequest;
+import store.csolved.csolved.domain.notice.controller.request.NoticeUpdateRequest;
+import store.csolved.csolved.domain.notice.controller.response.NoticeCardResponse;
+import store.csolved.csolved.domain.notice.controller.response.NoticeDetailResponse;
 import store.csolved.csolved.domain.notice.controller.response.NoticeListResponse;
+import store.csolved.csolved.domain.notice.service.NoticeCommandService;
+import store.csolved.csolved.domain.notice.service.NoticeQueryService;
+import store.csolved.csolved.domain.notice.service.command.NoticeCreateCommand;
+import store.csolved.csolved.domain.notice.service.command.NoticeUpdateCommand;
+import store.csolved.csolved.domain.notice.service.result.NoticeCardResult;
+import store.csolved.csolved.domain.notice.service.result.NoticeDetailResult;
+import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginRequest;
+import store.csolved.csolved.utils.login.LoginUser;
 import store.csolved.csolved.utils.page.PageInfo;
+import store.csolved.csolved.utils.page.Pagination;
+import store.csolved.csolved.utils.page.PaginationManager;
 import store.csolved.csolved.utils.search.SearchInfo;
 import store.csolved.csolved.utils.search.Searching;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
 public class NoticeController
 {
-    public final static String VIEWS_NOTICE_CREATE_FORM = "/views/notice/create";
-    public final static String VIEWS_NOTICE_UPDATE_FORM = "/views/notice/update";
-    public final static String VIEWS_NOTICE_LIST = "/views/notice/list";
-    public final static String VIEWS_NOTICE_DETAIL = "/views/notice/detail";
+    private final NoticeCommandService noticeCommandService;
+    private final NoticeQueryService noticeQueryService;
+    private final PaginationManager paginationManager;
 
-//    private final NoticeFacade noticeFacade;
-
-
-    @LoginRequest
     @PostMapping("/notice")
-    public String processCreate(@Valid @ModelAttribute("createForm") NoticeCreateRequest form,
-                                BindingResult result)
+    @ResponseStatus(HttpStatus.CREATED)
+    public void save(@LoginUser User user,
+                     @Valid @RequestBody NoticeCreateRequest request)
     {
-        if (result.hasErrors())
-        {
-            return VIEWS_NOTICE_CREATE_FORM;
-        }
-
-//        noticeFacade.save(form);
-        return "redirect:/notices?page=1";
+        noticeCommandService.save(user.getAdmin(), NoticeCreateCommand.from(request));
     }
 
-    @LoginRequest
+    @PutMapping("/notice/{noticeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable("noticeId") Long noticeId,
+                       @LoginUser User user,
+                       @Valid @ModelAttribute("updateForm") NoticeUpdateRequest request)
+    {
+        noticeCommandService.update(user.getId(), user.getAdmin(), noticeId, NoticeUpdateCommand.from(request));
+    }
+
+    @DeleteMapping("/{noticeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long noticeId,
+                       @LoginUser User user)
+    {
+        noticeCommandService.delete(user.getId(), user.getAdmin(), noticeId);
+    }
+
     @GetMapping("/notices")
-    public String getNotices(@PageInfo Long page,
-                             @SearchInfo Searching search,
-                             Model model)
+    public NoticeListResponse getNotices(@PageInfo Long page,
+                                         @SearchInfo Searching search)
     {
-//        NoticeListResponse viewModel = noticeFacade.getNotices(page, search);
-//        model.addAttribute("noticeListViewModel", viewModel);
-        return VIEWS_NOTICE_LIST;
+        Long totalNotices = noticeQueryService.countNotices(search);
+        Pagination pagination = paginationManager.createPagination(page, totalNotices);
+        List<NoticeCardResult> results = noticeQueryService.getNotices(pagination, search);
+
+        return NoticeListResponse.from(pagination, results);
     }
 
-    @LoginRequest
-    @GetMapping("/notice/{postId}")
-    public String viewNotice(@PathVariable Long postId,
-                             Model model)
+    @GetMapping("/notice/{noticeId}")
+    public NoticeDetailResponse getNoticeWithViewIncrease(@PathVariable Long noticeId)
     {
-//        model.addAttribute("noticeDetails", noticeFacade.viewNotice(postId));
-//        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
-        model.addAttribute("commentCreateForm", CommentCreateRequest.empty());
-        return VIEWS_NOTICE_DETAIL;
-    }
-
-    @LoginRequest
-    @GetMapping("/notice/{postId}/read")
-    public String getNotice(@PathVariable Long postId,
-                            Model model)
-    {
-//        model.addAttribute("noticeDetails", noticeFacade.getNotice(postId));
-//        model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
-//        model.addAttribute("commentCreateForm", CommentCreateRequest.empty());
-        return VIEWS_NOTICE_DETAIL;
-    }
-
-
-
-    @LoginRequest
-    @PutMapping("/notice/{postId}")
-    public String processUpdate(@PathVariable("postId") Long postId,
-                                @Valid @ModelAttribute("updateForm") NoticeCreateRequest form,
-                                BindingResult result)
-    {
-        if (result.hasErrors())
-        {
-            return VIEWS_NOTICE_UPDATE_FORM;
-        }
-
-//        noticeFacade.update(postId, form);
-        return "redirect:/notices?page=1";
+        NoticeDetailResult result = noticeQueryService.getNoticeWithIncreaseView(noticeId);
+        return NoticeDetailResponse.from(result);
     }
 }

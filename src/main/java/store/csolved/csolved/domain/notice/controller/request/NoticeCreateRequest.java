@@ -21,13 +21,6 @@ public class NoticeCreateRequest
     @NotNull
     private Long authorId;
 
-
-    public static NoticeCreateRequest from(Notice notice)
-    {
-        return NoticeCreateRequest.builder()
-                .title(notice.getTitle())
-                .content(notice.getContent())
-                .authorId(notice.getAuthorId())
-                .build();
-    }
+    @NotNull
+    private boolean isPinned;
 }
