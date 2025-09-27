@@ -4,9 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.post.mapper.entity.Post;
-import store.csolved.csolved.domain.post.exception.DeleteDeniedException;
-import store.csolved.csolved.domain.post.exception.PostNotFoundException;
-import store.csolved.csolved.domain.post.exception.UpdateDeniedException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.domain.post.service.command.PostCreateCommand;
 import store.csolved.csolved.domain.post.service.command.PostUpdateCommand;
@@ -14,7 +13,7 @@ import store.csolved.csolved.domain.tag.service.TagService;
 
 import java.util.Objects;
 
-import static store.csolved.csolved.domain.post.PostType.COMMUNITY;
+import static store.csolved.csolved.domain.post.mapper.entity.PostType.COMMUNITY;
 
 @RequiredArgsConstructor
 @Service
@@ -42,12 +41,12 @@ public class PostCommandService
 
         if (authorId == null)
         {
-            throw new PostNotFoundException();
+            throw new CsolvedException(ExceptionCode.POST_NOT_FOUND);
         }
 
         if (!authorId.equals(userId))
         {
-            throw new UpdateDeniedException();
+            throw new CsolvedException(ExceptionCode.POST_UPDATE_DENIED);
         }
 
         postMapper.updatePost(postId, post);
@@ -62,12 +61,12 @@ public class PostCommandService
 
         if (authorId == null)
         {
-            throw new PostNotFoundException();
+            throw new CsolvedException(ExceptionCode.POST_NOT_FOUND);
         }
 
         if (!Objects.equals(userId, authorId))
         {
-            throw new DeleteDeniedException();
+            throw new CsolvedException(ExceptionCode.POST_DELETE_DENIED);
         }
 
         postMapper.deletePost(postId);

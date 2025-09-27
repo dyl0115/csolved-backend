@@ -6,9 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import store.csolved.csolved.domain.notice.exception.NoticeAdminOnlyException;
-import store.csolved.csolved.domain.notice.exception.NoticeNotFoundException;
-import store.csolved.csolved.domain.notice.exception.NoticeSaveDeniedException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.notice.mapper.NoticeMapper;
 import store.csolved.csolved.domain.notice.mapper.entity.Notice;
 import store.csolved.csolved.domain.notice.service.command.NoticeCreateCommand;
@@ -50,9 +49,10 @@ class NoticeCommandServiceTest {
         NoticeCreateCommand command = createNoticeCreateCommand();
 
         // when & then
-        assertThrows(NoticeAdminOnlyException.class, () -> {
+        CsolvedException exception = assertThrows(CsolvedException.class, () -> {
             noticeCommandService.save(userIsAdmin, command);
         });
+        assertEquals(ExceptionCode.NOTICE_ADMIN_ONLY, exception.getCode());
 
         verify(noticeMapper, never()).saveNotice(any());
     }
@@ -88,9 +88,10 @@ class NoticeCommandServiceTest {
         when(noticeMapper.getAuthorId(noticeId)).thenReturn(null);
 
         // when & then
-        assertThrows(NoticeNotFoundException.class, () -> {
+        CsolvedException exception = assertThrows(CsolvedException.class, () -> {
             noticeCommandService.update(userId, userIsAdmin, noticeId, command);
         });
+        assertEquals(ExceptionCode.NOTICE_NOT_FOUND, exception.getCode());
 
         verify(noticeMapper).getAuthorId(noticeId);
         verify(noticeMapper, never()).updateNotice(any(), any());
@@ -109,9 +110,10 @@ class NoticeCommandServiceTest {
         when(noticeMapper.getAuthorId(noticeId)).thenReturn(differentAuthorId);
 
         // when & then
-        assertThrows(NoticeSaveDeniedException.class, () -> {
+        CsolvedException exception = assertThrows(CsolvedException.class, () -> {
             noticeCommandService.update(userId, userIsAdmin, noticeId, command);
         });
+        assertEquals(ExceptionCode.NOTICE_UPDATE_DENIED, exception.getCode());
 
         verify(noticeMapper).getAuthorId(noticeId);
         verify(noticeMapper, never()).updateNotice(any(), any());
@@ -129,9 +131,10 @@ class NoticeCommandServiceTest {
         when(noticeMapper.getAuthorId(noticeId)).thenReturn(userId);
 
         // when & then
-        assertThrows(NoticeAdminOnlyException.class, () -> {
+        CsolvedException exception = assertThrows(CsolvedException.class, () -> {
             noticeCommandService.update(userId, userIsAdmin, noticeId, command);
         });
+        assertEquals(ExceptionCode.NOTICE_ADMIN_ONLY, exception.getCode());
 
         verify(noticeMapper).getAuthorId(noticeId);
         verify(noticeMapper, never()).updateNotice(any(), any());
@@ -166,9 +169,10 @@ class NoticeCommandServiceTest {
         when(noticeMapper.getAuthorId(noticeId)).thenReturn(null);
 
         // when & then
-        assertThrows(NoticeNotFoundException.class, () -> {
+        CsolvedException exception = assertThrows(CsolvedException.class, () -> {
             noticeCommandService.delete(userId, userIsAdmin, noticeId);
         });
+        assertEquals(ExceptionCode.NOTICE_NOT_FOUND, exception.getCode());
 
         verify(noticeMapper).getAuthorId(noticeId);
         verify(noticeMapper, never()).deleteNotice(any());
@@ -186,9 +190,10 @@ class NoticeCommandServiceTest {
         when(noticeMapper.getAuthorId(noticeId)).thenReturn(differentAuthorId);
 
         // when & then
-        assertThrows(NoticeSaveDeniedException.class, () -> {
+        CsolvedException exception = assertThrows(CsolvedException.class, () -> {
             noticeCommandService.delete(userId, userIsAdmin, noticeId);
         });
+        assertEquals(ExceptionCode.NOTICE_DELETE_DENIED, exception.getCode());
 
         verify(noticeMapper).getAuthorId(noticeId);
         verify(noticeMapper, never()).deleteNotice(any());
@@ -205,9 +210,10 @@ class NoticeCommandServiceTest {
         when(noticeMapper.getAuthorId(noticeId)).thenReturn(userId);
 
         // when & then
-        assertThrows(NoticeAdminOnlyException.class, () -> {
+        CsolvedException exception = assertThrows(CsolvedException.class, () -> {
             noticeCommandService.delete(userId, userIsAdmin, noticeId);
         });
+        assertEquals(ExceptionCode.NOTICE_ADMIN_ONLY, exception.getCode());
 
         verify(noticeMapper).getAuthorId(noticeId);
         verify(noticeMapper, never()).deleteNotice(any());

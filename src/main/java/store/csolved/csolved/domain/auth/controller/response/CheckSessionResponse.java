@@ -3,7 +3,7 @@ package store.csolved.csolved.domain.auth.controller.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 
 import java.time.LocalDateTime;
 

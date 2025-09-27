@@ -4,8 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import store.csolved.csolved.domain.post.PostType;
-import store.csolved.csolved.domain.category.Category;
+import store.csolved.csolved.domain.post.mapper.entity.PostType;
+import store.csolved.csolved.domain.category.mapper.entity.Category;
 
 import java.time.LocalDateTime;
 

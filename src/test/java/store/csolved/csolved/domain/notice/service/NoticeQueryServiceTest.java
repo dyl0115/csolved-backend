@@ -6,14 +6,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import store.csolved.csolved.domain.notice.exception.NoticeNotFoundException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.notice.mapper.NoticeMapper;
 import store.csolved.csolved.domain.notice.mapper.record.NoticeCardRecord;
 import store.csolved.csolved.domain.notice.mapper.record.NoticeDetailRecord;
 import store.csolved.csolved.domain.notice.service.result.NoticeCardResult;
 import store.csolved.csolved.domain.notice.service.result.NoticeDetailResult;
-import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.utils.search.Searching;
+import store.csolved.csolved.global.utils.page.Pagination;
+import store.csolved.csolved.global.utils.search.Searching;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -112,10 +113,11 @@ class NoticeQueryServiceTest
         when(noticeMapper.getNotice(noticeId)).thenReturn(null);
 
         //when & then
-        assertThrows(NoticeNotFoundException.class, () ->
+        CsolvedException exception = assertThrows(CsolvedException.class, () ->
         {
             noticeQueryService.getNoticeWithIncreaseView(noticeId);
         });
+        assertEquals(ExceptionCode.NOTICE_NOT_FOUND, exception.getCode());
 
         verify(noticeMapper).getNotice(noticeId);
         verify(noticeMapper, never()).increaseView(any());

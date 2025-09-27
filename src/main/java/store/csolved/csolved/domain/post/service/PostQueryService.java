@@ -5,20 +5,21 @@ import org.springframework.stereotype.Service;
 import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.post.controller.response.PostDetailResponse;
 import store.csolved.csolved.domain.post.controller.response.PostListResponse;
-import store.csolved.csolved.domain.post.exception.PostNotFoundException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.domain.post.mapper.record.PostDetailRecord;
 import store.csolved.csolved.domain.post.service.result.RepliedPostsAndPageResult;
 import store.csolved.csolved.domain.post.service.result.UserPostsAndPageResult;
-import store.csolved.csolved.utils.filter.Filtering;
-import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.utils.page.PaginationManager;
-import store.csolved.csolved.utils.search.Searching;
-import store.csolved.csolved.utils.sort.Sorting;
+import store.csolved.csolved.global.utils.filter.Filtering;
+import store.csolved.csolved.global.utils.page.Pagination;
+import store.csolved.csolved.global.utils.page.PaginationManager;
+import store.csolved.csolved.global.utils.search.Searching;
+import store.csolved.csolved.global.utils.sort.Sorting;
 
 import java.util.List;
 
-import static store.csolved.csolved.domain.post.PostType.COMMUNITY;
+import static store.csolved.csolved.domain.post.mapper.entity.PostType.COMMUNITY;
 
 @RequiredArgsConstructor
 @Service
@@ -65,7 +66,7 @@ public class PostQueryService
 
         if (post == null)
         {
-            throw new PostNotFoundException();
+            throw new CsolvedException(ExceptionCode.POST_NOT_FOUND);
         }
 
         postMapper.increaseView(postId);

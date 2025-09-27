@@ -3,10 +3,8 @@ package store.csolved.csolved.domain.answer.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.answer.exception.AnswerDeleteDeniedException;
-import store.csolved.csolved.domain.answer.exception.AnswerNotFoundException;
-import store.csolved.csolved.domain.answer.exception.AnswerSaveDeniedException;
-import store.csolved.csolved.domain.answer.exception.PostNotFoundException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.answer.mapper.entity.Answer;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
 import store.csolved.csolved.domain.answer.mapper.record.AnswerDetailRecord;
@@ -31,12 +29,12 @@ public class AnswerCommandService
 
         if (!postExist)
         {
-            throw new PostNotFoundException();
+            throw new CsolvedException(ExceptionCode.POST_NOT_FOUND);
         }
 
         if (!Objects.equals(userId, answer.getAuthorId()))
         {
-            throw new AnswerSaveDeniedException();
+            throw new CsolvedException(ExceptionCode.ANSWER_SAVE_DENIED);
         }
 
         answerMapper.increaseAnswerCount(answer.getPostId());
@@ -50,12 +48,12 @@ public class AnswerCommandService
 
         if (answer == null)
         {
-            throw new AnswerNotFoundException();
+            throw new CsolvedException(ExceptionCode.ANSWER_NOT_FOUND);
         }
 
         if (!Objects.equals(answer.getAuthorId(), userId))
         {
-            throw new AnswerDeleteDeniedException();
+            throw new CsolvedException(ExceptionCode.ANSWER_DELETE_DENIED);
         }
 
         if (commentsExist)

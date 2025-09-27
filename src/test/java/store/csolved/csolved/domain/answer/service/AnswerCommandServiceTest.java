@@ -6,10 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import store.csolved.csolved.domain.answer.exception.AnswerDeleteDeniedException;
-import store.csolved.csolved.domain.answer.exception.AnswerNotFoundException;
-import store.csolved.csolved.domain.answer.exception.AnswerSaveDeniedException;
-import store.csolved.csolved.domain.answer.exception.PostNotFoundException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
 import store.csolved.csolved.domain.answer.mapper.entity.Answer;
 import store.csolved.csolved.domain.answer.mapper.record.AnswerDetailRecord;
@@ -72,8 +70,9 @@ class AnswerCommandServiceTest
         when(postMapper.isExist(999L)).thenReturn(false);
 
         // when & then
-        assertThrows(PostNotFoundException.class,
+        CsolvedException exception = assertThrows(CsolvedException.class,
                 () -> answerCommandService.save(userId, command));
+        assertEquals(ExceptionCode.POST_NOT_FOUND, exception.getCode());
 
         verify(postMapper).isExist(999L);
         verify(answerMapper, never()).increaseAnswerCount(any());
@@ -96,8 +95,9 @@ class AnswerCommandServiceTest
         when(postMapper.isExist(1L)).thenReturn(true);
 
         // when & then
-        assertThrows(AnswerSaveDeniedException.class,
+        CsolvedException exception = assertThrows(CsolvedException.class,
                 () -> answerCommandService.save(userId, command));
+        assertEquals(ExceptionCode.ANSWER_SAVE_DENIED, exception.getCode());
 
         verify(postMapper).isExist(1L);
         verify(answerMapper, never()).increaseAnswerCount(any());
@@ -176,8 +176,9 @@ class AnswerCommandServiceTest
         when(answerMapper.getAnswer(answerId)).thenReturn(null);
 
         // when & then
-        assertThrows(AnswerNotFoundException.class,
+        CsolvedException exception = assertThrows(CsolvedException.class,
                 () -> answerCommandService.delete(userId, answerId));
+        assertEquals(ExceptionCode.ANSWER_NOT_FOUND, exception.getCode());
 
         verify(answerMapper).existComments(answerId);
         verify(answerMapper).getAnswer(answerId);
@@ -205,8 +206,9 @@ class AnswerCommandServiceTest
         when(answerMapper.getAnswer(answerId)).thenReturn(answerRecord);
 
         // when & then
-        assertThrows(AnswerDeleteDeniedException.class,
+        CsolvedException exception = assertThrows(CsolvedException.class,
                 () -> answerCommandService.delete(userId, answerId));
+        assertEquals(ExceptionCode.ANSWER_DELETE_DENIED, exception.getCode());
 
         verify(answerMapper).existComments(answerId);
         verify(answerMapper).getAnswer(answerId);

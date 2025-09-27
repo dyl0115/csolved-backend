@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.category.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import store.csolved.csolved.domain.category.Category;
+import store.csolved.csolved.domain.category.mapper.entity.Category;
 import store.csolved.csolved.domain.category.mapper.CategoryMapper;
 
 import java.util.List;

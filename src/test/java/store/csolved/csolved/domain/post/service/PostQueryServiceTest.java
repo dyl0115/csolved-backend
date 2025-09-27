@@ -8,16 +8,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import store.csolved.csolved.domain.post.controller.response.PostDetailResponse;
 import store.csolved.csolved.domain.post.controller.response.PostListResponse;
-import store.csolved.csolved.domain.post.exception.PostNotFoundException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.post.mapper.record.PostDetailRecord;
 import store.csolved.csolved.domain.tag.Tag;
-import store.csolved.csolved.utils.filter.Filtering;
-import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.utils.page.PaginationManager;
-import store.csolved.csolved.utils.search.Searching;
-import store.csolved.csolved.utils.sort.Sorting;
+import store.csolved.csolved.global.utils.filter.Filtering;
+import store.csolved.csolved.global.utils.page.Pagination;
+import store.csolved.csolved.global.utils.page.PaginationManager;
+import store.csolved.csolved.global.utils.search.Searching;
+import store.csolved.csolved.global.utils.sort.Sorting;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static store.csolved.csolved.domain.post.PostType.COMMUNITY;
+import static store.csolved.csolved.domain.post.mapper.entity.PostType.COMMUNITY;
 
 @ExtendWith(MockitoExtension.class)
 class PostQueryServiceTest
@@ -124,10 +125,11 @@ class PostQueryServiceTest
         when(postMapper.getPost(postId)).thenReturn(null);
 
         //when & then
-        assertThrows(PostNotFoundException.class, () ->
+        CsolvedException exception = assertThrows(CsolvedException.class, () ->
         {
             postQueryService.getPost(postId);
         });
+        assertEquals(ExceptionCode.POST_NOT_FOUND, exception.getCode());
 
         verify(postMapper).getPost(postId);
         verify(postMapper, never()).increaseView(any());

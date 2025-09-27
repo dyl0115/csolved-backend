@@ -7,8 +7,8 @@ import store.csolved.csolved.domain.auth.controller.request.SigninRequest;
 import store.csolved.csolved.domain.auth.controller.request.SignupRequest;
 import store.csolved.csolved.domain.auth.controller.response.*;
 import store.csolved.csolved.domain.auth.service.AuthService;
-import store.csolved.csolved.utils.login.LoginUser;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.global.utils.login.LoginUser;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 
 @RequiredArgsConstructor
 @RestController

@@ -4,10 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 import store.csolved.csolved.domain.comment.controller.request.CommentCreateRequest;
 import store.csolved.csolved.domain.comment.service.CommentService;
-import store.csolved.csolved.utils.login.LoginUser;
+import store.csolved.csolved.global.utils.login.LoginUser;
 
 @RequiredArgsConstructor
 @RestController

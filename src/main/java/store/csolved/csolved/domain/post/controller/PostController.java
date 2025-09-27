@@ -10,7 +10,7 @@ import store.csolved.csolved.domain.post.service.PostLikeService;
 import store.csolved.csolved.domain.post.service.PostQueryService;
 import store.csolved.csolved.domain.post.service.command.PostCreateCommand;
 import store.csolved.csolved.domain.post.service.command.PostUpdateCommand;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 import store.csolved.csolved.domain.post.controller.request.PostCreateRequest;
 import store.csolved.csolved.domain.post.controller.response.PostDetailResponse;
 import store.csolved.csolved.domain.post.controller.response.PostListResponse;
@@ -18,14 +18,14 @@ import store.csolved.csolved.domain.user.controller.response.RepliedPostsAndPage
 import store.csolved.csolved.domain.user.controller.response.UserPostsAndPageResponse;
 import store.csolved.csolved.domain.post.service.result.RepliedPostsAndPageResult;
 import store.csolved.csolved.domain.post.service.result.UserPostsAndPageResult;
-import store.csolved.csolved.utils.filter.FilterInfo;
-import store.csolved.csolved.utils.filter.Filtering;
-import store.csolved.csolved.utils.login.LoginUser;
-import store.csolved.csolved.utils.page.PageInfo;
-import store.csolved.csolved.utils.search.SearchInfo;
-import store.csolved.csolved.utils.search.Searching;
-import store.csolved.csolved.utils.sort.SortInfo;
-import store.csolved.csolved.utils.sort.Sorting;
+import store.csolved.csolved.global.utils.filter.FilterInfo;
+import store.csolved.csolved.global.utils.filter.Filtering;
+import store.csolved.csolved.global.utils.login.LoginUser;
+import store.csolved.csolved.global.utils.page.PageInfo;
+import store.csolved.csolved.global.utils.search.SearchInfo;
+import store.csolved.csolved.global.utils.search.Searching;
+import store.csolved.csolved.global.utils.sort.SortInfo;
+import store.csolved.csolved.global.utils.sort.Sorting;
 
 @RequiredArgsConstructor
 @RestController

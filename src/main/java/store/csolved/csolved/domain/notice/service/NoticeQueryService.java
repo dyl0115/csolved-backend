@@ -3,14 +3,15 @@ package store.csolved.csolved.domain.notice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.notice.exception.NoticeNotFoundException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.notice.mapper.NoticeMapper;
 import store.csolved.csolved.domain.notice.mapper.record.NoticeCardRecord;
 import store.csolved.csolved.domain.notice.mapper.record.NoticeDetailRecord;
 import store.csolved.csolved.domain.notice.service.result.NoticeCardResult;
 import store.csolved.csolved.domain.notice.service.result.NoticeDetailResult;
-import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.utils.search.Searching;
+import store.csolved.csolved.global.utils.page.Pagination;
+import store.csolved.csolved.global.utils.search.Searching;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class NoticeQueryService
 
         if (notice == null)
         {
-            throw new NoticeNotFoundException();
+            throw new CsolvedException(ExceptionCode.NOTICE_NOT_FOUND);
         }
 
         noticeMapper.increaseView(noticeId);

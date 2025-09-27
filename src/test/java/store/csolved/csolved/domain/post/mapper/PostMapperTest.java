@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.post.mapper.entity.Post;
-import store.csolved.csolved.domain.post.PostType;
+import store.csolved.csolved.domain.post.mapper.entity.PostType;
 import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.post.mapper.record.PostDetailRecord;
-import store.csolved.csolved.utils.page.Pagination;
+import store.csolved.csolved.global.utils.page.Pagination;
 
 import java.util.List;
 import java.util.Objects;

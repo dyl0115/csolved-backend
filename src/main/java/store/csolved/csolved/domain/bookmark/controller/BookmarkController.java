@@ -5,11 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.bookmark.controller.response.BookmarkStatusResponse;
 import store.csolved.csolved.domain.bookmark.service.BookmarkService;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 import store.csolved.csolved.domain.user.controller.response.BookmarksAndPageResponse;
 import store.csolved.csolved.domain.bookmark.service.result.BookmarksAndPageResult;
-import store.csolved.csolved.utils.login.LoginUser;
-import store.csolved.csolved.utils.page.PageInfo;
+import store.csolved.csolved.global.utils.login.LoginUser;
+import store.csolved.csolved.global.utils.page.PageInfo;
 
 @RequestMapping("/api")
 @RequiredArgsConstructor

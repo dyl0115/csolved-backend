@@ -6,7 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import store.csolved.csolved.domain.post.exception.AlreadyLikedException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,9 +52,10 @@ class PostLikeServiceTest
         when(postMapper.hasUserLiked(postId, userId)).thenReturn(true);
 
         //when & then
-        assertThrows(AlreadyLikedException.class, () -> {
+        CsolvedException exception = assertThrows(CsolvedException.class, () -> {
             postLikeService.addLike(postId, userId);
         });
+        assertEquals(ExceptionCode.ALREADY_LIKED, exception.getCode());
 
         verify(postMapper).hasUserLiked(postId, userId);
         verify(postMapper, never()).addUserLike(any(), any());

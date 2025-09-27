@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 
 import java.time.LocalDateTime;
 

@@ -2,16 +2,9 @@ package store.csolved.csolved.domain.notice.controller.response;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.answer.mapper.entity.Answer;
-import store.csolved.csolved.domain.answer.mapper.record.AnswerWithCommentsRecord;
-import store.csolved.csolved.domain.comment.Comment;
-import store.csolved.csolved.domain.notice.mapper.entity.Notice;
-import store.csolved.csolved.domain.notice.mapper.record.NoticeDetailRecord;
 import store.csolved.csolved.domain.notice.service.result.NoticeDetailResult;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
 
 @Getter
 @Builder

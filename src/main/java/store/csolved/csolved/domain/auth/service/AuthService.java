@@ -3,13 +3,14 @@ package store.csolved.csolved.domain.auth.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.auth.exception.*;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.auth.service.command.SigninCommand;
 import store.csolved.csolved.domain.auth.service.command.SignupCommand;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
-import store.csolved.csolved.utils.PasswordManager;
-import store.csolved.csolved.utils.AuthSessionManager;
+import store.csolved.csolved.global.utils.PasswordManager;
+import store.csolved.csolved.global.utils.AuthSessionManager;
 
 
 @RequiredArgsConstructor
@@ -25,12 +26,12 @@ public class AuthService
     {
         if (userMapper.existsByEmail(command.getEmail()))
         {
-            throw new DuplicateEmailException();
+            throw new CsolvedException(ExceptionCode.DUPLICATE_EMAIL);
         }
 
         if (userMapper.existsByNickname(command.getNickname()))
         {
-            throw new DuplicateNicknameException();
+            throw new CsolvedException(ExceptionCode.DUPLICATE_NICKNAME);
         }
 
         String hashedPassword = passwordManager.hashPassword(command.getPassword());
@@ -43,14 +44,14 @@ public class AuthService
 
         if (user == null)
         {
-            throw new UserNotFoundException();
+            throw new CsolvedException(ExceptionCode.USER_NOT_FOUND);
         }
 
         String storedPassword = userMapper.findPasswordByEmail(command.getEmail());
 
         if (storedPassword == null || !passwordManager.verifyPassword(command.getPassword(), storedPassword))
         {
-            throw new InvalidPasswordException();
+            throw new CsolvedException(ExceptionCode.INVALID_PASSWORD);
         }
 
         authSession.setLoginUser(user);
@@ -64,7 +65,7 @@ public class AuthService
 
         if (principal == null)
         {
-            throw new InvalidSessionException();
+            throw new CsolvedException(ExceptionCode.INVALID_SESSION);
         }
 
         return principal;
@@ -76,7 +77,7 @@ public class AuthService
 
         if (principal == null)
         {
-            throw new InvalidSessionException();
+            throw new CsolvedException(ExceptionCode.INVALID_SESSION);
         }
 
         authSession.invalidateSession();
@@ -89,7 +90,7 @@ public class AuthService
 
         if (principal == null)
         {
-            throw new InvalidSessionException();
+            throw new CsolvedException(ExceptionCode.INVALID_SESSION);
         }
 
         authSession.invalidateSession();

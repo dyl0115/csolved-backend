@@ -3,16 +3,15 @@ package store.csolved.csolved.domain.bookmark.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.answer.exception.PostNotFoundException;
-import store.csolved.csolved.domain.bookmark.exception.AlreadyBookmarkedException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.bookmark.mapper.BookmarkMapper;
 import store.csolved.csolved.domain.bookmark.service.result.BookmarksAndPageResult;
-import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.utils.page.PaginationManager;
+import store.csolved.csolved.global.utils.page.Pagination;
+import store.csolved.csolved.global.utils.page.PaginationManager;
 
-import java.rmi.AlreadyBoundException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -29,12 +28,12 @@ public class BookmarkService
 
         if (!postMapper.isExist(postId))
         {
-            throw new PostNotFoundException();
+            throw new CsolvedException(ExceptionCode.POST_NOT_FOUND);
         }
 
         if (bookmarkMapper.hasBookmarked(userId, postId))
         {
-            throw new
+            throw new CsolvedException(ExceptionCode.ALREADY_BOOKMARKED);
         }
 
         bookmarkMapper.saveBookmark(userId, postId);

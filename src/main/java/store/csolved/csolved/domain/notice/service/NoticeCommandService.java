@@ -3,9 +3,8 @@ package store.csolved.csolved.domain.notice.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.notice.exception.NoticeAdminOnlyException;
-import store.csolved.csolved.domain.notice.exception.NoticeNotFoundException;
-import store.csolved.csolved.domain.notice.exception.NoticeSaveDeniedException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.notice.mapper.entity.Notice;
 import store.csolved.csolved.domain.notice.mapper.NoticeMapper;
 import store.csolved.csolved.domain.notice.service.command.NoticeCreateCommand;
@@ -24,7 +23,7 @@ public class NoticeCommandService
     {
         if (!userIsAdmin)
         {
-            throw new NoticeAdminOnlyException();
+            throw new CsolvedException(ExceptionCode.NOTICE_ADMIN_ONLY);
         }
 
         noticeMapper.saveNotice(Notice.from(command));
@@ -38,17 +37,17 @@ public class NoticeCommandService
 
         if (authorId == null)
         {
-            throw new NoticeNotFoundException();
+            throw new CsolvedException(ExceptionCode.NOTICE_NOT_FOUND);
         }
 
         if (!Objects.equals(userId, authorId))
         {
-            throw new NoticeSaveDeniedException();
+            throw new CsolvedException(ExceptionCode.NOTICE_UPDATE_DENIED);
         }
 
         if (!userIsAdmin)
         {
-            throw new NoticeAdminOnlyException();
+            throw new CsolvedException(ExceptionCode.NOTICE_ADMIN_ONLY);
         }
 
         noticeMapper.updateNotice(noticeId, Notice.from(command));
@@ -61,17 +60,17 @@ public class NoticeCommandService
 
         if (authorId == null)
         {
-            throw new NoticeNotFoundException();
+            throw new CsolvedException(ExceptionCode.NOTICE_NOT_FOUND);
         }
 
         if (!Objects.equals(userId, authorId))
         {
-            throw new NoticeSaveDeniedException();
+            throw new CsolvedException(ExceptionCode.NOTICE_DELETE_DENIED);
         }
 
         if (!userIsAdmin)
         {
-            throw new NoticeAdminOnlyException();
+            throw new CsolvedException(ExceptionCode.NOTICE_ADMIN_ONLY);
         }
 
         noticeMapper.deleteNotice(noticeId);

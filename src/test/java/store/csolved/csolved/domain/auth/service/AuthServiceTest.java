@@ -5,13 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import store.csolved.csolved.domain.auth.exception.DuplicateEmailException;
-import store.csolved.csolved.domain.auth.exception.DuplicateNicknameException;
-import store.csolved.csolved.domain.auth.exception.InvalidPasswordException;
-import store.csolved.csolved.domain.auth.exception.UserNotFoundException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.auth.service.command.SigninCommand;
 import store.csolved.csolved.domain.auth.service.command.SignupCommand;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
 
 import static org.assertj.core.api.Assertions.*;
@@ -85,7 +83,8 @@ class AuthServiceTest
         //when then
         authService.signUp(command1);
         assertThatThrownBy(() -> authService.signUp(command2))
-                .isInstanceOf(DuplicateEmailException.class);
+                .isInstanceOf(CsolvedException.class)
+                .hasFieldOrPropertyWithValue("code", ExceptionCode.DUPLICATE_EMAIL);
 
         assertThat(usermapper.existsByNickname("david")).isTrue();
 
@@ -108,7 +107,8 @@ class AuthServiceTest
         //when then
         authService.signUp(command1);
         assertThatThrownBy(() -> authService.signUp(command2))
-                .isInstanceOf(DuplicateNicknameException.class);
+                .isInstanceOf(CsolvedException.class)
+                .hasFieldOrPropertyWithValue("code", ExceptionCode.DUPLICATE_NICKNAME);
 
         assertThat(usermapper.existsByEmail("david@example.com")).isTrue();
 
@@ -129,7 +129,8 @@ class AuthServiceTest
         SigninCommand command2 = createSigninCommand("nono@naver.com", "marry123!");
 
         assertThatThrownBy(() -> authService.signIn(command2))
-                .isInstanceOf(UserNotFoundException.class);
+                .isInstanceOf(CsolvedException.class)
+                .hasFieldOrPropertyWithValue("code", ExceptionCode.USER_NOT_FOUND);
     }
 
     @Test
@@ -146,7 +147,8 @@ class AuthServiceTest
         SigninCommand command2 = createSigninCommand("david@naver.com", "wrongpassword");
 
         assertThatThrownBy(() -> authService.signIn(command2))
-                .isInstanceOf(InvalidPasswordException.class);
+                .isInstanceOf(CsolvedException.class)
+                .hasFieldOrPropertyWithValue("code", ExceptionCode.INVALID_PASSWORD);
     }
 
     @Test

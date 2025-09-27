@@ -3,7 +3,8 @@ package store.csolved.csolved.domain.post.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.post.exception.AlreadyLikedException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class PostLikeService
 
         if (alreadyLike)
         {
-            throw new AlreadyLikedException();
+            throw new CsolvedException(ExceptionCode.ALREADY_LIKED);
         }
 
         postMapper.addUserLike(postId, userId);

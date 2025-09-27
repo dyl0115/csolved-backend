@@ -1,10 +1,9 @@
 package store.csolved.csolved.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 import store.csolved.csolved.domain.user.mapper.UserMapper;
 
 @RequiredArgsConstructor

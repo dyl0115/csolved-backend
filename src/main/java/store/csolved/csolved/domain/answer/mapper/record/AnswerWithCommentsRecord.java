@@ -2,15 +2,10 @@ package store.csolved.csolved.domain.answer.mapper.record;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import store.csolved.csolved.common.BaseRecord;
-import store.csolved.csolved.domain.answer.mapper.entity.Answer;
-import store.csolved.csolved.domain.comment.Comment;
+import store.csolved.csolved.global.common.BaseRecord;
 import store.csolved.csolved.domain.comment.mapper.record.CommentDetailRecord;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @Getter
 @Setter

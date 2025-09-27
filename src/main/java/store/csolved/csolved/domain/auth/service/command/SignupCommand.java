@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.auth.service.command;
 
 import lombok.Builder;
 import lombok.Getter;
-import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.domain.user.mapper.entity.User;
 
 @Getter
 @Builder

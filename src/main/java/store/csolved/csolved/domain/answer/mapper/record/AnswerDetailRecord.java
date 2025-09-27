@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.answer.mapper.record;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import store.csolved.csolved.common.BaseRecord;
+import store.csolved.csolved.global.common.BaseRecord;
 
 @Getter
 @Setter

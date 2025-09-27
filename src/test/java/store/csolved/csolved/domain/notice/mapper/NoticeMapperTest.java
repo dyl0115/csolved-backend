@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.notice.mapper.entity.Notice;
 import store.csolved.csolved.domain.notice.mapper.record.NoticeCardRecord;
 import store.csolved.csolved.domain.notice.mapper.record.NoticeDetailRecord;
-import store.csolved.csolved.utils.page.Pagination;
-import store.csolved.csolved.utils.search.Searching;
+import store.csolved.csolved.global.utils.page.Pagination;
+import store.csolved.csolved.global.utils.search.Searching;
 
 import java.util.List;
 

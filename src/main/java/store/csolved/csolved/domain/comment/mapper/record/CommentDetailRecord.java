@@ -2,9 +2,7 @@ package store.csolved.csolved.domain.comment.mapper.record;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import store.csolved.csolved.common.BaseRecord;
-
-import java.time.LocalDateTime;
+import store.csolved.csolved.global.common.BaseRecord;
 
 @Data
 @NoArgsConstructor

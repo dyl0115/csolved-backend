@@ -2,7 +2,7 @@ package store.csolved.csolved.domain.answer.mapper.entity;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import store.csolved.csolved.common.BaseEntity;
+import store.csolved.csolved.global.common.BaseEntity;
 import store.csolved.csolved.domain.answer.service.command.AnswerCreateCommand;
 
 import java.time.LocalDateTime;

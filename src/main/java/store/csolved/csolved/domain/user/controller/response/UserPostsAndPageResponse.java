@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.post.service.result.UserPostsAndPageResult;
-import store.csolved.csolved.utils.page.Pagination;
+import store.csolved.csolved.global.utils.page.Pagination;
 
 import java.util.List;
 

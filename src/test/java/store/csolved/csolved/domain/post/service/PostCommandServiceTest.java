@@ -6,9 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import store.csolved.csolved.domain.post.exception.DeleteDeniedException;
-import store.csolved.csolved.domain.post.exception.PostNotFoundException;
-import store.csolved.csolved.domain.post.exception.UpdateDeniedException;
+import store.csolved.csolved.global.exception.CsolvedException;
+import store.csolved.csolved.global.exception.ExceptionCode;
 import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.domain.post.mapper.entity.Post;
 import store.csolved.csolved.domain.post.service.command.PostCreateCommand;
@@ -22,7 +21,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-import static store.csolved.csolved.domain.post.PostType.COMMUNITY;
+import static store.csolved.csolved.domain.post.mapper.entity.PostType.COMMUNITY;
 
 @ExtendWith(MockitoExtension.class)
 class PostCommandServiceTest
@@ -83,10 +82,11 @@ class PostCommandServiceTest
         when(postMapper.getAuthorId(postId)).thenReturn(null);
 
         //when & then
-        assertThrows(PostNotFoundException.class, () ->
+        CsolvedException exception = assertThrows(CsolvedException.class, () ->
         {
             postCommandService.update(userId, postId, command);
         });
+        assertEquals(ExceptionCode.POST_NOT_FOUND, exception.getCode());
 
         verify(postMapper).getAuthorId(postId);
         verify(postMapper, never()).updatePost(any(), any());
@@ -106,10 +106,11 @@ class PostCommandServiceTest
         when(postMapper.getAuthorId(postId)).thenReturn(differentAuthorId);
 
         //when & then
-        assertThrows(UpdateDeniedException.class, () ->
+        CsolvedException exception = assertThrows(CsolvedException.class, () ->
         {
             postCommandService.update(userId, postId, command);
         });
+        assertEquals(ExceptionCode.POST_UPDATE_DENIED, exception.getCode());
 
         verify(postMapper).getAuthorId(postId);
         verify(postMapper, never()).updatePost(any(), any());
@@ -145,10 +146,11 @@ class PostCommandServiceTest
         when(postMapper.getAuthorId(postId)).thenReturn(null);
 
         //when & then
-        assertThrows(PostNotFoundException.class, () ->
+        CsolvedException exception = assertThrows(CsolvedException.class, () ->
         {
             postCommandService.delete(userId, postId);
         });
+        assertEquals(ExceptionCode.POST_NOT_FOUND, exception.getCode());
 
         verify(postMapper).getAuthorId(postId);
         verify(postMapper, never()).deletePost(any());
@@ -166,10 +168,11 @@ class PostCommandServiceTest
         when(postMapper.getAuthorId(postId)).thenReturn(differentAuthorId);
 
         //when & then
-        assertThrows(DeleteDeniedException.class, () ->
+        CsolvedException exception = assertThrows(CsolvedException.class, () ->
         {
             postCommandService.delete(userId, postId);
         });
+        assertEquals(ExceptionCode.POST_DELETE_DENIED, exception.getCode());
 
         verify(postMapper).getAuthorId(postId);
         verify(postMapper, never()).deletePost(any());

@@ -9,8 +9,8 @@ import store.csolved.csolved.domain.answer.controller.response.AnswerWithComment
 import store.csolved.csolved.domain.answer.service.AnswerCommandService;
 import store.csolved.csolved.domain.answer.service.AnswerQueryService;
 import store.csolved.csolved.domain.answer.service.command.AnswerCreateCommand;
-import store.csolved.csolved.domain.user.User;
-import store.csolved.csolved.utils.login.LoginUser;
+import store.csolved.csolved.domain.user.mapper.entity.User;
+import store.csolved.csolved.global.utils.login.LoginUser;
 
 import java.util.List;
 

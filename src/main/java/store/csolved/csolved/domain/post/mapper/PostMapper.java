@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import store.csolved.csolved.domain.post.mapper.entity.Post;
 import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.post.mapper.record.PostDetailRecord;
-import store.csolved.csolved.utils.page.Pagination;
+import store.csolved.csolved.global.utils.page.Pagination;
 
 import java.util.List;
 
