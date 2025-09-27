@@ -1,9 +1,7 @@
 package store.csolved.csolved.domain.comment.mapper.record;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
+import store.csolved.csolved.common.BaseRecord;
 
 import java.time.LocalDateTime;
 
@@ -11,29 +9,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentDetailRecord
+@EqualsAndHashCode(callSuper = true)
+public class CommentDetailRecord extends BaseRecord
 {
-    private Long id;
     private Long answerId;
     private Long authorId;
     private String authorProfileImage;
     private String authorNickname;
     private boolean anonymous;
     private String content;
-    private LocalDateTime createdAt;
-
-    @Override
-    public String toString()
-    {
-        return "CommentDetailRecord{" +
-                "id=" + id +
-                ", answerId=" + answerId +
-                ", authorId=" + authorId +
-                ", authorProfileImage='" + authorProfileImage + '\'' +
-                ", authorNickname='" + authorNickname + '\'' +
-                ", anonymous=" + anonymous +
-                ", content='" + content + '\'' +
-                ", createdAt=" + createdAt +
-                '}';
-    }
 }
+

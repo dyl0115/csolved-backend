@@ -2,6 +2,7 @@ package store.csolved.csolved.domain.answer.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import store.csolved.csolved.domain.answer.mapper.entity.Answer;
+import store.csolved.csolved.domain.answer.mapper.record.AnswerDetailRecord;
 import store.csolved.csolved.domain.answer.mapper.record.AnswerWithCommentsRecord;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface AnswerMapper
 
     List<AnswerWithCommentsRecord> getAnswersWithComments(Long postId);
 
-    Answer getAnswer(Long answerId);
+    AnswerDetailRecord getAnswer(Long answerId);
 
     void increaseAnswerCount(Long postId);
 

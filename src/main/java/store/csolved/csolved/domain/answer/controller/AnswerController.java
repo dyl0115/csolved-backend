@@ -10,6 +10,8 @@ import store.csolved.csolved.domain.answer.service.AnswerCommandService;
 import store.csolved.csolved.domain.answer.service.AnswerQueryService;
 import store.csolved.csolved.domain.answer.service.command.AnswerCreateCommand;
 import store.csolved.csolved.domain.answer.service.result.AnswerWithCommentsResult;
+import store.csolved.csolved.domain.user.User;
+import store.csolved.csolved.utils.login.LoginUser;
 
 import java.util.List;
 
@@ -21,27 +23,25 @@ public class AnswerController
     private final AnswerCommandService answerCommandService;
     private final AnswerQueryService answerQueryService;
 
-    //    @LoginRequest
     @PostMapping("/answer")
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@Valid @RequestBody AnswerCreateRequest request)
+    public void save(@LoginUser User user,
+                     @Valid @RequestBody AnswerCreateRequest request)
     {
-        System.out.println("answer save");
-        answerCommandService.save(AnswerCreateCommand.from(request));
+        answerCommandService.save(user.getId(), AnswerCreateCommand.from(request));
     }
 
-    //    @LoginRequest
     @DeleteMapping("/answer/{answerId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable Long answerId)
+    public void delete(@LoginUser User user,
+                       @PathVariable Long answerId)
     {
-        answerCommandService.delete(answerId);
+        answerCommandService.delete(user.getId(), answerId);
     }
 
     @GetMapping("/{postId}/answers")
     public AnswersWithCommentsResponse getAnswersWithComments(@PathVariable Long postId)
     {
-        List<AnswerWithCommentsResult> results = answerQueryService.getAnswersWithComments(postId);
-        return AnswersWithCommentsResponse.from(results);
+        return AnswersWithCommentsResponse.from(answerQueryService.getAnswersWithComments(postId));
     }
 }
