@@ -6,10 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import store.csolved.csolved.domain.answer.exception.AnswerDeleteDeniedException;
 import store.csolved.csolved.domain.answer.exception.AnswerNotFoundException;
 import store.csolved.csolved.domain.answer.exception.AnswerSaveDeniedException;
+import store.csolved.csolved.domain.answer.exception.PostNotFoundException;
 import store.csolved.csolved.domain.answer.mapper.entity.Answer;
 import store.csolved.csolved.domain.answer.mapper.AnswerMapper;
 import store.csolved.csolved.domain.answer.mapper.record.AnswerDetailRecord;
 import store.csolved.csolved.domain.answer.service.command.AnswerCreateCommand;
+import store.csolved.csolved.domain.post.mapper.PostMapper;
 
 import java.util.Objects;
 
@@ -19,10 +21,18 @@ import java.util.Objects;
 public class AnswerCommandService
 {
     private final AnswerMapper answerMapper;
+    private final PostMapper postMapper;
 
     public void save(Long userId, AnswerCreateCommand command)
     {
         Answer answer = Answer.from(command);
+
+        Boolean postExist = postMapper.isExist(answer.getPostId());
+
+        if (!postExist)
+        {
+            throw new PostNotFoundException();
+        }
 
         if (!Objects.equals(userId, answer.getAuthorId()))
         {

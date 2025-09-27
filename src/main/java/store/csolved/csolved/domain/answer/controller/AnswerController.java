@@ -5,11 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import store.csolved.csolved.domain.answer.controller.request.AnswerCreateRequest;
-import store.csolved.csolved.domain.answer.controller.response.AnswersWithCommentsResponse;
+import store.csolved.csolved.domain.answer.controller.response.AnswerWithCommentsResponse;
 import store.csolved.csolved.domain.answer.service.AnswerCommandService;
 import store.csolved.csolved.domain.answer.service.AnswerQueryService;
 import store.csolved.csolved.domain.answer.service.command.AnswerCreateCommand;
-import store.csolved.csolved.domain.answer.service.result.AnswerWithCommentsResult;
 import store.csolved.csolved.domain.user.User;
 import store.csolved.csolved.utils.login.LoginUser;
 
@@ -40,8 +39,8 @@ public class AnswerController
     }
 
     @GetMapping("/{postId}/answers")
-    public AnswersWithCommentsResponse getAnswersWithComments(@PathVariable Long postId)
+    public List<AnswerWithCommentsResponse> getAnswersWithComments(@PathVariable Long postId)
     {
-        return AnswersWithCommentsResponse.from(answerQueryService.getAnswersWithComments(postId));
+        return AnswerWithCommentsResponse.from(answerQueryService.getAnswersWithComments(postId));
     }
 }

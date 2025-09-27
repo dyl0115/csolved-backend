@@ -16,25 +16,6 @@ public class CommentController
 {
     private final CommentService commentService;
 
-    // TODO: 여기 싹 수정해야함
-//    @LoginRequest
-//    @PostMapping("/notice/{postId}/answers/{answerId}/comment")
-//    public String saveNoticeComment(@PathVariable("postId") Long postId,
-//                                    @Valid @ModelAttribute("commentCreateForm") CommentCreateRequest form,
-//                                    BindingResult result,
-//                                    Model model)
-//    {
-//        if (result.hasErrors())
-//        {
-//            model.addAttribute("noticeDetails", noticeFacade.viewNotice(postId));
-//            model.addAttribute("answerCreateForm", AnswerCreateRequest.empty());
-//            model.addAttribute("commentCreateFrom", form);
-//            return VIEWS_NOTICE_DETAIL;
-//        }
-//        commentService.saveComment(form.toCommand());
-//        return "redirect:/notice/" + postId + "/read";
-//    }
-
     //    @LoginRequest
     @PostMapping("/community/{postId}/answer/{answerId}/comment")
     @ResponseStatus(HttpStatus.CREATED)

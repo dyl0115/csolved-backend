@@ -1,6 +1,7 @@
 package store.csolved.csolved.domain.answer.mapper.record;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import store.csolved.csolved.common.BaseRecord;
 import store.csolved.csolved.domain.answer.mapper.entity.Answer;
 import store.csolved.csolved.domain.comment.Comment;
@@ -15,7 +16,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class AnswerWithCommentsRecord extends BaseRecord
 {

@@ -69,13 +69,13 @@
     <update id="increaseAnswerCount">
         update posts
         set answer_count = answer_count + 1
-        where id = #{questionId};
+        where id = #{postId};
     </update>
 
     <update id="decreaseAnswerCount">
         update posts
         set answer_count = answer_count - 1
-        where id = #{questionId};
+        where id = #{postId};
     </update>
 
     <select id="existComments">

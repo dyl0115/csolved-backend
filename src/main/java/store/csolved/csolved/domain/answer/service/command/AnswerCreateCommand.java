@@ -12,7 +12,7 @@ public class AnswerCreateCommand
 {
     private Long postId;
     private Long authorId;
-    private boolean anonymous;
+    private Boolean anonymous;
     private String content;
 
     public static AnswerCreateCommand from(AnswerCreateRequest request)

@@ -22,6 +22,11 @@ public class AnswerExceptionHandler
         return new AnswerExceptionResponse((AnswerExceptionType.SAVE_DENIED));
     }
 
-
+    @ExceptionHandler(AnswerDeleteDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public AnswerExceptionResponse handleAnswerDeletedDenied()
+    {
+        return new AnswerExceptionResponse((AnswerExceptionType.DELETE_DENIED));
+    }
 
 }

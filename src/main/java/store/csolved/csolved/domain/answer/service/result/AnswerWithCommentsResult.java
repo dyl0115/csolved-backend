@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import store.csolved.csolved.domain.answer.mapper.record.AnswerWithCommentsRecord;
 import store.csolved.csolved.domain.comment.mapper.record.CommentDetailRecord;
+import store.csolved.csolved.domain.comment.service.result.CommentDetailResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,10 +18,10 @@ public class AnswerWithCommentsResult
     private Long authorId;
     private String authorProfileImage;
     private String authorNickname;
-    private boolean anonymous;
+    private Boolean anonymous;
     private String content;
     private LocalDateTime createdAt;
-    private List<CommentDetailRecord> comments;
+    private List<CommentDetailResult> comments;
 
     public static AnswerWithCommentsResult from(AnswerWithCommentsRecord record)
     {
@@ -32,7 +33,7 @@ public class AnswerWithCommentsResult
                 .anonymous(record.isAnonymous())
                 .content(record.getContent())
                 .createdAt(record.getCreatedAt())
-                .comments(record.getComments())
+                .comments(CommentDetailResult.from(record.getComments()))
                 .build();
     }
 

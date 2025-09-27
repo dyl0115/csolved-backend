@@ -14,7 +14,7 @@ public interface PostMapper
 {
     void savePost(int postType, Post post);
 
-    void updatePost(Long communityId, Post post);
+    void updatePost(Long postId, Post post);
 
     // 질문글들 조회
     List<PostCardRecord> getPosts(int postType,
@@ -30,10 +30,12 @@ public interface PostMapper
     PostDetailRecord getPost(Long postId);
 
     // 게시글 작성자 조회
-    Long getAuthorId(Long communityId);
+    Long getAuthorId(Long postId);
+
+    Boolean isExist(Long postId);
 
     // 논리적으로 게시글을 삭제
-    void deletePost(Long communityId);
+    void deletePost(Long postId);
 
     // 게시글 개수 조회
     Long countPosts(int postType,
@@ -43,16 +45,16 @@ public interface PostMapper
                     String searchKeyword);
 
     // 좋아요 테이블에 저장된 유저인지 체크
-    boolean hasUserLiked(Long communityId, Long authorId);
+    boolean hasUserLiked(Long postId, Long authorId);
 
     // 테이블의 Likes 1증가
-    void increaseLikes(Long communityId);
+    void increaseLikes(Long postId);
 
     // 좋아요 테이블에 postId, userId 저장 (중복 좋아요 방지)
-    void addUserLike(Long communityId, Long authorId);
+    void addUserLike(Long postId, Long authorId);
 
     // 테이블의 Views 1증가
-    void increaseView(Long communityId);
+    void increaseView(Long postId);
 
     // 댓글 단 게시글 카드 조회
     List<PostCardRecord> getRepliedPosts(@Param("userId") Long userId,

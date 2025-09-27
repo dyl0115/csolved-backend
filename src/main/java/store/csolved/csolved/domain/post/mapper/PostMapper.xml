@@ -61,13 +61,13 @@
             content     = #{post.content},
             category_id = #{post.categoryId},
             modified_at = current_timestamp
-        where id = #{communityId};
+        where id = #{postId};
     </update>
 
     <update id="deletePost">
         update posts
         set deleted_at = current_timestamp
-        where id = #{communityId};
+        where id = #{postId};
     </update>
 
     <select id="getPost" resultMap="postDetailResultMap">
@@ -170,34 +170,40 @@
         </choose>
     </select>
 
+    <select id="isExist">
+        select exists(select 1
+                      from posts
+                      where id = #{postId});
+    </select>
+
     <select id="getAuthorId">
         select user_id
         from posts
-        where id = #{communityId};
+        where id = #{postId};
     </select>
 
     <select id="hasUserLiked">
         select exists(select 1
                       from post_likes
                       where user_id = #{authorId}
-                        and post_id = #{communityId});
+                        and post_id = #{postId});
     </select>
 
     <update id="increaseLikes">
         update posts
         set likes = likes + 1
-        where id = #{communityId};
+        where id = #{postId};
     </update>
 
     <insert id="addUserLike">
         insert into post_likes(post_id, user_id)
-        values (#{communityId}, #{authorId});
+        values (#{postId}, #{authorId});
     </insert>
 
     <update id="increaseView">
         update posts
         set views = views + 1
-        where id = #{communityId};
+        where id = #{postId};
     </update>
 
     <!-- 댓글 단 게시글들 조회 -->

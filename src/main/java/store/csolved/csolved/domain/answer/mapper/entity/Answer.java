@@ -15,7 +15,7 @@ public class Answer extends BaseEntity
 {
     private Long postId;
     private Long authorId;
-    private boolean anonymous;
+    private Boolean anonymous;
     private String content;
 
     public static Answer from(AnswerCreateCommand command)
@@ -23,7 +23,7 @@ public class Answer extends BaseEntity
         return Answer.builder()
                 .postId(command.getPostId())
                 .authorId(command.getAuthorId())
-                .anonymous(command.isAnonymous())
+                .anonymous(command.getAnonymous())
                 .content(command.getContent())
                 .createdAt(LocalDateTime.now())
                 .build();
