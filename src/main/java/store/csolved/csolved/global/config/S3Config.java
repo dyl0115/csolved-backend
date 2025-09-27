@@ -1,4 +1,4 @@
-package store.csolved.csolved.config;
+package store.csolved.csolved.global.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

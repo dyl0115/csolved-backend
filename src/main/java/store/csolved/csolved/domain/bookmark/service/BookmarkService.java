@@ -3,12 +3,16 @@ package store.csolved.csolved.domain.bookmark.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import store.csolved.csolved.domain.answer.exception.PostNotFoundException;
+import store.csolved.csolved.domain.bookmark.exception.AlreadyBookmarkedException;
+import store.csolved.csolved.domain.post.mapper.PostMapper;
 import store.csolved.csolved.domain.post.mapper.record.PostCardRecord;
 import store.csolved.csolved.domain.bookmark.mapper.BookmarkMapper;
 import store.csolved.csolved.domain.bookmark.service.result.BookmarksAndPageResult;
 import store.csolved.csolved.utils.page.Pagination;
 import store.csolved.csolved.utils.page.PaginationManager;
 
+import java.rmi.AlreadyBoundException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,26 +21,45 @@ public class BookmarkService
 {
     private final PaginationManager paginationManager;
     private final BookmarkMapper bookmarkMapper;
+    private final PostMapper postMapper;
 
     @Transactional
     public void add(Long userId, Long postId)
     {
+
+        if (!postMapper.isExist(postId))
+        {
+            throw new PostNotFoundException();
+        }
+
+        if (bookmarkMapper.hasBookmarked(userId, postId))
+        {
+            throw new
+        }
+
         bookmarkMapper.saveBookmark(userId, postId);
     }
 
     @Transactional
     public void remove(Long userId, Long postId)
     {
+        if (userId == null || postId == null)
+        {
+            throw new IllegalArgumentException("User ID and Post ID cannot be null");
+        }
+        if (!bookmarkMapper.hasBookmarked(userId, postId))
+        {
+            throw new IllegalStateException("Bookmark not found");
+        }
         bookmarkMapper.deleteBookmark(userId, postId);
-    }
-
-    public List<PostCardRecord> getBookmarks(Long userId, Pagination page)
-    {
-        return bookmarkMapper.getBookmarkedPosts(userId, page);
     }
 
     public boolean hasBookmarked(Long userId, Long postId)
     {
+        if (userId == null || postId == null)
+        {
+            throw new IllegalArgumentException("User ID and Post ID cannot be null");
+        }
         return bookmarkMapper.hasBookmarked(userId, postId);
     }
 
@@ -44,6 +67,15 @@ public class BookmarkService
     public BookmarksAndPageResult getBookmarksAndPage(Long userId,
                                                       Long pageNumber)
     {
+        if (userId == null)
+        {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        if (pageNumber == null || pageNumber < 1)
+        {
+            throw new IllegalArgumentException("Page number must be positive");
+        }
+
         // DB에서 북마크 개수를 가져옴.
         Long totalPosts = bookmarkMapper.countBookmarks(userId);
 

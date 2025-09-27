@@ -1,4 +1,4 @@
-package store.csolved.csolved.config;
+package store.csolved.csolved.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

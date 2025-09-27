@@ -14,11 +14,10 @@ import store.csolved.csolved.utils.page.PageInfo;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
-public class BookmarkRestController
+public class BookmarkController
 {
     private final BookmarkService bookmarkService;
 
-    //    @LoginRequest
     @PostMapping("/post/{postId}/bookmark")
     @ResponseStatus(HttpStatus.OK)
     public void add(@LoginUser User user,
@@ -35,7 +34,6 @@ public class BookmarkRestController
         return BookmarkStatusResponse.from(bookmarked);
     }
 
-    //    @LoginRequest
     @DeleteMapping("/post/{postId}/bookmark")
     @ResponseStatus(HttpStatus.OK)
     public void remove(@LoginUser User user,
